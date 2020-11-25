@@ -46,7 +46,7 @@ function App() {
           });
       }}
     >
-      Agregar todo
+      Agregar a mongo
     </button>
     <ul>
       {todos.map((todo) => {
