@@ -14,7 +14,11 @@ const OpcionesAdministrador = (props) => {
 
   return (
     <div>
-      <Button color="primary" onClick={toggle} style={{ marginBottom: "1rem" }}>
+      <Button
+        color="secondary"
+        onClick={toggle}
+        style={{ marginBottom: "1rem" }}
+      >
         Toggle
       </Button>
       <Collapse isOpen={isOpen}>
