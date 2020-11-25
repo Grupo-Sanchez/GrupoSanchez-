@@ -1,8 +1,24 @@
 {
+<<<<<<< HEAD
   "name": "Backend",
   "version": "1.0.0",
   "description": "",
   "main": "src/index.js",
+=======
+  "name": "gruposanchez",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.2.2",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
+    "reactstrap": "^8.7.1",
+    "web-vitals": "^0.2.4"
+  },
+>>>>>>> b05c40b084397192ebbffbf31bcc7d354154f7ca
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js"
