@@ -1,18 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
-
+import AmbienteAdministrador from "./Views/AmbienteAdministrador"
 //Import de la base de datos 
 
 function App() {
 
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-
-      </header>
-    </div>
+    <AmbienteAdministrador/>
   );
 }
 
