@@ -16,5 +16,6 @@ module.exports = {
     'react/jsx-closing-bracket-location': [1, 'tag-aligned'],
     'react/prop-types': ['off'],
     'no-return-assign': ['off'],
+    'linebreak-style': 0,
   },
 };
