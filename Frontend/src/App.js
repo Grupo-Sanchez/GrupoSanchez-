@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+import AmbienteJefeDeTienda from "./Views/AmbienteJefeDeTienda/AmbienteJefeDeTienda.js"
 
 //Importaciones de react
 import React, { useEffect, useState } from "react";
@@ -24,12 +23,13 @@ function App() {
   const [titulo, setTitulo] = useState("");
 
   return (
+    <AmbienteJefeDeTienda />
     // <div className="App">
     //   <header className="App-header">
     //     <img src={logo} className="App-logo" alt="logo" />
     //   </header>
     // </div>
-    <div>
+    /*<div>
     <input
       value={titulo}
       onChange={(e) => {
@@ -53,7 +53,7 @@ function App() {
         return <li key={todo._id}>{todo.titulo}</li>;
       })}
     </ul>
-  </div>
+  </div>*/
   );
 }
 
