@@ -10,5 +10,6 @@ const administradorSchema = new mongoose.Schema({
 
 // modelo: Casita
 // Esquema: Plano
+
 // mongoose.model 1er parametro= nombre de la coleccion, 2do parametro= exportamos el modelo,
-module.exports = mongoose.model('mujeres', administradorSchema);
+module.exports = mongoose.model('programadores', administradorSchema);

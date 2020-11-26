@@ -1,14 +1,14 @@
 import AmbienteJefeDeTienda from "./Views/AmbienteJefeDeTienda/AmbienteJefeDeTienda.js"
 
-//Importaciones de react
-import React, { useEffect, useState } from "react";
+// Importaciones de react
+import React, { useState } from 'react';
 
 const writeSomething = (titulo) => {
   const jsonString = { titulo, terminado: false };
   console.log(jsonString);
-  fetch("http://localhost:3001/api/administrador", {
-    method: "post",
-    headers: { "content-type": "application/json" },
+  fetch('http://localhost:3001/api/administrador', {
+    method: 'post',
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify(jsonString),
   })
     .then((res) => res.json())
@@ -16,11 +16,12 @@ const writeSomething = (titulo) => {
       console.log(json);
     });
 };
-//Import de la base de datos 
+// hola
+// Import de la base de datos
 
 function App() {
   const [todos, setTodos] = useState([]);
-  const [titulo, setTitulo] = useState("");
+  const [titulo, setTitulo] = useState('');
 
   return (
     <AmbienteJefeDeTienda />
