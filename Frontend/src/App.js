@@ -1,8 +1,9 @@
 // import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import InterfazProducto from './Views/InterfazProducto/InterfazProducto';
 
 // Importaciones de react
-import React, { useState } from 'react';
 
 const writeSomething = (titulo) => {
   const jsonString = { titulo, terminado: false };
@@ -31,29 +32,7 @@ function App() {
     //   </header>
     // </div>
     <div>
-      <input
-        value={titulo}
-        onChange={(e) => {
-          setTitulo(e.target.value);
-        }}
-      ></input>
-      <button
-        onClick={() => {
-          writeSomething(titulo);
-          fetch('http://localhost:3001/api/administrador')
-            .then((res) => res.json())
-            .then((json) => {
-              setTodos(json.values);
-            });
-        }}
-      >
-        Agregar a mongo
-      </button>
-      {/* <ul>
-        {todos.map((todo) => {
-          return <li key={todo._id}>{todo.titulo}</li>;
-        })}
-      </ul> */}
+      <InterfazProducto/>
     </div>
   );
 }

@@ -18,6 +18,8 @@ export default function InterfazProducto() {
     setData(dataNueva);
     setModalInsertar(false);
     */
+
+    
   }
   return (
     <div className="text-center">
