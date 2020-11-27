@@ -1,7 +1,8 @@
 import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import React, { useState } from 'react';
-import { Button, Label, FormGroup, Input } from 'reactstrap';
+import { Button, Label, FormGroup, Input, ButtonGroup} from 'reactstrap';
 import './InterfazProducto.css';
+
 
 export default function InterfazProducto() {
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
@@ -19,7 +20,7 @@ export default function InterfazProducto() {
     setModalInsertar(false);
     */
 
-    
+
   }
   return (
     <div className="text-center">
