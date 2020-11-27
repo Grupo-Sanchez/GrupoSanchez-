@@ -18,7 +18,7 @@ const writeSomething = (titulo) => {
     });
 };
 
-//hola
+// hola
 // Import de la base de datos
 // adios
 
