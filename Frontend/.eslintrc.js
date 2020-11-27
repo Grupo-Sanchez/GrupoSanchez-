@@ -17,5 +17,6 @@ module.exports = {
     'react/prop-types': ['off'],
     'no-return-assign': ['off'],
     'linebreak-style': 0,
+    "no-trailing-spaces": [2, { "skipBlankLines": true }],
   },
 };
