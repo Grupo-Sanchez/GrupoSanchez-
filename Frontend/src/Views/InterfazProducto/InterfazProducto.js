@@ -6,15 +6,16 @@ import './InterfazProducto.css';
 
 export default function InterfazProducto() {
   const dataApuntes = [
-    { N: 1, nombre: "Esto es react", area: "21/ago/2020", ubicacion: "is working", marca:"esta" },
-    { N: 2, nombre: "Esto es Bootstrap", area: "15/jun/2019", ubicacion: "", marca: "aquella"}
   ];
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalModificar, setModalModificar] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
+
   const [data, setData] = useState(dataApuntes);
+
   const [seleccionado, setSeleccionado] = useState({
+
     N: '',
     nombre: '',
     area: '',
@@ -24,6 +25,14 @@ export default function InterfazProducto() {
   const abrirModalInsertar = () => {
     //setElementoSeleccionado(null);
   }
+  const manejarCambio = e => {
+    const { name, value } = e.target;
+    setSeleccionado((prevState) => ({
+      ...prevState,
+      [name]: value
+    }))
+
+  }
   /*const insertar = () => {
     var valorInsertar = seleccionado;
     var dataNueva = data;
@@ -32,16 +41,16 @@ export default function InterfazProducto() {
     setData(dataNueva);
     setModalInsertar(false);
   }*/
-    const insertar = () => {
-      var valorInsertar = seleccionado;
-      valorInsertar.N = data[data.length - 1].N + 1;
-      var dataNueva = data;
-      dataNueva.push(valorInsertar);
-      setData(dataNueva);
-      setModalInsertar(false);
-    }
+  const insertar = () => {
+    var valorInsertar = seleccionado;
+    valorInsertar.N = data[data.length - 1].N + 1;
+    var dataNueva = data;
+    dataNueva.push(valorInsertar);
+    setData(dataNueva);
+    setModalInsertar(false);
+  }
 
-   return (
+  return (
     <div className="text-center">
       <ButtonGroup>
         <Button onClick={() => setModalInsertar(true)}>Agregar</Button>
@@ -77,8 +86,8 @@ export default function InterfazProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  name="nombre"
+                //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
                 //onChange={manejarCambio}
                 />
                 <br />
@@ -247,11 +256,14 @@ export default function InterfazProducto() {
           </Modal>
 
           <div>
-            <div>
-              <h3>Area</h3>
-            </div>
-            <Label for="exampleEmail"></Label>
-            <input type="text" name="Area" id="Area" placeholder="" />
+            <h3>Area</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="area"
+              value={seleccionado ? seleccionado.area : ''}
+              onChange={manejarCambio}
+            />
           </div>
           <div>
             <div>
@@ -276,13 +288,20 @@ export default function InterfazProducto() {
                 rows="5"
               />
             </div>
-            <div>
-              <Button color="success" /*onClick={() => insertar(0)}*/>
-                Agregar Producto
-          </Button>
-            </div>
+
           </div>
         </ModalBody>
+        <ModalFooter>
+          <button className="btn btn-primary" onClick={() => insertar(0)}>
+            Agregar Producto
+          </button>
+          <button
+            className="btn btn-danger"
+            onClick={() => setModalInsertar(false)}
+          >
+            Cancelar
+          </button>
+        </ModalFooter>
 
       </Modal >
       <Modal isOpen={modalModificar} className="text-center"  /*-------------------MODAL MODIFICAR--------------------------------------*/>
@@ -479,7 +498,7 @@ export default function InterfazProducto() {
                 onClick={() => setModalInsertarProveedor(false)}
               >
                 Cancelar
-          </button>
+            </button>
             </ModalFooter>
           </Modal>
 
@@ -516,7 +535,7 @@ export default function InterfazProducto() {
             <div>
               <Button color="success" onClick={() => insertar(0)}>
                 Agregar Producto
-          </Button>
+              </Button>
             </div>
           </div>
         </ModalBody>
@@ -536,18 +555,18 @@ export default function InterfazProducto() {
             </tr>
           </thead>
           <tbody>
-          {data.map(elemento => (
+            {data.map(elemento => (
               <tr>
                 <td>{elemento.N}</td>
                 <td>{elemento.nombre}</td>
                 <td>{elemento.area}</td>
                 <td>{elemento.ubicacion}</td>
                 <td>{elemento.marca}</td>
-                <td><Button color="primary">Ver</Button></td>  
-              <td><Button color="primary">Ver</Button></td>  
-              <td><Button color="primary" >Ver</Button></td>  
-              <td><Button  onClick={() => setModalModificar(true)} color="success">Modificar</Button>{' '}</td>
-              <td><Button color="danger">Eliminar</Button>{' '}</td>   
+                <td><Button color="primary">Ver</Button></td>
+                <td><Button color="primary">Ver</Button></td>
+                <td><Button color="primary" >Ver</Button></td>
+                <td><Button onClick={() => setModalModificar(true)} color="success">Modificar</Button>{' '}</td>
+                <td><Button color="danger">Eliminar</Button>{' '}</td>
               </tr>
             ))
             }
