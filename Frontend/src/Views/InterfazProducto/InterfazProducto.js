@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import './InterfazProducto.css';
 
-
 export default function InterfazProducto() {
-  const dataApuntes = [
-  ];
+  const dataApuntes = [{nombre: "Esto es react", area: "21/ago/2020", ubicacion: ["is working"]}, {nombre: "Esto es react", area: "21/ago/2020", ubicacion: ["is working"]}];
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalModificar, setModalModificar] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
@@ -15,24 +13,21 @@ export default function InterfazProducto() {
   const [data, setData] = useState(dataApuntes);
 
   const [seleccionado, setSeleccionado] = useState({
-
-    N: '',
     nombre: '',
     area: '',
     ubicacion: '',
-    marca: ''
+    marca: '',
   });
   const abrirModalInsertar = () => {
     //setElementoSeleccionado(null);
-  }
-  const manejarCambio = e => {
+  };
+  const manejarCambio = (e) => {
     const { name, value } = e.target;
     setSeleccionado((prevState) => ({
       ...prevState,
-      [name]: value
-    }))
-
-  }
+      [name]: value,
+    }));
+  };
   /*const insertar = () => {
     var valorInsertar = seleccionado;
     var dataNueva = data;
@@ -43,12 +38,12 @@ export default function InterfazProducto() {
   }*/
   const insertar = () => {
     var valorInsertar = seleccionado;
-    valorInsertar.N = data[data.length - 1].N + 1;
+    //valorInsertar.N = data[data.length].N + 1;
     var dataNueva = data;
     dataNueva.push(valorInsertar);
     setData(dataNueva);
     setModalInsertar(false);
-  }
+  };
 
   return (
     <div className="text-center">
@@ -60,19 +55,22 @@ export default function InterfazProducto() {
       <Modal isOpen={modalInsertar} className="text-center">
         <ModalHeader>
           <div>
-            <h3 >AGREGAR PRODUCTOS</h3>
+            <h3>AGREGAR PRODUCTOS</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div>
-            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">Insertar Codigo</Button>{' '}
+            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
+              Insertar Codigo
+            </Button>{' '}
           </div>
           <div>
-            <label>
-            </label>
+            <label></label>
           </div>
           <div>
-            <Button onClick={() => setModalInsertarProveedor(true)} color="primary">Insertar Proveedor</Button>{' '}
+            <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
+              Insertar Proveedor
+            </Button>{' '}
           </div>
           <Modal isOpen={modalInsertarCodigo}>
             <ModalHeader>
@@ -87,8 +85,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="nombre"
-                //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 2</label>
@@ -96,8 +94,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 3</label>
@@ -105,9 +103,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 4</label>
@@ -115,9 +112,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 5</label>
@@ -125,9 +121,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 6</label>
@@ -135,9 +130,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 7</label>
@@ -145,9 +139,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -155,13 +148,10 @@ export default function InterfazProducto() {
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => insertar(0)}>
                 Agregar Producto
-          </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setModalInsertarCodigo(false)}
-              >
+              </button>
+              <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
                 Cancelar
-          </button>
+              </button>
             </ModalFooter>
           </Modal>
           <Modal isOpen={modalInsertarProveedor}>
@@ -177,8 +167,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -186,8 +176,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -195,9 +185,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -205,9 +194,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -215,9 +203,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -225,9 +212,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -235,9 +221,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -245,18 +230,24 @@ export default function InterfazProducto() {
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => insertar(0)}>
                 Agregar Proveedores
-          </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setModalInsertarProveedor(false)}
-              >
+              </button>
+              <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
                 Cancelar
-          </button>
+              </button>
             </ModalFooter>
           </Modal>
-
           <div>
-            <h3>Area</h3>
+            <h3>Nombre</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="nombre"
+              value={seleccionado ? seleccionado.nombre : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Área</h3>
             <input
               className="form-control"
               type="text"
@@ -266,45 +257,57 @@ export default function InterfazProducto() {
             />
           </div>
           <div>
+            <h3>Ubicación</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="ubicacion"
+              value={seleccionado ? seleccionado.ubicacion : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Marca</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="marca"
+              value={seleccionado ? seleccionado.marca : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
             <div>
               <h3>Descripción corta</h3>
+              <FormGroup class="style">
+                <Label for="exampleText"></Label>
+                <Input type="textarea" name="text" id="exampleText" />
+              </FormGroup>
             </div>
-            <FormGroup class="style">
-              <Label for="exampleText"></Label>
-              <Input type="textarea" name="text" id="exampleText" />
-            </FormGroup>
-
           </div>
           <div>
             <div>
               <h3>Descripción larga </h3>
             </div>
             <div className="form-group">
-              <label htmlFor="exampleFormControlTextarea1">
-              </label>
-              <textarea
-                className="form-control"
-                id="exampleFormControlTextarea1"
-                rows="5"
-              />
+              <label htmlFor="exampleFormControlTextarea1"></label>
+              <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" />
             </div>
-
           </div>
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-primary" onClick={() => insertar(0)}>
             Agregar Producto
           </button>
-          <button
-            className="btn btn-danger"
-            onClick={() => setModalInsertar(false)}
-          >
+          <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
             Cancelar
           </button>
         </ModalFooter>
-
-      </Modal >
-      <Modal isOpen={modalModificar} className="text-center"  /*-------------------MODAL MODIFICAR--------------------------------------*/>
+      </Modal>
+      <Modal
+        isOpen={modalModificar}
+        className="text-center" /*-------------------MODAL MODIFICAR--------------------------------------*/
+      >
         <ModalHeader>
           <div>
             <h3>AGREGAR PRODUCTOS</h3>
@@ -312,14 +315,17 @@ export default function InterfazProducto() {
         </ModalHeader>
         <ModalBody>
           <div>
-            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">Insertar Codigo</Button>{' '}
+            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
+              Insertar Codigo
+            </Button>{' '}
           </div>
           <div>
-            <label>
-            </label>
+            <label></label>
           </div>
           <div>
-            <Button onClick={() => setModalInsertarProveedor(true)} color="primary">Insertar Proveedor</Button>{' '}
+            <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
+              Insertar Proveedor
+            </Button>{' '}
           </div>
           <Modal isOpen={modalInsertarCodigo}>
             <ModalHeader>
@@ -334,8 +340,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 2</label>
@@ -343,8 +349,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 3</label>
@@ -352,9 +358,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 4</label>
@@ -362,9 +367,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 5</label>
@@ -372,9 +376,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 6</label>
@@ -382,9 +385,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 7</label>
@@ -392,9 +394,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -402,13 +403,10 @@ export default function InterfazProducto() {
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => insertar(0)}>
                 Agregar Producto
-          </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setModalInsertarCodigo(false)}
-              >
+              </button>
+              <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
                 Cancelar
-          </button>
+              </button>
             </ModalFooter>
           </Modal>
           <Modal isOpen={modalInsertarProveedor}>
@@ -424,8 +422,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -433,8 +431,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -442,9 +440,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -452,9 +449,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -462,9 +458,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -472,9 +467,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -482,9 +476,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
-
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -492,13 +485,10 @@ export default function InterfazProducto() {
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => insertar(0)}>
                 Agregar Proveedores
-          </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => setModalInsertarProveedor(false)}
-              >
+              </button>
+              <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
                 Cancelar
-            </button>
+              </button>
             </ModalFooter>
           </Modal>
 
@@ -517,20 +507,14 @@ export default function InterfazProducto() {
               <Label for="exampleText"></Label>
               <Input type="textarea" name="text" id="exampleText" />
             </FormGroup>
-
           </div>
           <div>
             <div>
               <h3>Descripción larga </h3>
             </div>
             <div className="form-group">
-              <label htmlFor="exampleFormControlTextarea1">
-              </label>
-              <textarea
-                className="form-control"
-                id="exampleFormControlTextarea1"
-                rows="5"
-              />
+              <label htmlFor="exampleFormControlTextarea1"></label>
+              <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" />
             </div>
             <div>
               <Button color="success" onClick={() => insertar(0)}>
@@ -555,25 +539,35 @@ export default function InterfazProducto() {
             </tr>
           </thead>
           <tbody>
-            {data.map(elemento => (
+            {data.map((elemento) => (
               <tr>
                 <td>{elemento.N}</td>
                 <td>{elemento.nombre}</td>
                 <td>{elemento.area}</td>
                 <td>{elemento.ubicacion}</td>
                 <td>{elemento.marca}</td>
-                <td><Button color="primary">Ver</Button></td>
-                <td><Button color="primary">Ver</Button></td>
-                <td><Button color="primary" >Ver</Button></td>
-                <td><Button onClick={() => setModalModificar(true)} color="success">Modificar</Button>{' '}</td>
-                <td><Button color="danger">Eliminar</Button>{' '}</td>
+                <td>
+                  <Button color="primary">Ver</Button>
+                </td>
+                <td>
+                  <Button color="primary">Ver</Button>
+                </td>
+                <td>
+                  <Button color="primary">Ver</Button>
+                </td>
+                <td>
+                  <Button onClick={() => setModalModificar(true)} color="success">
+                    Modificar
+                  </Button>{' '}
+                </td>
+                <td>
+                  <Button color="danger">Eliminar</Button>{' '}
+                </td>
               </tr>
-            ))
-            }
+            ))}
           </tbody>
         </Table>
       </div>
     </div>
-
   );
 }
