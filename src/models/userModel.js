@@ -30,6 +30,10 @@ const userSchema = new Schema({
   correo: {
     type: String,
   },
+  rol: {
+    type: String,
+    required: 'se requiere un rol',
+  },
 });
 
 module.exports = model('user', userSchema);
