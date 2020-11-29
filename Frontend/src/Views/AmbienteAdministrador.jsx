@@ -1,85 +1,55 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
+import Informes from '../Icons/Informes.svg';
+import Productos from '../Icons/Productos.svg';
+import Bodegas from '../Icons/Bodegas.svg';
+import Notificacion from '../Icons/Notificacion.svg';
+import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
+import OpcionesProductos from '../Components/OpcionesProductos.jsx';
 
 const items = [
   {
-    name: 'Usuarios',
+    name: 'Productos',
     to: '/a',
     icon: (
-      <svg
+      <img
+        src={Productos}
         style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
+        alt="logo"
+      />
     ),
   },
   {
-    name: 'Item B',
+    name: 'Bodegas',
     to: '/b',
     icon: (
-      <svg
+      <img
+        src={Bodegas}
         style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
+        alt="logo"
+      />
     ),
   },
   {
-    name: 'Item C',
+    name: 'Informes',
     to: '/c',
     icon: (
-      <svg
+      <img
+        src={Informes}
         style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
+        alt="logo"
+      />
     ),
   },
   {
-    name: 'Item D',
+    name: 'Notificaciones',
     to: '/d',
     icon: (
-      <svg
+      <img
+        src={Notificacion}
         style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
+        alt="logo"
+      />
     ),
   },
 ];
@@ -92,11 +62,8 @@ const AmbienteAdministrador = () => (
           <Header items={items} />
         </Col>
       </Row>
-
       <Row>
-        <Col>
-          <div>Content PEPEGA</div>
-        </Col>
+        <OpcionesProductos />
       </Row>
     </Container>
   </div>
