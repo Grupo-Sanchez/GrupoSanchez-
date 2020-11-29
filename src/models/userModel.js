@@ -1,6 +1,10 @@
 const { Schema, model } = require('mongoose');
 
 const userSchema = new Schema({
+  identidad: {
+    type: String,
+    required: 'se requiere la identidad',
+  },
   nombre: {
     type: String,
     required: 'el nombre es requerido',
@@ -10,10 +14,7 @@ const userSchema = new Schema({
   },
   primer_apellido: {
     type: String,
-    required: 'el apellido es requerido',
-  },
-  identidad: {
-    Type: String,
+    required: 'el primer apellido es requerido',
   },
 
   segundo_apellido: {
