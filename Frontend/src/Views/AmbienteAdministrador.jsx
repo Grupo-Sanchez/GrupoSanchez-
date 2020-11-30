@@ -64,7 +64,7 @@ const AmbienteAdministrador = () => (
         </Col>
       </Row>
       <Row>
-        <OpcionesProductos />
+        <OpcionesBodegas />
       </Row>
     </Container>
   </div>
