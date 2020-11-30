@@ -1,11 +1,12 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
+import OpcionesProductos from '../Components/OpcionesProductos.jsx';
+import OpcionesBodegas from '../Components/OpcionesBodegas.jsx';
 import Informes from '../Icons/Informes.svg';
 import Productos from '../Icons/Productos.svg';
 import Bodegas from '../Icons/Bodegas.svg';
 import Notificacion from '../Icons/Notificacion.svg';
 import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
-import OpcionesProductos from '../Components/OpcionesProductos.jsx';
 
 const items = [
   {
