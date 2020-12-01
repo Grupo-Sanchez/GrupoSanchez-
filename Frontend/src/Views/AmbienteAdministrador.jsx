@@ -2,6 +2,7 @@ import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
 import OpcionesProductos from '../Components/OpcionesProductos.jsx';
 import OpcionesBodegas from '../Components/OpcionesBodegas.jsx';
+import CreacionDepartamentos from '../Components/CreacionDepartamentos.jsx';
 import Informes from '../Icons/Informes.svg';
 import Productos from '../Icons/Productos.svg';
 import Bodegas from '../Icons/Bodegas.svg';
@@ -64,7 +65,7 @@ const AmbienteAdministrador = () => (
         </Col>
       </Row>
       <Row>
-        <OpcionesProductos />
+        <CreacionDepartamentos />
       </Row>
     </Container>
   </div>
