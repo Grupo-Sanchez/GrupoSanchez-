@@ -126,7 +126,7 @@ const [seleccionado, setSeleccionado] = useState({
             </ModalBody>
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => insertar(0)}>
-                Agregar Producto
+                Agregar Código
               </button>
               <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
                 Cancelar

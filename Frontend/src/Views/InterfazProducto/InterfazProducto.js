@@ -13,8 +13,10 @@ export default function InterfazProducto() {
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalModificar, setModalModificar] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
+  const [modalVerCodigo, setModalVerCodigo] = useState(false);
+  const[modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
-
+  const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -55,19 +57,13 @@ export default function InterfazProducto() {
     setModalInsertar(false);
   };
   const eliminar = () => {
-    setData(data.filter(elemento => elemento.nombre !== seleccionado.nombre));
-    
+    setData(data.filter((elemento) => elemento.nombre !== seleccionado.nombre));
   };
 
   return (
     <div className="text-center">
       <div align="center">
-        <SelectSearch
-          search
-          placeholder="Encuentre el Producto a Facturar"
-          options={options}
-
-        />
+        <SelectSearch search placeholder="Encuentre el Producto a Facturar" options={options} />
       </div>
       <Button onClick={() => setModalInsertar(true)}>Agregar</Button>
       <Button>Eliminar</Button>
@@ -104,8 +100,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="nombre"
-                //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 2</label>
@@ -113,8 +109,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 3</label>
@@ -122,8 +118,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 4</label>
@@ -131,8 +127,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 5</label>
@@ -140,8 +136,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 6</label>
@@ -149,8 +145,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 7</label>
@@ -158,8 +154,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -186,8 +182,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -195,8 +191,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -204,8 +200,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -213,8 +209,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -222,8 +218,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -231,8 +227,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -240,8 +236,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -356,6 +352,7 @@ export default function InterfazProducto() {
               Insertar Proveedor
             </Button>{' '}
           </div>
+
           <Modal isOpen={modalInsertarCodigo}>
             <ModalHeader>
               <div>
@@ -369,8 +366,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 2</label>
@@ -378,8 +375,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 3</label>
@@ -387,8 +384,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 4</label>
@@ -396,8 +393,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 5</label>
@@ -405,8 +402,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 6</label>
@@ -414,8 +411,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 7</label>
@@ -423,15 +420,15 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
             </ModalBody>
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => insertar(0)}>
-                Agregar Producto
+                Agregar Código
               </button>
               <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
                 Cancelar
@@ -451,8 +448,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -460,8 +457,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -469,8 +466,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -478,8 +475,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -487,8 +484,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -496,8 +493,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -505,8 +502,8 @@ export default function InterfazProducto() {
                   className="form-control"
                   type="text"
                   name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -534,8 +531,8 @@ export default function InterfazProducto() {
               className="form-control"
               type="text"
               name="nombre"
-            //value={seleccionado ? seleccionado.nombre : ''}
-            //onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.nombre : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -544,8 +541,8 @@ export default function InterfazProducto() {
               className="form-control"
               type="text"
               name="area"
-            //value={seleccionado ? seleccionado.area : ''}
-            //onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.area : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -554,8 +551,8 @@ export default function InterfazProducto() {
               className="form-control"
               type="text"
               name="ubicacion"
-            //value={seleccionado ? seleccionado.ubicacion : ''}
-            //onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.ubicacion : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -564,8 +561,8 @@ export default function InterfazProducto() {
               className="form-control"
               type="text"
               name="marca"
-            //value={seleccionado ? seleccionado.marca : ''}
-            //onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.marca : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -574,8 +571,8 @@ export default function InterfazProducto() {
               className="form-control"
               type="text"
               name="precio"
-            //value={seleccionado ? seleccionado.precio : ''}
-            //onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.precio : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -607,7 +604,7 @@ export default function InterfazProducto() {
         </ModalBody>
       </Modal>
       <div>
-        <Modal isOpen={modalInsertarCodigo}>
+        <Modal isOpen={modalVerCodigo}>
           <ModalHeader>
             <div className="text-center">
               <h3>Agregar Productos</h3>
@@ -622,8 +619,8 @@ export default function InterfazProducto() {
                 name="nombre"
                 value="87878"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 2</label>
@@ -632,8 +629,8 @@ export default function InterfazProducto() {
                 type="text"
                 name="Fecha"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 3</label>
@@ -642,8 +639,8 @@ export default function InterfazProducto() {
                 type="text"
                 name="Etiqueta"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 4</label>
@@ -652,8 +649,8 @@ export default function InterfazProducto() {
                 type="text"
                 name="Etiqueta"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 5</label>
@@ -662,8 +659,8 @@ export default function InterfazProducto() {
                 type="text"
                 name="Etiqueta"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 6</label>
@@ -672,8 +669,8 @@ export default function InterfazProducto() {
                 type="text"
                 name="Etiqueta"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 7</label>
@@ -682,17 +679,127 @@ export default function InterfazProducto() {
                 type="text"
                 name="Etiqueta"
                 readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
-              Cancelar
-              </button>
+            <button className="btn btn-primary" onClick={() => setModalVerCodigo(false)}>
+              OK
+            </button>
           </ModalFooter>
+        </Modal>
+        <Modal isOpen={modalVerProveedor}>
+          <ModalHeader>
+            <div>
+              <h3>Modificar Productos</h3>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+            <div className="form-group">
+              <label>proveedor 1</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Apunte"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+              <label>proveedor 2</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Fecha"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+              <label>proveedor 3</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+              <label>proveedor 4</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+              <label>proveedor 5</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+              <label>proveedor 6</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+              <label>proveedor 7</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                readOnly
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
+              />
+              <br />
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-primary" onClick={() => setModalVerProveedor(false)}>
+              OK
+            </button>
+          </ModalFooter>
+        </Modal>
+        <Modal isOpen = {modalVerDescripciones}>
+          <ModalHeader></ModalHeader>
+          <ModalBody>
+            <div>
+              <div>
+                <h3>Descripción corta</h3>
+              </div>
+              <FormGroup class="style">
+                <Label for="exampleText"></Label>
+                <Input type="textarea" name="text" id="exampleText" readOnly/>
+              </FormGroup>
+            </div>
+            <div>
+              <div>
+                <h3>Descripción larga </h3>
+              </div>
+              <div className="form-group">
+                <label htmlFor="exampleFormControlTextarea1"></label>
+                <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" readOnly/>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter></ModalFooter>
         </Modal>
         <Table>
           <thead>
@@ -716,13 +823,17 @@ export default function InterfazProducto() {
                 <td>{elemento.ubicacion}</td>
                 <td>{elemento.marca}</td>
                 <td>
-                  <Button color="primary">Ver</Button>
+                  <Button color="primary" onClick={() => setModalVerCodigo(true)}>
+                    Ver
+                  </Button>
                 </td>
                 <td>
-                  <Button color="primary">Ver</Button>
+                  <Button color="primary" onClick={() => setModalVerProveedor(true)}>
+                    Ver
+                  </Button>
                 </td>
                 <td>
-                  <Button color="primary">Ver</Button>
+                  <Button color="primary" onClick = {() => setModalVerProveedor(true)}>Ver</Button>
                 </td>
                 <td>
                   <Button onClick={() => setModalModificar(true)} color="success">
@@ -730,7 +841,9 @@ export default function InterfazProducto() {
                   </Button>{' '}
                 </td>
                 <td>
-                  <Button onClick={() => eliminar()} color="danger">Eliminar</Button>{' '}
+                  <Button onClick={() => eliminar()} color="danger">
+                    Eliminar
+                  </Button>{' '}
                 </td>
               </tr>
             ))}
