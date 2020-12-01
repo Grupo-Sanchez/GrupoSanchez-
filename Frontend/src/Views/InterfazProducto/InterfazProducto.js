@@ -2,22 +2,32 @@ import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import React, { useState } from 'react';
 import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import './InterfazProducto.css';
+import './SearchBar.css';
+import SelectSearch from 'react-select-search';
 
 export default function InterfazProducto() {
-  const dataApuntes = [{nombre: "Esto es react", area: "21/ago/2020", ubicacion: ["is working"]}, {nombre: "Esto es react", area: "21/ago/2020", ubicacion: ["is working"]}];
+  const dataApuntes = [
+    { nombre: 'Martillo', area: 'H1', ubicacion: ['H5-S'] },
+    { nombre: 'Llave inglesa', area: 'H1', ubicacion: ['H6-S'] },
+  ];
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalModificar, setModalModificar] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
 
   const [data, setData] = useState(dataApuntes);
-
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
     ubicacion: '',
     marca: '',
+    precio: '',
   });
+  const options = [
+    { name: 'Swedish', value: 'sv' },
+    { name: 'English', value: 'en' },
+  ];
+  /* Simple example */
   const abrirModalInsertar = () => {
     //setElementoSeleccionado(null);
   };
@@ -47,6 +57,15 @@ export default function InterfazProducto() {
 
   return (
     <div className="text-center">
+      <div align="center">
+        <SelectSearch
+          className="select-search"
+          options={options}
+          value="sv"
+          name="language"
+          placeholder="Choose your language"
+        />
+      </div>
       <ButtonGroup>
         <Button onClick={() => setModalInsertar(true)}>Agregar</Button>
         <Button onClick={() => setModalModificar(true)}>Modificar </Button>
@@ -74,7 +93,7 @@ export default function InterfazProducto() {
           </div>
           <Modal isOpen={modalInsertarCodigo}>
             <ModalHeader>
-              <div>
+              <div className="text-center">
                 <h3>Agregar Productos</h3>
               </div>
             </ModalHeader>
@@ -273,6 +292,16 @@ export default function InterfazProducto() {
               type="text"
               name="marca"
               value={seleccionado ? seleccionado.marca : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Precio</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="precio"
+              value={seleccionado ? seleccionado.precio : ''}
               onChange={manejarCambio}
             />
           </div>
@@ -500,6 +529,56 @@ export default function InterfazProducto() {
             <input type="text" name="Area" id="Area" placeholder="" />
           </div>
           <div>
+            <h3>Nombre</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="nombre"
+              //value={seleccionado ? seleccionado.nombre : ''}
+              //onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Área</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="area"
+              //value={seleccionado ? seleccionado.area : ''}
+              //onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Ubicación</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="ubicacion"
+              //value={seleccionado ? seleccionado.ubicacion : ''}
+              //onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Marca</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="marca"
+              //value={seleccionado ? seleccionado.marca : ''}
+              //onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Precio</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="precio"
+              //value={seleccionado ? seleccionado.precio : ''}
+              //onChange={manejarCambio}
+            />
+          </div>
+          <div>
             <div>
               <h3>Descripción corta</h3>
             </div>
@@ -519,6 +598,9 @@ export default function InterfazProducto() {
             <div>
               <Button color="success" onClick={() => insertar(0)}>
                 Agregar Producto
+              </Button>
+              <Button color="danger" onClick={() => setModalModificar(false)}>
+                Cancelar
               </Button>
             </div>
           </div>

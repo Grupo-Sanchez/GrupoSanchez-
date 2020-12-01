@@ -31,7 +31,7 @@ function App() {
     //   </header>
     // </div>
     <div>
-      <InterfazProducto />
+      <InterfazProducto/>
     </div>
   );
 }
