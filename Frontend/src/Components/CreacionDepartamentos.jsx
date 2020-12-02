@@ -3,6 +3,8 @@ import { Input, Container, Button, Col } from 'reactstrap';
 import '../Styles/ImgSelection.css';
 
 const CreacionDepartamentos = () => {
+  const [imagen, setImagen] = useState();
+
   const [data, setData] = useState({
     nombre: '',
     image: '',
@@ -13,10 +15,16 @@ const CreacionDepartamentos = () => {
     setData({ ...data, [name]: value });
   };
 
+  const updateImg = (e) => {
+    setImagen(e.target.files[0]);
+    const nombreImagen = 'image';
+    setData({ ...data, [nombreImagen]: URL.createObjectURL(e.target.files[0]) });
+  };
+
   const imageHandler = (e) => {
     if (e.target.files[0]) {
-      console.log(e.target.files[0]);
       const image = e.target.files[0];
+      setImagen(image);
     }
     updateImg(e);
   };
@@ -29,9 +37,9 @@ const CreacionDepartamentos = () => {
         <Input name="nombre" value={data.nombre} onChange={handleChange} />
         <h3>Imagen de Departamento</h3>
         <div className="img-holder">
-          <img src={data.profilepic} alt="" id="img" className="img img-select" />
+          <img src={data.image} alt="" id="img" className="img img-select" />
         </div>
-        <Input type="file" name="imgfile" id="exampleFile" onChange={imageHandler} />
+        <Input type="file" name="image" id="exampleFile" onChange={imageHandler} />
       </Col>
     </Container>
   );
