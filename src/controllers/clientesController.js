@@ -34,9 +34,39 @@ exports.read_entries = async (req, res) => {
 
 */
 
+/*
 exports.create_cliente = async (req, res) => {
   try {
     const new_cliente = new cliente(req.query);
+    ret = await new_cliente.save();
+    res.json(ret);
+  } catch (error) {
+    res.send({ message: 'Bad request: ' + error });
+  }
+};
+*/
+exports.create_cliente = async (req, res) => {
+  const {
+    cedula,
+    nombre,
+    segundo_nombre,
+    primer_apellido,
+    segundo_apellido,
+    RTN,
+    tel,
+    email,
+  } = req.body;
+  try {
+    const new_cliente = new cliente({
+      cedula,
+      nombre,
+      segundo_nombre,
+      primer_apellido,
+      segundo_apellido,
+      RTN,
+      tel,
+      email,
+    });
     ret = await new_cliente.save();
     res.json(ret);
   } catch (error) {

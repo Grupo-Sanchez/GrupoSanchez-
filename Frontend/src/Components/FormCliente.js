@@ -1,5 +1,6 @@
 // Imports
 import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 
 import {
   Container,
@@ -136,6 +137,21 @@ const FormCliente = () => {
     }
   };
 
+  const prueba = async () => {
+    const campos = {
+      cedula: id,
+      nombre: primerNombre,
+      segundo_nombre: segundoNombre,
+      primer_apellido: primerApellido,
+      segundo_apellido: segundoApellido,
+      RTN: rtn,
+      tel: telefono,
+      email: correo,
+    };
+    const res = await axios.post('http://localhost:3001/api/clientes', campos);
+    console.log(res);
+  };
+
   // Con validaciones
   const handleClick = () => {
     // if (
@@ -176,6 +192,14 @@ const FormCliente = () => {
     // } else {
     //   alert('Llenar campos');
     // }
+  };
+
+  const onSave = async (e) => {
+    // e.preventDefault();
+    const res = await axios.post('http://localhost:3001/api/clientes', {
+      nombre: 'Eddas',
+    });
+    console.log(res);
   };
 
   return (
@@ -337,6 +361,14 @@ const FormCliente = () => {
                     }}
                   ></div>
                 </FormGroup>
+                <Button
+                  onClick={() => {
+                    prueba();
+                  }}
+                  className="danger"
+                >
+                  send to db test
+                </Button>
               </Form>
             </Col>
           </Row>

@@ -25,7 +25,6 @@ import '../Styles/FormularioCliente.css';
 
 const AmbienteFormularioCliente = () => {
   // States
-
   // Modal
   const [modalFormularioCliente, setModalFormularioCliente] = useState(false);
   const toggleFormularioCliente = () => setModalFormularioCliente(!modalFormularioCliente);
@@ -50,7 +49,12 @@ const AmbienteFormularioCliente = () => {
         <FormCliente />
       </ModalBody>
       <ModalFooter>
-        <Button color="primary" onClick={toggleFormularioCliente}>
+        <Button
+          color="primary"
+          onClick={() => {
+            toggleFormularioCliente();
+          }}
+        >
           Confirmar
         </Button>{' '}
       </ModalFooter>
