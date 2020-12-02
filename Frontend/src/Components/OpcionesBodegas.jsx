@@ -57,8 +57,9 @@ const OpcionesBodegas = () => {
   ];
 
   return (
-    <Container fluid="md">
+    <Container fluid="md" style={{ padding: '0' }}>
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Bodegas</h1>
+
       <Row style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon }, i) => (
           <Col md="4">
