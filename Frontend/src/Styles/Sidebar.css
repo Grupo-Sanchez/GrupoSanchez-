@@ -1,0 +1,96 @@
+.base-header {
+  padding: 0.3rem 0.5rem;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #343a40;
+  color: white;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidenav-button {
+  margin-right: 1rem;
+  border-style: none;
+  background-color: transparent;
+}
+
+.sidenav {
+  display: flex;
+  flex-flow: column;
+  position: fixed;
+  background-color: white;
+  color: black;
+  width: 13rem;
+  height: 100%;
+  top: 0;
+  left: 0;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+  z-index: 10;
+}
+
+.sidenav-closed {
+  transform: translateX(-100%);
+}
+
+.sidenav-opened {
+  transform: translateX(0);
+}
+
+.sidenav-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem;
+}
+
+.sidenav-content {
+  flex: 1 0 auto;
+}
+
+.sidenav-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 1rem;
+}
+
+.sidenav-footer:hover {
+  background-color: #343a40;
+  color: white;
+}
+
+.sidenav-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 0.8rem;
+}
+
+.sidenav-item:hover {
+  background-color: #343a40;
+  color: white;
+}
+
+.sidenav-background {
+  z-index: 10;
+  position: fixed;
+  inset: 0;
+}
+
+.sidenav-background-content {
+  position: absolute;
+  inset: 0;
+  background-color: black;
+  opacity: 50%;
+}
