@@ -1,7 +1,6 @@
-import AmbienteJefeDeTienda from "./Views/AmbienteJefeDeTienda/AmbienteJefeDeTienda.js"
-
-// Importaciones de react
 import React, { useState } from 'react';
+import AmbienteJefeDeTienda from './Views/AmbienteJefeDeTienda/AmbienteJefeDeTienda.jsx';
+// Importaciones de react
 
 const writeSomething = (titulo) => {
   const jsonString = { titulo, terminado: false };
@@ -23,39 +22,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [titulo, setTitulo] = useState('');
 
-  return (
-    <AmbienteJefeDeTienda />
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //   </header>
-    // </div>
-    /*<div>
-    <input
-      value={titulo}
-      onChange={(e) => {
-        setTitulo(e.target.value);
-      }}
-    ></input>
-    <button
-      onClick={() => {
-        writeSomething(titulo);
-        fetch("http://localhost:3001/api/administrador")
-          .then((res) => res.json())
-          .then((json) => {
-            setTodos(json.values);
-          });
-      }}
-    >
-      Agregar a mongo
-    </button>
-    <ul>
-      {todos.map((todo) => {
-        return <li key={todo._id}>{todo.titulo}</li>;
-      })}
-    </ul>
-  </div>*/
-  );
+  return <AmbienteJefeDeTienda />;
 }
 
 export default App;
