@@ -5,10 +5,9 @@ import './App.css';
 
 function App() {
   return (
-    <>
-      <AmbienteFormularioCliente />
-      <AmbienteAdministrador />
-    </>
+    <div>
+      <p>Hola desde app.js<p/>
+    <div/>
   );
 }
 
