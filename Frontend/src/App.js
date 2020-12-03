@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import './App.css';
 import AgregarProducto from './Views/InterfazProducto/AgregarProducto';
+import EliminarProducto from './Views/InterfazProducto/EliminarProducto';
 import InterfazProducto from './Views/InterfazProducto/InterfazProducto';
 
 // Importaciones de react
@@ -32,7 +33,7 @@ function App() {
     //   </header>
     // </div>
     <div >
-      <InterfazProducto/>
+      <EliminarProducto/>
     </div>
   );
 }

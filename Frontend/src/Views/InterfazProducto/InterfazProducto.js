@@ -7,8 +7,8 @@ import SelectSearch from 'react-select-search';
 
 export default function InterfazProducto() {
   const dataApuntes = [
-    { nombre: 'Martillo', area: 'H1', ubicacion: ['H5-S'] },
-    { nombre: 'Llave inglesa', area: 'H1', ubicacion: ['H6-S'] },
+    { nombre: 'Martillo', area: 'H1', codigo:["0801","0802","0803"],proveedores:["0801","0802","0803"],ubicacion: ['H5-S'] },
+    { nombre: 'Llave inglesa',area:'H1', codigo:["0801","0802","0803"] ,proveedores:["0801","0802","0803"], ubicacion: ['H6-S'] },
   ];
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalModificar, setModalModificar] = useState(false);
@@ -21,6 +21,7 @@ export default function InterfazProducto() {
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
+    codigo: ['123'],
     ubicacion: '',
     marca: '',
     precio: '',
@@ -56,10 +57,14 @@ export default function InterfazProducto() {
     setData(dataNueva);
     setModalInsertar(false);
   };
-  const eliminar = () => {
-    setData(data.filter((elemento) => elemento.nombre !== seleccionado.nombre));
+  const eliminar = (i) => {
+    setData(data.filter((elemento) => elemento.nombre !== i));
   };
+  const mostrarCodigos = (i) => {
+    setSeleccionado(i);
+    setModalVerCodigo(true);
 
+  };
   return (
     <div className="text-center">
       <div align="center">
@@ -617,7 +622,7 @@ export default function InterfazProducto() {
                 className="form-control"
                 type="text"
                 name="nombre"
-                value="87878"
+                value={seleccionado.codigo[0]}
                 readOnly
                 //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
                 //onChange={manejarCambio}
@@ -648,6 +653,7 @@ export default function InterfazProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
+                value={seleccionado.codigo[0]}
                 readOnly
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
@@ -823,7 +829,7 @@ export default function InterfazProducto() {
                 <td>{elemento.ubicacion}</td>
                 <td>{elemento.marca}</td>
                 <td>
-                  <Button color="primary" onClick={() => setModalVerCodigo(true)}>
+                  <Button color="primary" onClick={() =>mostrarCodigos(elemento)}>
                     Ver
                   </Button>
                 </td>
@@ -841,7 +847,7 @@ export default function InterfazProducto() {
                   </Button>{' '}
                 </td>
                 <td>
-                  <Button onClick={() => eliminar()} color="danger">
+                  <Button onClick={() => eliminar(elemento.nombre)} color="danger">
                     Eliminar
                   </Button>{' '}
                 </td>
