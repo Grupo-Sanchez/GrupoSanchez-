@@ -38,7 +38,7 @@ const items = [
     ),
   },
   {
-    name: 'Informes',
+    name: 'Reportes',
     to: '/c',
     icon: (
       <img
@@ -48,20 +48,9 @@ const items = [
       />
     ),
   },
-  {
-    name: 'Notificaciones',
-    to: '/d',
-    icon: (
-      <img
-        src={Notificacion}
-        style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        alt="logo"
-      />
-    ),
-  },
 ];
 
-const AmbienteAdministrador = () => (
+const AmbientePropietarioBodegas = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -76,4 +65,4 @@ const AmbienteAdministrador = () => (
   </div>
 );
 
-export default AmbienteAdministrador;
+export default AmbientePropietarioBodegas;

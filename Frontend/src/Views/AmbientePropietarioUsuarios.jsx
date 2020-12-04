@@ -1,8 +1,6 @@
-import { useState } from 'react';
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
-import OpcionesProductos from '../Components/OpcionesProductos.jsx';
-import OpcionesBodegas from '../Components/OpcionesBodegas.jsx';
+import OpcionesUsuarios from '../Components/OpcionesUsuarios.jsx';
 import Informes from '../Icons/Informes.svg';
 import Productos from '../Icons/Productos.svg';
 import Bodegas from '../Icons/Bodegas.svg';
@@ -39,7 +37,7 @@ const items = [
     ),
   },
   {
-    name: 'Informes',
+    name: 'Reportes',
     to: '/c',
     icon: (
       <img
@@ -49,20 +47,9 @@ const items = [
       />
     ),
   },
-  {
-    name: 'Notificaciones',
-    to: '/d',
-    icon: (
-      <img
-        src={Notificacion}
-        style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        alt="logo"
-      />
-    ),
-  },
 ];
 
-const AmbienteAdministrador = () => (
+const AmbientePropietarioUsuarios = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -71,10 +58,10 @@ const AmbienteAdministrador = () => (
         </Col>
       </Row>
       <Row noGutters>
-        <OpcionesProductos />
+        <OpcionesUsuarios />
       </Row>
     </Container>
   </div>
 );
 
-export default AmbienteAdministrador;
+export default AmbientePropietarioUsuarios;

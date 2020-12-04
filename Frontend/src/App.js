@@ -1,10 +1,10 @@
 import React from 'react';
-import AmbienteAdministradorProductos from './Views/AmbienteAdministradorProductos.jsx';
-import AmbienteAdministradorBodegas from './Views/AmbienteAdministradorBodegas.jsx';
 import './App.css';
+import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
+import AmbientePropietarioProductos from './Views/AmbientePropietarioProductos.jsx';
 
 function App() {
-  return <AmbienteAdministradorProductos />;
+  return <AmbientePropietarioProductos />;
 }
 
 export default App;

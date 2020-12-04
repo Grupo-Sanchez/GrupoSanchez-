@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../Styles/Sidebar.css';
+import Notificacion from '../Icons/Notificacion.svg';
+import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
 
 const Header = (props) => {
   const { items } = props;
@@ -33,6 +35,8 @@ const Header = (props) => {
         </button>
 
         <span>Grupo Sanchez</span>
+
+        <img src={Notificacion} style={{ width: '1.4em', height: '1.4em', color: 'white' }} />
       </div>
 
       {isOpen && (
