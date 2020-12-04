@@ -33,7 +33,7 @@ function App() {
     //   </header>
     // </div>
     <div >
-      <EliminarProducto/>
+      <AgregarProducto/>
     </div>
   );
 }

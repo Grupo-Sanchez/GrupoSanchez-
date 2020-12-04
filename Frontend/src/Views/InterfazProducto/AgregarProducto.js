@@ -1,15 +1,28 @@
 import { Modal, ModalBody, ModalHeader, ModalFooter, Alert } from 'reactstrap';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import './InterfazProducto.css';
 import axios from 'axios';
 
 export default function AgregarProducto() {
   const dataApuntes = [
-    { nombre: 'Martillo', area: 'H1', codigo: ["0801", "0802", "0803"], proveedores: ["0801", "0802", "0803"], ubicacion: ['H5-S'], precio: ['24500', '700'] },
-    { nombre: 'Llave inglesa', area: 'H1', codigo: ["0801", "0802", "0803"], proveedores: ["0801", "0802", "0803"], ubicacion: ['H6-S'], precio: ['24500', '700'] },
+    {
+      nombre: 'Martillo',
+      area: 'H1',
+      codigos: ['0801', '0802', '0803'],
+      proveedores: ['0801', '0802', '0803'],
+      ubicacion: ['H5-S'],
+      precio: ['24500', '700'],
+    },
+    {
+      nombre: 'Llave inglesa',
+      area: 'H1',
+      codigos: ['0801', '0802', '0803'],
+      proveedores: ['0801', '0802', '0803'],
+      ubicacion: ['H6-S'],
+      precio: ['24500', '700'],
+    },
   ];
-
 
   const [modalInsertar, setModalInsertar] = useState(true);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
@@ -18,28 +31,27 @@ export default function AgregarProducto() {
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
-    codigo: ['456'],
-    proveedores: ['tres'],
+    codigos: [''],
+    proveedores: [''],
     ubicacion: '',
     marca: '',
     precio: [],
   });
   const prueba = async () => {
-    alert("entrooo")
+    alert('entrooo');
     const campos = {
       nombre: seleccionado.nombre,
       area: seleccionado.area,
-      codigos: seleccionado.codigo,
+      codigos: seleccionado.codigos,
       proveedores: seleccionado.proveedores,
       ubicacion: seleccionado.ubicacion,
       marca: seleccionado.marca,
       precios: seleccionado.precio,
-
     };
-    alert("saliooo")
+    alert('saliooo');
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
-    alert("escribio?")
+    alert('escribio?');
   };
   const manejarCambio = (e) => {
     const { name, value } = e.target;
@@ -58,7 +70,6 @@ export default function AgregarProducto() {
     prueba();
   };
 
- 
   return (
     <Modal isOpen={modalInsertar} className="text-center">
       <ModalHeader>
@@ -70,7 +81,7 @@ export default function AgregarProducto() {
         <div>
           <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
             Insertar Codigo
-            </Button>{' '}
+          </Button>{' '}
         </div>
         <div>
           <label></label>
@@ -78,7 +89,7 @@ export default function AgregarProducto() {
         <div>
           <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
             Insertar Proveedor
-            </Button>{' '}
+          </Button>{' '}
         </div>
         <Modal isOpen={modalInsertarCodigo}>
           <ModalHeader>
@@ -91,10 +102,10 @@ export default function AgregarProducto() {
               <label>codigo 1</label>
               <input
                 className="form-control"
-                type="text"
-                name="nombre"
-              //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-              //onChange={manejarCambio}
+                type="number"
+                name="codigos"
+                value={seleccionado ? seleccionado.codigos : ''}                
+                onChange={manejarCambio}
               />
               <br />
               <label>codigo 2</label>
@@ -102,8 +113,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Fecha"
-              //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 3</label>
@@ -111,8 +122,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 4</label>
@@ -120,8 +131,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 5</label>
@@ -129,8 +140,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 6</label>
@@ -138,8 +149,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>codigo 7</label>
@@ -147,19 +158,17 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" >
-              Agregar Código
-              </button>
+            <button className="btn btn-primary">Agregar Código</button>
             <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
               Cancelar
-              </button>
+            </button>
           </ModalFooter>
         </Modal>
         <Modal isOpen={modalInsertarProveedor}>
@@ -175,8 +184,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Apunte"
-              //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>proveedor 2</label>
@@ -184,8 +193,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Fecha"
-              //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>proveedor 3</label>
@@ -193,8 +202,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>proveedor 4</label>
@@ -202,8 +211,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>proveedor 5</label>
@@ -211,8 +220,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>proveedor 6</label>
@@ -220,8 +229,8 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
               <label>proveedor 7</label>
@@ -229,19 +238,17 @@ export default function AgregarProducto() {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                //onChange={manejarCambio}
               />
               <br />
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary">
-              Agregar Proveedores
-              </button>
+            <button className="btn btn-primary">Agregar Proveedores</button>
             <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
               Cancelar
-              </button>
+            </button>
           </ModalFooter>
         </Modal>
         <div>
@@ -316,10 +323,10 @@ export default function AgregarProducto() {
       <ModalFooter>
         <button className="btn btn-primary" onClick={() => insertar(0)}>
           Agregar Producto
-          </button>
+        </button>
         <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
           Cancelar
-          </button>
+        </button>
       </ModalFooter>
     </Modal>
   );
