@@ -6,8 +6,6 @@ import axios from 'axios';
 import AgregarProducto from './AgregarProducto'
 export default function EliminarProducto() {
   const dataApuntes = [
-    { nombre: 'Martillo', area: 'H1', codigos: ["0801", "0802", "0803"], proveedores: ["0801", "0802", "0803"], ubicacion: ['H5-S'], precio: ['24500', '700'] },
-    { nombre: 'Llave inglesa', area: 'H1', codigos: ["0801", "0802", "0803"], proveedores: ["0801", "0802", "0803"], ubicacion: ['H6-S'], precio: ['24500', '700'] },
   ];
 
 
@@ -141,6 +139,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="Fecha"
+              value={seleccionado.codigos[1]}
               readOnly
             //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
             //onChange={manejarCambio}
@@ -151,6 +150,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="Etiqueta"
+              value={seleccionado.codigos[2]}
               readOnly
             //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             //onChange={manejarCambio}
@@ -161,7 +161,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.codigos[0]}
+              value={seleccionado.codigos[3]}
               readOnly
             //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             //onChange={manejarCambio}
@@ -172,6 +172,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="Etiqueta"
+              value={seleccionado.codigos[4]}
               readOnly
             //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             //onChange={manejarCambio}
@@ -182,6 +183,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="Etiqueta"
+              value={seleccionado.codigos[5]}
               readOnly
             //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             //onChange={manejarCambio}
@@ -192,6 +194,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="Etiqueta"
+              value={seleccionado.codigos[6]}
               readOnly
             //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             //onChange={manejarCambio}

@@ -5,37 +5,22 @@ import './InterfazProducto.css';
 import axios from 'axios';
 
 export default function AgregarProducto() {
-  const dataApuntes = [
-    {
-      nombre: 'Martillo',
-      area: 'H1',
-      codigos: ['0801', '0802', '0803'],
-      proveedores: ['0801', '0802', '0803'],
-      ubicacion: ['H5-S'],
-      precio: ['24500', '700'],
-    },
-    {
-      nombre: 'Llave inglesa',
-      area: 'H1',
-      codigos: ['0801', '0802', '0803'],
-      proveedores: ['0801', '0802', '0803'],
-      ubicacion: ['H6-S'],
-      precio: ['24500', '700'],
-    },
-  ];
+  const dataApuntes = [];
 
   const [modalInsertar, setModalInsertar] = useState(true);
+  const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
-    codigos: [''],
-    proveedores: [''],
+    codigos: [],
+    proveedores: [],
     ubicacion: '',
     marca: '',
     precio: [],
+    cantidad: '',
   });
   const prueba = async () => {
     alert('entrooo');
@@ -47,18 +32,58 @@ export default function AgregarProducto() {
       ubicacion: seleccionado.ubicacion,
       marca: seleccionado.marca,
       precios: seleccionado.precio,
+      cantidad: seleccionado.cantidad,
     };
     alert('saliooo');
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
     alert('escribio?');
   };
+  /* HandleChange(event){
+      this.state.codigos.push();
+      
+      this.setState({some:'val',arr:this.state.arr})
+  }*/
+
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setSeleccionado((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+  };
+  const GuardarCodigos = () => {
+
+    seleccionado.codigos.push(document.getElementById('cod1').value);
+    seleccionado.codigos.push(document.getElementById('cod2').value);
+    seleccionado.codigos.push(document.getElementById('cod3').value);
+    seleccionado.codigos.push(document.getElementById('cod4').value);
+    seleccionado.codigos.push(document.getElementById('cod5').value);
+    seleccionado.codigos.push(document.getElementById('cod6').value);
+    seleccionado.codigos.push(document.getElementById('cod7').value);
+    setModalInsertarCodigo(false)
+    alert(seleccionado.codigos[0]);
+  };
+  const GuardarPrecio = () => {
+
+    seleccionado.precio.push(document.getElementById('precio1').value);
+    seleccionado.precio.push(document.getElementById('precio2').value);
+    seleccionado.precio.push(document.getElementById('precio3').value);
+
+    alert(seleccionado.precio[0]);
+  };
+  const GuardarProveedores = () => {
+
+    seleccionado.codigos.push(document.getElementById('prov1').value);
+    seleccionado.codigos.push(document.getElementById('prov2').value);
+    seleccionado.codigos.push(document.getElementById('prov3').value);
+    seleccionado.codigos.push(document.getElementById('prov4').value);
+    seleccionado.codigos.push(document.getElementById('prov5').value);
+    seleccionado.codigos.push(document.getElementById('prov6').value);
+    seleccionado.codigos.push(document.getElementById('prov7').value);
+    setModalInsertarProveedor(false);
+
+    alert(seleccionado.codigos[0]);
   };
   const insertar = () => {
     var valorInsertar = seleccionado;
@@ -71,263 +96,328 @@ export default function AgregarProducto() {
   };
 
   return (
-    <Modal isOpen={modalInsertar} className="text-center">
-      <ModalHeader>
-        <div>
-          <h3>AGREGAR PRODUCTOS</h3>
-        </div>
-      </ModalHeader>
-      <ModalBody>
-        <div>
-          <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
-            Insertar Codigo
+    <div>
+      <Modal isOpen={modalInsertar} className="text-center">
+        <ModalHeader>
+          <div>
+            <h3>AGREGAR PRODUCTOS</h3>
+          </div>
+        </ModalHeader>
+        <ModalBody>
+          <div>
+            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
+              Insertar Codigo
           </Button>{' '}
-        </div>
-        <div>
-          <label></label>
-        </div>
-        <div>
-          <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
-            Insertar Proveedor
+          </div>
+          <div>
+            <label></label>
+          </div>
+          <div>
+            <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
+              Insertar Proveedor
           </Button>{' '}
-        </div>
-        <Modal isOpen={modalInsertarCodigo}>
-          <ModalHeader>
-            <div className="text-center">
-              <h3>Agregar Productos</h3>
-            </div>
-          </ModalHeader>
-          <ModalBody>
-            <div className="form-group">
-              <label>codigo 1</label>
-              <input
-                className="form-control"
-                type="number"
-                name="codigos"
-                value={seleccionado ? seleccionado.codigos : ''}                
-                onChange={manejarCambio}
-              />
-              <br />
-              <label>codigo 2</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Fecha"
+          </div>
+          <Modal isOpen={modalInsertarCodigo}>
+            <ModalHeader>
+              <div className="text-center">
+                <h3>Agregar Productos</h3>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <div className="form-group">
+                <label>codigo 1</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo1"
+                  id='cod1'
+                />
+                <br />
+                <label>codigo 2</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo2"
+                  id='cod2'
                 //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>codigo 3</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>codigo 3</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo3"
+                  id='cod3'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>codigo 4</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>codigo 4</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo4"
+                  id='cod4'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>codigo 5</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>codigo 5</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo5"
+                  id='cod5'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>codigo 6</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>codigo 6</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo6"
+                  id='cod6'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>codigo 7</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>codigo 7</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="codigo7"
+                  id='cod7'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <button className="btn btn-primary">Agregar Código</button>
-            <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
-              Cancelar
+                />
+                <br />
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <button className="btn btn-primary" onClick={() => GuardarCodigos()}>Agregar Código</button>
+              <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
+                Cancelar
             </button>
-          </ModalFooter>
-        </Modal>
-        <Modal isOpen={modalInsertarProveedor}>
-          <ModalHeader>
-            <div>
-              <h3>Agregar Productos</h3>
-            </div>
-          </ModalHeader>
-          <ModalBody>
-            <div className="form-group">
-              <label>proveedor 1</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Apunte"
+            </ModalFooter>
+          </Modal>
+          <Modal isOpen={modalInsertarProveedor}>
+            <ModalHeader>
+              <div>
+                <h3>Agregar Productos</h3>
+              </div>
+            </ModalHeader>
+            <ModalBody>
+              <div className="form-group">
+                <label>proveedor 1</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor1"
+                  id='prov1'
                 //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>proveedor 2</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Fecha"
+                />
+                <br />
+                <label>proveedor 2</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor2"
+                  id='prov2'
                 //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>proveedor 3</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>proveedor 3</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor3"
+                  id='prov3'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>proveedor 4</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>proveedor 4</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor4"
+                  id='prov4'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>proveedor 5</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>proveedor 5</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor5"
+                  id='prov5'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>proveedor 6</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>proveedor 6</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor6"
+                  id='prov6'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-              <label>proveedor 7</label>
-              <input
-                className="form-control"
-                type="text"
-                name="Etiqueta"
+                />
+                <br />
+                <label>proveedor 7</label>
+                <input
+                  className="form-control"
+                  type="text"
+                  name="proveedor7"
+                  id='prov7'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
-              />
-              <br />
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <button className="btn btn-primary">Agregar Proveedores</button>
-            <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
-              Cancelar
+                />
+                <br />
+              </div>
+            </ModalBody>
+            <ModalFooter>
+              <button className="btn btn-primary" onClick={() => GuardarProveedores()}>Agregar Proveedores</button>
+              <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
+                Cancelar
             </button>
-          </ModalFooter>
-        </Modal>
-        <div>
-          <h3>Nombre</h3>
-          <input
-            className="form-control"
-            type="text"
-            name="nombre"
-            value={seleccionado ? seleccionado.nombre : ''}
-            onChange={manejarCambio}
-          />
-        </div>
-        <div>
-          <h3>Área</h3>
-          <input
-            className="form-control"
-            type="text"
-            name="area"
-            value={seleccionado ? seleccionado.area : ''}
-            onChange={manejarCambio}
-          />
-        </div>
-        <div>
-          <h3>Ubicación</h3>
-          <input
-            className="form-control"
-            type="text"
-            name="ubicacion"
-            value={seleccionado ? seleccionado.ubicacion : ''}
-            onChange={manejarCambio}
-          />
-        </div>
-        <div>
-          <h3>Marca</h3>
-          <input
-            className="form-control"
-            type="text"
-            name="marca"
-            value={seleccionado ? seleccionado.marca : ''}
-            onChange={manejarCambio}
-          />
-        </div>
-        <div>
-          <h3>Precio</h3>
-          <input
-            className="form-control"
-            type="number"
-            name="precio"
-            value={seleccionado ? seleccionado.precio : ''}
-            onChange={manejarCambio}
-          />
-        </div>
-        <div>
+            </ModalFooter>
+          </Modal>
           <div>
-            <h3>Descripción corta</h3>
-            <FormGroup class="style">
-              <Label for="exampleText"></Label>
-              <Input type="textarea" name="text" id="exampleText" />
-            </FormGroup>
+            <h3>Nombre</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="nombre"
+              value={seleccionado ? seleccionado.nombre : ''}
+              onChange={manejarCambio}
+            />
           </div>
-        </div>
-        <div>
           <div>
-            <h3>Descripción larga </h3>
+            <h3>Área</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="area"
+              value={seleccionado ? seleccionado.area : ''}
+              onChange={manejarCambio}
+            />
           </div>
+          <div>
+            <h3>Ubicación</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="ubicacion"
+              value={seleccionado ? seleccionado.ubicacion : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Marca</h3>
+            <input
+              className="form-control"
+              type="text"
+              name="marca"
+              value={seleccionado ? seleccionado.marca : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
+            Precios
+          </Button>{' '}
+          <div>
+            <h3>Cantidad</h3>
+            <input
+              className="form-control"
+              type="Number"
+              name="cantidad"
+              value={seleccionado ? seleccionado.cantidad : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <div>
+              <h3>Descripción corta</h3>
+              <FormGroup class="style">
+                <Label for="exampleText"></Label>
+                <Input type="textarea" name="text" id="exampleText" />
+              </FormGroup>
+            </div>
+          </div>
+          <div>
+            <div>
+              <h3>Descripción larga </h3>
+            </div>
+            <div className="form-group">
+              <label htmlFor="exampleFormControlTextarea1"></label>
+              <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" />
+            </div>
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <button className="btn btn-primary" onClick={() => insertar(0)}>
+            Agregar Producto
+        </button>
+          <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
+            Cancelar
+        </button>
+        </ModalFooter>
+      </Modal>
+      <Modal isOpen={modalInsertarPrecio}>
+        <ModalHeader>
+          <div className="text-center">
+            <h3>Agregar Productos</h3>
+          </div>
+        </ModalHeader>
+        <ModalBody>
           <div className="form-group">
-            <label htmlFor="exampleFormControlTextarea1"></label>
-            <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" />
+            <label>codigo 1</label>
+            <input
+              className="form-control"
+              type="text"
+              name="precio1"
+              id='precio1'
+            />
+            <br />
+            <label>codigo 2</label>
+            <input
+              className="form-control"
+              type="text"
+              name="Fecha"
+              name="precio2"
+              id='precio2'
+            //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+            //onChange={manejarCambio}
+            />
+            <br />
+            <label>codigo 3</label>
+            <input
+              className="form-control"
+              type="text"
+              name="Etiqueta"
+              name="precio3"
+              id='precio3'
+            //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            //onChange={manejarCambio}
+            />
           </div>
-        </div>
-      </ModalBody>
-      <ModalFooter>
-        <button className="btn btn-primary" onClick={() => insertar(0)}>
-          Agregar Producto
+        </ModalBody>
+        <ModalFooter>
+        <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
+            Agregar Producto
         </button>
-        <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
-          Cancelar
+          <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
+            Cancelar
         </button>
-      </ModalFooter>
-    </Modal>
+        </ModalFooter>
+      </Modal>
+    </div>
   );
 }

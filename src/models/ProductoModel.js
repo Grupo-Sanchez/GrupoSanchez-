@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 const { Schema, model } = require('mongoose');
 const ProductoSchema = new Schema({/*  nombre: '',
 area: '',
@@ -23,7 +24,9 @@ precio: '',*/
         type: String,
     }, precios: {
         type: Array,
-    },
+    }, cantidad: {
+        type: Number
+    }
 });
 
 module.exports = model('producto', ProductoSchema);
