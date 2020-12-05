@@ -1,9 +1,13 @@
 import React from 'react';
-import AmbienteAdministrador from './Views/AmbienteAdministrador.jsx';
 import './App.css';
+import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
+import AmbientePropietarioProductos from './Views/AmbientePropietarioProductos.jsx';
+import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
+import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProveedores.jsx';
+import AmbienteJefeTiendaFacturar from './Views/AmbienteJefeTiendaFacturar.jsx';
 
 function App() {
-  return <AmbienteAdministrador />;
+  return <AmbienteJefeTiendaFacturar />;
 }
 
 export default App;
