@@ -15,28 +15,30 @@ const OpcionesProductos = () => {
       icon: (
         <img
           src={AgregarProducto}
-          style={{ width: '220px', height: 'auto', paddingBottom: '20px' }}
+          style={{
+            width: '220px',
+            height: 'auto',
+            paddingBottom: '20px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
         />
       ),
       to: '/asd',
       isOpen: () => setModalInsertar(true),
     },
     {
-      titulo: 'Modificar Producto',
+      titulo: 'Modificar / Eliminar Producto',
       icon: (
         <img
           src={EditarProducto}
-          style={{ width: '220px', height: 'auto', paddingBottom: '20px' }}
-        />
-      ),
-      to: '/asd',
-    },
-    {
-      titulo: 'Eliminar Producto',
-      icon: (
-        <img
-          src={EliminarProducto}
-          style={{ width: '220px', height: 'auto', paddingBottom: '20px' }}
+          style={{
+            width: '220px',
+            height: 'auto',
+            paddingBottom: '20px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
         />
       ),
       to: '/asd',
@@ -46,7 +48,13 @@ const OpcionesProductos = () => {
       icon: (
         <img
           src={BuscarProducto}
-          style={{ width: '220px', height: 'auto', paddingBottom: '20px' }}
+          style={{
+            width: '220px',
+            height: 'auto',
+            paddingBottom: '20px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
         />
       ),
       to: '/asd',
@@ -57,7 +65,7 @@ const OpcionesProductos = () => {
     <Container>
       <Agregar isOpen={modalInsertar} change={() => setModalInsertar(!modalInsertar)} />
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Productos</h1>
-      <Row md="4" style={{ paddingTop: '25px' }}>
+      <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
           <Col>
             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />
