@@ -1,9 +1,7 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
-import SegundoPrecio from '../Icons/SegundoPrecio.svg';
-import Facturar from '../Icons/Facturar.svg';
-import Devolucion from '../Icons/Devolucion.svg';
-//087 017 019
+import Proveedores from '../Icons/Proveedores.svg';
+
 const items = [
   {
     name: 'Facturar',
@@ -17,7 +15,7 @@ const items = [
   },
 ];
 
-const AmbienteJefeTienda2doPrecio = () => (
+const AmbienteJefeTiendaDevoluciones = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -30,4 +28,4 @@ const AmbienteJefeTienda2doPrecio = () => (
   </div>
 );
 
-export default AmbienteJefeTienda2doPrecio;
+export default AmbienteJefeTiendaDevoluciones;

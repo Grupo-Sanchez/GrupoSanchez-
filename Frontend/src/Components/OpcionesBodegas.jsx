@@ -3,6 +3,7 @@ import CartasOpciones from './CartasOpciones.jsx';
 import CrearBodega from '../Icons/CrearBodega.svg';
 import EliminarBodega from '../Icons/EliminarBodega.svg';
 import EditarBodega from '../Icons/EditarBodega.svg';
+import ConsultarBodega from '../Icons/ConsultarBodega.svg';
 
 const OpcionesBodegas = () => {
   const items = [
@@ -12,7 +13,7 @@ const OpcionesBodegas = () => {
         <img
           src={CrearBodega}
           style={{
-            width: '275px',
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -28,7 +29,7 @@ const OpcionesBodegas = () => {
         <img
           src={EditarBodega}
           style={{
-            width: '275px',
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -44,7 +45,23 @@ const OpcionesBodegas = () => {
         <img
           src={EliminarBodega}
           style={{
-            width: '275px',
+            width: '240px',
+            height: 'auto',
+            paddingBottom: '20px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        />
+      ),
+      to: '/',
+    },
+    {
+      titulo: 'Consultar Bodegas',
+      icon: (
+        <img
+          src={ConsultarBodega}
+          style={{
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -60,9 +77,9 @@ const OpcionesBodegas = () => {
     <Container fluid="md" style={{ padding: '0' }}>
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Bodegas</h1>
 
-      <Row style={{ paddingTop: '25px' }}>
+      <Row md="4" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon }, i) => (
-          <Col md="4">
+          <Col>
             <CartasOpciones titulo={titulo} to={to} icon={icon} />
           </Col>
         ))}

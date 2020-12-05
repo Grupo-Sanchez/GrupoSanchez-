@@ -1,22 +1,12 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
+import Proveedores from '../Icons/Proveedores.svg';
 
 const items = [
   {
-    name: '3er Precio',
-    to: '/a',
-    icon: (
-      <img
-        src={Productos}
-        style={{ width: '1em', height: '1em', marginRight: '0.5rem' }}
-        alt="logo"
-      />
-    ),
-  },
-  {
     name: 'Proveedores',
-    to: '/a',
-    icon: <img src={Usuario} style={{ width: '1em', height: '1em', marginRight: '0.5rem' }} />,
+    to: '/Administrador/Proveedores',
+    icon: <img src={Proveedores} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
   },
 ];
 
