@@ -5,9 +5,8 @@ import './InterfazProducto.css';
 import axios from 'axios';
 import AgregarProducto from './AgregarProducto'
 export default function EliminarProducto() {
-  const dataApuntes = [
-  ];
-
+ 
+  const dataApuntes = [ ];
 
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
@@ -24,7 +23,8 @@ export default function EliminarProducto() {
     proveedores: [],
     ubicacion: '',
     marca: '',
-    precio: [],
+    precios: [],
+    cantidad:'',
     descripcion_corta: '',
     descripcion_larga: '',
   });
@@ -37,7 +37,45 @@ export default function EliminarProducto() {
         });
     };
     fecthData();
+    
   }, []);
+  /*Metodo para fuardar codigos del ModalModificar */
+  const GuardarCodigos = (i) => {
+    console.log(i.codigos[0]);
+    seleccionado.codigos[0]=document.getElementById('mcod1').value
+    console.log(seleccionado.codigos[0]);
+    
+    
+    seleccionado.codigos[1]=document.getElementById('modcod2').value;
+    seleccionado.codigos[2]=document.getElementById('modcod3').value;
+    seleccionado.codigos[3]=document.getElementById('modcod4').value;
+    seleccionado.codigos[4]=document.getElementById('modcod5').value;
+    seleccionado.codigos[5]=document.getElementById('modcod6').value;
+    seleccionado.codigos[6]=document.getElementById('modcod7').value;
+    setModalModificarCodigos(false);
+    alert(seleccionado.codigos[1]);
+  };
+  /*Metodo para fuardar codigos del ModalModificar */
+  const GuardarProveedores = () => {
+
+    seleccionado.proveedores[0]=(document.getElementById('modprov1').value);
+    seleccionado.proveedores[1]=(document.getElementById('modprov2').value);
+    seleccionado.proveedores[2]=(document.getElementById('modprov3').value);
+    seleccionado.proveedores[3]=(document.getElementById('modprov4').value);
+    seleccionado.proveedores[4]=(document.getElementById('modprov5').value);
+    seleccionado.proveedores[5]=(document.getElementById('modprov6').value);
+    seleccionado.proveedores[6]=(document.getElementById('modprov7').value);
+    setModalModificarProveedores(false);
+    alert(seleccionado.proveedores[0]);
+  };
+  const GuardarPrecio = () => {
+
+    seleccionado.precios[0]=(document.getElementById('modprecio1').value);
+    seleccionado.precios[1]=(document.getElementById('modprecio2').value);
+    seleccionado.precios[2]=(document.getElementById('modprecio3').value);
+    setModalModificarPrecios(false);
+    alert(seleccionado.precios[0]);
+  };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
@@ -52,11 +90,39 @@ export default function EliminarProducto() {
         console.log(error);
       });
   };
+  
 
+  const updateItem=(Id)=>{
+    setModalModificar(false);
+    axios.put(`http://localhost:3001/api/productos/${Id}`, {
+    nombre: document.getElementById('modnombre').value,
+    area: document.getElementById('modarea').value,
+    codigos: seleccionado.codigos,
+    proveedores: seleccionado.proveedores,
+    ubicacion: document.getElementById('modubicacion').value,
+    marca: document.getElementById('modmarca').value,
+    precios: seleccionado.precios,
+    cantidad:document.getElementById('modcantidad').value,
+    descripcion_corta:document.getElementById('descripcion1').value,
+    descripcion_larga:document.getElementById('descripcion2').value,
+
+
+    }).then(response => {
+      console.log(response);
+    }).catch(error => {
+      console.log(error);
+    });
+  };
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
+    console.log(i.nombre);
     setModalVerCodigos(true);
   };
+  const Modificar=(elemento)=>{
+    setSeleccionado(elemento);
+    console.log(elemento.nombre);
+    setModalModificar(true)
+  }
   const mostrarProveedores = (i) => {
     setSeleccionado(i);
     setModalVerProveedor(true);
@@ -117,7 +183,7 @@ export default function EliminarProducto() {
                 <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>Ver</Button>
               </td>
               <td>
-                <Button onClick={() => setModalModificar(true)} color="success">
+                <Button onClick={() => Modificar(elemento)} color="success">
                   Modificar
                 </Button>{' '}
               </td>
@@ -163,16 +229,16 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo1"
-                  id='cod1'
+                  name="mcodigo1"
+                  id='mcod1'
                 />
                 <br />
                 <label>codigo 2</label>
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo2"
-                  id='cod2'
+                  name="modcodigo2"
+                  id='modcod2'
                 //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
                 //onChange={manejarCambio}
                 />
@@ -181,8 +247,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo3"
-                  id='cod3'
+                  name="modcodigo3"
+                  id='modcod3'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -191,8 +257,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo4"
-                  id='cod4'
+                  name="modcodigo4"
+                  id='modcod4'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -201,8 +267,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo5"
-                  id='cod5'
+                  name="modcodigo5"
+                  id='modcod5'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -211,8 +277,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo6"
-                  id='cod6'
+                  name="modcodigo6"
+                  id='modcod6'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -221,8 +287,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="codigo7"
-                  id='cod7'
+                  name="modcodigo7"
+                  id='modcod7'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -230,7 +296,7 @@ export default function EliminarProducto() {
               </div>
             </ModalBody>
             <ModalFooter>
-              <button className="btn btn-primary" /*onClick={() => GuardarCodigos()}*/>Agregar Código</button>
+              <button className="btn btn-primary" onClick={() => GuardarCodigos(seleccionado)}>Agregar Código</button>
               <button className="btn btn-danger" onClick={() => setModalModificarCodigos(false)}>
                 Cancelar
             </button>
@@ -248,8 +314,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor1"
-                  id='prov1'
+                  name="modproveedor1"
+                  id='modprov1'
                 //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
                 //onChange={manejarCambio}
                 />
@@ -258,8 +324,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor2"
-                  id='prov2'
+                  name="modproveedor2"
+                  id='modprov2'
                 //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
                 //onChange={manejarCambio}
                 />
@@ -268,8 +334,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor3"
-                  id='prov3'
+                  name="modproveedor3"
+                  id='modprov3'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -278,8 +344,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor4"
-                  id='prov4'
+                  name="modproveedor4"
+                  id='modprov4'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -288,8 +354,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor5"
-                  id='prov5'
+                  name="modproveedor5"
+                  id='modprov5'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -298,8 +364,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor6"
-                  id='prov6'
+                  name="modproveedor6"
+                  id='modprov6'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -308,8 +374,8 @@ export default function EliminarProducto() {
                 <input
                   className="form-control"
                   type="text"
-                  name="proveedor7"
-                  id='prov7'
+                  name="modproveedor7"
+                  id='modprov7'
                 //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
                 //onChange={manejarCambio}
                 />
@@ -317,7 +383,7 @@ export default function EliminarProducto() {
               </div>
             </ModalBody>
             <ModalFooter>
-              <button className="btn btn-primary" /*onClick={() => GuardarProveedores()}*/>Modificar Proveedores*</button>
+              <button className="btn btn-primary" onClick={() => GuardarProveedores()}>Modificar Proveedores*</button>
               <button className="btn btn-danger" onClick={() => setModalModificarProveedores(false)}>
                 Cancelar
             </button>
@@ -329,6 +395,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="nombre"
+              id="modnombre"
               //value={seleccionado ? seleccionado.nombre : ''}
               //onChange={manejarCambio}
             />
@@ -339,6 +406,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="area"
+              id="modarea"
               //value={seleccionado ? seleccionado.area : ''}
               //onChange={manejarCambio}
             />
@@ -349,6 +417,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="ubicacion"
+              id="modubicacion"
               //value={seleccionado ? seleccionado.ubicacion : ''}
               //onChange={manejarCambio}
             />
@@ -359,6 +428,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="marca"
+              id="modmarca"
               //value={seleccionado ? seleccionado.marca : ''}
               //onChange={manejarCambio}
             />
@@ -373,6 +443,7 @@ export default function EliminarProducto() {
               className="form-control"
               type="Number"
               name="cantidad"
+              id="modcantida"
               //value={seleccionado ? seleccionado.cantidad : ''}
               //onChange={manejarCambio}
             />
@@ -397,10 +468,10 @@ export default function EliminarProducto() {
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" /*onClick={() => insertar(0)}*/>
-            Agregar Producto
+          <button className="btn btn-primary" onClick={() => updateItem(seleccionado._id)}>
+            Guardar Cambios
         </button>
-          <button className="btn btn-danger" onClick={() => setModalModificar(false)}>
+          <button className="btn btn-danger" onClick={() =>setModalModificar(false) }>
             Cancelar
         </button>
         </ModalFooter>
@@ -417,17 +488,16 @@ export default function EliminarProducto() {
             <input
               className="form-control"
               type="text"
-              name="precio1"
-              id='precio1'
+              name="modprecio1"
+              id='modprecio1'
             />
             <br />
             <label>Precio 2</label>
             <input
               className="form-control"
               type="text"
-              name="Fecha"
-              name="precio2"
-              id='precio2'
+              name="modprecio2"
+              id='modprecio2'
             //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
             //onChange={manejarCambio}
             />
@@ -436,16 +506,15 @@ export default function EliminarProducto() {
             <input
               className="form-control"
               type="text"
-              name="Etiqueta"
-              name="precio3"
-              id='precio3'
+              name="modprecio3"
+              id='modprecio3'
             //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             //onChange={manejarCambio}
             />
           </div>
         </ModalBody>
         <ModalFooter>
-        <button className="btn btn-primary" /*onClick={() => GuardarPrecio()}*/>
+        <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
             Agregar Producto
         </button>
           <button className="btn btn-danger" onClick={() => setModalModificarPrecios(false)}>

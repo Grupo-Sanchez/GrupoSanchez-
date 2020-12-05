@@ -8,11 +8,11 @@ marca: '',
 precio: '',*/
     nombre: {
         type: String,
-        required: 'se requiere la identidad',
+        required: 'se requiere nombre',
     },
     area: {
         type: String,
-        required: 'nombre requerido',
+        required: 'area requerido',
     },
     codigos: {
         type: Array,
@@ -25,7 +25,8 @@ precio: '',*/
     }, precios: {
         type: Array,
     }, cantidad: {
-        type: Number
+        type: Number,
+        required: 'cantidad requerido',
     }, descripcion_corta: {
         type: String
     }, descripcion_larga: {

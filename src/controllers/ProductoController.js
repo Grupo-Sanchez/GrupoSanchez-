@@ -90,15 +90,14 @@ exports.read_producto = async (req, res) => {
 
 exports.update_producto = async (req, res) => {
     try {
-        const ret = await producto.findByIdAndUpdate({ _id: req.params.productoId }, req.query, {
+        const ret = await producto.findByIdAndUpdate({ _id: req.params.productoId },req.body, {
             new: true,
         });
-        res.json(ret);
+        res.json(ret)
     } catch (error) {
         res.send({ message: 'Bad request: ' + error });
     }
 };
-
 exports.delete_producto = async (req, res) => {
     try {
         const ret = await producto.deleteOne({ _id: req.params.productoId });
