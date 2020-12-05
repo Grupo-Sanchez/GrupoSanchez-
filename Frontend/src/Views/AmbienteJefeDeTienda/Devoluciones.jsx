@@ -3,6 +3,7 @@ import { Row, Button, Form, FormGroup, Label, Input, FormText, Col } from 'react
 import SelectSearch from 'react-select-search';
 import './SearchBar.css';
 import { Table } from 'reactstrap';
+import axios from 'axios';
 export default class Devoluciones extends Component {
   constructor(props) {
     super(props);
@@ -16,54 +17,13 @@ export default class Devoluciones extends Component {
       productosDevolucion: [],
       indice: 1,
       quantity: 1,
-      productosEnBodega: [
-        {
-          indice: 0,
-          name: 'Clavos',
-          value: 'cla',
-          codigo: '00354',
-          cantidad: 5,
-          precioUnitario: 25,
-          precioSumado: 125,
-        },
-        {
-          indice: 0,
-          name: 'Guantes',
-          value: 'gua',
-          codigo: '00254',
-          cantidad: 10,
-          precioUnitario: 500,
-          precioSumado: 5000,
-        },
-        {
-          indice: 0,
-          name: 'Mangueras',
-          value: 'man',
-          codigo: '15423',
-          cantidad: 55,
-          precioUnitario: 100,
-          precioSumado: 5500,
-        },
-        {
-          indice: 0,
-          name: 'Llaves',
-          value: 'lla',
-          codigo: '35695',
-          cantidad: 15,
-          precioUnitario: 125,
-          precioSumado: 1875,
-        },
-        {
-          indice: 0,
-          name: 'Martillos',
-          value: 'mar',
-          codigo: '32564',
-          cantidad: 7,
-          precioUnitario: 250,
-          precioSumado: 1750,
-        },
-      ],
+      productosEnBodega: [],
       productoSeleccionado: [],
+      nombreCliente: '',
+      identificacion: '',
+      razonDevolucion: '',
+      Estado: '',
+      LugarDevolucion: '',
     };
   }
   addRow(producto) {
@@ -79,17 +39,111 @@ export default class Devoluciones extends Component {
         this.state.productoSeleccionado = {
           name: item.name,
           value: item.value,
-          codigo: item.codigo,
-          cantidad: item.cantidad,
+          codigo: item.codigos,
+          cantidad: 1,
           precioUnitario: item.precioUnitario,
           precioSumado: item.precioSumado,
         };
       }
     });
   }
-  eliminarProducto = (i) => {
+  write = async () => {
+    var newLine = '\r\n';
+    var msg = 'Nombre: ' + this.state.nombreCliente + newLine;
+    msg += 'Identificacion: ' + this.state.identificacion + newLine;
+    msg += 'Razon de Devolucion: ' + this.state.razonDevolucion + newLine;
+    msg += 'Estado: ' + this.state.Estado + newLine;
+    msg += 'Nombre: ' + this.state.LugarDevolucion + newLine;
+    alert(msg);
+    alert('entrooo');
+    const campos = {
+      nombreCliente: this.state.nombreCliente,
+      identificacion: this.state.identificacion,
+      razonDevolucion: this.state.razonDevolucion,
+      Estado: this.state.Estado,
+      LugarDevolucion: this.state.LugarDevolucion,
+      productosDevueltos: this.state.productosDevolucion,
+    };
+    alert('saliooo');
+    await axios.post('http://localhost:3001/api/devoluciones', campos);
+    alert('escribio?');
+    window.location.reload();
+  };
+  componentDidMount = async () => {
+    await this.getProductos();
+  };
+
+  getProductos = async () => {
+    await axios
+      .get('http://localhost:3001/api/productos')
+      .then((response) => {
+        const productos = response.data;
+        var productosagregados = [];
+        for (let index = 0; index < productos.length; index++) {
+          const element = productos[index];
+          console.log(index + ': ' + element.codigos);
+          productosagregados.push({
+            indice: 0,
+            name: element.nombre,
+            value: element._id,
+            codigos: element.codigos,
+            proveedores: element.proveedores,
+            precios: element.precios,
+            area: element.area,
+            ubicacion: element.ubicacion,
+            marca: element.marca,
+            _v: element._v,
+            cantidad: element.cantidad,
+            precioUnitario: 0,
+            precioSumado: 0,
+          });
+        }
+        var nextState = this.state;
+        nextState.productosEnBodega = productosagregados;
+        this.setState(nextState);
+      })
+      .catch(() => {
+        alert('Error');
+      });
+  };
+  updateTool = async (id) => {
+    var cantidad2 = 0;
+    for (let index = 0; index < this.state.productosEnBodega.length; index++) {
+      const element = this.state.productosEnBodega[index];
+      if (element.value === id) {
+        cantidad2 = Number(element.cantidad) + Number(this.state.productoSeleccionado.cantidad);
+        break;
+      }
+    }
+    axios
+      .put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  eliminarProducto = async (i, cantidad) => {
     this.state.indice = 1;
-    const items = this.state.productosDevolucion.filter((item) => item.codigo !== i);
+    var cantidad2 = 0;
+    await this.getProductos();
+    for (let index = 0; index < this.state.productosEnBodega.length; index++) {
+      const element = this.state.productosEnBodega[index];
+      if (element.value === i) {
+        cantidad2 = Number(element.cantidad) - Number(cantidad);
+        break;
+      }
+    }
+    axios
+      .put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 })
+      .then(function (response) {
+        console.log(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    const items = this.state.productosDevolucion.filter((item) => item.value !== i);
     var nextState = this.state;
     nextState.productosDevolucion = items;
     this.setState(nextState);
@@ -102,6 +156,7 @@ export default class Devoluciones extends Component {
     this.state.indice = 1;
     var nextState = this.state;
     nextState.quantity = e.target.value;
+    nextState.productoSeleccionado.cantidad = nextState.quantity;
     this.setState(nextState);
   }
   agregarProductoaTabla() {
@@ -109,8 +164,10 @@ export default class Devoluciones extends Component {
     this.addRow({
       name: this.state.productoSeleccionado.name,
       codigo: this.state.productoSeleccionado.codigo,
-      cantidad: this.state.quantity,
+      cantidad: this.state.productoSeleccionado.cantidad,
+      value: this.state.productoSeleccionado.value,
     });
+    this.updateTool(this.state.productoSeleccionado.value);
     var nextState = this.state;
     nextState.quantity = 1;
     this.setState(nextState);
@@ -118,10 +175,10 @@ export default class Devoluciones extends Component {
   render() {
     return (
       <div align="center">
+        <h1 align="center">DEVOLUCIONES</h1>
         <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
           <div align="center">
             <SelectSearch
-              name="productos"
               options={this.state.productosEnBodega}
               search
               placeholder="Encuentre el Producto"
@@ -162,10 +219,10 @@ export default class Devoluciones extends Component {
           >
             <thead>
               <tr>
-                <td className="channel-name">#</td>
-                <td className="channel-name">Nombre Producto</td>
-                <td className="channel-description">Codigo</td>
-                <td className="channel-description">Cantidad</td>
+                <td classname="channel-name">#</td>
+                <td classname="channel-name">Nombre Producto</td>
+                <td classname="channel-description">Codigo</td>
+                <td classname="channel-description">Cantidad</td>
               </tr>
             </thead>
             <tbody>
@@ -173,13 +230,13 @@ export default class Devoluciones extends Component {
                 <tr>
                   <th>{this.state.indice++}</th>
                   <th>{row.name}</th>
-                  <th>{row.codigo}</th>
+                  <th>{row.codigo[0]}</th>
                   <th>{row.cantidad}</th>
                   <th>
                     <Button
                       style={{ marginLeft: '10px' }}
-                      className="btn btn-danger"
-                      onClick={() => this.eliminarProducto(row.codigo)}
+                      classname="btn btn-danger"
+                      onClick={() => this.eliminarProducto(row.value, row.cantidad)}
                     >
                       Eliminar
                     </Button>
@@ -200,12 +257,16 @@ export default class Devoluciones extends Component {
           <Row form>
             <Col md={6}>
               <FormGroup>
-                <Label for="exampleNombreCliente">Nombre del Cliente</Label>
+                <Label for="examplenameCliente">Nombre del Cliente</Label>
                 <Input
                   type="text"
                   name="text"
-                  id="exampleNombreCliente"
+                  id="examplenameCliente"
                   placeholder="Nombre del Cliente"
+                  value={this.state.nombreCliente}
+                  onChange={(event) =>
+                    this.setState({ nombreCliente: event.target.value, indice: 1 })
+                  }
                 />
               </FormGroup>
             </Col>
@@ -216,6 +277,9 @@ export default class Devoluciones extends Component {
                   type="text"
                   name="text"
                   id="exampleIdentificacion"
+                  onChange={(event) =>
+                    this.setState({ identificacion: event.target.value, indice: 1 })
+                  }
                   placeholder="Identificacion del Cliente"
                 />
               </FormGroup>
@@ -226,53 +290,89 @@ export default class Devoluciones extends Component {
               Razon de Devolucion
             </Label>
             <Col sm={12}>
-              <Input type="textarea" name="text" id="exampleText" />
+              <Input
+                onChange={(event) =>
+                  this.setState({ razonDevolucion: event.target.value, indice: 1 })
+                }
+                type="textarea"
+                name="text"
+                id="exampleText"
+              />
             </Col>
           </FormGroup>
-          <FormGroup row>
-            <Label for="exampleFile" sm={2}>
-              File
-            </Label>
-            <Col sm={10}>
-              <Input type="file" name="file" id="exampleFile" />
-              <FormText color="muted">
-                This is some placeholder block-level help text for the above input. It's a bit
-                lighter and easily wraps to a new line.
-              </FormText>
-            </Col>
-          </FormGroup>
+          <FormGroup row></FormGroup>
           <FormGroup tag="fieldset" row>
-            <legend className="col-form-label col-sm-2">Estado</legend>
+            <legend classname="col-form-label col-sm-2">Estado</legend>
             <Col style={{ display: 'inline', float: 'center' }} sm={10}>
               <FormGroup check>
                 <Label check>
-                  <Input type="radio" name="radio2" /> Nuevo
+                  <Input
+                    onChange={(event) => this.setState({ Estado: 'Nuevo', indice: 1 })}
+                    type="radio"
+                    name="radio2"
+                  />{' '}
+                  Nuevo
                 </Label>
                 <Label style={{ marginLeft: '25px' }} check>
-                  <Input type="radio" name="radio2" /> Usado
+                  <Input
+                    onChange={(event) => this.setState({ Estado: 'Usado', indice: 1 })}
+                    type="radio"
+                    name="radio2"
+                  />{' '}
+                  Usado
                 </Label>
                 <Label style={{ marginLeft: '25px' }} check>
-                  <Input type="radio" name="radio2" />
+                  <Input
+                    onChange={(event) => this.setState({ Estado: 'Defectuoso', indice: 1 })}
+                    type="radio"
+                    name="radio2"
+                  />
                   Defectuoso
                 </Label>
               </FormGroup>
               <FormGroup row>
-                <Label for="checkbox2" sm={2}>
-                  Checkbox
-                </Label>
+                <legend classname="col-form-label col-sm-2">Checkbox</legend>
+
                 <Col style={{ display: 'inline', float: 'center', marginRight: '25px' }} sm={10}>
                   <FormGroup check>
                     <Label check>
-                      <Input type="checkbox" id="checkbox2" /> Tienda
+                      <Input
+                        onChange={(event) =>
+                          this.setState({ LugarDevolucion: 'Tienda', indice: 1 })
+                        }
+                        type="checkbox"
+                        id="checkbox2"
+                      />{' '}
+                      Tienda
                     </Label>
                     <Label style={{ marginLeft: '25px' }} check>
-                      <Input type="checkbox" id="checkbox1" /> Bodega
+                      <Input
+                        onChange={(event) =>
+                          this.setState({ LugarDevolucion: 'Bodega', indice: 1 })
+                        }
+                        type="checkbox"
+                        id="checkbox1"
+                      />{' '}
+                      Bodega
                     </Label>
                   </FormGroup>
+                  <Button
+                    color="primary"
+                    style={{
+                      width: '100px',
+                      height: '50px',
+                      'font-weight': 'bold',
+                      position: 'absolute',
+                      marginLeft: '350px',
+                      top: '-40px',
+                    }}
+                    onClick={this.write}
+                  >
+                    Devolver
+                  </Button>
                 </Col>
               </FormGroup>
             </Col>
-            <Button style={{ marginLeft: '230px' }}>Sign in</Button>
           </FormGroup>
         </Form>
       </div>
