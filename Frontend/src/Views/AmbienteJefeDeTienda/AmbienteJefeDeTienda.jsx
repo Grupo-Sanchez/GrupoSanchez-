@@ -104,11 +104,6 @@ class AmbienteJefeDeTienda extends Component {
                   Facturar
                 </NavLink>
               </NavItem>
-              {/*<NavItem>
-                <NavLink style={{ color: "white" }} onClick={this.onButtonAutorizacion} href="#">
-                  Autorizacion 2do Precio
-                </NavLink>
-              </NavItem>*/}
             </Nav>
             <Button onClick={this.logout} color="primary">
               {this.state.buttoncerrar}
