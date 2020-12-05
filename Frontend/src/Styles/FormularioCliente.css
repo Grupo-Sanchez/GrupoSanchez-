@@ -1,0 +1,139 @@
+#CompletarFormBackground,
+#UneteFormBackgroundFormularioNegocioDos,
+#UneteFormBackgroundFormularioNegocioTres,
+#UneteFormBackgroundFormularioNegocioCuatro,
+#UneteFormBackgroundFormularioRepartidor {
+  background-size: cover;
+  background-position: top;
+
+  height: calc(100vh - 7.8rem);
+  overflow: auto;
+}
+
+#NegocioFormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#NegocioForm {
+  background-color: rgba(255, 255, 255, 0.938);
+  padding: 40px 65px;
+  border-radius: 40px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.NegocioFormInput {
+  transition: 250ms;
+  border: 2px solid #d7cfcf;
+  border-radius: 12px;
+  padding: 1.3rem 2.3rem;
+  /* height: 39px; */
+  margin-bottom: 15px;
+}
+
+.NegocioFormInputComboBox {
+  transition: 250ms;
+  border: 2px solid #d7cfcf;
+  border-radius: 12px;
+  padding: 1.3rem 2.3rem;
+  height: 40px;
+  margin-bottom: 10px;
+}
+
+.NegocioFormInput:focus {
+  background-color: var(--primary-blue);
+  color: rgb(73, 71, 71);
+  outline: none;
+}
+
+.NegocioFormInput:focus::placeholder {
+  color: rgb(226, 220, 220);
+}
+
+.NegocioFormInput,
+.NegocioFormInput::placeholder {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  /* identical to box height */
+  color: gray;
+}
+
+.FormTitle {
+  font-size: 3rem;
+  line-height: 3.7rem;
+  font-weight: normal;
+  margin-bottom: 25px;
+  color: var(--primary-blue);
+}
+
+.NegocioFormModalText {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  display: flex;
+  color: red;
+}
+
+.NegocioFormLabel {
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  display: flex;
+  color: black;
+}
+
+.UneteTitle {
+  font-size: 4rem;
+  line-height: 4.7rem;
+  font-weight: normal;
+  color: var(--primary-blue);
+}
+
+.UneteAcercaDe {
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 55px;
+  line-height: 65px;
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  color: #4b74db;
+}
+
+.UneteEnLetras {
+  font-family: Raleway;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 90px;
+  line-height: 106px;
+  /* identical to box height */
+  display: flex;
+  align-items: center;
+  color: #4b74db;
+  margin-top: -30px;
+}
+
+.UneteEmphasis {
+  font-weight: bold;
+  color: black;
+}
+
+.UneteSubtitle {
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.8rem;
+  /* identical to box height */
+  color: #4b74db;
+}
+
+.FormSubtitles {
+  font-size: 2rem;
+  line-height: 0.7rem;
+  font-weight: lighter;
+  margin-bottom: 25px;
+}

@@ -19,13 +19,13 @@ const clienteSchema = new Schema({
   segundo_apellido: {
     type: String,
   },
-  rtn: {
+  RTN: {
     type: String,
   },
-  telefono: {
+  tel: {
     Type: String,
   },
-  correo: {
+  email: {
     type: String,
   },
 });

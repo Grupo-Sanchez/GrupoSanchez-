@@ -1,12 +1,9 @@
-//var mongoose = require("mongoose"),
-//Entry = mongoose.model("Entry");
-
-const cliente = require('../models/clienteModel');
+const producto = require('../models/ProductoModel');
 
 //read entries normal
-exports.read_clientes = async (req, res) => {
+exports.read_producto = async (req, res) => {
   try {
-    const ret = await cliente.find();
+    const ret = await producto.find();
     res.json(ret);
   } catch (error) {
     res.send({ message: 'Bad request: ' + error });
@@ -16,7 +13,6 @@ exports.read_clientes = async (req, res) => {
 //READ ENTRIES CON FILTRO REGISTERED == TRUE Y TAMBIEN CON SORT == TRUE
 
 /*
-
 exports.read_entries = async (req, res) => {
   try {
     var ret = await cliente.find();
@@ -31,7 +27,6 @@ exports.read_entries = async (req, res) => {
     res.send({ message: "Bad GET Request: " + error });
   }
 };
-
 */
 
 /*
@@ -45,47 +40,57 @@ exports.create_cliente = async (req, res) => {
   }
 };
 */
-exports.create_cliente = async (req, res) => {
+exports.create_producto = async (req, res) => {
   const {
-    cedula,
+    /*nombre: '',
+       area: '',
+       codigo: ['123'],
+       ubicacion: '',
+       marca: '',
+       precio: '', */
     nombre,
-    segundo_nombre,
-    primer_apellido,
-    segundo_apellido,
-    RTN,
-    tel,
-    email,
+    area,
+    codigos,
+    proveedores,
+    ubicacion,
+    marca,
+    precios,
+    cantidad,
+    descripcion_corta,
+    descripcion_larga,
   } = req.body;
   try {
-    const new_cliente = new cliente({
-      cedula,
+    const new_producto = new producto({
       nombre,
-      segundo_nombre,
-      primer_apellido,
-      segundo_apellido,
-      RTN,
-      tel,
-      email,
+      area,
+      codigos,
+      proveedores,
+      ubicacion,
+      marca,
+      precios,
+      cantidad,
+      descripcion_corta,
+      descripcion_larga,
     });
-    ret = await new_cliente.save();
+    ret = await new_producto.save();
     res.json(ret);
   } catch (error) {
     res.send({ message: 'Bad request: ' + error });
   }
 };
 
-exports.read_cliente = async (req, res) => {
+exports.read_producto = async (req, res) => {
   try {
-    const ret = await cliente.findById(req.params.clienteId);
+    const ret = await producto.find();
     res.send(ret);
   } catch (error) {
     res.send({ message: 'Bad request: ' + error });
   }
 };
 
-exports.update_cliente = async (req, res) => {
+exports.update_producto = async (req, res) => {
   try {
-    const ret = await cliente.findByIdAndUpdate({ _id: req.params.clienteId }, req.query, {
+    const ret = await producto.findByIdAndUpdate({ _id: req.params.productoId }, req.body, {
       new: true,
     });
     res.json(ret);
@@ -94,10 +99,10 @@ exports.update_cliente = async (req, res) => {
   }
 };
 
-exports.delete_cliente = async (req, res) => {
+exports.delete_producto = async (req, res) => {
   try {
-    const ret = await cliente.deleteOne({ _id: req.params.clienteId });
-    res.json({ message: 'Deleted cliente' });
+    const ret = await producto.deleteOne({ _id: req.params.productoId });
+    res.json({ message: 'Deleted producto' });
   } catch (error) {
     res.send({ message: 'Bad Request: ' + error });
   }
