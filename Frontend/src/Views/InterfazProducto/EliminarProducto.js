@@ -13,8 +13,9 @@ export default function EliminarProducto() {
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalModificar, setModalModificar] = useState(false);
-  const [ModalModificarCodigo, setModalModificarCodigo] = useState(false);
+  const [ModalModificarCodigos, setModalModificarCodigos] = useState(false);
   const [ModalModificarProveedores, setModalModificarProveedores] = useState(false);
+  const[ModalModificarPrecios, setModalModificarPrecios] = useState(false);
   const [data, setData] = useState(dataApuntes);
   var [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -133,12 +134,12 @@ export default function EliminarProducto() {
       <Modal isOpen={ModalModificar} className="text-center">
         <ModalHeader>
           <div>
-            <h3>AGREGAR PRODUCTOS</h3>
+            <h3 className = "text-center">MODIFICAR PRODUCTOS</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div>
-            <Button onClick={() => setModalModificarCodigo(true)} color="primary">
+            <Button onClick={() => setModalModificarCodigos(true)} color="primary">
               Insertar Codigo
           </Button>{' '}
           </div>
@@ -146,11 +147,11 @@ export default function EliminarProducto() {
             <label></label>
           </div>
           <div>
-            <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
+            <Button onClick={() => setModalModificarProveedores(true)} color="primary">
               Insertar Proveedor
           </Button>{' '}
           </div>
-          <Modal isOpen={ModalModificarCodigo}>
+          <Modal isOpen={ModalModificarCodigos}>
             <ModalHeader>
               <div className="text-center">
                 <h3>Modificar Códigos</h3>
@@ -230,12 +231,12 @@ export default function EliminarProducto() {
             </ModalBody>
             <ModalFooter>
               <button className="btn btn-primary" /*onClick={() => GuardarCodigos()}*/>Agregar Código</button>
-              <button className="btn btn-danger" /*onClick={() => setModalInsertarCodigo(false)}*/>
+              <button className="btn btn-danger" onClick={() => setModalModificarCodigos(false)}>
                 Cancelar
             </button>
             </ModalFooter>
           </Modal>
-          <Modal isOpen={modalInsertarProveedor}>
+          <Modal isOpen={ModalModificarProveedores}>
             <ModalHeader>
               <div>
                 <h3>Modificar Proveedores</h3>
@@ -316,8 +317,8 @@ export default function EliminarProducto() {
               </div>
             </ModalBody>
             <ModalFooter>
-              <button className="btn btn-primary" onClick={() => GuardarProveedores()}>Agregar Proveedores</button>
-              <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
+              <button className="btn btn-primary" /*onClick={() => GuardarProveedores()}*/>Modificar Proveedores*</button>
+              <button className="btn btn-danger" onClick={() => setModalModificarProveedores(false)}>
                 Cancelar
             </button>
             </ModalFooter>
@@ -328,8 +329,8 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="nombre"
-              value={seleccionado ? seleccionado.nombre : ''}
-              onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.nombre : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -338,8 +339,8 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="area"
-              value={seleccionado ? seleccionado.area : ''}
-              onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.area : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -348,8 +349,8 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="ubicacion"
-              value={seleccionado ? seleccionado.ubicacion : ''}
-              onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.ubicacion : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -358,12 +359,12 @@ export default function EliminarProducto() {
               className="form-control"
               type="text"
               name="marca"
-              value={seleccionado ? seleccionado.marca : ''}
-              onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.marca : ''}
+              //onChange={manejarCambio}
             />
           </div>
           
-          <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
+          <Button onClick={() => setModalModificarPrecios(true)} color="primary">
             Precios
           </Button>{' '}
           <div>
@@ -372,8 +373,8 @@ export default function EliminarProducto() {
               className="form-control"
               type="Number"
               name="cantidad"
-              value={seleccionado ? seleccionado.cantidad : ''}
-              onChange={manejarCambio}
+              //value={seleccionado ? seleccionado.cantidad : ''}
+              //onChange={manejarCambio}
             />
           </div>
           <div>
@@ -396,18 +397,18 @@ export default function EliminarProducto() {
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={() => insertar(0)}>
+          <button className="btn btn-primary" /*onClick={() => insertar(0)}*/>
             Agregar Producto
         </button>
-          <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
+          <button className="btn btn-danger" onClick={() => setModalModificar(false)}>
             Cancelar
         </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalInsertarPrecio}>
+      <Modal isOpen={ModalModificarPrecios}>
         <ModalHeader>
           <div className="text-center">
-            <h3>Agregar Precios</h3>
+            <h3>Modificar Precios</h3>
           </div>
         </ModalHeader>
         <ModalBody>
@@ -444,10 +445,10 @@ export default function EliminarProducto() {
           </div>
         </ModalBody>
         <ModalFooter>
-        <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
+        <button className="btn btn-primary" /*onClick={() => GuardarPrecio()}*/>
             Agregar Producto
         </button>
-          <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
+          <button className="btn btn-danger" onClick={() => setModalModificarPrecios(false)}>
             Cancelar
         </button>
         </ModalFooter>
