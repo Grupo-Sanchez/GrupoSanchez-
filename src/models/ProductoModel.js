@@ -26,6 +26,10 @@ precio: '',*/
         type: Array,
     }, cantidad: {
         type: Number
+    }, descripcion_corta: {
+        type: String
+    }, descripcion_larga: {
+        type : String
     }
 });
 

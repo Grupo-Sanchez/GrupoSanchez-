@@ -56,6 +56,8 @@ exports.create_producto = async (req, res) => {
         marca,
         precios, 
         cantidad,
+        descripcion_corta,
+        descripcion_larga,
     } = req.body;
     try {
         const new_producto = new producto({
@@ -67,6 +69,8 @@ exports.create_producto = async (req, res) => {
             marca,
             precios,
             cantidad,
+            descripcion_corta,
+            descripcion_larga,
         });
         ret = await new_producto.save();
         res.json(ret);

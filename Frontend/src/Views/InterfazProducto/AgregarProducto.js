@@ -21,9 +21,10 @@ export default function AgregarProducto() {
     marca: '',
     precio: [],
     cantidad: '',
+    descripcion_corta: '',
+    descripcion_larga: '',
   });
   const prueba = async () => {
-    alert('entrooo');
     const campos = {
       nombre: seleccionado.nombre,
       area: seleccionado.area,
@@ -33,11 +34,12 @@ export default function AgregarProducto() {
       marca: seleccionado.marca,
       precios: seleccionado.precio,
       cantidad: seleccionado.cantidad,
+      descripcion_corta: seleccionado.descripcion_corta,
+      descripcion_larga: seleccionado.descripcion_larga,
     };
-    alert('saliooo');
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
-    alert('escribio?');
+    alert('¡Producto Agregado!');
   };
   /* HandleChange(event){
       this.state.codigos.push();
@@ -61,7 +63,7 @@ export default function AgregarProducto() {
     seleccionado.codigos.push(document.getElementById('cod5').value);
     seleccionado.codigos.push(document.getElementById('cod6').value);
     seleccionado.codigos.push(document.getElementById('cod7').value);
-    setModalInsertarCodigo(false)
+    setModalInsertarCodigo(false);
     alert(seleccionado.codigos[0]);
   };
   const GuardarPrecio = () => {
@@ -69,21 +71,20 @@ export default function AgregarProducto() {
     seleccionado.precio.push(document.getElementById('precio1').value);
     seleccionado.precio.push(document.getElementById('precio2').value);
     seleccionado.precio.push(document.getElementById('precio3').value);
-
+    setModalInsertarPrecio(false);
     alert(seleccionado.precio[0]);
   };
   const GuardarProveedores = () => {
 
-    seleccionado.codigos.push(document.getElementById('prov1').value);
-    seleccionado.codigos.push(document.getElementById('prov2').value);
-    seleccionado.codigos.push(document.getElementById('prov3').value);
-    seleccionado.codigos.push(document.getElementById('prov4').value);
-    seleccionado.codigos.push(document.getElementById('prov5').value);
-    seleccionado.codigos.push(document.getElementById('prov6').value);
-    seleccionado.codigos.push(document.getElementById('prov7').value);
+    seleccionado.proveedores.push(document.getElementById('prov1').value);
+    seleccionado.proveedores.push(document.getElementById('prov2').value);
+    seleccionado.proveedores.push(document.getElementById('prov3').value);
+    seleccionado.proveedores.push(document.getElementById('prov4').value);
+    seleccionado.proveedores.push(document.getElementById('prov5').value);
+    seleccionado.proveedores.push(document.getElementById('prov6').value);
+    seleccionado.proveedores.push(document.getElementById('prov7').value);
     setModalInsertarProveedor(false);
-
-    alert(seleccionado.codigos[0]);
+    alert(seleccionado.proveedores[0]);
   };
   const insertar = () => {
     var valorInsertar = seleccionado;
@@ -92,6 +93,8 @@ export default function AgregarProducto() {
     dataNueva.push(valorInsertar);
     setData(dataNueva);
     setModalInsertar(false);
+    seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
+    seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     prueba();
   };
 
@@ -120,7 +123,7 @@ export default function AgregarProducto() {
           <Modal isOpen={modalInsertarCodigo}>
             <ModalHeader>
               <div className="text-center">
-                <h3>Agregar Productos</h3>
+                <h3>Agregar Códigos</h3>
               </div>
             </ModalHeader>
             <ModalBody>
@@ -205,7 +208,7 @@ export default function AgregarProducto() {
           <Modal isOpen={modalInsertarProveedor}>
             <ModalHeader>
               <div>
-                <h3>Agregar Productos</h3>
+                <h3>Agregar Proveedores</h3>
               </div>
             </ModalHeader>
             <ModalBody>
@@ -329,6 +332,7 @@ export default function AgregarProducto() {
               onChange={manejarCambio}
             />
           </div>
+          
           <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
             Precios
           </Button>{' '}
@@ -347,7 +351,7 @@ export default function AgregarProducto() {
               <h3>Descripción corta</h3>
               <FormGroup class="style">
                 <Label for="exampleText"></Label>
-                <Input type="textarea" name="text" id="exampleText" />
+                <Input type="textarea" name="text" id="descripcion1"/>
               </FormGroup>
             </div>
           </div>
@@ -357,7 +361,7 @@ export default function AgregarProducto() {
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlTextarea1"></label>
-              <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" />
+              <textarea className="form-control" id="descripcion2" rows="5"/>
             </div>
           </div>
         </ModalBody>
@@ -373,12 +377,12 @@ export default function AgregarProducto() {
       <Modal isOpen={modalInsertarPrecio}>
         <ModalHeader>
           <div className="text-center">
-            <h3>Agregar Productos</h3>
+            <h3>Agregar Precios</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label>codigo 1</label>
+            <label>Precio 1</label>
             <input
               className="form-control"
               type="text"
@@ -386,7 +390,7 @@ export default function AgregarProducto() {
               id='precio1'
             />
             <br />
-            <label>codigo 2</label>
+            <label>Precio 2</label>
             <input
               className="form-control"
               type="text"
@@ -397,7 +401,7 @@ export default function AgregarProducto() {
             //onChange={manejarCambio}
             />
             <br />
-            <label>codigo 3</label>
+            <label>Precio 3</label>
             <input
               className="form-control"
               type="text"
