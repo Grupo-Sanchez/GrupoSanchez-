@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
+    'object-curly-newline': 'off',
     'no-unused-vars': 'off',
     'max-len': ['error', { code: 100 }],
     'prefer-promise-reject-errors': ['off'],
