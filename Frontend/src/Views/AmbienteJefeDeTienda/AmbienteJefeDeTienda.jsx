@@ -9,7 +9,6 @@ import {
   NavLink,
   Button,
 } from 'reactstrap';
-import Autorizacion2doPrecio from './Autorizacion2doPrecio.jsx';
 import Devoluciones from './Devoluciones.jsx';
 import Factura from './Factura.jsx';
 
@@ -105,11 +104,6 @@ class AmbienteJefeDeTienda extends Component {
                   Facturar
                 </NavLink>
               </NavItem>
-              {/*<NavItem>
-                <NavLink style={{ color: "white" }} onClick={this.onButtonAutorizacion} href="#">
-                  Autorizacion 2do Precio
-                </NavLink>
-              </NavItem>*/}
             </Nav>
             <Button onClick={this.logout} color="primary">
               {this.state.buttoncerrar}
@@ -120,13 +114,6 @@ class AmbienteJefeDeTienda extends Component {
           {this.state.showDevoluciones ? (
             <>
               <Devoluciones />
-            </>
-          ) : null}
-        </div>
-        <div style={{ 'padding-top': '30px' }}>
-          {this.state.showAutorizacion ? (
-            <>
-              <Autorizacion2doPrecio />
             </>
           ) : null}
         </div>
