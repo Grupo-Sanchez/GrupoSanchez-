@@ -1,60 +1,91 @@
-// import logo from './logo.svg';
+// Import de react debe ser lo primero
+import React, { useEffect, useState } from 'react';
+
+// Import del react router
+import { BrowserRouter as Router, Switch, Redirect, Route, Link } from 'react-router-dom';
+
+// Import de Styles
 import './App.css';
 
-// Importaciones de react
-import React, { useState } from 'react';
+// Import de login & landingpages
 
-const writeSomething = (titulo) => {
-  const jsonString = { titulo, terminado: false };
-  console.log(jsonString);
-  fetch('http://localhost:3001/api/administrador', {
-    method: 'post',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(jsonString),
-  })
-    .then((res) => res.json())
-    .then((json) => {
-      console.log(json);
-    });
-};
-// Import de la base de datos
+import LoginSignup from './Views/Login';
 
-function App() {
-  const [todos, setTodos] = useState([]);
-  const [titulo, setTitulo] = useState('');
+import AmbientePropietario from './Views/AmbientePropietario.jsx';
+import AmbienteJefeTienda from './Views/AmbienteJefeTienda.jsx';
+import AmbienteVendedor from './Views/AmbienteVendedor.jsx';
+import AmbienteAdministrador from './Views/AmbienteAdministrador.jsx';
 
+// Import de funcionalidades admin
+import AmbientePropietarioProductos from './Views/AmbientePropietarioProductos.jsx';
+import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
+import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
+
+// Import de funcionalidades jefe  de tienda
+import AmbienteJefeTiendaDevoluciones from './Views/AmbienteJefeTiendaDevoluciones.jsx';
+import AmbienteJefeTiendaFacturar from './Views/AmbienteJefeTiendaFacturar.jsx';
+import AmbienteJefeDeTienda from './Views/AmbienteJefeDeTienda.jsx';
+
+// Import de funcionalidades vendedor
+import AmbienteVendedorFacturacion from './Views/AmbienteVendedorFacturacion.jsx';
+
+// Import de funcionalidades administrador
+import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProveedores.jsx';
+
+// Import de pagina en construccion y error
+import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
+
+// Instancia de la react app
+const App = () => {
+  console.log('Hola desde app.js');
   return (
-    // <div className="App">
-    //   <header className="App-header">
-    //     <img src={logo} className="App-logo" alt="logo" />
-    //   </header>
-    // </div>
-    <div>
-      <input
-        value={titulo}
-        onChange={(e) => {
-          setTitulo(e.target.value);
-        }}
-      ></input>
-      <button
-        onClick={() => {
-          writeSomething(titulo);
-          fetch('http://localhost:3001/api/administrador')
-            .then((res) => res.json())
-            .then((json) => {
-              setTodos(json.values);
-            });
-        }}
-      >
-        Agregar a mongo
-      </button>
-      {/* <ul>
-        {todos.map((todo) => {
-          return <li key={todo._id}>{todo.titulo}</li>;
-        })}
-      </ul> */}
-    </div>
+    <Router>
+      {/* Prueba de rutas  */}
+      <Route exact path="/">
+        <LoginSignup />
+      </Route>
+      {/*  Login  */}
+      <Route exact path="/login"></Route>
+      {/* Ambientes propietario */}
+      <Route exact path="/Propietario">
+        <AmbientePropietario />
+      </Route>
+      <Route exact path="/Propietario/Bodegas">
+        <AmbientePropietarioBodegas />
+      </Route>
+      <Route exact path="/Propietario/Productos">
+        <AmbientePropietarioProductos />
+      </Route>
+      <Route exact path="/Propietario/Usuarios">
+        <AmbientePropietarioUsuarios />
+      </Route>
+      {/* Ambientes administrador */}
+      <Route exact path="/Administrador">
+        <AmbienteAdministrador />
+      </Route>
+      {/* Ambientes propietario */}
+      <Route exact path="/JefeTienda">
+        <AmbienteJefeTienda />
+      </Route>
+      <Route exact path="/JefeTienda/Facturar">
+        <AmbienteJefeTiendaFacturar />
+      </Route>
+      <Route exact path="/JefeTienda/Devoluciones">
+        <AmbienteJefeTiendaDevoluciones />
+      </Route>
+      {/* Ambientes vendedor */}
+      <Route exact path="/Vendedor">
+        <AmbienteVendedor />
+      </Route>
+      <Route exact path="/Vendedor/Facturacion">
+        <AmbienteVendedorFacturacion />
+      </Route>
+      {/* Pagina en construccion o error */}
+      <Route exact path="/EnConstruccion">
+        <EnConstruccion />
+      </Route>
+    </Router>
   );
-}
+};
 
 export default App;
