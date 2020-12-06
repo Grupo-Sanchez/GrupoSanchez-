@@ -28,7 +28,6 @@ const AmbienteJefeTiendaDevoluciones = () => (
       </Row>
       <Devoluciones />
     </Container>
-    <h1>Ambiente Jefe De Tienda</h1>
   </div>
 );
 
