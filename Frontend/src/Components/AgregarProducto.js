@@ -1,13 +1,20 @@
-import { Modal, ModalBody, ModalHeader, ModalFooter, Alert } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  Label,
+  FormGroup,
+  Input,
+} from 'reactstrap';
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
-import './InterfazProducto.css';
+import '../Styles/SearchBarInterfazProductos.css';
 import axios from 'axios';
 
-export default function AgregarProducto() {
+export default function AgregarProducto(props) {
   const dataApuntes = [];
 
-  const [modalInsertar, setModalInsertar] = useState(true);
   const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
@@ -23,6 +30,7 @@ export default function AgregarProducto() {
     cantidad: '',
     descripcion_corta: '',
     descripcion_larga: '',
+    cantidad_minima: '',
   });
   const prueba = async () => {
     const campos = {
@@ -36,6 +44,7 @@ export default function AgregarProducto() {
       cantidad: seleccionado.cantidad,
       descripcion_corta: seleccionado.descripcion_corta,
       descripcion_larga: seleccionado.descripcion_larga,
+      cantidad_minima: seleccionado.cantidad_minima,
     };
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
@@ -55,7 +64,6 @@ export default function AgregarProducto() {
     }));
   };
   const GuardarCodigos = () => {
-
     seleccionado.codigos.push(document.getElementById('cod1').value);
     seleccionado.codigos.push(document.getElementById('cod2').value);
     seleccionado.codigos.push(document.getElementById('cod3').value);
@@ -67,7 +75,6 @@ export default function AgregarProducto() {
     alert(seleccionado.codigos[0]);
   };
   const GuardarPrecio = () => {
-
     seleccionado.precio.push(document.getElementById('precio1').value);
     seleccionado.precio.push(document.getElementById('precio2').value);
     seleccionado.precio.push(document.getElementById('precio3').value);
@@ -75,7 +82,6 @@ export default function AgregarProducto() {
     alert(seleccionado.precio[0]);
   };
   const GuardarProveedores = () => {
-
     seleccionado.proveedores.push(document.getElementById('prov1').value);
     seleccionado.proveedores.push(document.getElementById('prov2').value);
     seleccionado.proveedores.push(document.getElementById('prov3').value);
@@ -96,11 +102,12 @@ export default function AgregarProducto() {
     seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     prueba();
+    props.change;
   };
 
   return (
     <div>
-      <Modal isOpen={modalInsertar} className="text-center">
+      <Modal isOpen={props.isOpen} className="text-center">
         <ModalHeader>
           <div>
             <h3>AGREGAR PRODUCTOS</h3>
@@ -110,7 +117,7 @@ export default function AgregarProducto() {
           <div>
             <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
               Insertar Codigo
-          </Button>{' '}
+            </Button>{' '}
           </div>
           <div>
             <label></label>
@@ -118,7 +125,7 @@ export default function AgregarProducto() {
           <div>
             <Button onClick={() => setModalInsertarProveedor(true)} color="primary">
               Insertar Proveedor
-          </Button>{' '}
+            </Button>{' '}
           </div>
           <Modal isOpen={modalInsertarCodigo}>
             <ModalHeader>
@@ -129,21 +136,16 @@ export default function AgregarProducto() {
             <ModalBody>
               <div className="form-group">
                 <label>codigo 1</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="codigo1"
-                  id='cod1'
-                />
+                <input className="form-control" type="text" name="codigo1" id="cod1" />
                 <br />
                 <label>codigo 2</label>
                 <input
                   className="form-control"
                   type="text"
                   name="codigo2"
-                  id='cod2'
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  id="cod2"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 3</label>
@@ -151,9 +153,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="codigo3"
-                  id='cod3'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="cod3"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 4</label>
@@ -161,9 +163,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="codigo4"
-                  id='cod4'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="cod4"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 5</label>
@@ -171,9 +173,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="codigo5"
-                  id='cod5'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="cod5"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 6</label>
@@ -181,9 +183,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="codigo6"
-                  id='cod6'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="cod6"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 7</label>
@@ -191,18 +193,20 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="codigo7"
-                  id='cod7'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="cod7"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
             </ModalBody>
             <ModalFooter>
-              <button className="btn btn-primary" onClick={() => GuardarCodigos()}>Agregar Código</button>
+              <button className="btn btn-primary" onClick={() => GuardarCodigos()}>
+                Agregar Código
+              </button>
               <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
                 Cancelar
-            </button>
+              </button>
             </ModalFooter>
           </Modal>
           <Modal isOpen={modalInsertarProveedor}>
@@ -218,9 +222,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor1"
-                  id='prov1'
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                  id="prov1"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -228,9 +232,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor2"
-                  id='prov2'
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                  id="prov2"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -238,9 +242,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor3"
-                  id='prov3'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="prov3"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -248,9 +252,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor4"
-                  id='prov4'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="prov4"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -258,9 +262,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor5"
-                  id='prov5'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="prov5"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -268,9 +272,9 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor6"
-                  id='prov6'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="prov6"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -278,18 +282,20 @@ export default function AgregarProducto() {
                   className="form-control"
                   type="text"
                   name="proveedor7"
-                  id='prov7'
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                  id="prov7"
+                  //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  //onChange={manejarCambio}
                 />
                 <br />
               </div>
             </ModalBody>
             <ModalFooter>
-              <button className="btn btn-primary" onClick={() => GuardarProveedores()}>Agregar Proveedores</button>
+              <button className="btn btn-primary" onClick={() => GuardarProveedores()}>
+                Agregar Proveedores
+              </button>
               <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
                 Cancelar
-            </button>
+              </button>
             </ModalFooter>
           </Modal>
           <div>
@@ -332,7 +338,6 @@ export default function AgregarProducto() {
               onChange={manejarCambio}
             />
           </div>
-          
           <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
             Precios
           </Button>{' '}
@@ -347,11 +352,21 @@ export default function AgregarProducto() {
             />
           </div>
           <div>
+            <h3>Cantidad Mínima</h3>
+            <input
+              className="form-control"
+              type="Number"
+              name="cantidad"
+              value={seleccionado ? seleccionado.cantidad_minima : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
             <div>
               <h3>Descripción corta</h3>
               <FormGroup class="style">
                 <Label for="exampleText"></Label>
-                <Input type="textarea" name="text" id="descripcion1"/>
+                <Input type="textarea" name="text" id="descripcion1" />
               </FormGroup>
             </div>
           </div>
@@ -361,17 +376,17 @@ export default function AgregarProducto() {
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlTextarea1"></label>
-              <textarea className="form-control" id="descripcion2" rows="5"/>
+              <textarea className="form-control" id="descripcion2" rows="5" />
             </div>
           </div>
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-primary" onClick={() => insertar(0)}>
             Agregar Producto
-        </button>
-          <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
+          </button>
+          <button className="btn btn-danger" onClick={props.change}>
             Cancelar
-        </button>
+          </button>
         </ModalFooter>
       </Modal>
       <Modal isOpen={modalInsertarPrecio}>
@@ -383,12 +398,7 @@ export default function AgregarProducto() {
         <ModalBody>
           <div className="form-group">
             <label>Precio 1</label>
-            <input
-              className="form-control"
-              type="text"
-              name="precio1"
-              id='precio1'
-            />
+            <input className="form-control" type="text" name="precio1" id="precio1" />
             <br />
             <label>Precio 2</label>
             <input
@@ -396,9 +406,9 @@ export default function AgregarProducto() {
               type="text"
               name="Fecha"
               name="precio2"
-              id='precio2'
-            //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-            //onChange={manejarCambio}
+              id="precio2"
+              //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              //onChange={manejarCambio}
             />
             <br />
             <label>Precio 3</label>
@@ -407,19 +417,19 @@ export default function AgregarProducto() {
               type="text"
               name="Etiqueta"
               name="precio3"
-              id='precio3'
-            //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            //onChange={manejarCambio}
+              id="precio3"
+              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              //onChange={manejarCambio}
             />
           </div>
         </ModalBody>
         <ModalFooter>
-        <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
+          <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
             Agregar Producto
-        </button>
+          </button>
           <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
             Cancelar
-        </button>
+          </button>
         </ModalFooter>
       </Modal>
     </div>

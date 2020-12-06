@@ -9,6 +9,7 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
+    'object-curly-newline': 'off',
     'no-unused-vars': 'off',
     'max-len': ['error', { code: 100 }],
     'prefer-promise-reject-errors': ['off'],
@@ -17,5 +18,10 @@ module.exports = {
     'react/prop-types': ['off'],
     'no-return-assign': ['off'],
     'linebreak-style': 0,
+    'lines-between-class-members': 'off',
+    'no-underscore-dangle': 'off',
+    'no-plusplus': 'off',
+    'prefer-destructuring': ['error', { object: true, array: false }],
+    'implicit-arrow-linebreak': 0,
   },
 };

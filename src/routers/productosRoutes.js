@@ -6,6 +6,7 @@ const router = Router();
 const producto = require('../controllers/ProductoController');
 
 router.route('/').get(producto.read_producto).post(producto.create_producto);
+
 //se utiliza para capturar el id de un usuario
 router
   .route('/:productoId')
