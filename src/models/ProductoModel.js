@@ -28,9 +28,11 @@ precio: '',*/
         type: Number,
         required: 'cantidad requerido',
     }, descripcion_corta: {
-        type: String
+        type: String,
     }, descripcion_larga: {
-        type : String
+        type : String,
+    }, cantidad_minima: {
+        type : Number,
     }
 });
 

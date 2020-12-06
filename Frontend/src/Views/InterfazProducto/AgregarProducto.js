@@ -23,6 +23,7 @@ export default function AgregarProducto() {
     cantidad: '',
     descripcion_corta: '',
     descripcion_larga: '',
+    cantidad_minima: '',
   });
   const prueba = async () => {
     const campos = {
@@ -36,6 +37,7 @@ export default function AgregarProducto() {
       cantidad: seleccionado.cantidad,
       descripcion_corta: seleccionado.descripcion_corta,
       descripcion_larga: seleccionado.descripcion_larga,
+      cantidad_minima: seleccionado.cantidad_minima,
     };
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
@@ -343,6 +345,16 @@ export default function AgregarProducto() {
               type="Number"
               name="cantidad"
               value={seleccionado ? seleccionado.cantidad : ''}
+              onChange={manejarCambio}
+            />
+          </div>
+          <div>
+            <h3>Cantidad Mínima</h3>
+            <input
+              className="form-control"
+              type="Number"
+              name="cantidad"
+              value={seleccionado ? seleccionado.cantidad_minima : ''}
               onChange={manejarCambio}
             />
           </div>
