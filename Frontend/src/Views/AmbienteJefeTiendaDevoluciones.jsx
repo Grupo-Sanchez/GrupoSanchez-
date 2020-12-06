@@ -1,5 +1,6 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
+import Devoluciones from '../Components/Devoluciones.jsx';
 import Proveedores from '../Icons/Proveedores.svg';
 import Facturar from '../Icons/Facturar.svg';
 import Devolucion from '../Icons/Devolucion.svg';
@@ -25,7 +26,7 @@ const AmbienteJefeTiendaDevoluciones = () => (
           <Header items={items} />
         </Col>
       </Row>
-      <Row noGutters></Row>
+      <Devoluciones />
     </Container>
   </div>
 );

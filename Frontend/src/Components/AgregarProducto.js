@@ -7,16 +7,14 @@ import {
   Label,
   FormGroup,
   Input,
-  ButtonGroup,
 } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
 import '../Styles/SearchBarInterfazProductos.css';
 import axios from 'axios';
 
-export default function AgregarProducto() {
+export default function AgregarProducto(props) {
   const dataApuntes = [];
 
-  const [modalInsertar, setModalInsertar] = useState(true);
   const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
@@ -104,11 +102,12 @@ export default function AgregarProducto() {
     seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     prueba();
+    props.change;
   };
 
   return (
     <div>
-      <Modal isOpen={modalInsertar} className="text-center">
+      <Modal isOpen={props.isOpen} className="text-center">
         <ModalHeader>
           <div>
             <h3>AGREGAR PRODUCTOS</h3>
@@ -385,7 +384,7 @@ export default function AgregarProducto() {
           <button className="btn btn-primary" onClick={() => insertar(0)}>
             Agregar Producto
           </button>
-          <button className="btn btn-danger" onClick={() => setModalInsertar(false)}>
+          <button className="btn btn-danger" onClick={props.change}>
             Cancelar
           </button>
         </ModalFooter>

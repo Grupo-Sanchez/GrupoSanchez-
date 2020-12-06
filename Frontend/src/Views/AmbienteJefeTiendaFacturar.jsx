@@ -1,5 +1,6 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
+import Factura from '../Components/Factura.jsx';
 import SegundoPrecio from '../Icons/SegundoPrecio.svg';
 import Facturar from '../Icons/Facturar.svg';
 import Devolucion from '../Icons/Devolucion.svg';
@@ -25,7 +26,7 @@ const AmbienteJefeTienda2doPrecio = () => (
           <Header items={items} />
         </Col>
       </Row>
-      <Row noGutters></Row>
+      <Factura />
     </Container>
   </div>
 );

@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Col, Row, Container } from 'reactstrap';
 import CartasOpciones from './CartasOpciones.jsx';
-import Agregar from './AgregarProducto.jsx';
+import Agregar from './AgregarProducto.js';
 import AgregarProducto from '../Icons/AgregarProducto.svg';
 import EditarProducto from '../Icons/EditarProducto.svg';
 import EliminarProducto from '../Icons/EliminarProducto.svg';
 import BuscarProducto from '../Icons/BuscarProducto.svg';
+import Eliminar from './EliminarProducto.js';
 
 const OpcionesProductos = () => {
-  const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalAgregar, setModalAgregar] = useState(false);
+  const [modalEliminar, setModalEliminar] = useState(false);
   const items = [
     {
       titulo: 'Agregar Productos',
@@ -25,7 +27,7 @@ const OpcionesProductos = () => {
         />
       ),
       to: '/asd',
-      isOpen: () => setModalInsertar(true),
+      isOpen: () => setModalAgregar(true),
     },
     {
       titulo: 'Modificar / Eliminar Producto',
@@ -42,6 +44,7 @@ const OpcionesProductos = () => {
         />
       ),
       to: '/asd',
+      isOpen: () => setModalEliminar(true),
     },
     {
       titulo: 'Buscar Producto',
@@ -63,7 +66,8 @@ const OpcionesProductos = () => {
 
   return (
     <Container>
-      <Agregar isOpen={modalInsertar} change={() => setModalInsertar(!modalInsertar)} />
+      <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
+      <Eliminar isOpen={modalEliminar} change={() => setModalEliminar(!modalEliminar)} />
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Productos</h1>
       <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
