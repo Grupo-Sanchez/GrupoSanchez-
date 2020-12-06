@@ -19,5 +19,6 @@ module.exports = {
     'no-return-assign': ['off'],
     'linebreak-style': 0,
     'lines-between-class-members': 'off',
+    "eol-last": ["error", "never"],
   },
 };
