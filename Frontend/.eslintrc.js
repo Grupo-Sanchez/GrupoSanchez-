@@ -23,5 +23,6 @@ module.exports = {
     'no-plusplus': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
     'implicit-arrow-linebreak': 0,
+    "no-param-reassign": 0,
   },
 };
