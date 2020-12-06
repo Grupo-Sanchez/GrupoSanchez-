@@ -5,7 +5,6 @@ import { Table, Container, Row, Col } from 'reactstrap';
 import Header from '../Components/Header.jsx';
 import Facturar from '../Icons/Facturar.svg';
 
-
 import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarVendedor.css';
 import axios from 'axios';
@@ -18,7 +17,6 @@ const items = [
   },
 ];
 export default class Facturas extends Component {
-  
   constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
@@ -197,20 +195,17 @@ export default class Facturas extends Component {
       this.state.total = this.state.result + this.state.impuesto;
     }
     return (
-      
       <div>
         <div>
-    <Container fluid style={{ padding: '0' }}>
-      <Row noGutters>
-        <Col>
-          <Header items={items} />
-        </Col>
-      </Row>
-      <Row noGutters>
-
-      </Row>
-    </Container>
-  </div>
+          <Container fluid style={{ padding: '0' }}>
+            <Row noGutters>
+              <Col>
+                <Header items={items} />
+              </Col>
+            </Row>
+            <Row noGutters></Row>
+          </Container>
+        </div>
         <h1 align="center">FACTURA</h1>
         <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
           <div align="center">

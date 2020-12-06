@@ -22,8 +22,8 @@ import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
 import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
 
 // Import de funcionalidades jefe  de tienda
-import AmbienteJefeTiendaDevoluciones from './Views/AmbienteJefeTiendaDevoluciones.jsx';
-import AmbienteJefeTiendaFacturar from './Views/AmbienteJefeTiendaFacturar.jsx';
+import AmbienteJefeTiendaDevoluciones from './Components/Devoluciones.jsx';
+import AmbienteJefeTiendaFacturar from './Components/Factura.jsx';
 import AmbienteJefeDeTienda from './Views/AmbienteJefeDeTienda.jsx';
 
 // Import de funcionalidades vendedor

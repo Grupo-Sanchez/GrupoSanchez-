@@ -26,11 +26,9 @@ const AmbienteJefeTienda = () => (
           <Header items={items} />
         </Col>
       </Row>
-      <Row noGutters>
-
-      </Row>
+      <Row noGutters></Row>
     </Container>
-    <h1>Ambiente JefeTienda</h1>
+    <h1>Ambiente Jefe De Tienda</h1>
   </div>
 );
 

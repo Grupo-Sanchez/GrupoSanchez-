@@ -26,16 +26,12 @@ class AmbienteJefeDeTienda extends Component {
     this.OnButtonDevoluciones = this.OnButtonDevoluciones.bind(this);
     this.onButtonAutorizacion = this.onButtonAutorizacion.bind(this);
     this.onButtonFactura = this.onButtonFactura.bind(this);
-    // this.onUnload = this.onUnload.bind(this);
     this.HomeClickJefeTienda = this.HomeClickJefeTienda.bind(this);
   }
-  // componentDidMount() {}
 
   componentWillUnmount() {
     window.removeEventListener('onbeforeunload', this.onUnload);
   }
-
-  // onUnload() {}
 
   logout() {
     if (this.state.buttoncerrar === 'Iniciar Session') {

@@ -226,7 +226,7 @@ export default function EliminarProducto(props) {
       <Modal
         isOpen={props.isOpen}
         className="text-center"
-        style={{ maxWidth: '1700px', width: '80%' }}
+        style={{ maxWidth: '1700px', width: '80%', 'text-align': 'center', 'padding-top': '200px' }}
       >
         <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
         <input
@@ -247,6 +247,7 @@ export default function EliminarProducto(props) {
           }}
         ></input>
         <Table
+          responsive
           striped
           bordered
           hover
