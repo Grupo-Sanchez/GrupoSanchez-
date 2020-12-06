@@ -8,12 +8,11 @@
     "@testing-library/user-event": "^12.2.2",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
-    "jquery": "^3.5.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
-    "react-select-search": "^2.2.1",
-    "react-table-scrollbar": "^0.1.9",
+    "react-select-search": "^2.2.3",
     "reactstrap": "^8.7.1",
     "web-vitals": "^0.2.4"
   },
@@ -48,10 +47,5 @@
     "husky": "^4.3.0",
     "prettier": "^2.2.0",
     "pretty-quick": "^3.1.0"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
   }
 }

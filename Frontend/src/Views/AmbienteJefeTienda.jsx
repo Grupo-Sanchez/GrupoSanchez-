@@ -7,13 +7,18 @@ import Devolucion from '../Icons/Devolucion.svg';
 const items = [
   {
     name: 'Facturar',
-    to: '/Vendedor/Facturacion',
+    to: '/JefeTienda/Facturar',
     icon: <img src={Facturar} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
+  },
+  {
+    name: 'Devoluciones',
+    to: '/JefeTienda/Devoluciones',
+    icon: <img src={Devolucion} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
   },
 ];
 
 // Landing page para Jefe de tienda
-const AmbienteVendedor = () => (
+const AmbienteJefeTienda = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -23,8 +28,8 @@ const AmbienteVendedor = () => (
       </Row>
       <Row noGutters></Row>
     </Container>
-    <h1>Ambiente Vendedor</h1>
+    <h1>Ambiente Jefe De Tienda</h1>
   </div>
 );
 
-export default AmbienteVendedor;
+export default AmbienteJefeTienda;

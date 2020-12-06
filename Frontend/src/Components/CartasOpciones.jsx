@@ -5,7 +5,9 @@ const CartasOpciones = (props) => (
   <div>
     <Card body>
       {props.icon}
-      <Button color="primary">{props.titulo}</Button>
+      <Button color="primary" onClick={props.isOpen}>
+        {props.titulo}
+      </Button>
     </Card>
   </div>
 );

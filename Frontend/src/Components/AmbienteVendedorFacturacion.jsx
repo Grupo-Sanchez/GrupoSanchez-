@@ -1,16 +1,16 @@
 import React, { Component, useState } from 'react';
-import { Button } from 'reactstrap';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Table } from 'reactstrap';
-import SelectSearch from 'react-select-search';
-import './SearchBar.css';
+import { Button, Table } from 'reactstrap';
 import axios from 'axios';
+import SelectSearch from 'react-select-search';
+import '../Styles/SearchBarVendedor.css';
+import Header from './Header.jsx';
+import Facturar from '../Icons/Facturar.svg';
+
 export default class Facturas extends Component {
   constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.segundoPrecio = this.segundoPrecio.bind(this);
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
     this.agregarProductoaTabla = this.agregarProductoaTabla.bind(this);
     this.eliminarProducto = this.eliminarProducto.bind(this);
@@ -39,7 +39,7 @@ export default class Facturas extends Component {
     };
   }
   addRow(producto) {
-    var nextState = this.state;
+    const nextState = this.state;
     nextState.productosSeleccionado.push(producto);
     this.setState(nextState);
   }
@@ -55,6 +55,7 @@ export default class Facturas extends Component {
           precioSumado: item.precioSumado,
         };
       }
+      return 0;
     });
   }
   componentDidMount = async () => {
@@ -65,10 +66,9 @@ export default class Facturas extends Component {
       .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
-        var productosagregados = [];
+        const productosagregados = [];
         for (let index = 0; index < productos.length; index++) {
           const element = productos[index];
-          console.log(index + ': ' + element.name);
           productosagregados.push({
             indice: 0,
             name: element.nombre,
@@ -85,7 +85,7 @@ export default class Facturas extends Component {
             precioSumado: 0,
           });
         }
-        var nextState = this.state;
+        const nextState = this.state;
         nextState.productosEnBodega = productosagregados;
         this.setState(nextState);
       })
@@ -97,47 +97,19 @@ export default class Facturas extends Component {
     this.state.indice = 1;
     this.b(e);
   }
-  segundoPrecio = (codigo) => {
-    var nextState = this.state;
-    this.state.indice = 1;
-    for (let index = 0; index < nextState.productosSeleccionado.length; index++) {
-      const element = nextState.productosSeleccionado[index];
-      if (element.codigo === codigo) {
-        for (let i = 0; i < nextState.productosEnBodega.length; i++) {
-          const element2 = nextState.productosEnBodega[i];
-          if (element.codigo === element2.codigos[0]) {
-            if (element.precioUnitario !== element2.precioUnitario[1]) {
-              element.precioUnitario = element2.precioUnitario[1];
-              element.precioSumado = element.cantidad * element.precioUnitario;
-              this.setState(nextState);
-              alert('Segundo Precio Aplicado');
-              break;
-            } else {
-              alert('El segundo precio ya fue aplicado');
-              break;
-            }
-          }
-        }
-      }
-    }
-  };
 
   write = async () => {
-    var newLine = '\r\n';
-    alert('entrooo');
     const campos = {
       subtotal: this.state.result,
       impuesto: this.state.impuesto,
       total: this.state.total,
       productosSeleccionado: this.state.productosSeleccionado,
     };
-    alert('saliooo');
     await axios.post('http://localhost:3001/api/facturas', campos);
-    alert('escribio?');
     window.location.reload();
   };
   updateTool = async (id) => {
-    var cantidad2 = 0;
+    let cantidad2 = 0;
     for (let index = 0; index < this.state.productosEnBodega.length; index++) {
       const element = this.state.productosEnBodega[index];
       if (element.value === id) {
@@ -145,25 +117,17 @@ export default class Facturas extends Component {
         break;
       }
     }
-    axios
-      .put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 })
-      .then(function (response) {
-        alert('RES: ' + JSON.stringify(response.data));
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
   };
   handleQuantityChange(e) {
     this.state.indice = 1;
-    var nextState = this.state;
+    const nextState = this.state;
     nextState.quantity = e.target.value;
     nextState.productoSeleccionado.cantidad = nextState.quantity;
     this.setState(nextState);
   }
   eliminarProducto = async (i, cantidad) => {
-    var cantidad2 = 0;
+    let cantidad2 = 0;
     await this.getProductos();
     for (let index = 0; index < this.state.productosEnBodega.length; index++) {
       const element = this.state.productosEnBodega[index];
@@ -172,26 +136,20 @@ export default class Facturas extends Component {
         break;
       }
     }
-    axios
-      .put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 })
-      .then(function (response) {
-        alert('RES: ' + JSON.stringify(response.data));
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items = this.state.productosSeleccionado.filter((item) => item.value !== i);
-    var nextState = this.state;
+    const nextState = this.state;
+    nextState.productosSeleccionado = items;
     this.state.result = 0;
     this.state.indice = 1;
     this.state.impuesto = 0;
     this.state.total = 0;
-    nextState.productosSeleccionado = items;
     this.setState(nextState);
   };
   agregarProductoaTabla() {
     this.state.indice = 1;
+
     this.addRow({
       name: this.state.productoSeleccionado.name,
       value: this.state.productoSeleccionado.value,
@@ -202,19 +160,18 @@ export default class Facturas extends Component {
         this.state.productoSeleccionado.cantidad * this.state.productoSeleccionado.precioUnitario,
     });
     this.updateTool(this.state.productoSeleccionado.value);
-    var nextState = this.state;
+    const nextState = this.state;
     nextState.quantity = 1;
     this.setState(nextState);
   }
   render() {
-    if (this.state.productosSeleccionado && this.state.productosSeleccionado.length) {
-      //your code here
-      this.state.result = this.state.productosSeleccionado.reduce(function (prev, current) {
-        return prev + current.precioSumado;
-      }, 0);
-      this.state.impuesto = this.state.result * (15 / 100);
-      this.state.total = this.state.result + this.state.impuesto;
-    }
+    this.state.result = this.state.productosSeleccionado.reduce(
+      (prev, current) => prev + current.precioSumado,
+      0,
+    );
+    this.state.impuesto = this.state.result * (15 / 100);
+    this.state.total = this.state.result + this.state.impuesto;
+
     return (
       <div>
         <h1 align="center">FACTURA</h1>
@@ -258,29 +215,25 @@ export default class Facturas extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.productosSeleccionado &&
-                this.state.productosSeleccionado.map((row, i) => (
-                  <tr key={i}>
-                    <th>{(row.indice = this.state.indice++)}</th>
-                    <th>{row.name}</th>
-                    <th>{row.codigo}</th>
-                    <th>{row.cantidad}</th>
-                    <th>{row.precioUnitario}</th>
-                    <th>{row.precioSumado}</th>
-                    <th>
-                      <Button onClick={() => this.segundoPrecio(row.codigo)}>
-                        Autorizar 2do Precio
-                      </Button>
-                      <Button
-                        style={{ marginLeft: '10px' }}
-                        className="btn btn-danger"
-                        onClick={() => this.eliminarProducto(row.value, row.cantidad)}
-                      >
-                        Eliminar
-                      </Button>
-                    </th>
-                  </tr>
-                ))}
+              {this.state.productosSeleccionado.map((row, i) => (
+                <tr key={i}>
+                  <th>{this.state.indice++}</th>
+                  <th>{row.name}</th>
+                  <th>{row.codigo}</th>
+                  <th>{row.cantidad}</th>
+                  <th>{row.precioUnitario}</th>
+                  <th>{row.precioSumado}</th>
+                  <th>
+                    <Button
+                      style={{ marginLeft: '10px' }}
+                      className="btn btn-danger"
+                      onClick={() => this.eliminarProducto(row.value, row.cantidad)}
+                    >
+                      Eliminar
+                    </Button>
+                  </th>
+                </tr>
+              ))}
             </tbody>
           </Table>
         </div>

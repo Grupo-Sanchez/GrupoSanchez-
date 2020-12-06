@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+
 import '../Styles/Sidebar.css';
 
+// Import de svg
+import Notificacion from '../Icons/Notificacion.svg';
+import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
+
 const Header = (props) => {
+  const { history } = props;
   const { items } = props;
 
   const [isOpen, setOpen] = useState(false);
 
   function handleItemClick(to) {
+    history.push(to);
     console.log(`Let's go to ${to}!`);
   }
 
@@ -33,6 +41,8 @@ const Header = (props) => {
         </button>
 
         <span>Grupo Sanchez</span>
+
+        <img src={Notificacion} style={{ width: '1.4em', height: '1.4em', color: 'white' }} />
       </div>
 
       {isOpen && (
@@ -76,4 +86,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default withRouter(Header);

@@ -1,22 +1,18 @@
 import { useState } from 'react';
 import { Col, Row, Container } from 'reactstrap';
 import CartasOpciones from './CartasOpciones.jsx';
-import Agregar from './AgregarProducto.js';
-import AgregarProducto from '../Icons/AgregarProducto.svg';
-import EditarProducto from '../Icons/EditarProducto.svg';
-import EliminarProducto from '../Icons/EliminarProducto.svg';
-import BuscarProducto from '../Icons/BuscarProducto.svg';
-import Eliminar from './EliminarProducto.js';
+import AgregarUsuario from '../Icons/CrearUsuario.svg';
+import EliminarUsuario from '../Icons/EliminarUsuario.svg';
+import EditarUsuario from '../Icons/EditarUsuario.svg';
 
-const OpcionesProductos = () => {
-  const [modalAgregar, setModalAgregar] = useState(false);
-  const [modalEliminar, setModalEliminar] = useState(false);
+const OpcionesUsuarios = () => {
+  const [modalInsertar, setModalInsertar] = useState(false);
   const items = [
     {
-      titulo: 'Agregar Productos',
+      titulo: 'Agregar Usuarios',
       icon: (
         <img
-          src={AgregarProducto}
+          src={AgregarUsuario}
           style={{
             width: '220px',
             height: 'auto',
@@ -27,13 +23,13 @@ const OpcionesProductos = () => {
         />
       ),
       to: '/asd',
-      isOpen: () => setModalAgregar(true),
+      isOpen: () => setModalInsertar(true),
     },
     {
-      titulo: 'Modificar / Eliminar Producto',
+      titulo: 'Eliminar Usuarios',
       icon: (
         <img
-          src={EditarProducto}
+          src={EliminarUsuario}
           style={{
             width: '220px',
             height: 'auto',
@@ -44,13 +40,12 @@ const OpcionesProductos = () => {
         />
       ),
       to: '/asd',
-      isOpen: () => setModalEliminar(true),
     },
     {
-      titulo: 'Buscar Producto',
+      titulo: 'Modificar Usuarios',
       icon: (
         <img
-          src={BuscarProducto}
+          src={EditarUsuario}
           style={{
             width: '220px',
             height: 'auto',
@@ -66,9 +61,7 @@ const OpcionesProductos = () => {
 
   return (
     <Container>
-      <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
-      <Eliminar isOpen={modalEliminar} change={() => setModalEliminar(!modalEliminar)} />
-      <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Productos</h1>
+      <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Usuarios</h1>
       <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
           <Col>
@@ -81,4 +74,4 @@ const OpcionesProductos = () => {
   );
 };
 
-export default OpcionesProductos;
+export default OpcionesUsuarios;

@@ -1,9 +1,12 @@
 import React, { Component, useState } from 'react';
-import { Row, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
+import { Table, Container, Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import SelectSearch from 'react-select-search';
-import './SearchBar.css';
-import { Table } from 'reactstrap';
 import axios from 'axios';
+import Header from './Header.jsx';
+import Facturar from '../Icons/Facturar.svg';
+import '../Styles/SearchBar.css';
+import Devolucion from '../Icons/Devolucion.svg';
+
 export default class Devoluciones extends Component {
   constructor(props) {
     super(props);
@@ -28,13 +31,13 @@ export default class Devoluciones extends Component {
   }
   addRow(producto) {
     this.state.indice = 1;
-    var nextState = this.state;
+    const nextState = this.state;
     nextState.productosDevolucion.push(producto);
     this.setState(nextState);
   }
   b(idToSearch) {
     this.state.indice = 1;
-    return this.state.productosEnBodega.filter((item) => {
+    this.state.productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
         this.state.productoSeleccionado = {
           name: item.name,
@@ -45,17 +48,10 @@ export default class Devoluciones extends Component {
           precioSumado: item.precioSumado,
         };
       }
+      return 0;
     });
   }
   write = async () => {
-    var newLine = '\r\n';
-    var msg = 'Nombre: ' + this.state.nombreCliente + newLine;
-    msg += 'Identificacion: ' + this.state.identificacion + newLine;
-    msg += 'Razon de Devolucion: ' + this.state.razonDevolucion + newLine;
-    msg += 'Estado: ' + this.state.Estado + newLine;
-    msg += 'Nombre: ' + this.state.LugarDevolucion + newLine;
-    alert(msg);
-    alert('entrooo');
     const campos = {
       nombreCliente: this.state.nombreCliente,
       identificacion: this.state.identificacion,
@@ -64,9 +60,7 @@ export default class Devoluciones extends Component {
       LugarDevolucion: this.state.LugarDevolucion,
       productosDevueltos: this.state.productosDevolucion,
     };
-    alert('saliooo');
     await axios.post('http://localhost:3001/api/devoluciones', campos);
-    alert('escribio?');
     window.location.reload();
   };
   componentDidMount = async () => {
@@ -78,10 +72,9 @@ export default class Devoluciones extends Component {
       .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
-        var productosagregados = [];
+        const productosagregados = [];
         for (let index = 0; index < productos.length; index++) {
           const element = productos[index];
-          console.log(index + ': ' + element.codigos);
           productosagregados.push({
             indice: 0,
             name: element.nombre,
@@ -98,7 +91,7 @@ export default class Devoluciones extends Component {
             precioSumado: 0,
           });
         }
-        var nextState = this.state;
+        const nextState = this.state;
         nextState.productosEnBodega = productosagregados;
         this.setState(nextState);
       })
@@ -107,7 +100,7 @@ export default class Devoluciones extends Component {
       });
   };
   updateTool = async (id) => {
-    var cantidad2 = 0;
+    let cantidad2 = 0;
     for (let index = 0; index < this.state.productosEnBodega.length; index++) {
       const element = this.state.productosEnBodega[index];
       if (element.value === id) {
@@ -115,18 +108,11 @@ export default class Devoluciones extends Component {
         break;
       }
     }
-    axios
-      .put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
   };
   eliminarProducto = async (i, cantidad) => {
     this.state.indice = 1;
-    var cantidad2 = 0;
+    let cantidad2 = 0;
     await this.getProductos();
     for (let index = 0; index < this.state.productosEnBodega.length; index++) {
       const element = this.state.productosEnBodega[index];
@@ -135,17 +121,10 @@ export default class Devoluciones extends Component {
         break;
       }
     }
-    axios
-      .put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 })
-      .then(function (response) {
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    const items = this.state.productosDevolucion.filter((item) => item.value !== i);
-    var nextState = this.state;
-    nextState.productosDevolucion = items;
+    axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    const items2 = this.state.productosDevolucion.filter((item) => item.value !== i);
+    const nextState = this.state;
+    nextState.productosDevolucion = items2;
     this.setState(nextState);
   };
   handleChange(e) {
@@ -154,7 +133,7 @@ export default class Devoluciones extends Component {
   }
   handleQuantityChange(e) {
     this.state.indice = 1;
-    var nextState = this.state;
+    const nextState = this.state;
     nextState.quantity = e.target.value;
     nextState.productoSeleccionado.cantidad = nextState.quantity;
     this.setState(nextState);
@@ -168,7 +147,7 @@ export default class Devoluciones extends Component {
       value: this.state.productoSeleccionado.value,
     });
     this.updateTool(this.state.productoSeleccionado.value);
-    var nextState = this.state;
+    const nextState = this.state;
     nextState.quantity = 1;
     this.setState(nextState);
   }

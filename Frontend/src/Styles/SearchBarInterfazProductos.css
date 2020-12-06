@@ -1,13 +1,8 @@
-/**
- * Main wrapper
- */
- .select-search {
+.select-search {
+    width: 300px;
     position: relative;
     font-family: 'Nunito Sans', sans-serif;
     box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .select-search *,
@@ -38,10 +33,9 @@
  * Input
  */
 .select-search__input {
-    
     display: block;
     height: 36px;
-    width: 500px;
+    width: 100%;
     padding: 0 16px;
     background: #fff;
     border: 1px solid transparent;
