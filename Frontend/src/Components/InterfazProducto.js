@@ -2,19 +2,31 @@ import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import React, { useState } from 'react';
 import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
 import './InterfazProducto.css';
-import './SearchBar.css';
+import '../Styles/SearchBarInterfazProductos.css';
 import SelectSearch from 'react-select-search';
 
 export default function InterfazProducto() {
   const dataApuntes = [
-    { nombre: 'Martillo', area: 'H1', codigo:["0801","0802","0803"],proveedores:["0801","0802","0803"],ubicacion: ['H5-S'] },
-    { nombre: 'Llave inglesa',area:'H1', codigo:["0801","0802","0803"] ,proveedores:["0801","0802","0803"], ubicacion: ['H6-S'] },
+    {
+      nombre: 'Martillo',
+      area: 'H1',
+      codigo: ['0801', '0802', '0803'],
+      proveedores: ['0801', '0802', '0803'],
+      ubicacion: ['H5-S'],
+    },
+    {
+      nombre: 'Llave inglesa',
+      area: 'H1',
+      codigo: ['0801', '0802', '0803'],
+      proveedores: ['0801', '0802', '0803'],
+      ubicacion: ['H6-S'],
+    },
   ];
   const [modalInsertar, setModalInsertar] = useState(false);
   const [modalModificar, setModalModificar] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalVerCodigo, setModalVerCodigo] = useState(false);
-  const[modalVerDescripciones, setmodalVerDescripciones] = useState(false);
+  const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [data, setData] = useState(dataApuntes);
@@ -63,7 +75,6 @@ export default function InterfazProducto() {
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
     setModalVerCodigo(true);
-
   };
   return (
     <div className="text-center">
@@ -783,7 +794,7 @@ export default function InterfazProducto() {
             </button>
           </ModalFooter>
         </Modal>
-        <Modal isOpen = {modalVerDescripciones}>
+        <Modal isOpen={modalVerDescripciones}>
           <ModalHeader></ModalHeader>
           <ModalBody>
             <div>
@@ -792,7 +803,7 @@ export default function InterfazProducto() {
               </div>
               <FormGroup class="style">
                 <Label for="exampleText"></Label>
-                <Input type="textarea" name="text" id="exampleText" readOnly/>
+                <Input type="textarea" name="text" id="exampleText" readOnly />
               </FormGroup>
             </div>
             <div>
@@ -801,7 +812,12 @@ export default function InterfazProducto() {
               </div>
               <div className="form-group">
                 <label htmlFor="exampleFormControlTextarea1"></label>
-                <textarea className="form-control" id="exampleFormControlTextarea1" rows="5" readOnly/>
+                <textarea
+                  className="form-control"
+                  id="exampleFormControlTextarea1"
+                  rows="5"
+                  readOnly
+                />
               </div>
             </div>
           </ModalBody>
@@ -829,7 +845,7 @@ export default function InterfazProducto() {
                 <td>{elemento.ubicacion}</td>
                 <td>{elemento.marca}</td>
                 <td>
-                  <Button color="primary" onClick={() =>mostrarCodigos(elemento)}>
+                  <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
                     Ver
                   </Button>
                 </td>
@@ -839,7 +855,9 @@ export default function InterfazProducto() {
                   </Button>
                 </td>
                 <td>
-                  <Button color="primary" onClick = {() => setModalVerProveedor(true)}>Ver</Button>
+                  <Button color="primary" onClick={() => setModalVerProveedor(true)}>
+                    Ver
+                  </Button>
                 </td>
                 <td>
                   <Button onClick={() => setModalModificar(true)} color="success">

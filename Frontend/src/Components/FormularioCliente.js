@@ -16,14 +16,14 @@ import {
 } from 'reactstrap';
 
 // Import de ambientes
-import FormCliente from '../Components/FormCliente';
+import FormCliente from './FormCliente';
 
 // Import de Forms
 
 // Import de styles
 import '../Styles/FormularioCliente.css';
 
-const AmbienteFormularioCliente = () => {
+const FormularioCliente = () => {
   // States
   // Modal
   const [modalFormularioCliente, setModalFormularioCliente] = useState(false);
@@ -62,4 +62,4 @@ const AmbienteFormularioCliente = () => {
   );
 };
 
-export default AmbienteFormularioCliente;
+export default FormularioCliente;

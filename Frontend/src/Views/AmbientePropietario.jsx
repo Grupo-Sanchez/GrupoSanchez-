@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
-import OpcionesUsuarios from '../Components/OpcionesUsuarios.jsx';
+import OpcionesProductos from '../Components/OpcionesProductos.jsx';
+import OpcionesBodegas from '../Components/OpcionesBodegas.jsx';
 import Informes from '../Icons/Informes.svg';
 import Productos from '../Icons/Productos.svg';
 import Bodegas from '../Icons/Bodegas.svg';
@@ -49,7 +51,7 @@ const items = [
   },
 ];
 
-const AmbientePropietarioUsuarios = () => (
+const AmbientePropietario = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -58,10 +60,11 @@ const AmbientePropietarioUsuarios = () => (
         </Col>
       </Row>
       <Row noGutters>
-        <OpcionesUsuarios />
+
       </Row>
     </Container>
+    <h1>Ambiente propietario</h1>
   </div>
 );
 
-export default AmbientePropietarioUsuarios;
+export default AmbientePropietario;

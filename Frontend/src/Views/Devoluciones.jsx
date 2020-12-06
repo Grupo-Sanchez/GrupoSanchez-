@@ -1,7 +1,7 @@
 import React, { Component, useState } from 'react';
 import { Row, Button, Form, FormGroup, Label, Input, FormText, Col } from 'reactstrap';
 import SelectSearch from 'react-select-search';
-import './SearchBar.css';
+import '../Styles/SearchBar.css';
 import { Table } from 'reactstrap';
 import axios from 'axios';
 export default class Devoluciones extends Component {

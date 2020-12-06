@@ -40,7 +40,7 @@ const items = [
   },
   {
     name: 'Reportes',
-    to: '/Propietario/Reportes',
+    to: '/EnConstruccion',
     icon: (
       <img
         src={Informes}

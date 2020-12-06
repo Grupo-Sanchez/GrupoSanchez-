@@ -1,16 +1,28 @@
 import React, { Component, useState } from 'react';
 import { Button } from 'reactstrap';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { Table } from 'reactstrap';
+import { Table, Container, Row, Col } from 'reactstrap';
+import Header from '../Components/Header.jsx';
+import Facturar from '../Icons/Facturar.svg';
+
+
 import SelectSearch from 'react-select-search';
-import './SearchBar.css';
+import '../Styles/SearchBarVendedor.css';
 import axios from 'axios';
+
+const items = [
+  {
+    name: 'Facturar',
+    to: '/Vendedor/Facturacion',
+    icon: <img src={Facturar} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
+  },
+];
 export default class Facturas extends Component {
+  
   constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.segundoPrecio = this.segundoPrecio.bind(this);
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
     this.agregarProductoaTabla = this.agregarProductoaTabla.bind(this);
     this.eliminarProducto = this.eliminarProducto.bind(this);
@@ -97,43 +109,16 @@ export default class Facturas extends Component {
     this.state.indice = 1;
     this.b(e);
   }
-  segundoPrecio = (codigo) => {
-    var nextState = this.state;
-    this.state.indice = 1;
-    for (let index = 0; index < nextState.productosSeleccionado.length; index++) {
-      const element = nextState.productosSeleccionado[index];
-      if (element.codigo === codigo) {
-        for (let i = 0; i < nextState.productosEnBodega.length; i++) {
-          const element2 = nextState.productosEnBodega[i];
-          if (element.codigo === element2.codigos[0]) {
-            if (element.precioUnitario !== element2.precioUnitario[1]) {
-              element.precioUnitario = element2.precioUnitario[1];
-              element.precioSumado = element.cantidad * element.precioUnitario;
-              this.setState(nextState);
-              alert('Segundo Precio Aplicado');
-              break;
-            } else {
-              alert('El segundo precio ya fue aplicado');
-              break;
-            }
-          }
-        }
-      }
-    }
-  };
 
   write = async () => {
     var newLine = '\r\n';
-    alert('entrooo');
     const campos = {
       subtotal: this.state.result,
       impuesto: this.state.impuesto,
       total: this.state.total,
       productosSeleccionado: this.state.productosSeleccionado,
     };
-    alert('saliooo');
     await axios.post('http://localhost:3001/api/facturas', campos);
-    alert('escribio?');
     window.location.reload();
   };
   updateTool = async (id) => {
@@ -147,10 +132,7 @@ export default class Facturas extends Component {
     }
     axios
       .put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 })
-      .then(function (response) {
-        alert('RES: ' + JSON.stringify(response.data));
-        console.log(response.data);
-      })
+      .then(function (response) {})
       .catch(function (error) {
         console.log(error);
       });
@@ -172,26 +154,25 @@ export default class Facturas extends Component {
         break;
       }
     }
+
     axios
       .put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 })
-      .then(function (response) {
-        alert('RES: ' + JSON.stringify(response.data));
-        console.log(response.data);
-      })
+      .then(function (response) {})
       .catch(function (error) {
         console.log(error);
       });
     const items = this.state.productosSeleccionado.filter((item) => item.value !== i);
     var nextState = this.state;
+    nextState.productosSeleccionado = items;
     this.state.result = 0;
     this.state.indice = 1;
     this.state.impuesto = 0;
     this.state.total = 0;
-    nextState.productosSeleccionado = items;
     this.setState(nextState);
   };
   agregarProductoaTabla() {
     this.state.indice = 1;
+
     this.addRow({
       name: this.state.productoSeleccionado.name,
       value: this.state.productoSeleccionado.value,
@@ -216,7 +197,20 @@ export default class Facturas extends Component {
       this.state.total = this.state.result + this.state.impuesto;
     }
     return (
+      
       <div>
+        <div>
+    <Container fluid style={{ padding: '0' }}>
+      <Row noGutters>
+        <Col>
+          <Header items={items} />
+        </Col>
+      </Row>
+      <Row noGutters>
+
+      </Row>
+    </Container>
+  </div>
         <h1 align="center">FACTURA</h1>
         <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
           <div align="center">
@@ -268,9 +262,6 @@ export default class Facturas extends Component {
                     <th>{row.precioUnitario}</th>
                     <th>{row.precioSumado}</th>
                     <th>
-                      <Button onClick={() => this.segundoPrecio(row.codigo)}>
-                        Autorizar 2do Precio
-                      </Button>
                       <Button
                         style={{ marginLeft: '10px' }}
                         className="btn btn-danger"

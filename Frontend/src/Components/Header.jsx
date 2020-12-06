@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+
 import '../Styles/Sidebar.css';
+
+// Import de svg
 import Notificacion from '../Icons/Notificacion.svg';
 import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
 
 const Header = (props) => {
+  const { history } = props;
   const { items } = props;
 
   const [isOpen, setOpen] = useState(false);
 
   function handleItemClick(to) {
+    history.push(to);
     console.log(`Let's go to ${to}!`);
   }
 
@@ -80,4 +86,4 @@ const Header = (props) => {
   );
 };
 
-export default Header;
+export default withRouter(Header);

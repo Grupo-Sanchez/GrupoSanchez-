@@ -1,10 +1,10 @@
 import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
 import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
-import './InterfazProducto.css';
+import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import AgregarProducto from './AgregarProducto';
-import imagePath from './lupa1.jpeg';
+import imagePath from '../Icons/lupa1.jpeg';
 export default function EliminarProducto() {
   const dataApuntes = [];
 
@@ -226,25 +226,34 @@ export default function EliminarProducto() {
       <input
         type="text"
         id="myInput"
-        onChange = {() => myFunction()}
+        onChange={() => myFunction()}
         placeholder="Search for names.."
         title="Type in a name"
-        style = {{
-          "background-image" : `url('${imagePath}')` ,
-          "background-position" : "10px 10px",
-          "background-repeat" : "no-repeat",
-          "width" : "100%",
-          "font-size" : "16px",
-          "padding" : "12px 20px 12px 40px",
-          "border" : "1px solid #ddd", 
-          "margin-bottom" : "12px",
+        style={{
+          'background-image': `url('${imagePath}')`,
+          'background-position': '10px 10px',
+          'background-repeat': 'no-repeat',
+          width: '100%',
+          'font-size': '16px',
+          padding: '12px 20px 12px 40px',
+          border: '1px solid #ddd',
+          'margin-bottom': '12px',
         }}
       ></input>
-      <Table striped bordered hover dark align="center" size="sm" id="myTable" style = {{"width" : "500px"}}>
+      <Table
+        striped
+        bordered
+        hover
+        dark
+        align="center"
+        size="sm"
+        id="myTable"
+        style={{ width: '500px' }}
+      >
         <thead>
           <tr>
             <th>#</th>
-            <th >Nombre</th>
+            <th>Nombre</th>
             <th>Area</th>
             <th>Ubicación</th>
             <th>Marca</th>
@@ -259,7 +268,7 @@ export default function EliminarProducto() {
         <tbody>
           {data.map((elemento, index) => (
             <tr>
-              <td>{index = index+1}</td>
+              <td>{(index = index + 1)}</td>
               <td>{elemento.nombre}</td>
               <td>{elemento.area}</td>
               <td>{elemento.ubicacion}</td>

@@ -1,8 +1,15 @@
-import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import React, { useState } from 'react';
-import { Button, Label, FormGroup, Input } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  Label,
+  FormGroup,
+  Input } from 'reactstrap';
 import '../Styles/InterfazProducto.css';
-import { PromiseProvider } from 'mongoose';
+// import { PromiseProvider } from 'mongoose';
 
 export default function AgregarProducto(props) {
   const [seleccionado, setSeleccionado] = useState({
@@ -12,6 +19,7 @@ export default function AgregarProducto(props) {
     marca: '',
     precio: '',
   });
+  const [data, setData] = useState('');
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setSeleccionado((prevState) => ({
@@ -20,8 +28,8 @@ export default function AgregarProducto(props) {
     }));
   };
   const insertar = () => {
-    var valorInsertar = seleccionado;
-    var dataNueva = data;
+    const valorInsertar = seleccionado;
+    const dataNueva = data;
     dataNueva.push(valorInsertar);
     setData(dataNueva);
   };
@@ -63,8 +71,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="nombre"
-                //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>codigo 2</label>
@@ -72,8 +80,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>codigo 3</label>
@@ -81,8 +89,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>codigo 4</label>
@@ -90,8 +98,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>codigo 5</label>
@@ -99,8 +107,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>codigo 6</label>
@@ -108,8 +116,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>codigo 7</label>
@@ -117,8 +125,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
             </div>
@@ -145,8 +153,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Apunte"
-                //value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>proveedor 2</label>
@@ -154,8 +162,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Fecha"
-                //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>proveedor 3</label>
@@ -163,8 +171,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>proveedor 4</label>
@@ -172,8 +180,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>proveedor 5</label>
@@ -181,8 +189,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>proveedor 6</label>
@@ -190,8 +198,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>proveedor 7</label>
@@ -199,8 +207,8 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="Etiqueta"
-                //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                //onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
               <br />
             </div>
