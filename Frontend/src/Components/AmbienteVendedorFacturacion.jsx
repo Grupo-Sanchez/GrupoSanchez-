@@ -1,18 +1,16 @@
 import React, { Component, useState } from 'react';
-import { Button, Table, Container, Row, Col } from 'reactstrap';
-import SelectSearch from 'react-select-search';
+import { Button, Table } from 'reactstrap';
 import axios from 'axios';
+import SelectSearch from 'react-select-search';
+import '../Styles/SearchBarVendedor.css';
 import Header from './Header.jsx';
 import Facturar from '../Icons/Facturar.svg';
-import '../Styles/SearchBar.css';
-import Devolucion from '../Icons/Devolucion.svg';
 
 export default class Facturas extends Component {
   constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.segundoPrecio = this.segundoPrecio.bind(this);
     this.handleQuantityChange = this.handleQuantityChange.bind(this);
     this.agregarProductoaTabla = this.agregarProductoaTabla.bind(this);
     this.eliminarProducto = this.eliminarProducto.bind(this);
@@ -99,33 +97,8 @@ export default class Facturas extends Component {
     this.state.indice = 1;
     this.b(e);
   }
-  segundoPrecio = (codigo) => {
-    const nextState = this.state;
-    this.state.indice = 1;
-    for (let index = 0; index < nextState.productosSeleccionado.length; index++) {
-      const element = nextState.productosSeleccionado[index];
-      if (element.codigo === codigo) {
-        for (let i = 0; i < nextState.productosEnBodega.length; i++) {
-          const element2 = nextState.productosEnBodega[i];
-          if (element.codigo === element2.codigos[0]) {
-            if (element.precioUnitario !== element2.precioUnitario[1]) {
-              element.precioUnitario = element2.precioUnitario[1];
-              element.precioSumado = element.cantidad * element.precioUnitario;
-              this.setState(nextState);
-              alert('Segundo Precio Aplicado');
-              break;
-            } else {
-              alert('El segundo precio ya fue aplicado');
-              break;
-            }
-          }
-        }
-      }
-    }
-  };
 
   write = async () => {
-    const newLine = '\r\n';
     const campos = {
       subtotal: this.state.result,
       impuesto: this.state.impuesto,
@@ -163,18 +136,20 @@ export default class Facturas extends Component {
         break;
       }
     }
+
     axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
-    const items2 = this.state.productosSeleccionado.filter((item) => item.value !== i);
+    const items = this.state.productosSeleccionado.filter((item) => item.value !== i);
     const nextState = this.state;
+    nextState.productosSeleccionado = items;
     this.state.result = 0;
     this.state.indice = 1;
     this.state.impuesto = 0;
     this.state.total = 0;
-    nextState.productosSeleccionado = items2;
     this.setState(nextState);
   };
   agregarProductoaTabla() {
     this.state.indice = 1;
+
     this.addRow({
       name: this.state.productoSeleccionado.name,
       value: this.state.productoSeleccionado.value,
@@ -196,6 +171,7 @@ export default class Facturas extends Component {
     );
     this.state.impuesto = this.state.result * (15 / 100);
     this.state.total = this.state.result + this.state.impuesto;
+
     return (
       <div>
         <h1 align="center">FACTURA</h1>
@@ -248,9 +224,6 @@ export default class Facturas extends Component {
                   <th>{row.precioUnitario}</th>
                   <th>{row.precioSumado}</th>
                   <th>
-                    <Button onClick={() => this.segundoPrecio(row.codigo)}>
-                      Autorizar 2do Precio
-                    </Button>
                     <Button
                       style={{ marginLeft: '10px' }}
                       className="btn btn-danger"

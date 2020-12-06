@@ -27,7 +27,7 @@ import AmbienteJefeTiendaFacturar from './Components/Factura.jsx';
 import AmbienteJefeDeTienda from './Views/AmbienteJefeDeTienda.jsx';
 
 // Import de funcionalidades vendedor
-import AmbienteVendedorFacturacion from './Views/AmbienteVendedorFacturacion.jsx';
+import AmbienteVendedorFacturacion from './Components/AmbienteVendedorFacturacion.jsx';
 
 // Import de funcionalidades administrador
 import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProveedores.jsx';
