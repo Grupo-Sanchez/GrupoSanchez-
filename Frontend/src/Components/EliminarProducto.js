@@ -5,7 +5,8 @@ import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import AgregarProducto from './AgregarProducto';
 import imagePath from '../Icons/lupa1.jpeg';
-export default function EliminarProducto() {
+import { PromiseProvider } from 'mongoose';
+export default function EliminarProducto(props) {
   const dataApuntes = [];
 
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
@@ -222,92 +223,101 @@ export default function EliminarProducto() {
 
   return (
     <div>
-      <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
-      <input
-        type="text"
-        id="myInput"
-        onChange={() => myFunction()}
-        placeholder="Search for names.."
-        title="Type in a name"
-        style={{
-          'background-image': `url('${imagePath}')`,
-          'background-position': '10px 10px',
-          'background-repeat': 'no-repeat',
-          width: '100%',
-          'font-size': '16px',
-          padding: '12px 20px 12px 40px',
-          border: '1px solid #ddd',
-          'margin-bottom': '12px',
-        }}
-      ></input>
-      <Table
-        striped
-        bordered
-        hover
-        dark
-        align="center"
-        size="sm"
-        id="myTable"
-        style={{ width: '500px' }}
+      <Modal
+        isOpen={props.isOpen}
+        className="text-center"
+        style={{ maxWidth: '1700px', width: '80%' }}
       >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Area</th>
-            <th>Ubicación</th>
-            <th>Marca</th>
-            <th>Cantidad Mínima</th>
-            <th>Códigos</th>
-            <th>Proveedores </th>
-            <th>Descripciones </th>
-            <th>Precios</th>
-            <th class="text-center"> Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((elemento, index) => (
+        <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
+        <input
+          type="text"
+          id="myInput"
+          onChange={() => myFunction()}
+          placeholder="Search for names.."
+          title="Type in a name"
+          style={{
+            'background-image': `url('${imagePath}')`,
+            'background-position': '10px 10px',
+            'background-repeat': 'no-repeat',
+            width: '100%',
+            'font-size': '16px',
+            padding: '12px 20px 12px 40px',
+            border: '1px solid #ddd',
+            'margin-bottom': '12px',
+          }}
+        ></input>
+        <Table
+          striped
+          bordered
+          hover
+          dark
+          align="center"
+          size="sm"
+          id="myTable"
+          style={{ width: '500px' }}
+        >
+          <thead>
             <tr>
-              <td>{(index = index + 1)}</td>
-              <td>{elemento.nombre}</td>
-              <td>{elemento.area}</td>
-              <td>{elemento.ubicacion}</td>
-              <td>{elemento.marca}</td>
-              <td>{elemento.cantidad_minima}</td>
-              <td>
-                <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button onClick={() => Modificar(elemento)} color="success">
-                  Modificar
-                </Button>{' '}
-              </td>
-              <td>
-                <Button onClick={() => eliminar(elemento._id)} color="danger">
-                  Eliminar
-                </Button>{' '}
-              </td>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Area</th>
+              <th>Ubicación</th>
+              <th>Marca</th>
+              <th>Cantidad Mínima</th>
+              <th>Códigos</th>
+              <th>Proveedores </th>
+              <th>Descripciones </th>
+              <th>Precios</th>
+              <th class="text-center"> Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data.map((elemento, index) => (
+              <tr>
+                <td>{(index = index + 1)}</td>
+                <td>{elemento.nombre}</td>
+                <td>{elemento.area}</td>
+                <td>{elemento.ubicacion}</td>
+                <td>{elemento.marca}</td>
+                <td>{elemento.cantidad_minima}</td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button onClick={() => Modificar(elemento)} color="success">
+                    Modificar
+                  </Button>{' '}
+                </td>
+                <td>
+                  <Button onClick={() => eliminar(elemento._id)} color="danger">
+                    Eliminar
+                  </Button>{' '}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Button color="danger" onClick={props.change}>
+          Cerrar
+        </Button>
+      </Modal>
       <div>
         <Modal isOpen={ModalModificar} className="text-center">
           <ModalHeader>

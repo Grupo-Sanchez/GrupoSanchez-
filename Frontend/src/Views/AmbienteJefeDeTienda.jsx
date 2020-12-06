@@ -9,8 +9,6 @@ import {
   NavLink,
   Button,
 } from 'reactstrap';
-import Devoluciones from './Devoluciones.jsx';
-import Factura from './Factura.jsx';
 
 class AmbienteJefeDeTienda extends Component {
   constructor(props) {
