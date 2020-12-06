@@ -1,11 +1,8 @@
-import React, { Component, useState } from 'react';
-import { Button, Table, Container, Row, Col } from 'reactstrap';
+import React, { Component } from 'react';
+import { Button, Table } from 'reactstrap';
 import SelectSearch from 'react-select-search';
 import axios from 'axios';
-import Header from './Header.jsx';
-import Facturar from '../Icons/Facturar.svg';
 import '../Styles/SearchBar.css';
-import Devolucion from '../Icons/Devolucion.svg';
 
 export default class Facturas extends Component {
   constructor(props) {
