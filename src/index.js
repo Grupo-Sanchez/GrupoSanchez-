@@ -26,22 +26,8 @@ app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
 
-// // Paso #2 heroku deployment
+// PASO #2
 
-// // Nos conectamos a la base de datos por medio de mongoose
-// // El proces busca donde se hizo el npm dotenv
-// mongoose.connect(process.env.MONGODB_URI, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-// });
-
-// mongoose.connection.on('connected', () => {
-//   console.log('Conectado a la base de datos con exito');
-// });
-
-// // Finaliza proceso de coneccion a la base de datos por medio de mongoose
-
-// Paso #2 heroku deployment
 // Nos conectamos a la base de datos por medio de mongoose
 // El proces busca donde se hizo el npm dotenv
 mongoose.connect(
@@ -57,9 +43,16 @@ mongoose.connect(
 );
 // Finaliza proceso de coneccion a la base de datos por medio de mongoose
 
-// Paso #3 heroku deployment
+
+// PASO #3
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('/Frontend/build'));
+  // Exprees will serve up production assets
+  app.use(express.static('Frontend/build'));
+
+  // Express serve up index.html file if it doesn't recognize route
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'Frontend', 'build', 'index.html'));
+  });
 }
 
 // Morgan es un log de la base de datos
