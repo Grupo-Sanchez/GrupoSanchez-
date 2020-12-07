@@ -13,6 +13,7 @@ const fs = require('fs');
 // Definimos ruta del backend (backend)
 const api = require('./routers/api');
 
+// PASO #1
 // Especificamos el puerto
 const port = process.env.PORT || 3001;
 
@@ -24,6 +25,8 @@ app.use(cors());
 app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
+
+// PASO #2
 
 // Nos conectamos a la base de datos por medio de mongoose
 // El proces busca donde se hizo el npm dotenv
@@ -39,6 +42,17 @@ mongoose.connect(
   },
 );
 // Finaliza proceso de coneccion a la base de datos por medio de mongoose
+
+// PASO #3
+if (process.env.NODE_ENV === 'production') {
+  // Exprees will serve up production assets
+  app.use(express.static('Frontend/build'));
+
+  // Express serve up index.html file if it doesn't recognize route
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'Frontend', 'build', 'index.html'));
+  });
+}
 
 // Morgan es un log de la base de datos
 if (!fs.existsSync('logs')) {
