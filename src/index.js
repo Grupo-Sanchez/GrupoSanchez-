@@ -13,11 +13,12 @@ const fs = require('fs');
 // Definimos ruta del backend (backend)
 const api = require('./routers/api');
 
-// Especificamos el puerto
-const port = process.env.PORT || 3001;
-
 // Instanciamos express con un const llamado app para ultilizarlo a lo largo del desarollo
 const app = express();
+
+// Paso #1 para heroku deployment
+// Especificamos el puerto
+const port = process.env.PORT || 3001;
 
 // Middlewares
 app.use(cors());
@@ -25,6 +26,22 @@ app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
 
+// // Paso #2 heroku deployment
+
+// // Nos conectamos a la base de datos por medio de mongoose
+// // El proces busca donde se hizo el npm dotenv
+// mongoose.connect(process.env.MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+// mongoose.connection.on('connected', () => {
+//   console.log('Conectado a la base de datos con exito');
+// });
+
+// // Finaliza proceso de coneccion a la base de datos por medio de mongoose
+
+// Paso #2 heroku deployment
 // Nos conectamos a la base de datos por medio de mongoose
 // El proces busca donde se hizo el npm dotenv
 mongoose.connect(
@@ -39,6 +56,11 @@ mongoose.connect(
   },
 );
 // Finaliza proceso de coneccion a la base de datos por medio de mongoose
+
+// Paso #3 heroku deployment
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('/Frontend/build'));
+}
 
 // Morgan es un log de la base de datos
 if (!fs.existsSync('logs')) {
