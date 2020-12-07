@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Col, Row, Container } from 'reactstrap';
 import CartasOpciones from './CartasOpciones.jsx';
-import Agregar from './AgregarProducto.js';
+import Agregar from './AgregarProducto';
 import AgregarProducto from '../Icons/AgregarProducto.svg';
 import EditarProducto from '../Icons/EditarProducto.svg';
 import EliminarProducto from '../Icons/EliminarProducto.svg';
 import BuscarProducto from '../Icons/BuscarProducto.svg';
-import Eliminar from './EliminarProducto.js';
+import Eliminar from './EliminarProducto';
 
 const OpcionesProductos = () => {
   const [modalAgregar, setModalAgregar] = useState(false);
