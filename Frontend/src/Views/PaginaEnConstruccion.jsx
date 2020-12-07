@@ -10,8 +10,6 @@ import Notificacion from '../Icons/Notificacion.svg';
 import Usuario from '../Icons/Usuario.svg';
 import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
 
-
-
 const AmbientePropietario = () => (
   <div>
     <h1>PAGINA EN CONSTRUCCIÓN</h1>

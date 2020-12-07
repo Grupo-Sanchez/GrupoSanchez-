@@ -35,6 +35,9 @@ import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProve
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
 
+// import para paginas de bodegas
+import CrearBodega from './Views/CrearBodega.jsx';
+
 // Instancia de la react app
 const App = () => {
   console.log('Hola desde app.js');
@@ -73,7 +76,7 @@ const App = () => {
       <Route exact path="/JefeTienda/Devoluciones">
         <AmbienteJefeTiendaDevoluciones />
       </Route>
-      {/* Ambientes vendedor */}
+      {/*  Ambientes vendedor */}
       <Route exact path="/Vendedor">
         <AmbienteVendedor />
       </Route>

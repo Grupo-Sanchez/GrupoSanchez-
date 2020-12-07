@@ -4,6 +4,7 @@ import CrearBodega from '../Icons/CrearBodega.svg';
 import EliminarBodega from '../Icons/EliminarBodega.svg';
 import EditarBodega from '../Icons/EditarBodega.svg';
 import ConsultarBodega from '../Icons/ConsultarBodega.svg';
+import AgregarBodega from "../Views/CrearBodega.jsx";
 
 const OpcionesBodegas = () => {
   const items = [
