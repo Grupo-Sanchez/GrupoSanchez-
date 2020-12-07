@@ -11,18 +11,6 @@ const ListarBodegas = (props) => (
     </ModalHeader>
     <ModalBody>
       <div>
-        {/*props.map((Bodegas) => {
-          return (
-            <div>
-              <CardBodega
-                bodega={Bodegas.numBodega}
-                encargado={Bodegas.Description}
-                description={Bodegas.Encargado}
-                CantPasillos={Bodegas.CantPasillos}
-              />
-            </div>
-          );
-        })*/}
       </div>
     </ModalBody>
     <ModalFooter>
