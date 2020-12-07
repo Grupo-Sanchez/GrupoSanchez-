@@ -49,6 +49,17 @@ const items = [
       />
     ),
   },
+  {
+    name: 'Clientes',
+    to: '/Propietario/Clientes',
+    icon: (
+      <img
+        src={Informes}
+        style={{ width: '2em', height: '2em', marginRight: '0.5rem' }}
+        alt="logo"
+      />
+    ),
+  },
 ];
 
 const AmbientePropietario = () => (
@@ -59,9 +70,7 @@ const AmbientePropietario = () => (
           <Header items={items} />
         </Col>
       </Row>
-      <Row noGutters>
-
-      </Row>
+      <Row noGutters></Row>
     </Container>
     <h1>Ambiente propietario</h1>
   </div>

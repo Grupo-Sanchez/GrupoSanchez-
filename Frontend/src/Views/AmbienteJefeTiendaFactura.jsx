@@ -1,6 +1,6 @@
 import { Row, Col, Container } from 'reactstrap';
 import Header from '../Components/Header.jsx';
-import SegundoPrecio from '../Icons/SegundoPrecio.svg';
+import Factura from '../Components/Factura.jsx';
 import Facturar from '../Icons/Facturar.svg';
 import Devolucion from '../Icons/Devolucion.svg';
 
@@ -18,7 +18,7 @@ const items = [
 ];
 
 // Landing page para Jefe de tienda
-const AmbienteJefeTienda = () => (
+const AmbienteJefeTiendaFactura = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -26,10 +26,9 @@ const AmbienteJefeTienda = () => (
           <Header items={items} />
         </Col>
       </Row>
-      <Row noGutters></Row>
+      <Factura />
     </Container>
-    <h1>Ambiente Jefe De Tienda</h1>
   </div>
 );
 
-export default AmbienteJefeTienda;
+export default AmbienteJefeTiendaFactura;

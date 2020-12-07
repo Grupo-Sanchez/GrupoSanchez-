@@ -1,4 +1,4 @@
-.cardBodegas {
+.card-bodegas {
   border: none;
   border-radius: 8px;
   background: linear-gradient(to right, #a74cf2, #617bfb);
@@ -36,7 +36,7 @@
   height: 60px;
 }
 
-.Fitness-User-Info {
+.Bodega-User-Info {
   margin-top: 50px;
   margin-bottom: 50px;
   margin-left: 200px;

@@ -21,9 +21,7 @@ const AmbienteVendedor = () => (
           <Header items={items} />
         </Col>
       </Row>
-      <Row noGutters>
-
-      </Row>
+      <Row noGutters></Row>
     </Container>
     <h1>Ambiente Vendedor</h1>
   </div>

@@ -1,11 +1,20 @@
-import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Label, FormGroup, Input, ButtonGroup } from 'reactstrap';
+import {
+  Button,
+  Table,
+  Label,
+  FormGroup,
+  Input,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from 'reactstrap';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
-import AgregarProducto from './AgregarProducto';
 import imagePath from '../Icons/lupa1.jpeg';
-export default function EliminarProducto() {
+
+export default function EliminarProducto(props) {
   const dataApuntes = [];
 
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
@@ -17,7 +26,7 @@ export default function EliminarProducto() {
   const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
   const [data, setData] = useState(dataApuntes);
-  var [seleccionado, setSeleccionado] = useState({
+  const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
     codigos: [],
@@ -32,14 +41,15 @@ export default function EliminarProducto() {
   });
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/productos').then((res) => {
-        setData(res.data);
-        console.log(res.data);
+      await axios.get('http://localhost:3001/api/productos').then((response) => {
+        setData(response.data);
       });
     };
     fecthData();
   }, []);
-  /*Metodo para fuardar codigos del ModalModificar */
+  /*
+  Metodo para fuardar codigos del ModalModificar
+   */
   const GuardarCodigos = (i) => {
     console.log(i.codigos[0]);
     seleccionado.codigos[0] = document.getElementById('mcod1').value;
@@ -54,7 +64,7 @@ export default function EliminarProducto() {
     setModalModificarCodigos(false);
     alert(seleccionado.codigos[1]);
   };
-  /*Metodo para fuardar codigos del ModalModificar */
+  /* Metodo para fuardar codigos del ModalModificar */
   const GuardarProveedores = () => {
     seleccionado.proveedores[0] = document.getElementById('modprov1').value;
     seleccionado.proveedores[1] = document.getElementById('modprov2').value;
@@ -73,20 +83,12 @@ export default function EliminarProducto() {
     setModalModificarPrecios(false);
     alert(seleccionado.precios[0]);
   };
+  const onDelete = (memberId) => {
+    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
+  };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
-  };
-  const onDelete = (memberId) => {
-    axios
-      .delete(`http://localhost:3001/api/productos/${memberId}`)
-      .then((res) => {
-        console.log(res);
-        console.log('it works');
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
   const updateItem = (Id) => {
     setModalModificar(false);
@@ -139,10 +141,14 @@ export default function EliminarProducto() {
     { name: 'English', value: 'en' },
   ];
   const myFunction = () => {
-    //alert("eentoroo");
-    var input, filter, table, tr, td, i, txtValue;
-
-    input = document.getElementById('myInput');
+    // alert("eentoroo");
+    const input = document.getElementById('myInput');
+    let filter;
+    let table;
+    let tr;
+    let td;
+    let i;
+    let txtValue;
     if (input != null) {
       filter = input.value.toUpperCase();
       table = document.getElementById('myTable');
@@ -222,94 +228,112 @@ export default function EliminarProducto() {
 
   return (
     <div>
-      <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
-      <input
-        type="text"
-        id="myInput"
-        onChange={() => myFunction()}
-        placeholder="Search for names.."
-        title="Type in a name"
-        style={{
-          'background-image': `url('${imagePath}')`,
-          'background-position': '10px 10px',
-          'background-repeat': 'no-repeat',
-          width: '100%',
-          'font-size': '16px',
-          padding: '12px 20px 12px 40px',
-          border: '1px solid #ddd',
-          'margin-bottom': '12px',
-        }}
-      ></input>
-      <Table
-        striped
-        bordered
-        hover
-        dark
-        align="center"
-        size="sm"
-        id="myTable"
-        style={{ width: '500px' }}
+      <Modal
+        isOpen={props.isOpen}
+        className="text-center"
+        style={{ maxWidth: '1700px', width: '80%', 'text-align': 'center', 'padding-top': '200px' }}
       >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Area</th>
-            <th>Ubicación</th>
-            <th>Marca</th>
-            <th>Cantidad Mínima</th>
-            <th>Códigos</th>
-            <th>Proveedores </th>
-            <th>Descripciones </th>
-            <th>Precios</th>
-            <th class="text-center"> Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((elemento, index) => (
+        <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
+        <input
+          type="text"
+          id="myInput"
+          onChange={() => myFunction()}
+          placeholder="Search for names.."
+          title="Type in a name"
+          style={{
+            'background-image': `url('${imagePath}')`,
+            'background-position': '10px 10px',
+            'background-repeat': 'no-repeat',
+            width: '100%',
+            'font-size': '16px',
+            padding: '12px 20px 12px 40px',
+            border: '1px solid #ddd',
+            'margin-bottom': '12px',
+          }}
+        ></input>
+        <Table
+          responsive
+          striped
+          bordered
+          hover
+          dark
+          align="center"
+          size="sm"
+          id="myTable"
+          style={{ width: '500px' }}
+        >
+          <thead>
             <tr>
-              <td>{(index = index + 1)}</td>
-              <td>{elemento.nombre}</td>
-              <td>{elemento.area}</td>
-              <td>{elemento.ubicacion}</td>
-              <td>{elemento.marca}</td>
-              <td>{elemento.cantidad_minima}</td>
-              <td>
-                <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button onClick={() => Modificar(elemento)} color="success">
-                  Modificar
-                </Button>{' '}
-              </td>
-              <td>
-                <Button onClick={() => eliminar(elemento._id)} color="danger">
-                  Eliminar
-                </Button>{' '}
-              </td>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Area</th>
+              <th>Ubicación</th>
+              <th>Marca</th>
+              <th>Cantidad Mínima</th>
+              <th>Códigos</th>
+              <th>Proveedores </th>
+              <th>Descripciones </th>
+              <th>Precios</th>
+              <th class="text-center"> Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data.map((elemento, index) => (
+              <tr>
+                <td>{(index += 1)}</td>
+                <td>{elemento.nombre}</td>
+                <td>{elemento.area}</td>
+                <td>{elemento.ubicacion}</td>
+                <td>{elemento.marca}</td>
+                <td>{elemento.cantidad_minima}</td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button onClick={() => Modificar(elemento)} color="success">
+                    Modificar
+                  </Button>{' '}
+                </td>
+                <td>
+                  <Button onClick={() => eliminar(elemento._id)} color="danger">
+                    Eliminar
+                  </Button>{' '}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+        <Button color="danger" onClick={props.change}>
+          Cerrar
+        </Button>
+      </Modal>
       <div>
-        <Modal isOpen={ModalModificar} className="text-center">
+        <Modal
+          isOpen={ModalModificar}
+          className="text-center"
+          style={{
+            height: '95vh',
+            'overflow-y': 'auto',
+            top: '20px',
+          }}
+        >
           <ModalHeader>
             <div>
               <h3 className="text-center">MODIFICAR PRODUCTOS</h3>
@@ -343,7 +367,7 @@ export default function EliminarProducto() {
                     type="text"
                     name="mcodigo1"
                     id="mcod1"
-                    //placeholder = {seleccionado.codigos[0]}
+                    // placeholder = {seleccionado.codigos[0]}
                     value={codigo1}
                     onChange={(event) => setCodigo1(event.target.value)}
                   />
@@ -686,8 +710,8 @@ export default function EliminarProducto() {
               name="nombre"
               value={seleccionado.codigos[0]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 2</label>
@@ -697,8 +721,8 @@ export default function EliminarProducto() {
               name="Fecha"
               value={seleccionado.codigos[1]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 3</label>
@@ -708,8 +732,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.codigos[2]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 4</label>
@@ -719,8 +743,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.codigos[3]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 5</label>
@@ -730,8 +754,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.codigos[4]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 6</label>
@@ -741,8 +765,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.codigos[5]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 7</label>
@@ -752,8 +776,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.codigos[6]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
           </div>
@@ -779,7 +803,7 @@ export default function EliminarProducto() {
               name="Apunte"
               value={seleccionado.proveedores[0]}
               readOnly
-              //onChange={manejarCambio}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 2</label>
@@ -789,8 +813,8 @@ export default function EliminarProducto() {
               name="Fecha"
               readOnly
               value={seleccionado.proveedores[1]}
-              //value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 3</label>
@@ -800,8 +824,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.proveedores[2]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 4</label>
@@ -811,8 +835,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.proveedores[3]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 5</label>
@@ -822,8 +846,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.proveedores[4]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 6</label>
@@ -833,8 +857,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.proveedores[5]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 7</label>
@@ -844,8 +868,8 @@ export default function EliminarProducto() {
               name="Etiqueta"
               value={seleccionado.proveedores[6]}
               readOnly
-              //value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              //onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
           </div>
