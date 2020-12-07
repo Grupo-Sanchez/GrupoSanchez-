@@ -13,12 +13,12 @@ const fs = require('fs');
 // Definimos ruta del backend (backend)
 const api = require('./routers/api');
 
-// PASO #1
-// Especificamos el puerto
-const port = process.env.PORT || 3001;
-
 // Instanciamos express con un const llamado app para ultilizarlo a lo largo del desarollo
 const app = express();
+
+// Paso #1 para heroku deployment
+// Especificamos el puerto
+const port = process.env.PORT || 3001;
 
 // Middlewares
 app.use(cors());
@@ -42,6 +42,7 @@ mongoose.connect(
   },
 );
 // Finaliza proceso de coneccion a la base de datos por medio de mongoose
+
 
 // PASO #3
 if (process.env.NODE_ENV === 'production') {
