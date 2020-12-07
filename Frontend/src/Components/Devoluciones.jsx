@@ -7,18 +7,6 @@ import Facturar from '../Icons/Facturar.svg';
 import '../Styles/SearchBar.css';
 import Devolucion from '../Icons/Devolucion.svg';
 
-const items = [
-  {
-    name: 'Facturar',
-    to: '/JefeTienda/Facturar',
-    icon: <img src={Facturar} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
-  },
-  {
-    name: 'Devoluciones',
-    to: '/JefeTienda/Devoluciones',
-    icon: <img src={Devolucion} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
-  },
-];
 export default class Devoluciones extends Component {
   constructor(props) {
     super(props);
@@ -166,16 +154,6 @@ export default class Devoluciones extends Component {
   render() {
     return (
       <div align="center">
-        <div>
-          <Container fluid style={{ padding: '0' }}>
-            <Row noGutters>
-              <Col>
-                <Header items={items} />
-              </Col>
-            </Row>
-            <Row noGutters></Row>
-          </Container>
-        </div>
         <h1 align="center">DEVOLUCIONES</h1>
         <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
           <div align="center">

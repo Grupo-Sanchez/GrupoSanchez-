@@ -10,6 +10,11 @@ import Notificacion from '../Icons/Notificacion.svg';
 import Usuario from '../Icons/Usuario.svg';
 import NuevaNotificacion from '../Icons/NuevaNotificacion.svg';
 
+import '../Styles/index.css';
+
+// Import de main table
+import MainTable from '../Components/MainTable';
+
 const items = [
   {
     name: 'Productos',
@@ -49,20 +54,9 @@ const items = [
       />
     ),
   },
-  {
-    name: 'Clientes',
-    to: '/Propietario/Clientes',
-    icon: (
-      <img
-        src={Informes}
-        style={{ width: '2em', height: '2em', marginRight: '0.5rem' }}
-        alt="logo"
-      />
-    ),
-  },
 ];
 
-const AmbientePropietario = () => (
+const AmbientePropietarioClientes = () => (
   <div>
     <Container fluid style={{ padding: '0' }}>
       <Row noGutters>
@@ -72,8 +66,9 @@ const AmbientePropietario = () => (
       </Row>
       <Row noGutters></Row>
     </Container>
-    <h1>Ambiente propietario</h1>
+    <h1>Ambiente propietario clientes</h1>
+    <MainTable />
   </div>
 );
 
-export default AmbientePropietario;
+export default AmbientePropietarioClientes;
