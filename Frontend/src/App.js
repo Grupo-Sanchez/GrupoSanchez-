@@ -1,13 +1,11 @@
 import React from 'react';
-import AmbienteAdministrador from './Views/AmbienteAdministrador.jsx';
-import AmbienteFormularioCliente from './Views/AmbienteFormularioCliente';
-import './App.css';
+import MainTable from './MainTable';
 
 function App() {
   return (
-    <div>
-      <p>Hola desde app.js<p/>
-    <div/>
+    <>
+      <MainTable />
+    </>
   );
 }
 

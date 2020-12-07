@@ -22,7 +22,7 @@ const clienteSchema = new Schema({
   RTN: {
     type: String,
   },
-  tel: {
+  phone: {
     Type: String,
   },
   email: {

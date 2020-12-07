@@ -19,5 +19,7 @@ module.exports = {
     'no-return-assign': ['off'],
     'linebreak-style': 0,
     'lines-between-class-members': 'off',
+    'no-underscore-dangle': 'off',
+    'prefer-template': 'off',
   },
 };

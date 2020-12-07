@@ -53,7 +53,7 @@ exports.create_cliente = async (req, res) => {
     primer_apellido,
     segundo_apellido,
     RTN,
-    tel,
+    phone,
     email,
   } = req.body;
   try {
@@ -64,7 +64,7 @@ exports.create_cliente = async (req, res) => {
       primer_apellido,
       segundo_apellido,
       RTN,
-      tel,
+      phone,
       email,
     });
     ret = await new_cliente.save();

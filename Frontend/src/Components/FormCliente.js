@@ -145,11 +145,10 @@ const FormCliente = () => {
       primer_apellido: primerApellido,
       segundo_apellido: segundoApellido,
       RTN: rtn,
-      tel: telefono,
+      phone: telefono,
       email: correo,
     };
     const res = await axios.post('http://localhost:3001/api/clientes', campos);
-    console.log(res);
   };
 
   // Con validaciones
