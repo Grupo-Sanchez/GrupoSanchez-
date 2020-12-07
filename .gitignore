@@ -22,7 +22,7 @@ pids
 node_modules/
 
 # dotenv environment variables file
-.env
+# .env
 .env.test
 
 # production
