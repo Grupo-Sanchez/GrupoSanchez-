@@ -43,7 +43,6 @@ mongoose.connect(
 );
 // Finaliza proceso de coneccion a la base de datos por medio de mongoose
 
-
 // PASO #3
 if (process.env.NODE_ENV === 'production') {
   // Exprees will serve up production assets
