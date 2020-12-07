@@ -9,7 +9,7 @@ const Formulario = ({ onChange, onSubmit, form }) => (
           className="form-control"
           placeholder="Numero de bodega"
           name="numBodega"
-          onChange={onChange} //paso el atributo al NewBodega
+          onChange={onChange}
           value={form.numBodega}
         />
       </div>
@@ -19,7 +19,7 @@ const Formulario = ({ onChange, onSubmit, form }) => (
           className="form-control"
           placeholder="Descripcion de Bodega"
           name="Description"
-          onChange={onChange} //paso el atributo al NewBodega
+          onChange={onChange}
           value={form.Description}
         />
       </div>
@@ -29,7 +29,7 @@ const Formulario = ({ onChange, onSubmit, form }) => (
           className="form-control"
           placeholder="Encargado de Bodega"
           name="Encargado"
-          onChange={onChange} //paso el atributo al NewBodega
+          onChange={onChange}
           value={form.Encargado}
         />
       </div>
@@ -39,13 +39,10 @@ const Formulario = ({ onChange, onSubmit, form }) => (
           className="form-control"
           placeholder="Cantidad de pasillos"
           name="CantPasillos"
-          onChange={onChange} //paso el atributo al NewBodega
+          onChange={onChange}
           value={form.CantPasillos}
         />
       </div>
-      <button type="submit" className="btn btn-primary">
-        Submit
-      </button>
     </form>
   </div>
 );

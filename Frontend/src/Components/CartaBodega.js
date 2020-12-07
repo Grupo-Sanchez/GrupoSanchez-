@@ -3,7 +3,7 @@ import home from '../Icons/CasaBodegas.png';
 import '../Styles/Bodegas.css';
 
 const CartaBodegas = ({ numBodega, Description, Encargado, CantPasillos }) => (
-  <div className="cardBodegas mx-auto Fitness-Card">
+  <div className="card-bodegas mx-auto Fitness-Card">
     <div className="card-body">
       <div className="row center">
         <div className="col-6">

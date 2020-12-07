@@ -3,6 +3,7 @@ import { Col, Container, Row } from 'reactstrap';
 import CartasOpciones from './CartasOpciones.jsx';
 import Agregar from './CrearBodega.jsx';
 import Listar from './ListarBodegas.jsx';
+import Modificar from './ModificarEliminarBodegas.jsx';
 import CrearBodega from '../Icons/CrearBodega.svg';
 import EliminarBodega from '../Icons/EliminarBodega.svg';
 import EditarBodega from '../Icons/EditarBodega.svg';
@@ -89,6 +90,7 @@ const OpcionesBodegas = () => {
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Bodegas</h1>
       <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
       <Listar isOpen={modalConsultar} change={() => setModalConsultar(!modalConsultar)} />
+      <Modificar isOpen={modalModificar} change={() => setModalModificar(!modalModificar)} />
       <Row md="4" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
           <Col>
