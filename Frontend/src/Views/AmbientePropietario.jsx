@@ -49,7 +49,7 @@ const items = [
       />
     ),
   },
-    {
+  {
     name: 'Clientes',
     to: '/Propietario/Clientes',
     icon: (

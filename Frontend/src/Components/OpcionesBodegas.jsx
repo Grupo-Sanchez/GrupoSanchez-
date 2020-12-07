@@ -33,7 +33,7 @@ const OpcionesBodegas = () => {
       isOpen: () => setModalAgregar(true),
     },
     {
-      titulo: 'Modificar Bodegas',
+      titulo: 'Modificar/Eliminar Bodegas',
       icon: (
         <img
           src={EditarBodega}
@@ -49,23 +49,23 @@ const OpcionesBodegas = () => {
       to: '/',
       isOpen: () => setModalModificar(true),
     },
-    {
-      titulo: 'Eliminar Bodegas',
-      icon: (
-        <img
-          src={EliminarBodega}
-          style={{
-            width: '240px',
-            height: 'auto',
-            paddingBottom: '20px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        />
-      ),
-      to: '/',
-      isOpen: () => setModalEliminar(true),
-    },
+    // {
+    //   titulo: 'Eliminar Bodegas',
+    //   icon: (
+    //     <img
+    //       src={EliminarBodega}
+    //       style={{
+    //         width: '240px',
+    //         height: 'auto',
+    //         paddingBottom: '20px',
+    //         marginLeft: 'auto',
+    //         marginRight: 'auto',
+    //       }}
+    //     />
+    //   ),
+    //   to: '/',
+    //   isOpen: () => setModalEliminar(true),
+    // },
     {
       titulo: 'Consultar Bodegas',
       icon: (
@@ -91,13 +91,12 @@ const OpcionesBodegas = () => {
       <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
       <Listar isOpen={modalConsultar} change={() => setModalConsultar(!modalConsultar)} />
       <Modificar isOpen={modalModificar} change={() => setModalModificar(!modalModificar)} />
-      <Row md="4" style={{ paddingTop: '25px' }}>
+      <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
           <Col>
             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />
           </Col>
         ))}
-        ;
       </Row>
     </Container>
   );
