@@ -26,40 +26,40 @@ app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
 
-// Paso #2 heroku deployment
-
-// Nos conectamos a la base de datos por medio de mongoose
-// El proces busca donde se hizo el npm dotenv
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-mongoose.connection.on('connected', () => {
-  console.log('Conectado a la base de datos con exito');
-});
-
-// Finaliza proceso de coneccion a la base de datos por medio de mongoose
-
 // // Paso #2 heroku deployment
+
 // // Nos conectamos a la base de datos por medio de mongoose
 // // El proces busca donde se hizo el npm dotenv
-// mongoose.connect(
-//   `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster.82jgc.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   },
-//   (err) => {
-//     if (err) console.error(err);
-//     console.log('Conectado a la base de datos con exito');
-//   },
-// );
+// mongoose.connect(process.env.MONGODB_URI, {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+// mongoose.connection.on('connected', () => {
+//   console.log('Conectado a la base de datos con exito');
+// });
+
 // // Finaliza proceso de coneccion a la base de datos por medio de mongoose
+
+// Paso #2 heroku deployment
+// Nos conectamos a la base de datos por medio de mongoose
+// El proces busca donde se hizo el npm dotenv
+mongoose.connect(
+  `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster.82jgc.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    if (err) console.error(err);
+    console.log('Conectado a la base de datos con exito');
+  },
+);
+// Finaliza proceso de coneccion a la base de datos por medio de mongoose
 
 // Paso #3 heroku deployment
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static('../Frontend/build'));
+  app.use(express.static('/Frontend/build'));
 }
 
 // Morgan es un log de la base de datos
