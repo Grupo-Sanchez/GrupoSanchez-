@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import Formulario from "./FormularioBodega";
-import Card from "./CartaBodega";
-import { Modal, ModalBody, ModalHeader } from "reactstrap";
+import React, { useState, useEffect } from 'react';
+import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
+import Formulario from './FormularioBodega';
+import CartaBodegas from './CartaBodega';
 
-const CrearBodega = () => {
+const CrearBodega = (props) => {
   const [form, setForm] = useState({
-    numBodega: "",
-    Description: "",
-    Encargado: "",
-    CantPasillos: "",
+    numBodega: '',
+    Description: '',
+    Encargado: '',
+    CantPasillos: '',
   });
 
   const handleChange = (e) => {
@@ -19,7 +19,11 @@ const CrearBodega = () => {
   };
 
   return (
-    <Modal isOpen={props.isOpen}className="text-center">
+    <Modal
+      isOpen={props.isOpen}
+      className="text-center"
+      style={{ maxWidth: '1700px', width: '80%' }}
+    >
       <ModalHeader>
         <div>
           <h3>CREACION DE BODEGAS</h3>
@@ -30,16 +34,14 @@ const CrearBodega = () => {
           <div className="col-sm ">
             <CartaBodegas {...form} />
           </div>
-        <div className="col-sm">
-          <Formulario onChange={handleChange} form={form} />
+          <div className="col-sm">
+            <Formulario onChange={handleChange} form={form} />
+          </div>
         </div>
-      </div>
       </ModalBody>
       <ModalFooter>
-        <button className="btn btn-primary" onClick={() => insertar(0)}>
-          CREAR BODEGA
-        </button>
-        <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
+        <button className="btn btn-primary">CREAR BODEGA</button>
+        <button className="btn btn-danger" onClick={props.change}>
           CANCELAR
         </button>
       </ModalFooter>
