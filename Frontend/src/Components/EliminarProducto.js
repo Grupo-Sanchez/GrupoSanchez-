@@ -657,7 +657,7 @@ export default function EliminarProducto(props) {
               <label>Precio 1</label>
               <input
                 className="form-control"
-                type="text"
+                type="Number"
                 name="modprecio1"
                 id="modprecio1"
                 value={precio1}
@@ -667,7 +667,7 @@ export default function EliminarProducto(props) {
               <label>Precio 2</label>
               <input
                 className="form-control"
-                type="text"
+                type="Number"
                 name="modprecio2"
                 id="modprecio2"
                 value={precio2}
@@ -677,7 +677,7 @@ export default function EliminarProducto(props) {
               <label>Precio 3</label>
               <input
                 className="form-control"
-                type="text"
+                type="Number"
                 name="modprecio3"
                 id="modprecio3"
                 value={precio3}
