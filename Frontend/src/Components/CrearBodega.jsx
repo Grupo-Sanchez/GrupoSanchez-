@@ -4,8 +4,6 @@ import axios from 'axios';
 import Formulario from './FormularioBodega';
 import CartaBodegas from './CartaBodega';
 
-
-
 const CrearBodega = (props) => {
   const [form, setForm] = useState({
     numBodega: '',
@@ -13,6 +11,14 @@ const CrearBodega = (props) => {
     Encargado: '',
     CantPasillos: '',
   });
+
+  const cerrarModal = () => {
+    props.change();
+    form.numBodega = '';
+    form.Description = '';
+    form.Encargado = '';
+    form.cantPasillos = '';
+  };
 
   const EscribirBodegas = async () => {
     const campos = {
@@ -24,6 +30,7 @@ const CrearBodega = (props) => {
     const res = await axios.post('http://localhost:3001/api/bodegas', campos);
     console.log(res);
     alert('¡Bodega Agregada!');
+    cerrarModal();
   };
 
   const handleChange = (e) => {
