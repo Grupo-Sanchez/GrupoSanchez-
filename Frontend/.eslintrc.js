@@ -11,7 +11,7 @@ module.exports = {
   rules: {
     'object-curly-newline': 'off',
     'no-unused-vars': 'off',
-    'max-len': ['error', { code: 100 }],
+    'max-len': ['error', { code: 150 }],
     'prefer-promise-reject-errors': ['off'],
     'react/jsx-filename-extension': ['off'],
     'react/jsx-closing-bracket-location': [1, 'tag-aligned'],
@@ -23,6 +23,6 @@ module.exports = {
     'no-plusplus': 'off',
     'prefer-destructuring': ['error', { object: true, array: false }],
     'implicit-arrow-linebreak': 0,
-    "no-param-reassign": 0,
+    'no-param-reassign': 0,
   },
 };

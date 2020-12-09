@@ -8,6 +8,7 @@ import {
   FormGroup,
   Input,
 } from 'reactstrap';
+import { AvForm, AvField } from 'availity-reactstrap-validation';
 import React, { useState, useEffect } from 'react';
 import '../Styles/SearchBarInterfazProductos.css';
 import axios from 'axios';
@@ -65,15 +66,59 @@ export default function AgregarProducto(props) {
     }));
   };
   const GuardarCodigos = () => {
-    seleccionado.codigos.push(document.getElementById('cod1').value);
-    seleccionado.codigos.push(document.getElementById('cod2').value);
-    seleccionado.codigos.push(document.getElementById('cod3').value);
-    seleccionado.codigos.push(document.getElementById('cod4').value);
-    seleccionado.codigos.push(document.getElementById('cod5').value);
-    seleccionado.codigos.push(document.getElementById('cod6').value);
-    seleccionado.codigos.push(document.getElementById('cod7').value);
-    setModalInsertarCodigo(false);
-    alert(seleccionado.codigos[0]);
+    let cod1 = '';
+    let cod2 = '';
+    let cod3 = '';
+    let cod4 = '';
+    let cod5 = '';
+    let cod6 = '';
+    let cod7 = '';
+    if (document.getElementById('cod1') != null) {
+      cod1 = document.getElementById('cod1').value;
+    }
+    if (document.getElementById('cod2') != null) {
+      cod2 = document.getElementById('cod2').value;
+    }
+    if (document.getElementById('cod3') != null) {
+      cod3 = document.getElementById('cod3').value;
+    }
+    if (document.getElementById('cod4') != null) {
+      cod4 = document.getElementById('cod4').value;
+    }
+    if (document.getElementById('cod5') != null) {
+      cod5 = document.getElementById('cod5').value;
+    }
+    if (document.getElementById('cod6') != null) {
+      cod6 = document.getElementById('cod6').value;
+    }
+    if (document.getElementById('cod7') != null) {
+      cod7 = document.getElementById('cod7').value;
+    }
+    if (cod1.toString().trim() === '') {
+      alert(' nipi');
+    } else {
+      seleccionado.codigos.push(cod1);
+      if (cod2.toString().trim() !== '') {
+        seleccionado.codigos.push(cod2);
+      }
+      if (cod3.toString().trim() !== '') {
+        seleccionado.codigos.push(cod3);
+      }
+      if (cod4.toString().trim() !== '') {
+        seleccionado.codigos.push(cod4);
+      }
+      if (cod5.toString().trim() !== '') {
+        seleccionado.codigos.push(cod5);
+      }
+      if (cod6.toString().trim() !== '') {
+        seleccionado.codigos.push(cod6);
+      }
+      if (cod7.toString().trim() !== '') {
+        seleccionado.codigos.push(cod7);
+      }
+      setModalInsertarCodigo(false);
+      alert('Codigos Agregados Exitosamente');
+    }
   };
   const GuardarPrecio = () => {
     seleccionado.precio.push(document.getElementById('precio1').value);
@@ -109,11 +154,15 @@ export default function AgregarProducto(props) {
 
   return (
     <div>
-      <Modal isOpen={props.isOpen} className="text-center" style={{
-        height: '95vh',
-        'overflow-y': 'auto',
-        top: '20px',
-      }}>
+      <Modal
+        isOpen={props.isOpen}
+        className="text-center"
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+        }}
+      >
         <ModalHeader>
           <div>
             <h3>AGREGAR PRODUCTOS</h3>
@@ -140,80 +189,85 @@ export default function AgregarProducto(props) {
               </div>
             </ModalHeader>
             <ModalBody>
-              <div className="form-group">
-                <label>codigo 1</label>
-                <input className="form-control" type="text" name="codigo1" id="cod1" />
-                <br />
-                <label>codigo 2</label>
-                <input
+              <AvForm>
+                <AvField
+                  className="form-control"
+                  type="text"
+                  name="codigo1"
+                  id="cod1"
+                  required
+                  errorMessage="Este codigo es requerido"
+                  validate={{
+                    required: { value: true },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
+                />
+                <AvField
                   className="form-control"
                   type="text"
                   name="codigo2"
                   id="cod2"
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+                  errorMessage="Codigo Invalido"
+                  validate={{
+                    required: { value: false },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
                 />
-                <br />
-                <label>codigo 3</label>
-                <input
+                <AvField
                   className="form-control"
                   type="text"
                   name="codigo3"
                   id="cod3"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  errorMessage="Codigo Invalido"
+                  validate={{
+                    required: { value: false },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
                 />
-                <br />
-                <label>codigo 4</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="codigo4"
-                  id="cod4"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
-                />
-                <br />
-                <label>codigo 5</label>
-                <input
+                <AvField
                   className="form-control"
                   type="text"
                   name="codigo5"
                   id="cod5"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  errorMessage="Codigo Invalido"
+                  validate={{
+                    required: { value: false },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
                 />
-                <br />
-                <label>codigo 6</label>
-                <input
+                <AvField
                   className="form-control"
                   type="text"
                   name="codigo6"
                   id="cod6"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  errorMessage="Codigo Invalido"
+                  validate={{
+                    required: { value: false },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
                 />
-                <br />
-                <label>codigo 7</label>
-                <input
+                <AvField
                   className="form-control"
                   type="text"
                   name="codigo7"
                   id="cod7"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  errorMessage="Codigo Invalido"
+                  validate={{
+                    required: { value: false },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
                 />
-                <br />
-              </div>
+                <Button onClick={() => GuardarCodigos()} color="primary">
+                  Submit
+                </Button>
+              </AvForm>
             </ModalBody>
-            <ModalFooter>
-              <button className="btn btn-primary" onClick={() => GuardarCodigos()}>
-                Agregar Código
-              </button>
-              <button className="btn btn-danger" onClick={() => setModalInsertarCodigo(false)}>
-                Cancelar
-              </button>
-            </ModalFooter>
           </Modal>
           <Modal isOpen={modalInsertarProveedor}>
             <ModalHeader>
@@ -229,8 +283,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor1"
                   id="prov1"
-                // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -239,8 +293,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor2"
                   id="prov2"
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -249,8 +303,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor3"
                   id="prov3"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -259,8 +313,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor4"
                   id="prov4"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -269,8 +323,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor5"
                   id="prov5"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -279,8 +333,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor6"
                   id="prov6"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -289,8 +343,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor7"
                   id="prov7"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -358,16 +412,16 @@ export default function AgregarProducto(props) {
             />
           </div>
           <div>
-              <h3>Cantidad Mínima</h3>
-              <input
-                className="form-control"
-                type="Number"
-                name="cantidad_minima"
-                id="modcantidad_minima"
-                value={seleccionado ? seleccionado.cantidad_minima : ''}
-                onChange={manejarCambio}
-              />
-            </div>
+            <h3>Cantidad Mínima</h3>
+            <input
+              className="form-control"
+              type="Number"
+              name="cantidad_minima"
+              id="modcantidad_minima"
+              value={seleccionado ? seleccionado.cantidad_minima : ''}
+              onChange={manejarCambio}
+            />
+          </div>
           <div>
             <div>
               <h3>Descripción corta</h3>
@@ -414,8 +468,8 @@ export default function AgregarProducto(props) {
               name="Fecha"
               name="precio2"
               id="precio2"
-            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>Precio 3</label>
@@ -425,8 +479,8 @@ export default function AgregarProducto(props) {
               name="Etiqueta"
               name="precio3"
               id="precio3"
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
           </div>
         </ModalBody>

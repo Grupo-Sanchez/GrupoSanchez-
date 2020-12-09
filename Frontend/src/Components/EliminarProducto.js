@@ -227,30 +227,31 @@ export default function EliminarProducto(props) {
   };
 
   return (
-    <div>
-      <Modal
-        isOpen={props.isOpen}
-        className="text-center"
-        style={{ maxWidth: '1700px', width: '80%', 'text-align': 'center', 'padding-top': '200px' }}
+    <div align="center">
+      <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
+      <input
+        type="text"
+        id="myInput"
+        onChange={() => myFunction()}
+        placeholder="Search for names.."
+        title="Type in a name"
+        style={{
+          'background-image': `url('${imagePath}')`,
+          'background-position': '10px 10px',
+          'background-repeat': 'no-repeat',
+          width: '60%',
+          'font-size': '16px',
+          padding: '12px 20px 12px 40px',
+          border: '1px solid #ddd',
+          'margin-bottom': '12px',
+        }}
+      ></input>
+      <div
+        style={{
+          maxHeight: '600px',
+          overflowY: 'auto',
+        }}
       >
-        <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
-        <input
-          type="text"
-          id="myInput"
-          onChange={() => myFunction()}
-          placeholder="Search for names.."
-          title="Type in a name"
-          style={{
-            'background-image': `url('${imagePath}')`,
-            'background-position': '10px 10px',
-            'background-repeat': 'no-repeat',
-            width: '100%',
-            'font-size': '16px',
-            padding: '12px 20px 12px 40px',
-            border: '1px solid #ddd',
-            'margin-bottom': '12px',
-          }}
-        ></input>
         <Table
           responsive
           striped
@@ -320,10 +321,7 @@ export default function EliminarProducto(props) {
             ))}
           </tbody>
         </Table>
-        <Button color="danger" onClick={props.change}>
-          Cerrar
-        </Button>
-      </Modal>
+      </div>
       <div>
         <Modal
           isOpen={ModalModificar}
