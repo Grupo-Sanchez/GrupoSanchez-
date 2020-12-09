@@ -14,10 +14,10 @@ const CrearBodega = (props) => {
 
   const cerrarModal = () => {
     props.change();
-    form.numBodega = '';
+    form.numBodega = 0;
     form.Description = '';
     form.Encargado = '';
-    form.cantPasillos = '';
+    form.cantPasillos = 0;
   };
 
   const EscribirBodegas = async () => {
@@ -62,7 +62,9 @@ const CrearBodega = (props) => {
         </div>
       </ModalBody>
       <ModalFooter>
-        <button className="btn btn-primary" onClick = {() => EscribirBodegas()}>CREAR BODEGA</button>
+        <button className="btn btn-primary" onClick = {() => EscribirBodegas()}>
+          CREAR BODEGA
+        </button>
         <button className="btn btn-danger" onClick={props.change}>
           CANCELAR
         </button>
