@@ -95,7 +95,7 @@ export default function AgregarProducto(props) {
       cod7 = document.getElementById('cod7').value;
     }
     if (cod1.toString().trim() === '') {
-      alert(' nipi');
+      alert('Codigo 1 Vacio');
     } else {
       seleccionado.codigos.push(cod1);
       if (cod2.toString().trim() !== '') {
