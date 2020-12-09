@@ -4,13 +4,12 @@ import CartasOpciones from './CartasOpciones.jsx';
 import Agregar from './AgregarProducto';
 import AgregarProducto from '../Icons/AgregarProducto.svg';
 import EditarProducto from '../Icons/EditarProducto.svg';
-import EliminarProducto from '../Icons/EliminarProducto.svg';
 import BuscarProducto from '../Icons/BuscarProducto.svg';
-import Eliminar from './EliminarProducto';
 
 const OpcionesProductos = () => {
   const [modalAgregar, setModalAgregar] = useState(false);
   const [modalEliminar, setModalEliminar] = useState(false);
+  const [modalListar, setModalListar] = useState(false);
   const items = [
     {
       titulo: 'Agregar Productos',
@@ -43,11 +42,12 @@ const OpcionesProductos = () => {
           }}
         />
       ),
-      to: '/asd',
+      to: '/Propietario/Productos/EliminaryModificar',
       isOpen: () => setModalEliminar(true),
     },
     {
       titulo: 'Buscar Producto',
+      to: '/Propietario/Productos/Buscar',
       icon: (
         <img
           src={BuscarProducto}
@@ -60,14 +60,12 @@ const OpcionesProductos = () => {
           }}
         />
       ),
-      to: '/asd',
     },
   ];
 
   return (
     <Container>
       <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
-      <Eliminar isOpen={modalEliminar} change={() => setModalEliminar(!modalEliminar)} />
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Productos</h1>
       <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
