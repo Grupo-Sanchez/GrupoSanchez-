@@ -102,6 +102,7 @@ export default function AgregarProducto(props) {
     // setModalInsertar(false);
     seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
+    seleccionado.cantidad_minima = document.getElementsByName('cantidad_minima').value;
     prueba();
     props.change();
   };
@@ -357,15 +358,16 @@ export default function AgregarProducto(props) {
             />
           </div>
           <div>
-            <h3>Cantidad Mínima</h3>
-            <input
-              className="form-control"
-              type="Number"
-              name="cantidad"
-              value={seleccionado ? seleccionado.cantidad_minima : ''}
-              onChange={manejarCambio}
-            />
-          </div>
+              <h3>Cantidad Mínima</h3>
+              <input
+                className="form-control"
+                type="Number"
+                name="cantidad_minima"
+                id="modcantidad_minima"
+                value={seleccionado ? seleccionado.cantidad_minima : ''}
+                onChange={manejarCambio}
+              />
+            </div>
           <div>
             <div>
               <h3>Descripción corta</h3>
@@ -403,12 +405,12 @@ export default function AgregarProducto(props) {
         <ModalBody>
           <div className="form-group">
             <label>Precio 1</label>
-            <input className="form-control" type="text" name="precio1" id="precio1" />
+            <input className="form-control" type="Number" name="precio1" id="precio1" />
             <br />
             <label>Precio 2</label>
             <input
               className="form-control"
-              type="text"
+              type="Number"
               name="Fecha"
               name="precio2"
               id="precio2"
@@ -419,7 +421,7 @@ export default function AgregarProducto(props) {
             <label>Precio 3</label>
             <input
               className="form-control"
-              type="text"
+              type="Number"
               name="Etiqueta"
               name="precio3"
               id="precio3"
