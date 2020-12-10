@@ -19,6 +19,13 @@ export default function AgregarProducto(props) {
   const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
+  const [inputcod2, setinputcod2] = useState(false);
+  const [inputcod3, setinputcod3] = useState(false);
+  const [inputcod4, setinputcod4] = useState(false);
+  const [inputcod5, setinputcod5] = useState(false);
+  const [inputcod6, setinputcod6] = useState(false);
+  const [inputcod7, setinputcod7] = useState(false);
+  const [cod, setcod] = useState('');
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -138,6 +145,35 @@ export default function AgregarProducto(props) {
     setModalInsertarProveedor(false);
     alert(seleccionado.proveedores[0]);
   };
+  const handleChange = (e, num) => {
+    if (num === 2) {
+      setinputcod2(e.target.value);
+      setinputcod3(false);
+      setinputcod4(false);
+      setinputcod5(false);
+      setinputcod6(false);
+      setinputcod7(false);
+      if (inputcod2 === false) {
+        alert('entra');
+      } else {
+        setcod(' ');
+      }
+    } else if (num === 3) {
+      setinputcod3(e.target.value);
+      setinputcod4(false);
+    } else if (num === 4) {
+      setinputcod4(e.target.value);
+      setinputcod5(false);
+    } else if (num === 5) {
+      setinputcod5(e.target.value);
+      setinputcod6(false);
+    } else if (num === 6) {
+      setinputcod6(e.target.value);
+      setinputcod7(false);
+    } else if (num === 7) {
+      setinputcod7(e.target.value);
+    }
+  };
   const insertar = () => {
     const valorInsertar = seleccionado;
     // valorInsertar.N = data[data.length].N + 1;
@@ -148,10 +184,22 @@ export default function AgregarProducto(props) {
     seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     seleccionado.cantidad_minima = document.getElementsByName('cantidad_minima').value;
-    prueba();
-    props.change();
+    if (
+      seleccionado.codigos.length > 0
+      && seleccionado.proveedores.length > 0
+      && seleccionado.precio.length > 0
+    ) {
+      prueba();
+      props.change();
+    } else {
+      alert('Campos incompletos');
+    }
   };
-
+  const handleKeyDown = (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+    }
+  };
   return (
     <div>
       <Modal
@@ -190,6 +238,7 @@ export default function AgregarProducto(props) {
             </ModalHeader>
             <ModalBody>
               <AvForm>
+                <h3>Código 1</h3>
                 <AvField
                   className="form-control"
                   type="text"
@@ -202,7 +251,10 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
+                  onKeyDown={handleKeyDown}
+                  onChange={(e) => handleChange(e, 2)}
                 />
+                <h3>Código 2</h3>
                 <AvField
                   className="form-control"
                   type="text"
@@ -214,7 +266,12 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
+                  value={cod}
+                  onKeyDown={handleKeyDown}
+                  disabled={!inputcod2}
+                  onChange={(e) => handleChange(e, 3)}
                 />
+                <h3>Código 3</h3>
                 <AvField
                   className="form-control"
                   type="text"
@@ -226,7 +283,27 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
+                  onKeyDown={handleKeyDown}
+                  disabled={!inputcod3}
+                  onChange={(e) => handleChange(e, 4)}
                 />
+                <h3>Código 4</h3>
+                <AvField
+                  className="form-control"
+                  type="text"
+                  name="codigo4"
+                  id="cod4"
+                  errorMessage="Codigo Invalido"
+                  validate={{
+                    required: { value: false },
+                    pattern: { value: '^[A-Za-z0-9]+$' },
+                    minLength: { value: 1 },
+                  }}
+                  onKeyDown={handleKeyDown}
+                  disabled={!inputcod4}
+                  onChange={(e) => handleChange(e, 5)}
+                />
+                <h3>Código 5</h3>
                 <AvField
                   className="form-control"
                   type="text"
@@ -238,7 +315,11 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
+                  onKeyDown={handleKeyDown}
+                  disabled={!inputcod5}
+                  onChange={(e) => handleChange(e, 6)}
                 />
+                <h3>Código 6</h3>
                 <AvField
                   className="form-control"
                   type="text"
@@ -250,7 +331,11 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
+                  onKeyDown={handleKeyDown}
+                  disabled={!inputcod6}
+                  onChange={(e) => handleChange(e, 7)}
                 />
+                <h3>Código 7</h3>
                 <AvField
                   className="form-control"
                   type="text"
@@ -262,12 +347,19 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
+                  onKeyDown={handleKeyDown}
+                  disabled={!inputcod7}
                 />
-                <Button onClick={() => GuardarCodigos()} color="primary">
-                  Submit
-                </Button>
               </AvForm>
             </ModalBody>
+            <ModalFooter>
+              <Button onClick={() => GuardarCodigos()} color="primary">
+                Submit
+              </Button>
+              <Button onClick={() => setModalInsertarCodigo(false)} color="danger">
+                Cancelar
+              </Button>
+            </ModalFooter>
           </Modal>
           <Modal isOpen={modalInsertarProveedor}>
             <ModalHeader>
@@ -359,14 +451,22 @@ export default function AgregarProducto(props) {
             </ModalFooter>
           </Modal>
           <div>
-            <h3>Nombre</h3>
-            <input
-              className="form-control"
-              type="text"
-              name="nombre"
-              value={seleccionado ? seleccionado.nombre : ''}
-              onChange={manejarCambio}
-            />
+            <AvForm>
+              <h3>Nombre</h3>
+              <AvField
+                className="form-control"
+                type="text"
+                name="nombre"
+                errorMessage="Nombre Inválido"
+                validate={{
+                  required: { value: true },
+                  pattern: { value: '^[A-Za-z0-9]+$' },
+                  minLength: { value: 1 },
+                }}
+                value={seleccionado ? seleccionado.nombre : ''}
+                onChange={manejarCambio}
+              />
+            </AvForm>
           </div>
           <div>
             <h3>Área</h3>
