@@ -270,6 +270,7 @@ export default function EliminarProducto(props) {
               <th>Area</th>
               <th>Ubicación</th>
               <th>Marca</th>
+              <th>Cantidad</th>
               <th>Cantidad Mínima</th>
               <th>Códigos</th>
               <th>Proveedores </th>
@@ -286,6 +287,7 @@ export default function EliminarProducto(props) {
                 <td>{elemento.area}</td>
                 <td>{elemento.ubicacion}</td>
                 <td>{elemento.marca}</td>
+                <td>{elemento.cantidad}</td>
                 <td>{elemento.cantidad_minima}</td>
                 <td>
                   <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
