@@ -24,5 +24,7 @@ module.exports = {
     'prefer-destructuring': ['error', { object: true, array: false }],
     'implicit-arrow-linebreak': 0,
     'no-param-reassign': 0,
+    'operator-linebreak': 0,
+    'spaced-comment': 0,
   },
 };

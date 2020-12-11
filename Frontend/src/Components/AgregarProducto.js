@@ -25,6 +25,12 @@ export default function AgregarProducto(props) {
   const [inputcod5, setinputcod5] = useState(false);
   const [inputcod6, setinputcod6] = useState(false);
   const [inputcod7, setinputcod7] = useState(false);
+  const [inputprov2, setinputprov2] = useState(false);
+  const [inputprov3, setinputprov3] = useState(false);
+  const [inputprov4, setinputprov4] = useState(false);
+  const [inputprov5, setinputprov5] = useState(false);
+  const [inputprov6, setinputprov6] = useState(false);
+  const [inputprov7, setinputprov7] = useState(false);
   const [cod, setcod] = useState('');
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
@@ -128,11 +134,38 @@ export default function AgregarProducto(props) {
     }
   };
   const GuardarPrecio = () => {
+    let precio1 = '';
+    let precio2 = '';
+    let precio3 = '';
+    if (document.getElementById('precio1').value != null) {
+      precio1 = document.getElementById('precio1').value;
+    }
+    if (document.getElementById('precio2').value != null) {
+      precio2 = document.getElementById('precio2').value != null;
+    }
+    if (document.getElementById('precio3').value != null) {
+      precio3 = document.getElementById('precio3').value != null;
+    }
+    if (precio1.toString().trim() === '') {
+      alert('Debe ingresar precio 1');
+    } else {
+      seleccionado.precio.push(precio1);
+      if (precio2.toString().trim() !== '') {
+        seleccionado.precio.push(precio2);
+      }
+      if (precio3.toString().trim() !== '') {
+        seleccionado.precio.push(precio3);
+      }
+      setModalInsertarPrecio(false);
+      alert('Precios agregados exitosamente');
+    }
+    /*
     seleccionado.precio.push(document.getElementById('precio1').value);
     seleccionado.precio.push(document.getElementById('precio2').value);
     seleccionado.precio.push(document.getElementById('precio3').value);
     setModalInsertarPrecio(false);
     alert(seleccionado.precio[0]);
+    */
   };
   const GuardarProveedores = () => {
     seleccionado.proveedores.push(document.getElementById('prov1').value);
@@ -153,11 +186,6 @@ export default function AgregarProducto(props) {
       setinputcod5(false);
       setinputcod6(false);
       setinputcod7(false);
-      if (inputcod2 === false) {
-        alert('entra');
-      } else {
-        setcod(' ');
-      }
     } else if (num === 3) {
       setinputcod3(e.target.value);
       setinputcod4(false);
@@ -174,6 +202,30 @@ export default function AgregarProducto(props) {
       setinputcod7(e.target.value);
     }
   };
+  const handleChangeProv = (e, num) => {
+    if (num === 2) {
+      setinputprov2(e.target.value);
+      setinputprov3(false);
+      setinputprov4(false);
+      setinputprov5(false);
+      setinputprov6(false);
+      setinputprov7(false);
+    } else if (num === 3) {
+      setinputprov3(e.target.value);
+      setinputprov4(false);
+    } else if (num === 4) {
+      setinputprov4(e.target.value);
+      setinputprov5(false);
+    } else if (num === 5) {
+      setinputprov5(e.target.value);
+      setinputprov6(false);
+    } else if (num === 6) {
+      setinputprov6(e.target.value);
+      setinputprov7(false);
+    } else if (num === 7) {
+      setinputprov7(e.target.value);
+    }
+  };
   const insertar = () => {
     const valorInsertar = seleccionado;
     // valorInsertar.N = data[data.length].N + 1;
@@ -185,9 +237,9 @@ export default function AgregarProducto(props) {
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     seleccionado.cantidad_minima = document.getElementsByName('cantidad_minima').value;
     if (
-      seleccionado.codigos.length > 0
-      && seleccionado.proveedores.length > 0
-      && seleccionado.precio.length > 0
+      seleccionado.codigos.length > 0 &&
+      seleccionado.proveedores.length > 0 &&
+      seleccionado.precio.length > 0
     ) {
       prueba();
       props.change();
@@ -354,7 +406,7 @@ export default function AgregarProducto(props) {
             </ModalBody>
             <ModalFooter>
               <Button onClick={() => GuardarCodigos()} color="primary">
-                Submit
+                Insertar
               </Button>
               <Button onClick={() => setModalInsertarCodigo(false)} color="danger">
                 Cancelar
@@ -368,78 +420,129 @@ export default function AgregarProducto(props) {
               </div>
             </ModalHeader>
             <ModalBody>
-              <div className="form-group">
-                <label>proveedor 1</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor1"
-                  id="prov1"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-                <label>proveedor 2</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor2"
-                  id="prov2"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-                <label>proveedor 3</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor3"
-                  id="prov3"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-                <label>proveedor 4</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor4"
-                  id="prov4"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-                <label>proveedor 5</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor5"
-                  id="prov5"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-                <label>proveedor 6</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor6"
-                  id="prov6"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-                <label>proveedor 7</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor7"
-                  id="prov7"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
-                />
-                <br />
-              </div>
+              <AvForm>
+                <div className="form-group">
+                  <label>proveedor 1</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor1"
+                    id="prov1"
+                    required
+                    errorMessage="Este proveedor es requerido"
+                    validate={{
+                      required: { value: true },
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    onChange={(e) => handleChangeProv(e, 2)}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                  <label>proveedor 2</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor2"
+                    id="prov2"
+                    errorMessage="No debe contener espacios al inicio"
+                    validate={{
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    onChange={(e) => handleChangeProv(e, 3)}
+                    disabled={!inputprov2}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                  <label>proveedor 3</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor3"
+                    id="prov3"
+                    errorMessage="No debe contener espacios al inicio"
+                    validate={{
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    onChange={(e) => handleChangeProv(e, 4)}
+                    disabled={!inputprov3}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                  <label>proveedor 4</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor4"
+                    id="prov4"
+                    errorMessage="No debe contener espacios al inicio"
+                    validate={{
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    onChange={(e) => handleChangeProv(e, 5)}
+                    disabled={!inputprov4}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                  <label>proveedor 5</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor5"
+                    id="prov5"
+                    errorMessage="No debe contener espacios al inicio"
+                    validate={{
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    onChange={(e) => handleChangeProv(e, 6)}
+                    disabled={!inputprov5}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                  <label>proveedor 6</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor6"
+                    id="prov6"
+                    errorMessage="No debe contener espacios al inicio"
+                    validate={{
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    onChange={(e) => handleChangeProv(e, 7)}
+                    disabled={!inputprov6}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                  <label>proveedor 7</label>
+                  <AvField
+                    className="form-control"
+                    type="text"
+                    name="proveedor7"
+                    id="prov7"
+                    errorMessage="No debe contener espacios al inicio"
+                    validate={{
+                      pattern: { value: '^[A-Za-z0-9]+$' },
+                      minLength: { value: 1 },
+                    }}
+                    disabled={!inputprov7}
+                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                    // onChange={manejarCambio}
+                  />
+                  <br />
+                </div>
+              </AvForm>
             </ModalBody>
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => GuardarProveedores()}>
@@ -470,13 +573,20 @@ export default function AgregarProducto(props) {
           </div>
           <div>
             <h3>Área</h3>
-            <input
-              className="form-control"
-              type="text"
-              name="area"
-              value={seleccionado ? seleccionado.area : ''}
-              onChange={manejarCambio}
-            />
+            <AvForm>
+              <AvField
+                className="form-control"
+                type="text"
+                name="area"
+                errorMessage="Campo Obligatorio"
+                validate={{
+                  required: { value: true },
+                  minLength: { value: 1 },
+                }}
+                value={seleccionado ? seleccionado.area : ''}
+                onChange={manejarCambio}
+              />
+            </AvForm>
           </div>
           <div>
             <h3>Ubicación</h3>
@@ -525,10 +635,23 @@ export default function AgregarProducto(props) {
           <div>
             <div>
               <h3>Descripción corta</h3>
-              <FormGroup class="style">
-                <Label for="exampleText"></Label>
-                <Input type="textarea" name="text" id="descripcion1" />
-              </FormGroup>
+              <AvForm>
+                <FormGroup class="style">
+                  <Label for="exampleText"></Label>
+                  <AvField
+                    type="textarea"
+                    name="text"
+                    id="descripcion1"
+                    errorMessage="Campo Obligatorio"
+                    validate={{
+                      required: { value: true },
+                      minLength: { value: 1 },
+                    }}
+                    value={seleccionado ? seleccionado.descripcion_corta : ''}
+                    onChange={manejarCambio}
+                  />
+                </FormGroup>
+              </AvForm>
             </div>
           </div>
           <div>
@@ -559,7 +682,18 @@ export default function AgregarProducto(props) {
         <ModalBody>
           <div className="form-group">
             <label>Precio 1</label>
-            <input className="form-control" type="Number" name="precio1" id="precio1" />
+            <AvForm>
+              <AvField
+                className="form-control"
+                type="Number"
+                name="precio1"
+                id="precio1"
+                errorMessage="Este Campo es Obligatorio"
+                validate={{
+                  required: { value: true },
+                }}
+              />
+            </AvForm>
             <br />
             <label>Precio 2</label>
             <input
