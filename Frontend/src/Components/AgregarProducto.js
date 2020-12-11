@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import React, { useState, useEffect } from 'react';
+import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarInterfazProductos.css';
 import axios from 'axios';
 
@@ -79,6 +80,8 @@ export default function AgregarProducto(props) {
     }));
   };
   const GuardarCodigos = () => {
+    seleccionado.codigos = [];
+    alert(JSON.stringify(seleccionado.codigos));
     let cod1 = '';
     let cod2 = '';
     let cod3 = '';
@@ -130,8 +133,29 @@ export default function AgregarProducto(props) {
         seleccionado.codigos.push(cod7);
       }
       setModalInsertarCodigo(false);
+      setinputcod2(false);
+      setinputcod3(false);
+      setinputcod4(false);
+      setinputcod5(false);
+      setinputcod6(false);
+      setinputcod7(false);
+      alert(JSON.stringify(seleccionado.codigos));
       alert('Codigos Agregados Exitosamente');
     }
+  };
+  const insertarCodigos = () => {
+    /*if (seleccionado.codigos.length > 1) {
+      setinputcod2(true);
+      const cod2 = document.getElementById('cod2');
+      console.log(cod2.value);
+      //cod2.value = 'dfasd';
+    }
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);*/
+    setModalInsertarCodigo(true);
   };
   const GuardarPrecio = () => {
     let precio1 = '';
@@ -186,6 +210,12 @@ export default function AgregarProducto(props) {
       setinputcod5(false);
       setinputcod6(false);
       setinputcod7(false);
+
+      if (inputcod2 === false) {
+        console.log('entra');
+      } else {
+        setcod(' ');
+      }
     } else if (num === 3) {
       setinputcod3(e.target.value);
       setinputcod4(false);
@@ -247,13 +277,28 @@ export default function AgregarProducto(props) {
       alert('Campos incompletos');
     }
   };
+  const cerrarModalAgregarCodigos = () => {
+    setModalInsertarCodigo(false);
+    setinputcod2(false);
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);
+  };
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
     }
   };
+  const options = [
+    { value: 's', name: 'Small' },
+    { value: 'm', name: 'Medium' },
+    { value: 'l', name: 'Large' },
+  ];
+  const [size, setSize] = useState(null);
   return (
-    <div>
+    <div id="target">
       <Modal
         isOpen={props.isOpen}
         className="text-center"
@@ -261,6 +306,7 @@ export default function AgregarProducto(props) {
           height: '95vh',
           'overflow-y': 'auto',
           top: '20px',
+          maxWidth: '550px',
         }}
       >
         <ModalHeader>
@@ -270,7 +316,7 @@ export default function AgregarProducto(props) {
         </ModalHeader>
         <ModalBody>
           <div>
-            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
+            <Button onClick={() => insertarCodigos()} color="primary">
               Insertar Codigo
             </Button>{' '}
           </div>
@@ -282,7 +328,15 @@ export default function AgregarProducto(props) {
               Insertar Proveedor
             </Button>{' '}
           </div>
-          <Modal isOpen={modalInsertarCodigo}>
+          <Modal
+            style={{
+              height: '95vh',
+              'overflow-y': 'auto',
+              top: '20px',
+              maxWidth: '550px',
+            }}
+            isOpen={modalInsertarCodigo}
+          >
             <ModalHeader>
               <div className="text-center">
                 <h3>Agregar Códigos</h3>
@@ -318,7 +372,7 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
-                  value={cod}
+                  value=""
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod2}
                   onChange={(e) => handleChange(e, 3)}
@@ -408,141 +462,108 @@ export default function AgregarProducto(props) {
               <Button onClick={() => GuardarCodigos()} color="primary">
                 Insertar
               </Button>
-              <Button onClick={() => setModalInsertarCodigo(false)} color="danger">
+              <Button onClick={() => cerrarModalAgregarCodigos()} color="danger">
                 Cancelar
               </Button>
             </ModalFooter>
           </Modal>
-          <Modal isOpen={modalInsertarProveedor}>
+          <Modal
+            style={{
+              height: '95vh',
+              'overflow-y': 'auto',
+              top: '20px',
+              maxWidth: '550px',
+            }}
+            isOpen={modalInsertarProveedor}
+          >
             <ModalHeader>
               <div>
                 <h3>Agregar Proveedores</h3>
               </div>
             </ModalHeader>
             <ModalBody>
-              <AvForm>
-                <div className="form-group">
-                  <label>proveedor 1</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor1"
-                    id="prov1"
-                    required
-                    errorMessage="Este proveedor es requerido"
-                    validate={{
-                      required: { value: true },
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    onChange={(e) => handleChangeProv(e, 2)}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                  <label>proveedor 2</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor2"
-                    id="prov2"
-                    errorMessage="No debe contener espacios al inicio"
-                    validate={{
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    onChange={(e) => handleChangeProv(e, 3)}
-                    disabled={!inputprov2}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                  <label>proveedor 3</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor3"
-                    id="prov3"
-                    errorMessage="No debe contener espacios al inicio"
-                    validate={{
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    onChange={(e) => handleChangeProv(e, 4)}
-                    disabled={!inputprov3}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                  <label>proveedor 4</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor4"
-                    id="prov4"
-                    errorMessage="No debe contener espacios al inicio"
-                    validate={{
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    onChange={(e) => handleChangeProv(e, 5)}
-                    disabled={!inputprov4}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                  <label>proveedor 5</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor5"
-                    id="prov5"
-                    errorMessage="No debe contener espacios al inicio"
-                    validate={{
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    onChange={(e) => handleChangeProv(e, 6)}
-                    disabled={!inputprov5}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                  <label>proveedor 6</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor6"
-                    id="prov6"
-                    errorMessage="No debe contener espacios al inicio"
-                    validate={{
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    onChange={(e) => handleChangeProv(e, 7)}
-                    disabled={!inputprov6}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                  <label>proveedor 7</label>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="proveedor7"
-                    id="prov7"
-                    errorMessage="No debe contener espacios al inicio"
-                    validate={{
-                      pattern: { value: '^[A-Za-z0-9]+$' },
-                      minLength: { value: 1 },
-                    }}
-                    disabled={!inputprov7}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                    // onChange={manejarCambio}
-                  />
-                  <br />
-                </div>
-              </AvForm>
+              <div className="form-group">
+                <label>Proveedor 1</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  value={options[0].value}
+                  onClick={() => setSize(null)}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+                <label>Proveedor 2</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+                <label>Proveedor 3</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+                <label>Proveedor 4</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+                <label>Proveedor 5</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+                <label>Proveedor 6</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+                <label>Proveedor 7</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
+                />
+                <br />
+              </div>
             </ModalBody>
             <ModalFooter>
               <button className="btn btn-primary" onClick={() => GuardarProveedores()}>
@@ -599,19 +620,23 @@ export default function AgregarProducto(props) {
             />
           </div>
           <div>
-            <h3>Marca</h3>
-            <input
-              className="form-control"
-              type="text"
-              name="marca"
-              value={seleccionado ? seleccionado.marca : ''}
-              onChange={manejarCambio}
+            <h3 align="center">Marca</h3>
+            <SelectSearch
+              search
+              placeholder="Encuentre la Marca del Producto"
+              required
+              autoComplete
+              options={options}
+              // options={this.state.productosEnBodega}
+              // onChange={this.handleChange}
             />
           </div>
+          <br></br>
           <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
             Precios
-          </Button>{' '}
+          </Button>
           <div>
+            <br />
             <h3>Cantidad</h3>
             <input
               className="form-control"
@@ -673,7 +698,15 @@ export default function AgregarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalInsertarPrecio}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalInsertarPrecio}
+      >
         <ModalHeader>
           <div className="text-center">
             <h3>Agregar Precios</h3>
