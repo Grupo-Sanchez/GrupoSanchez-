@@ -26,6 +26,12 @@ export default function AgregarProducto(props) {
   const [inputcod5, setinputcod5] = useState(false);
   const [inputcod6, setinputcod6] = useState(false);
   const [inputcod7, setinputcod7] = useState(false);
+  const [inputprov2, setinputprov2] = useState(false);
+  const [inputprov3, setinputprov3] = useState(false);
+  const [inputprov4, setinputprov4] = useState(false);
+  const [inputprov5, setinputprov5] = useState(false);
+  const [inputprov6, setinputprov6] = useState(false);
+  const [inputprov7, setinputprov7] = useState(false);
   const [cod, setcod] = useState('');
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
@@ -152,11 +158,38 @@ export default function AgregarProducto(props) {
     setModalInsertarCodigo(true);
   };
   const GuardarPrecio = () => {
+    let precio1 = '';
+    let precio2 = '';
+    let precio3 = '';
+    if (document.getElementById('precio1').value != null) {
+      precio1 = document.getElementById('precio1').value;
+    }
+    if (document.getElementById('precio2').value != null) {
+      precio2 = document.getElementById('precio2').value != null;
+    }
+    if (document.getElementById('precio3').value != null) {
+      precio3 = document.getElementById('precio3').value != null;
+    }
+    if (precio1.toString().trim() === '') {
+      alert('Debe ingresar precio 1');
+    } else {
+      seleccionado.precio.push(precio1);
+      if (precio2.toString().trim() !== '') {
+        seleccionado.precio.push(precio2);
+      }
+      if (precio3.toString().trim() !== '') {
+        seleccionado.precio.push(precio3);
+      }
+      setModalInsertarPrecio(false);
+      alert('Precios agregados exitosamente');
+    }
+    /*
     seleccionado.precio.push(document.getElementById('precio1').value);
     seleccionado.precio.push(document.getElementById('precio2').value);
     seleccionado.precio.push(document.getElementById('precio3').value);
     setModalInsertarPrecio(false);
     alert(seleccionado.precio[0]);
+    */
   };
   const GuardarProveedores = () => {
     seleccionado.proveedores.push(document.getElementById('prov1').value);
@@ -177,6 +210,7 @@ export default function AgregarProducto(props) {
       setinputcod5(false);
       setinputcod6(false);
       setinputcod7(false);
+
       if (inputcod2 === false) {
         console.log('entra');
       } else {
@@ -196,6 +230,30 @@ export default function AgregarProducto(props) {
       setinputcod7(false);
     } else if (num === 7) {
       setinputcod7(e.target.value);
+    }
+  };
+  const handleChangeProv = (e, num) => {
+    if (num === 2) {
+      setinputprov2(e.target.value);
+      setinputprov3(false);
+      setinputprov4(false);
+      setinputprov5(false);
+      setinputprov6(false);
+      setinputprov7(false);
+    } else if (num === 3) {
+      setinputprov3(e.target.value);
+      setinputprov4(false);
+    } else if (num === 4) {
+      setinputprov4(e.target.value);
+      setinputprov5(false);
+    } else if (num === 5) {
+      setinputprov5(e.target.value);
+      setinputprov6(false);
+    } else if (num === 6) {
+      setinputprov6(e.target.value);
+      setinputprov7(false);
+    } else if (num === 7) {
+      setinputprov7(e.target.value);
     }
   };
   const insertar = () => {
@@ -402,7 +460,7 @@ export default function AgregarProducto(props) {
             </ModalBody>
             <ModalFooter>
               <Button onClick={() => GuardarCodigos()} color="primary">
-                Submit
+                Insertar
               </Button>
               <Button onClick={() => cerrarModalAgregarCodigos()} color="danger">
                 Cancelar
@@ -536,13 +594,20 @@ export default function AgregarProducto(props) {
           </div>
           <div>
             <h3>Área</h3>
-            <input
-              className="form-control"
-              type="text"
-              name="area"
-              value={seleccionado ? seleccionado.area : ''}
-              onChange={manejarCambio}
-            />
+            <AvForm>
+              <AvField
+                className="form-control"
+                type="text"
+                name="area"
+                errorMessage="Campo Obligatorio"
+                validate={{
+                  required: { value: true },
+                  minLength: { value: 1 },
+                }}
+                value={seleccionado ? seleccionado.area : ''}
+                onChange={manejarCambio}
+              />
+            </AvForm>
           </div>
           <div>
             <h3>Ubicación</h3>
@@ -595,10 +660,23 @@ export default function AgregarProducto(props) {
           <div>
             <div>
               <h3>Descripción corta</h3>
-              <FormGroup class="style">
-                <Label for="exampleText"></Label>
-                <Input type="textarea" name="text" id="descripcion1" />
-              </FormGroup>
+              <AvForm>
+                <FormGroup class="style">
+                  <Label for="exampleText"></Label>
+                  <AvField
+                    type="textarea"
+                    name="text"
+                    id="descripcion1"
+                    errorMessage="Campo Obligatorio"
+                    validate={{
+                      required: { value: true },
+                      minLength: { value: 1 },
+                    }}
+                    value={seleccionado ? seleccionado.descripcion_corta : ''}
+                    onChange={manejarCambio}
+                  />
+                </FormGroup>
+              </AvForm>
             </div>
           </div>
           <div>
@@ -637,7 +715,18 @@ export default function AgregarProducto(props) {
         <ModalBody>
           <div className="form-group">
             <label>Precio 1</label>
-            <input className="form-control" type="Number" name="precio1" id="precio1" />
+            <AvForm>
+              <AvField
+                className="form-control"
+                type="Number"
+                name="precio1"
+                id="precio1"
+                errorMessage="Este Campo es Obligatorio"
+                validate={{
+                  required: { value: true },
+                }}
+              />
+            </AvForm>
             <br />
             <label>Precio 2</label>
             <input
