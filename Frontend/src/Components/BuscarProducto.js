@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/SearchBarInterfazProductos.css';
+import '../Styles/SearchBar.css';
 import {
   Button,
   Table,

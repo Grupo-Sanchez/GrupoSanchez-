@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import { AvForm, AvField } from 'availity-reactstrap-validation';
 import React, { useState, useEffect } from 'react';
+import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarInterfazProductos.css';
 import axios from 'axios';
 
@@ -73,6 +74,8 @@ export default function AgregarProducto(props) {
     }));
   };
   const GuardarCodigos = () => {
+    seleccionado.codigos = [];
+    alert(JSON.stringify(seleccionado.codigos));
     let cod1 = '';
     let cod2 = '';
     let cod3 = '';
@@ -124,8 +127,29 @@ export default function AgregarProducto(props) {
         seleccionado.codigos.push(cod7);
       }
       setModalInsertarCodigo(false);
+      setinputcod2(false);
+      setinputcod3(false);
+      setinputcod4(false);
+      setinputcod5(false);
+      setinputcod6(false);
+      setinputcod7(false);
+      alert(JSON.stringify(seleccionado.codigos));
       alert('Codigos Agregados Exitosamente');
     }
+  };
+  const insertarCodigos = () => {
+    /*if (seleccionado.codigos.length > 1) {
+      setinputcod2(true);
+      const cod2 = document.getElementById('cod2');
+      console.log(cod2.value);
+      //cod2.value = 'dfasd';
+    }
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);*/
+    setModalInsertarCodigo(true);
   };
   const GuardarPrecio = () => {
     seleccionado.precio.push(document.getElementById('precio1').value);
@@ -154,7 +178,7 @@ export default function AgregarProducto(props) {
       setinputcod6(false);
       setinputcod7(false);
       if (inputcod2 === false) {
-        alert('entra');
+        console.log('entra');
       } else {
         setcod(' ');
       }
@@ -185,9 +209,9 @@ export default function AgregarProducto(props) {
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     seleccionado.cantidad_minima = document.getElementsByName('cantidad_minima').value;
     if (
-      seleccionado.codigos.length > 0
-      && seleccionado.proveedores.length > 0
-      && seleccionado.precio.length > 0
+      seleccionado.codigos.length > 0 &&
+      seleccionado.proveedores.length > 0 &&
+      seleccionado.precio.length > 0
     ) {
       prueba();
       props.change();
@@ -195,13 +219,28 @@ export default function AgregarProducto(props) {
       alert('Campos incompletos');
     }
   };
+  const cerrarModalAgregarCodigos = () => {
+    setModalInsertarCodigo(false);
+    setinputcod2(false);
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);
+  };
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
     }
   };
+  const options = [
+    { value: 's', name: 'Small' },
+    { value: 'm', name: 'Medium' },
+    { value: 'l', name: 'Large' },
+  ];
+  const [size, setSize] = useState(null);
   return (
-    <div>
+    <div id="target">
       <Modal
         isOpen={props.isOpen}
         className="text-center"
@@ -209,6 +248,7 @@ export default function AgregarProducto(props) {
           height: '95vh',
           'overflow-y': 'auto',
           top: '20px',
+          maxWidth: '550px',
         }}
       >
         <ModalHeader>
@@ -218,7 +258,7 @@ export default function AgregarProducto(props) {
         </ModalHeader>
         <ModalBody>
           <div>
-            <Button onClick={() => setModalInsertarCodigo(true)} color="primary">
+            <Button onClick={() => insertarCodigos()} color="primary">
               Insertar Codigo
             </Button>{' '}
           </div>
@@ -230,7 +270,15 @@ export default function AgregarProducto(props) {
               Insertar Proveedor
             </Button>{' '}
           </div>
-          <Modal isOpen={modalInsertarCodigo}>
+          <Modal
+            style={{
+              height: '95vh',
+              'overflow-y': 'auto',
+              top: '20px',
+              maxWidth: '550px',
+            }}
+            isOpen={modalInsertarCodigo}
+          >
             <ModalHeader>
               <div className="text-center">
                 <h3>Agregar Códigos</h3>
@@ -266,7 +314,7 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
-                  value={cod}
+                  value=""
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod2}
                   onChange={(e) => handleChange(e, 3)}
@@ -356,12 +404,20 @@ export default function AgregarProducto(props) {
               <Button onClick={() => GuardarCodigos()} color="primary">
                 Submit
               </Button>
-              <Button onClick={() => setModalInsertarCodigo(false)} color="danger">
+              <Button onClick={() => cerrarModalAgregarCodigos()} color="danger">
                 Cancelar
               </Button>
             </ModalFooter>
           </Modal>
-          <Modal isOpen={modalInsertarProveedor}>
+          <Modal
+            style={{
+              height: '95vh',
+              'overflow-y': 'auto',
+              top: '20px',
+              maxWidth: '550px',
+            }}
+            isOpen={modalInsertarProveedor}
+          >
             <ModalHeader>
               <div>
                 <h3>Agregar Proveedores</h3>
@@ -369,74 +425,84 @@ export default function AgregarProducto(props) {
             </ModalHeader>
             <ModalBody>
               <div className="form-group">
-                <label>proveedor 1</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor1"
-                  id="prov1"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 1</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  value={options[0].value}
+                  onClick={() => setSize(null)}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
-                <label>proveedor 2</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor2"
-                  id="prov2"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 2</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
-                <label>proveedor 3</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor3"
-                  id="prov3"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 3</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
-                <label>proveedor 4</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor4"
-                  id="prov4"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 4</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
-                <label>proveedor 5</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor5"
-                  id="prov5"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 5</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
-                <label>proveedor 6</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor6"
-                  id="prov6"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 6</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
-                <label>proveedor 7</label>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="proveedor7"
-                  id="prov7"
-                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                  // onChange={manejarCambio}
+                <label>Proveedor 7</label>
+                <SelectSearch
+                  search
+                  placeholder="Encuentre el Proveedor del Producto"
+                  required
+                  autoComplete
+                  options={options}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
               </div>
@@ -489,19 +555,23 @@ export default function AgregarProducto(props) {
             />
           </div>
           <div>
-            <h3>Marca</h3>
-            <input
-              className="form-control"
-              type="text"
-              name="marca"
-              value={seleccionado ? seleccionado.marca : ''}
-              onChange={manejarCambio}
+            <h3 align="center">Marca</h3>
+            <SelectSearch
+              search
+              placeholder="Encuentre la Marca del Producto"
+              required
+              autoComplete
+              options={options}
+              // options={this.state.productosEnBodega}
+              // onChange={this.handleChange}
             />
           </div>
+          <br></br>
           <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
             Precios
-          </Button>{' '}
+          </Button>
           <div>
+            <br />
             <h3>Cantidad</h3>
             <input
               className="form-control"
@@ -550,7 +620,15 @@ export default function AgregarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalInsertarPrecio}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalInsertarPrecio}
+      >
         <ModalHeader>
           <div className="text-center">
             <h3>Agregar Precios</h3>
