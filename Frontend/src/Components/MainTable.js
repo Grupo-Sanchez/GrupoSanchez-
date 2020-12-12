@@ -4,13 +4,15 @@ import axios from 'axios';
 import ModalForm from './Modal';
 import DataTable from './DataTable';
 
+// const direccion = 'http://localhost:3001';
+const direccion = 'http://178.128.67.247:3001';
 class MainTable extends Component {
   state = {
     items: [],
   };
 
   getItems = async () => {
-    const res = await axios.get('http://localhost:3001/api/clientes');
+    const res = await axios.get(`${direccion}/api/clientes`);
     this.setState({ items: res.data });
   };
 
