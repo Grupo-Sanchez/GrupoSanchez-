@@ -12,6 +12,8 @@ import {
 } from 'reactstrap';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
+import AvField from 'availity-reactstrap-validation/lib/AvField';
+import AvForm from 'availity-reactstrap-validation/lib/AvForm';
 import imagePath from '../Icons/lupa1.jpeg';
 
 export default function EliminarProducto(props) {
@@ -25,6 +27,12 @@ export default function EliminarProducto(props) {
   const [ModalModificarProveedores, setModalModificarProveedores] = useState(false);
   const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
+  const [inputcod2, setinputcod2] = useState(false);
+  const [inputcod3, setinputcod3] = useState(false);
+  const [inputcod4, setinputcod4] = useState(false);
+  const [inputcod5, setinputcod5] = useState(false);
+  const [inputcod6, setinputcod6] = useState(false);
+  const [inputcod7, setinputcod7] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -50,20 +58,31 @@ export default function EliminarProducto(props) {
   /*
   Metodo para fuardar codigos del ModalModificar
    */
-  const GuardarCodigos = (i) => {
-    console.log(i.codigos[0]);
-    seleccionado.codigos[0] = document.getElementById('mcod1').value;
-    console.log(seleccionado.codigos[0]);
-
-    seleccionado.codigos[1] = document.getElementById('modcod2').value;
-    seleccionado.codigos[2] = document.getElementById('modcod3').value;
-    seleccionado.codigos[3] = document.getElementById('modcod4').value;
-    seleccionado.codigos[4] = document.getElementById('modcod5').value;
-    seleccionado.codigos[5] = document.getElementById('modcod6').value;
-    seleccionado.codigos[6] = document.getElementById('modcod7').value;
-    setModalModificarCodigos(false);
-    alert(seleccionado.codigos[1]);
+  const handleChange = (e, num) => {
+    if (num === 2) {
+      setinputcod2(e.target.value);
+      setinputcod3(false);
+      setinputcod4(false);
+      setinputcod5(false);
+      setinputcod6(false);
+      setinputcod7(false);
+    } else if (num === 3 && document.getElementById('modcod4').value === null) {
+      setinputcod3(e.target.value);
+      setinputcod4(false);
+    } else if (num === 4 && document.getElementById('modcod5').value === null) {
+      setinputcod4(e.target.value);
+      setinputcod5(false);
+    } else if (num === 5 && document.getElementById('modcod6').value === null) {
+      setinputcod5(e.target.value);
+      setinputcod6(false);
+    } else if (num === 6 && document.getElementById('modcod7').value === null) {
+      setinputcod6(e.target.value);
+      setinputcod7(false);
+    } else if (num === 7) {
+      setinputcod7(e.target.value);
+    }
   };
+
   /* Metodo para fuardar codigos del ModalModificar */
   const GuardarProveedores = () => {
     seleccionado.proveedores[0] = document.getElementById('modprov1').value;
@@ -122,6 +141,32 @@ export default function EliminarProducto(props) {
     this.setState({
       name: value,
     });
+  };
+  const verificarCodigo = () => {
+    /*
+    if (seleccionado.codigos[0] !== null) {
+      setinputcod2(true);
+    }
+    if (seleccionado.codigos[1] !== null) {
+      setinputcod3(true);
+    }
+    if (seleccionado.codigos[2] !== null) {
+      setinputcod4(true);
+    }
+    if (seleccionado.codigos[3] !== null) {
+      setinputcod5(true);
+    }
+    if (seleccionado.codigos[4] !== null) {
+      setinputcod6(true);
+    }
+    if (seleccionado.codigos[5] !== null) {
+      setinputcod7(true);
+    }
+    */
+    /*if (document.getElementById('modcod2').value() != null) {
+      seleccionado.codigos;
+    }
+    */
   };
   const Modificar = (elemento) => {
     setSeleccionado(elemento);
@@ -183,7 +228,51 @@ export default function EliminarProducto(props) {
     setCodigo5(seleccionado.codigos[4]);
     setCodigo6(seleccionado.codigos[5]);
     setCodigo7(seleccionado.codigos[6]);
+    // verificarCodigo();
     setModalModificarCodigos(true);
+  };
+  const GuardarCodigos = (i) => {
+    const array = [];
+    // alert(JSON.stringify(seleccionado.codigos));
+    alert(seleccionado.codigos[0]);
+    if (seleccionado.codigos[0] === '') {
+      alert('Codigo 1 Vacio');
+    } else {
+      array.push(seleccionado.codigos[0]);
+    }
+    if (codigo2.toString().trim !== '') {
+      array.push(codigo2);
+    }
+    if (codigo3.toString().trim !== '') {
+      array.push(codigo3);
+    }
+    if (codigo4.toString().trim !== '') {
+      array.push(codigo4);
+    }
+    if (codigo5.toString().trim !== '') {
+      array.push(codigo5);
+    }
+    if (codigo6.toString().trim !== '') {
+      array.push(codigo6);
+    }
+    if (codigo7.toString().trim !== '') {
+      array.push(codigo7);
+    }
+    seleccionado.codigos = [];
+    seleccionado.codigos = array;
+    // console.log(i.codigos[0]);
+    /*
+    seleccionado.codigos[0] = document.getElementById('mcod1').value;
+    // console.log(seleccionado.codigos[0]);
+    seleccionado.codigos[1] = document.getElementById('modcod2').value;
+    seleccionado.codigos[2] = document.getElementById('modcod3').value;
+    seleccionado.codigos[3] = document.getElementById('modcod4').value;
+    seleccionado.codigos[4] = document.getElementById('modcod5').value;
+    seleccionado.codigos[5] = document.getElementById('modcod6').value;
+    seleccionado.codigos[6] = document.getElementById('modcod7').value;
+    setModalModificarCodigos(false);
+    // alert(seleccionado.codigos[1]);
+    */
   };
   const [proveedor1, setproveedor1] = useState('');
   const [proveedor2, setproveedor2] = useState('');
@@ -225,7 +314,11 @@ export default function EliminarProducto(props) {
       [name]: value,
     }));
   };
-
+  const handleKeyDown = (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+    }
+  };
   return (
     <div align="center">
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
@@ -361,76 +454,135 @@ export default function EliminarProducto(props) {
               </ModalHeader>
               <ModalBody>
                 <div className="form-group">
-                  <label>codigo 1</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="mcodigo1"
-                    id="mcod1"
-                    // placeholder = {seleccionado.codigos[0]}
-                    value={codigo1}
-                    onChange={(event) => setCodigo1(event.target.value)}
-                  />
+                  <AvForm>
+                    <label>codigo 1</label>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="mcodigo1"
+                      id="mcod1"
+                      // placeholder = {seleccionado.codigos[0]}
+                      value={codigo1}
+                      required
+                      errorMessage="Este codigo es requerido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onKeyDown={handleKeyDown}
+                      // onClick={verificarCodigo()}
+                      onChange={(event) => setCodigo1(event.target.value)}
+                      //onChange={(e) => handleChange(e, 2)}
+                    />
+                  </AvForm>
                   <br />
                   <label>codigo 2</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo2"
-                    id="modcod2"
-                    value={codigo2}
-                    onChange={(event) => setCodigo2(event.target.value)}
-                  />
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo2"
+                      id="modcod2"
+                      value={codigo2}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo2(event.target.value)}
+                      // disabled={!inputcod2}
+                      // onChange={(e) => handleChange(e, 3)}
+                    />
+                  </AvForm>
                   <br />
                   <label>codigo 3</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo3"
-                    id="modcod3"
-                    value={codigo3}
-                    onChange={(event) => setCodigo3(event.target.value)}
-                  />
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo3"
+                      id="modcod3"
+                      value={codigo3}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo3(event.target.value)}
+                      // disabled={!inputcod3}
+                      // onChange={(e) => handleChange(e, 4)}
+                    />
+                  </AvForm>
                   <br />
                   <label>codigo 4</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo4"
-                    id="modcod4"
-                    value={codigo4}
-                    onChange={(event) => setCodigo4(event.target.value)}
-                  />
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo4"
+                      id="modcod4"
+                      value={codigo4}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo4(event.target.value)}
+                      // disabled={!inputcod4}
+                      // onChange={(e) => handleChange(e, 5)}
+                    />
+                  </AvForm>
                   <br />
                   <label>codigo 5</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo5"
-                    id="modcod5"
-                    value={codigo5}
-                    onChange={(event) => setCodigo5(event.target.value)}
-                  />
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo5"
+                      id="modcod5"
+                      value={codigo5}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo5(event.target.value)}
+                      // disabled={!inputcod5}
+                      // onChange={(e) => handleChange(e, 6)}
+                    />
+                  </AvForm>
                   <br />
                   <label>codigo 6</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo6"
-                    id="modcod6"
-                    value={codigo6}
-                    onChange={(event) => setCodigo6(event.target.value)}
-                  />
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo6"
+                      id="modcod6"
+                      value={codigo6}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo6(event.target.value)}
+                      // disabled={!inputcod6}
+                      // onChange={(e) => handleChange(e, 7)}
+                    />
+                  </AvForm>
                   <br />
                   <label>codigo 7</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo7"
-                    id="modcod7"
-                    value={codigo7}
-                    onChange={(event) => setCodigo7(event.target.value)}
-                  />
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo7"
+                      id="modcod7"
+                      value={codigo7}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      // onChange={(event) => setCodigo7(event.target.value)}
+                      // disabled={!inputcod7}
+                    />
+                  </AvForm>
                   <br />
                 </div>
               </ModalBody>
