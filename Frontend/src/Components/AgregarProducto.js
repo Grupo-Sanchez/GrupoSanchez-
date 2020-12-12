@@ -16,6 +16,14 @@ import axios from 'axios';
 
 export default function AgregarProducto(props) {
   const dataApuntes = [];
+  const [cod, setcod] = useState('');
+  const [cod1, setcod1] = useState('');
+  const [cod2, setcod2] = useState('');
+  const [cod3, setcod3] = useState('');
+  const [cod4, setcod4] = useState('');
+  const [cod5, setcod5] = useState('');
+  const [cod6, setcod6] = useState('');
+  const [cod7, setcod7] = useState('');
 
   const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
@@ -32,7 +40,6 @@ export default function AgregarProducto(props) {
   const [inputprov5, setinputprov5] = useState(false);
   const [inputprov6, setinputprov6] = useState(false);
   const [inputprov7, setinputprov7] = useState(false);
-  const [cod, setcod] = useState('');
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -82,79 +89,51 @@ export default function AgregarProducto(props) {
   const GuardarCodigos = () => {
     seleccionado.codigos = [];
     alert(JSON.stringify(seleccionado.codigos));
-    let cod1 = '';
-    let cod2 = '';
-    let cod3 = '';
-    let cod4 = '';
-    let cod5 = '';
-    let cod6 = '';
-    let cod7 = '';
-    if (document.getElementById('cod1') != null) {
-      cod1 = document.getElementById('cod1').value;
-    }
-    if (document.getElementById('cod2') != null) {
-      cod2 = document.getElementById('cod2').value;
-    }
-    if (document.getElementById('cod3') != null) {
-      cod3 = document.getElementById('cod3').value;
-    }
-    if (document.getElementById('cod4') != null) {
-      cod4 = document.getElementById('cod4').value;
-    }
-    if (document.getElementById('cod5') != null) {
-      cod5 = document.getElementById('cod5').value;
-    }
-    if (document.getElementById('cod6') != null) {
-      cod6 = document.getElementById('cod6').value;
-    }
-    if (document.getElementById('cod7') != null) {
-      cod7 = document.getElementById('cod7').value;
-    }
-    if (cod1.toString().trim() === '') {
+    if (document.getElementById('cod1').value === '') {
       alert('Codigo 1 Vacio');
-    } else {
-      seleccionado.codigos.push(cod1);
-      if (cod2.toString().trim() !== '') {
-        seleccionado.codigos.push(cod2);
-      }
-      if (cod3.toString().trim() !== '') {
-        seleccionado.codigos.push(cod3);
-      }
-      if (cod4.toString().trim() !== '') {
-        seleccionado.codigos.push(cod4);
-      }
-      if (cod5.toString().trim() !== '') {
-        seleccionado.codigos.push(cod5);
-      }
-      if (cod6.toString().trim() !== '') {
-        seleccionado.codigos.push(cod6);
-      }
-      if (cod7.toString().trim() !== '') {
-        seleccionado.codigos.push(cod7);
-      }
-      setModalInsertarCodigo(false);
       setinputcod2(false);
       setinputcod3(false);
       setinputcod4(false);
       setinputcod5(false);
       setinputcod6(false);
       setinputcod7(false);
-      alert(JSON.stringify(seleccionado.codigos));
+    } else {
+      seleccionado.codigos.push(document.getElementById('cod1').value);
+      setinputcod2(true);
+      if (document.getElementById('cod2').value !== '') {
+        setinputcod3(true);
+        seleccionado.codigos.push(document.getElementById('cod2').value);
+      }
+      if (document.getElementById('cod3').value !== '') {
+        seleccionado.codigos.push(document.getElementById('cod3').value);
+        setinputcod4(true);
+      }
+      if (document.getElementById('cod4').value !== '') {
+        seleccionado.codigos.push(document.getElementById('cod4').value);
+        setinputcod5(true);
+      }
+      if (document.getElementById('cod5').value !== '') {
+        seleccionado.codigos.push(document.getElementById('cod5').value);
+        setinputcod6(true);
+      }
+      if (document.getElementById('cod6').value !== '') {
+        seleccionado.codigos.push(document.getElementById('cod6').value);
+        setinputcod7(true);
+      }
+      if (document.getElementById('cod7').value !== '') {
+        alert('pedoooo');
+        alert(document.getElementById('cod7').value);
+        seleccionado.codigos.push(cod7);
+      }
+      setModalInsertarCodigo(false);
+      /* setinputcod4(false);
+      setinputcod5(false);
+      setinputcod6(false);
+      setinputcod7(false); */
       alert('Codigos Agregados Exitosamente');
     }
   };
   const insertarCodigos = () => {
-    /*if (seleccionado.codigos.length > 1) {
-      setinputcod2(true);
-      const cod2 = document.getElementById('cod2');
-      console.log(cod2.value);
-      //cod2.value = 'dfasd';
-    }
-    setinputcod3(false);
-    setinputcod4(false);
-    setinputcod5(false);
-    setinputcod6(false);
-    setinputcod7(false);*/
     setModalInsertarCodigo(true);
   };
   const GuardarPrecio = () => {
@@ -205,11 +184,11 @@ export default function AgregarProducto(props) {
   const handleChange = (e, num) => {
     if (num === 2) {
       setinputcod2(e.target.value);
-      setinputcod3(false);
+      /* setinputcod3(false);
       setinputcod4(false);
       setinputcod5(false);
       setinputcod6(false);
-      setinputcod7(false);
+      setinputcod7(false); */
 
       if (inputcod2 === false) {
         console.log('entra');
@@ -278,13 +257,38 @@ export default function AgregarProducto(props) {
     }
   };
   const cerrarModalAgregarCodigos = () => {
-    setModalInsertarCodigo(false);
     setinputcod2(false);
     setinputcod3(false);
     setinputcod4(false);
     setinputcod5(false);
     setinputcod6(false);
     setinputcod7(false);
+    if (seleccionado.codigos && seleccionado.codigos.length) {
+      if (document.getElementById('cod1').value !== '') {
+        setinputcod2(true);
+      }
+      if (document.getElementById('cod2').value !== '') {
+        setinputcod3(true);
+        alert('entro esta puercada, va pa fuera');
+      }
+      if (document.getElementById('cod3').value !== '') {
+        setinputcod4(true);
+      }
+      if (document.getElementById('cod4').value !== '') {
+        setinputcod5(true);
+      }
+      if (document.getElementById('cod5').value !== '') {
+        setinputcod6(true);
+      }
+      if (document.getElementById('cod6').value !== '') {
+        setinputcod6(true);
+      }
+      if (document.getElementById('cod7').value !== '') {
+        setinputcod7(true);
+      }
+    }
+    setModalInsertarCodigo(false);
+    /**/
   };
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
@@ -350,6 +354,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo1"
                   id="cod1"
+                  value={seleccionado.codigos[0]}
                   required
                   errorMessage="Este codigo es requerido"
                   validate={{
@@ -372,7 +377,7 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
-                  value=""
+                  value={seleccionado.codigos[1]}
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod2}
                   onChange={(e) => handleChange(e, 3)}
@@ -383,6 +388,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo3"
                   id="cod3"
+                  value={seleccionado.codigos[2]}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -399,6 +405,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo4"
                   id="cod4"
+                  value={seleccionado.codigos[3]}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -415,6 +422,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo5"
                   id="cod5"
+                  value={seleccionado.codigos[4]}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -431,6 +439,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo6"
                   id="cod6"
+                  value={seleccionado.codigos[5]}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -447,6 +456,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo7"
                   id="cod7"
+                  value={seleccionado.codigos[6]}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -492,8 +502,8 @@ export default function AgregarProducto(props) {
                   options={options}
                   value={options[0].value}
                   onClick={() => setSize(null)}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 2</label>
@@ -504,8 +514,8 @@ export default function AgregarProducto(props) {
                   autoComplete
                   options={options}
 
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 3</label>
@@ -515,8 +525,8 @@ export default function AgregarProducto(props) {
                   required
                   autoComplete
                   options={options}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 4</label>
@@ -526,8 +536,8 @@ export default function AgregarProducto(props) {
                   required
                   autoComplete
                   options={options}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 5</label>
@@ -537,8 +547,8 @@ export default function AgregarProducto(props) {
                   required
                   autoComplete
                   options={options}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 6</label>
@@ -548,8 +558,8 @@ export default function AgregarProducto(props) {
                   required
                   autoComplete
                   options={options}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 7</label>
@@ -559,8 +569,8 @@ export default function AgregarProducto(props) {
                   required
                   autoComplete
                   options={options}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
                 />
                 <br />
               </div>
@@ -627,8 +637,8 @@ export default function AgregarProducto(props) {
               required
               autoComplete
               options={options}
-              // options={this.state.productosEnBodega}
-              // onChange={this.handleChange}
+            // options={this.state.productosEnBodega}
+            // onChange={this.handleChange}
             />
           </div>
           <br></br>
@@ -735,8 +745,8 @@ export default function AgregarProducto(props) {
               name="Fecha"
               name="precio2"
               id="precio2"
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Precio 3</label>
@@ -746,8 +756,8 @@ export default function AgregarProducto(props) {
               name="Etiqueta"
               name="precio3"
               id="precio3"
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
           </div>
         </ModalBody>
