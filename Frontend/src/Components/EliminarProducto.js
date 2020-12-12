@@ -233,31 +233,39 @@ export default function EliminarProducto(props) {
   };
   const GuardarCodigos = (i) => {
     const array = [];
+    seleccionado.codigos[0] = document.getElementById('mcod1').value;
+    seleccionado.codigos[1] = document.getElementById('modcod2').value;
+    seleccionado.codigos[2] = document.getElementById('modcod3').value;
+    seleccionado.codigos[3] = document.getElementById('modcod4').value;
+    seleccionado.codigos[4] = document.getElementById('modcod5').value;
+    seleccionado.codigos[5] = document.getElementById('modcod6').value;
+    seleccionado.codigos[6] = document.getElementById('modcod7').value;
     // alert(JSON.stringify(seleccionado.codigos));
     alert(seleccionado.codigos[0]);
-    if (seleccionado.codigos[0] === '') {
+    if (i.codigos[0] === '') {
       alert('Codigo 1 Vacio');
     } else {
-      array.push(seleccionado.codigos[0]);
+      array.push(codigo1);
     }
-    if (codigo2.toString().trim !== '') {
+    if (i.codigos[1] !== '') {
       array.push(codigo2);
     }
-    if (codigo3.toString().trim !== '') {
+    if (i.codigos[2] !== '') {
       array.push(codigo3);
     }
-    if (codigo4.toString().trim !== '') {
+    if (i.codigos[3] !== '') {
       array.push(codigo4);
     }
-    if (codigo5.toString().trim !== '') {
+    if (i.codigos[4] !== '') {
       array.push(codigo5);
     }
-    if (codigo6.toString().trim !== '') {
+    if (i.codigos[5] !== '') {
       array.push(codigo6);
     }
-    if (codigo7.toString().trim !== '') {
+    if (i.codigos[6] !== '') {
       array.push(codigo7);
     }
+    alert(JSON.stringify(array));
     seleccionado.codigos = [];
     seleccionado.codigos = array;
     // console.log(i.codigos[0]);
@@ -462,7 +470,7 @@ export default function EliminarProducto(props) {
                       name="mcodigo1"
                       id="mcod1"
                       // placeholder = {seleccionado.codigos[0]}
-                      value={codigo1}
+                      value={seleccionado.codigos[0]}
                       required
                       errorMessage="Este codigo es requerido"
                       validate={{
@@ -484,7 +492,7 @@ export default function EliminarProducto(props) {
                       type="text"
                       name="modcodigo2"
                       id="modcod2"
-                      value={codigo2}
+                      value={seleccionado.codigos[1]}
                       validate={{
                         pattern: { value: '^[A-Za-z0-9]+$' },
                         minLength: { value: 1 },
