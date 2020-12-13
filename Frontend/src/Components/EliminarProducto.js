@@ -11,14 +11,20 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import '../Styles/InterfazProducto.css';
+import SelectSearch from 'react-select-search';
 import axios from 'axios';
 import AvField from 'availity-reactstrap-validation/lib/AvField';
 import AvForm from 'availity-reactstrap-validation/lib/AvForm';
 import imagePath from '../Icons/lupa1.jpeg';
+import { Confirm } from './Confirm';
 
 export default function EliminarProducto(props) {
   const dataApuntes = [];
-
+  const options = [
+    { name: 'Swedish', value: 'sv' },
+    { name: 'English', value: 'en' },
+    { name: 'patito', value: 'patito' },
+  ];
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
@@ -58,6 +64,7 @@ export default function EliminarProducto(props) {
   /*
   Metodo para fuardar codigos del ModalModificar
    */
+
   const handleChange = (e, num) => {
     if (num === 2) {
       setinputcod2(e.target.value);
@@ -85,27 +92,38 @@ export default function EliminarProducto(props) {
 
   /* Metodo para fuardar codigos del ModalModificar */
   const GuardarProveedores = () => {
-    seleccionado.proveedores[0] = document.getElementById('modprov1').value;
-    seleccionado.proveedores[1] = document.getElementById('modprov2').value;
-    seleccionado.proveedores[2] = document.getElementById('modprov3').value;
-    seleccionado.proveedores[3] = document.getElementById('modprov4').value;
-    seleccionado.proveedores[4] = document.getElementById('modprov5').value;
-    seleccionado.proveedores[5] = document.getElementById('modprov6').value;
-    seleccionado.proveedores[6] = document.getElementById('modprov7').value;
-    setModalModificarProveedores(false);
-    alert(seleccionado.proveedores[0]);
+    if (document.getElementById('modprov1') === null) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar almenos el Proveedor 1.',
+        onok: () => {},
+      });
+    } else {
+      seleccionado.proveedores[0] = document.getElementById('modprov1').value;
+      seleccionado.proveedores[1] = document.getElementById('modprov2').value;
+      seleccionado.proveedores[2] = document.getElementById('modprov3').value;
+      seleccionado.proveedores[3] = document.getElementById('modprov4').value;
+      seleccionado.proveedores[4] = document.getElementById('modprov5').value;
+      seleccionado.proveedores[5] = document.getElementById('modprov6').value;
+      seleccionado.proveedores[6] = document.getElementById('modprov7').value;
+      setModalModificarProveedores(false);
+    }
   };
   const GuardarPrecio = () => {
     seleccionado.precios[0] = document.getElementById('modprecio1').value;
     seleccionado.precios[1] = document.getElementById('modprecio2').value;
     seleccionado.precios[2] = document.getElementById('modprecio3').value;
     setModalModificarPrecios(false);
-    alert(seleccionado.precios[0]);
   };
   const onDelete = (memberId) => {
     axios.delete(`http://localhost:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
+    /*Confirm.open({
+      title: '',
+      message: 'Producto Eliminado Exitosamente',
+      onok: () => {},
+    });*/
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
@@ -168,9 +186,24 @@ export default function EliminarProducto(props) {
     }
     */
   };
-  const Modificar = (elemento) => {
-    setSeleccionado(elemento);
-    console.log(elemento.nombre);
+  /*const colocarValorMarca = () => {
+    alert(marca);
+    for (let index = 0; index < options.length; index++) {
+      const element = options[index];
+      if (element.name === marca) {
+        return marca;
+      }
+    }
+    return 0;
+  };*/
+  const [cantsel, setCantsel] = useState(seleccionado.cantidad);
+  const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
+
+  const Modificar = (element) => {
+    setSeleccionado(element);
+    setCantminsel(element.cantidad_minima);
+    setCantsel(element.cantidad);
+    seleccionado.marca = element.marca;
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -181,10 +214,7 @@ export default function EliminarProducto(props) {
     setSeleccionado(elemento);
     setmodalVerDescripciones(true);
   };
-  const options = [
-    { name: 'Swedish', value: 'sv' },
-    { name: 'English', value: 'en' },
-  ];
+
   const myFunction = () => {
     // alert("eentoroo");
     const input = document.getElementById('myInput');
@@ -241,9 +271,12 @@ export default function EliminarProducto(props) {
     seleccionado.codigos[5] = document.getElementById('modcod6').value;
     seleccionado.codigos[6] = document.getElementById('modcod7').value;
     // alert(JSON.stringify(seleccionado.codigos));
-    alert(seleccionado.codigos[0]);
     if (i.codigos[0] === '') {
-      alert('Codigo 1 Vacio');
+      Confirm.open({
+        title: 'Error',
+        message: `El Codigo 1 de ${seleccionado.nombre} esta vacio`,
+        onok: () => {},
+      });
     } else {
       array.push(codigo1);
     }
@@ -265,7 +298,6 @@ export default function EliminarProducto(props) {
     if (i.codigos[6] !== '') {
       array.push(codigo7);
     }
-    alert(JSON.stringify(array));
     seleccionado.codigos = [];
     seleccionado.codigos = array;
     // console.log(i.codigos[0]);
@@ -281,6 +313,7 @@ export default function EliminarProducto(props) {
     setModalModificarCodigos(false);
     // alert(seleccionado.codigos[1]);
     */
+    setModalModificarCodigos(false);
   };
   const [proveedor1, setproveedor1] = useState('');
   const [proveedor2, setproveedor2] = useState('');
@@ -322,11 +355,35 @@ export default function EliminarProducto(props) {
       [name]: value,
     }));
   };
+  function limit() {
+    const temp = document.getElementById('modcantidad_minima');
+    const maxValue = document.getElementById('modcantidad').value;
+    temp.value = Math.min(maxValue, temp.value);
+  }
+  const manejarCambiocant = (e, n) => {
+    setCantsel(e.target.value);
+  };
+
+  const manejarCambiocantmin = (e, n) => {
+    const num = document.getElementById('modcantidad_minima').value;
+    const num2 = document.getElementById('modcantidad').value;
+    if (num > num2) {
+      document.getElementById('modcantidad_minima').onchange = limit;
+      setCantminsel(e.target.value);
+      // seleccionado.cantidad_minima = e.target.value;
+    } else {
+      document.getElementById('modcantidad').onchange = limit;
+      setCantminsel(e.target.value);
+      //seleccionado.cantidad_minima = e.target.value;
+    }
+    //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
+  };
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
     }
   };
+
   return (
     <div align="center">
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
@@ -416,7 +473,18 @@ export default function EliminarProducto(props) {
                   </Button>{' '}
                 </td>
                 <td>
-                  <Button onClick={() => eliminar(elemento._id)} color="danger">
+                  <Button
+                    onClick={() =>
+                      Confirm.open({
+                        title: 'Eliminar Producto',
+                        message: `Esta seguro de que quiere eliminar el Producto ${elemento.nombre}?`,
+                        onok: () => {
+                          eliminar(elemento._id);
+                        },
+                      })
+                    }
+                    color="danger"
+                  >
                     Eliminar
                   </Button>{' '}
                 </td>
@@ -433,6 +501,7 @@ export default function EliminarProducto(props) {
             height: '95vh',
             'overflow-y': 'auto',
             top: '20px',
+            maxWidth: '550px',
           }}
         >
           <ModalHeader>
@@ -454,7 +523,15 @@ export default function EliminarProducto(props) {
                 Modificar Proveedor
               </Button>{' '}
             </div>
-            <Modal isOpen={ModalModificarCodigos}>
+            <Modal
+              style={{
+                height: '95vh',
+                'overflow-y': 'auto',
+                top: '20px',
+                maxWidth: '550px',
+              }}
+              isOpen={ModalModificarCodigos}
+            >
               <ModalHeader>
                 <div className="text-center">
                   <h3>Modificar Códigos</h3>
@@ -463,7 +540,7 @@ export default function EliminarProducto(props) {
               <ModalBody>
                 <div className="form-group">
                   <AvForm>
-                    <label>codigo 1</label>
+                    <label>Codigo 1</label>
                     <AvField
                       className="form-control"
                       type="text"
@@ -485,7 +562,7 @@ export default function EliminarProducto(props) {
                     />
                   </AvForm>
                   <br />
-                  <label>codigo 2</label>
+                  <label>Codigo 2</label>
                   <AvForm>
                     <AvField
                       className="form-control"
@@ -498,12 +575,13 @@ export default function EliminarProducto(props) {
                         minLength: { value: 1 },
                       }}
                       onChange={(event) => setCodigo2(event.target.value)}
+                      onKeyDown={handleKeyDown}
                       // disabled={!inputcod2}
                       // onChange={(e) => handleChange(e, 3)}
                     />
                   </AvForm>
                   <br />
-                  <label>codigo 3</label>
+                  <label>Codigo 3</label>
                   <AvForm>
                     <AvField
                       className="form-control"
@@ -516,12 +594,13 @@ export default function EliminarProducto(props) {
                         minLength: { value: 1 },
                       }}
                       onChange={(event) => setCodigo3(event.target.value)}
+                      onKeyDown={handleKeyDown}
                       // disabled={!inputcod3}
                       // onChange={(e) => handleChange(e, 4)}
                     />
                   </AvForm>
                   <br />
-                  <label>codigo 4</label>
+                  <label>Codigo 4</label>
                   <AvForm>
                     <AvField
                       className="form-control"
@@ -534,12 +613,13 @@ export default function EliminarProducto(props) {
                         minLength: { value: 1 },
                       }}
                       onChange={(event) => setCodigo4(event.target.value)}
+                      onKeyDown={handleKeyDown}
                       // disabled={!inputcod4}
                       // onChange={(e) => handleChange(e, 5)}
                     />
                   </AvForm>
                   <br />
-                  <label>codigo 5</label>
+                  <label>Codigo 5</label>
                   <AvForm>
                     <AvField
                       className="form-control"
@@ -552,12 +632,13 @@ export default function EliminarProducto(props) {
                         minLength: { value: 1 },
                       }}
                       onChange={(event) => setCodigo5(event.target.value)}
+                      onKeyDown={handleKeyDown}
                       // disabled={!inputcod5}
                       // onChange={(e) => handleChange(e, 6)}
                     />
                   </AvForm>
                   <br />
-                  <label>codigo 6</label>
+                  <label>Codigo 6</label>
                   <AvForm>
                     <AvField
                       className="form-control"
@@ -570,12 +651,13 @@ export default function EliminarProducto(props) {
                         minLength: { value: 1 },
                       }}
                       onChange={(event) => setCodigo6(event.target.value)}
+                      onKeyDown={handleKeyDown}
                       // disabled={!inputcod6}
                       // onChange={(e) => handleChange(e, 7)}
                     />
                   </AvForm>
                   <br />
-                  <label>codigo 7</label>
+                  <label>Codigo 7</label>
                   <AvForm>
                     <AvField
                       className="form-control"
@@ -587,7 +669,8 @@ export default function EliminarProducto(props) {
                         pattern: { value: '^[A-Za-z0-9]+$' },
                         minLength: { value: 1 },
                       }}
-                      // onChange={(event) => setCodigo7(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      onChange={(event) => setCodigo7(event.target.value)}
                       // disabled={!inputcod7}
                     />
                   </AvForm>
@@ -595,7 +678,18 @@ export default function EliminarProducto(props) {
                 </div>
               </ModalBody>
               <ModalFooter>
-                <button className="btn btn-primary" onClick={() => GuardarCodigos(seleccionado)}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    Confirm.open({
+                      title: 'Modificar Codigos',
+                      message: 'Esta seguro de que quiere modificar estos codigos?',
+                      onok: () => {
+                        GuardarCodigos(seleccionado);
+                      },
+                    })
+                  }
+                >
                   Modificar Código
                 </button>
                 <button className="btn btn-danger" onClick={() => setModalModificarCodigos(false)}>
@@ -603,7 +697,15 @@ export default function EliminarProducto(props) {
                 </button>
               </ModalFooter>
             </Modal>
-            <Modal isOpen={ModalModificarProveedores}>
+            <Modal
+              style={{
+                height: '95vh',
+                'overflow-y': 'auto',
+                top: '20px',
+                maxWidth: '550px',
+              }}
+              isOpen={ModalModificarProveedores}
+            >
               <ModalHeader>
                 <div>
                   <h3>Modificar Proveedores</h3>
@@ -611,7 +713,152 @@ export default function EliminarProducto(props) {
               </ModalHeader>
               <ModalBody>
                 <div className="form-group">
-                  <label>proveedor 1</label>
+                  <label>Proveedor 1</label>
+                  <SelectSearch
+                    search
+                    // placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[0]
+                        ? seleccionado.proveedores[0]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[0]
+                        ? seleccionado.proveedores[0]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  <br />
+                  <label>Proveedor 2</label>
+                  <SelectSearch
+                    search
+                    // placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[1]
+                        ? seleccionado.proveedores[1]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[1]
+                        ? seleccionado.proveedores[1]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  <br />
+                  <label>Proveedor 3</label>
+                  <SelectSearch
+                    search
+                    //placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[2]
+                        ? seleccionado.proveedores[2]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[2]
+                        ? seleccionado.proveedores[2]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  <br />
+                  <label>Proveedor 4</label>
+                  <SelectSearch
+                    search
+                    //placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[3]
+                        ? seleccionado.proveedores[3]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[3]
+                        ? seleccionado.proveedores[3]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  <br />
+                  <label>Proveedor 5</label>
+                  <SelectSearch
+                    search
+                    //placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[4]
+                        ? seleccionado.proveedores[4]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[4]
+                        ? seleccionado.proveedores[4]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  <br />
+                  <label>Proveedor 6</label>
+                  <SelectSearch
+                    search
+                    //placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[5]
+                        ? seleccionado.proveedores[5]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[5]
+                        ? seleccionado.proveedores[5]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  <br />
+                  <label>Proveedor 7</label>
+                  <SelectSearch
+                    search
+                    required
+                    autoComplete
+                    options={options}
+                    placeholder={
+                      seleccionado.proveedores[6]
+                        ? seleccionado.proveedores[6]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={
+                      seleccionado.proveedores[6]
+                        ? seleccionado.proveedores[6]
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    // options={this.state.productosEnBodega}
+                    // onChange={this.handleChange}
+                  />
+                  {/*<label>proveedor 1</label>
                   <input
                     className="form-control"
                     type="text"
@@ -680,7 +927,7 @@ export default function EliminarProducto(props) {
                     id="modprov7"
                     value={proveedor7}
                     onChange={(event) => setproveedor7(event.target.value)}
-                  />
+                  />*/}
                   <br />
                 </div>
               </ModalBody>
@@ -731,7 +978,17 @@ export default function EliminarProducto(props) {
             </div>
             <div>
               <h3>Marca</h3>
-              <input
+              <SelectSearch
+                search
+                //placeholder="Encuentre la Marca del Producto"
+                options={options}
+                //placeholder={seleccionado.marca}
+                //printOptions="on-focus"
+                value={seleccionado.marca}
+                // options={this.state.productosEnBodega}
+                // onChange={this.handleChange}
+              />
+              {/*<input
                 className="form-control"
                 type="text"
                 name="marca"
@@ -739,31 +996,38 @@ export default function EliminarProducto(props) {
                 placeholder={seleccionado.marca}
                 value={seleccionado ? seleccionado.marca : ''}
                 onChange={manejarCambio}
-              />
+              />*/}
+              <br />
             </div>
             <Button onClick={() => changePrecio()} color="primary">
               Precios
-            </Button>{' '}
+            </Button>
             <div>
-              <h3>Cantidad</h3>
+              <br />
+              <div>
+                <h3>Cantidad</h3>
+              </div>
               <input
                 className="form-control"
-                type="Number"
-                name="cantidad"
+                type="number"
                 id="modcantidad"
-                value={seleccionado ? seleccionado.cantidad : ''}
-                onChange={manejarCambio}
+                //placeholder={seleccionado.cantidad}
+                min={cantminsel}
+                value={cantsel}
+                onChange={(e) => manejarCambiocant(e, 0)}
               />
             </div>
             <div>
               <h3>Cantidad Mínima</h3>
               <input
                 className="form-control"
-                type="Number"
-                name="cantidad_minima"
+                type="number"
                 id="modcantidad_minima"
-                value={seleccionado ? seleccionado.cantidad_minima : ''}
-                onChange={manejarCambio}
+                //placeholder={seleccionado.cantidad_minima}
+                max={cantsel}
+                value={cantminsel}
+                //min={seleccionado.cantidad_minima}
+                onChange={(e) => manejarCambiocantmin(e, 1)}
               />
             </div>
             <div>
@@ -798,7 +1062,18 @@ export default function EliminarProducto(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={() => updateItem(seleccionado._id)}>
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                Confirm.open({
+                  title: 'Guardar Cambios',
+                  message: `Esta seguro de que quiere modificar la/el ${seleccionado.nombre}?`,
+                  onok: () => {
+                    updateItem(seleccionado._id);
+                  },
+                })
+              }
+            >
               Guardar Cambios
             </button>
             <button className="btn btn-danger" onClick={() => setModalModificar(false)}>
@@ -806,7 +1081,15 @@ export default function EliminarProducto(props) {
             </button>
           </ModalFooter>
         </Modal>
-        <Modal isOpen={ModalModificarPrecios}>
+        <Modal
+          style={{
+            height: '95vh',
+            'overflow-y': 'auto',
+            top: '20px',
+            maxWidth: '550px',
+          }}
+          isOpen={ModalModificarPrecios}
+        >
           <ModalHeader>
             <div className="text-center">
               <h3>Modificar Precios</h3>
@@ -846,7 +1129,18 @@ export default function EliminarProducto(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                Confirm.open({
+                  title: 'Modificar Precios',
+                  message: 'Esta seguro de que quiere modificar estos precios?',
+                  onok: () => {
+                    GuardarPrecio();
+                  },
+                })
+              }
+            >
               Modificar Precio
             </button>
             <button className="btn btn-danger" onClick={() => setModalModificarPrecios(false)}>
@@ -855,15 +1149,23 @@ export default function EliminarProducto(props) {
           </ModalFooter>
         </Modal>
       </div>
-      <Modal isOpen={modalVerCodigos}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalVerCodigos}
+      >
         <ModalHeader>
           <div className="text-center">
-            <h3>Agregar Productos</h3>
+            <h3>Codigos de {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label>codigo 1</label>
+            <label>Codigo 1</label>
             <input
               className="form-control"
               type="text"
@@ -874,7 +1176,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 2</label>
+            <label>Codigo 2</label>
             <input
               className="form-control"
               type="text"
@@ -885,7 +1187,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 3</label>
+            <label>Codigo 3</label>
             <input
               className="form-control"
               type="text"
@@ -896,7 +1198,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 4</label>
+            <label>Codigo 4</label>
             <input
               className="form-control"
               type="text"
@@ -907,7 +1209,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 5</label>
+            <label>Codigo 5</label>
             <input
               className="form-control"
               type="text"
@@ -918,7 +1220,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 6</label>
+            <label>Codigo 6</label>
             <input
               className="form-control"
               type="text"
@@ -929,7 +1231,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 7</label>
+            <label>Codigo 7</label>
             <input
               className="form-control"
               type="text"
@@ -948,15 +1250,23 @@ export default function EliminarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalVerProveedor}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalVerProveedor}
+      >
         <ModalHeader>
           <div>
-            <h3>Modificar Productos</h3>
+            <h3>Proveedores de {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label>proveedor 1</label>
+            <label>Proveedor 1</label>
             <input
               className="form-control"
               type="text"
@@ -966,7 +1276,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 2</label>
+            <label>Proveedor 2</label>
             <input
               className="form-control"
               type="text"
@@ -977,7 +1287,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 3</label>
+            <label>Proveedor 3</label>
             <input
               className="form-control"
               type="text"
@@ -988,7 +1298,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 4</label>
+            <label>Proveedor 4</label>
             <input
               className="form-control"
               type="text"
@@ -999,7 +1309,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 5</label>
+            <label>Proveedor 5</label>
             <input
               className="form-control"
               type="text"
@@ -1010,7 +1320,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 6</label>
+            <label>Proveedor 6</label>
             <input
               className="form-control"
               type="text"
@@ -1021,7 +1331,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 7</label>
+            <label>Proveedor 7</label>
             <input
               className="form-control"
               type="text"
@@ -1040,12 +1350,20 @@ export default function EliminarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalVerDescripciones}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalVerDescripciones}
+      >
         <ModalHeader></ModalHeader>
         <ModalBody>
           <div>
             <div>
-              <h3>Descripción corta</h3>
+              <h3>Descripción corta de {seleccionado.nombre}</h3>
             </div>
             <FormGroup class="style">
               <Label for="exampleText"></Label>
@@ -1060,7 +1378,7 @@ export default function EliminarProducto(props) {
           </div>
           <div>
             <div>
-              <h3>Descripción larga </h3>
+              <h3>Descripción larga de {seleccionado.nombre}</h3>
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlTextarea1"></label>
@@ -1080,10 +1398,18 @@ export default function EliminarProducto(props) {
           </Button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={ModalVerPrecios}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={ModalVerPrecios}
+      >
         <ModalHeader>
           <div className="text-center">
-            <h3>Modificar Precios</h3>
+            <h3>Precios de {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
