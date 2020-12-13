@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
+import {
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+  Button,
+  Label,
+  FormGroup,
+  CustomInput,
+} from 'reactstrap';
 import axios from 'axios';
+import {
+  AvForm,
+  AvField,
+  AvGroup,
+  AvInput,
+  AvFeedback,
+  AvRadioGroup,
+  AvRadio,
+  AvCheckboxGroup,
+  AvCheckbox,
+} from 'availity-reactstrap-validation';
 import Formulario from './FormularioBodega';
 import CartaBodegas from './CartaBodega';
 
@@ -57,17 +77,65 @@ const CrearBodega = (props) => {
             <CartaBodegas {...form} />
           </div>
           <div className="col-sm">
-            <Formulario onChange={handleChange} form={form} />
+            {/* <Formulario onChange={handleChange} form={form} /> */}
+            <AvForm>
+              <AvField
+                name="numBodega"
+                label="Numero de bodega"
+                type="number"
+                onChange={handleChange}
+                value={form.numBodega}
+              />
+              <AvField
+                name="Description"
+                label="Descripcion"
+                type="text"
+                onChange={handleChange}
+                value={form.Description}
+                validate={{
+                  required: { value: true, errorMessage: 'Campo debe ser llenado ' },
+                  pattern: {
+                    value: '^[A-Za-z0-9]',
+                    errorMessage: 'Este campo debe estar compuesto solo de letras y numeros',
+                  },
+                }}
+              />
+              <AvField
+                name="Encargado"
+                label="Encargado"
+                type="text"
+                onChange={handleChange}
+                value={form.Encargado}
+                validate={{
+                  required: { value: true, errorMessage: 'Campo debe ser llenado' },
+                  pattern: {
+                    value: '^[A-Za-z0-9]',
+                    errorMessage: 'Este Campo debe ser llenado con letras y numeros',
+                  },
+                }}
+              />
+              <AvField
+                name="CantPasillos"
+                label="Cantidad de pasillos"
+                type="number"
+                onChange={handleChange}
+                value={form.CantPasillos}
+              />
+            </AvForm>
           </div>
         </div>
       </ModalBody>
       <ModalFooter>
-        <button className="btn btn-primary" onClick = {() => EscribirBodegas()}>
-          CREAR BODEGA
-        </button>
-        <button className="btn btn-danger" onClick={props.change}>
-          CANCELAR
-        </button>
+        <FormGroup>
+          <div className="row">
+            <Button className="btn btn-primary" onClick={() => EscribirBodegas()}>
+              CREAR
+            </Button>
+            <Button className="btn btn-primary" onClick={props.change}>
+              CANCELAR
+            </Button>
+          </div>
+        </FormGroup>
       </ModalFooter>
     </Modal>
   );
