@@ -53,6 +53,9 @@ export default function EliminarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
+  const [cantsel, setCantsel] = useState(seleccionado.cantidad);
+  const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
+
   useEffect(() => {
     const fecthData = async () => {
       await axios.get('http://localhost:3001/api/productos').then((response) => {
@@ -196,8 +199,6 @@ export default function EliminarProducto(props) {
     }
     return 0;
   };*/
-  const [cantsel, setCantsel] = useState(seleccionado.cantidad);
-  const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
 
   const Modificar = (element) => {
     setSeleccionado(element);

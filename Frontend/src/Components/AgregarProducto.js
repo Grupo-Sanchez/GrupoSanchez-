@@ -56,6 +56,39 @@ export default function AgregarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
+  const [proveedores, setProveedores] = useState({});
+  useEffect(() => {
+    const fecthData = async () => {
+      await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+        // setData(response.data);
+        const proveedoresDB = response.data;
+        const proveedoresagregados = [];
+        for (let index = 0; index < proveedoresDB.length; index++) {
+          const element = proveedoresDB[index];
+          proveedoresagregados.push({
+            company: element.company,
+            value: element._id,
+            agencia: element.agencia,
+            name: element.nombre,
+            apellidos: element.apellidos,
+            genero: element.genero,
+            email: element.email,
+            telefono: element.telefono,
+            direccion1: element.direccion1,
+            direccion2: element.direccion2,
+            ciudad: element.ciudad,
+            departamento: element.departamento,
+            codigoPostal: element.codigoPostal,
+            pais: element.pais,
+            comentario: element.comentario,
+            _v: element._v,
+          });
+        }
+        setProveedores(proveedoresagregados);
+      });
+    };
+    fecthData();
+  }, []);
   const prueba = async () => {
     const campos = {
       nombre: seleccionado.nombre,
@@ -84,6 +117,32 @@ export default function AgregarProducto(props) {
       this.setState({some:'val',arr:this.state.arr})
   }
   */
+  const proveedoresSeleccionados = [{}];
+  const handleOnChange = (value) => {
+    proveedores.filter((x) => {
+      if (x.value === value) {
+        proveedoresSeleccionados.push({
+          company: x.company,
+          value: x._id,
+          agencia: x.agencia,
+          name: x.nombre,
+          apellidos: x.apellidos,
+          genero: x.genero,
+          email: x.email,
+          telefono: x.telefono,
+          direccion1: x.direccion1,
+          direccion2: x.direccion2,
+          ciudad: x.ciudad,
+          departamento: x.departamento,
+          codigoPostal: x.codigoPostal,
+          pais: x.pais,
+          comentario: x.comentario,
+          _v: x._v,
+        });
+      }
+      return 0;
+    });
+  };
   function limit() {
     const temp = document.getElementById('cantidad_minima');
     const maxValue = document.getElementById('cantidad').value;
@@ -574,11 +633,13 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
+                  onChange={handleOnChange(size)}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
                 />
+                <p>prov: {size}</p>
                 <br />
                 <label>Proveedor 2</label>
                 <SelectSearch
@@ -587,7 +648,7 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
                 />
@@ -598,7 +659,7 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
@@ -610,7 +671,7 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
@@ -622,7 +683,7 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
@@ -634,7 +695,7 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
@@ -646,7 +707,7 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
+                  options={proveedores}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
