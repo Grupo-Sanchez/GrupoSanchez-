@@ -26,5 +26,6 @@ module.exports = {
     'no-param-reassign': 0,
     'operator-linebreak': 0,
     'spaced-comment': 0,
+    'prefer-destructuring': ['error', { object: true, array: false }],
   },
 };

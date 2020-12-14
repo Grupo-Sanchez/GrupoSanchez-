@@ -12,7 +12,9 @@ import { AvForm, AvField } from 'availity-reactstrap-validation';
 import React, { useState, useEffect } from 'react';
 import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarInterfazProductos.css';
+import '../Styles/ConfirmStyle.css';
 import axios from 'axios';
+import { Confirm } from './Confirm';
 
 export default function AgregarProducto(props) {
   const dataApuntes = [];
@@ -24,7 +26,7 @@ export default function AgregarProducto(props) {
   const [cod5, setcod5] = useState('');
   const [cod6, setcod6] = useState('');
   const [cod7, setcod7] = useState('');
-
+  const [size, setSize] = useState(null);
   const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
@@ -54,6 +56,39 @@ export default function AgregarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
+  const [proveedores, setProveedores] = useState({});
+  useEffect(() => {
+    const fecthData = async () => {
+      await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+        // setData(response.data);
+        const proveedoresDB = response.data;
+        const proveedoresagregados = [];
+        for (let index = 0; index < proveedoresDB.length; index++) {
+          const element = proveedoresDB[index];
+          proveedoresagregados.push({
+            company: element.company,
+            value: element._id,
+            agencia: element.agencia,
+            name: element.nombre,
+            apellidos: element.apellidos,
+            genero: element.genero,
+            email: element.email,
+            telefono: element.telefono,
+            direccion1: element.direccion1,
+            direccion2: element.direccion2,
+            ciudad: element.ciudad,
+            departamento: element.departamento,
+            codigoPostal: element.codigoPostal,
+            pais: element.pais,
+            comentario: element.comentario,
+            _v: element._v,
+          });
+        }
+        setProveedores(proveedoresagregados);
+      });
+    };
+    fecthData();
+  }, []);
   const prueba = async () => {
     const campos = {
       nombre: seleccionado.nombre,
@@ -70,7 +105,11 @@ export default function AgregarProducto(props) {
     };
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
-    alert('¡Producto Agregado!');
+    Confirm.open({
+      title: '',
+      message: '¡Producto Agregado!',
+      onok: () => {},
+    });
   };
   /*
   HandleChange(event){
@@ -78,7 +117,37 @@ export default function AgregarProducto(props) {
       this.setState({some:'val',arr:this.state.arr})
   }
   */
-
+  const proveedoresSeleccionados = [{}];
+  const handleOnChange = (value) => {
+    proveedores.filter((x) => {
+      if (x.value === value) {
+        proveedoresSeleccionados.push({
+          company: x.company,
+          value: x._id,
+          agencia: x.agencia,
+          name: x.nombre,
+          apellidos: x.apellidos,
+          genero: x.genero,
+          email: x.email,
+          telefono: x.telefono,
+          direccion1: x.direccion1,
+          direccion2: x.direccion2,
+          ciudad: x.ciudad,
+          departamento: x.departamento,
+          codigoPostal: x.codigoPostal,
+          pais: x.pais,
+          comentario: x.comentario,
+          _v: x._v,
+        });
+      }
+      return 0;
+    });
+  };
+  function limit() {
+    const temp = document.getElementById('cantidad_minima');
+    const maxValue = document.getElementById('cantidad').value;
+    temp.value = Math.min(maxValue, temp.value);
+  }
   const manejarCambio = (e) => {
     const { name, value } = e.target;
     setSeleccionado((prevState) => ({
@@ -86,11 +155,30 @@ export default function AgregarProducto(props) {
       [name]: value,
     }));
   };
+  const manejarCambiocant = (e, n) => {
+    seleccionado.cantidad = e.target.value;
+  };
+
+  const manejarCambiocantmin = (e, n) => {
+    const num = document.getElementById('cantidad_minima').value;
+    const num2 = document.getElementById('cantidad').value;
+    if (num > num2) {
+      document.getElementById('cantidad_minima').onchange = limit;
+      seleccionado.cantidad_minima = e.target.value;
+    } else {
+      document.getElementById('cantidad').onchange = limit;
+      seleccionado.cantidad_minima = e.target.value;
+    }
+    //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
+  };
   const GuardarCodigos = () => {
     seleccionado.codigos = [];
-    alert(JSON.stringify(seleccionado.codigos));
     if (document.getElementById('cod1').value === '') {
-      alert('Codigo 1 Vacio');
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar almenos el Codigo 1.',
+        onok: () => {},
+      });
       setinputcod2(false);
       setinputcod3(false);
       setinputcod4(false);
@@ -121,8 +209,6 @@ export default function AgregarProducto(props) {
         setinputcod7(true);
       }
       if (document.getElementById('cod7').value !== '') {
-        alert('pedoooo');
-        alert(document.getElementById('cod7').value);
         seleccionado.codigos.push(cod7);
       }
       setModalInsertarCodigo(false);
@@ -130,7 +216,11 @@ export default function AgregarProducto(props) {
       setinputcod5(false);
       setinputcod6(false);
       setinputcod7(false); */
-      alert('Codigos Agregados Exitosamente');
+      Confirm.open({
+        title: '',
+        message: 'Codigos Agregados Exitosamente',
+        onok: () => {},
+      });
     }
   };
   const insertarCodigos = () => {
@@ -150,7 +240,11 @@ export default function AgregarProducto(props) {
       precio3 = document.getElementById('precio3').value != null;
     }
     if (precio1.toString().trim() === '') {
-      alert('Debe ingresar precio 1');
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar almenos el Precio 1.',
+        onok: () => {},
+      });
     } else {
       seleccionado.precio.push(precio1);
       if (precio2.toString().trim() !== '') {
@@ -160,7 +254,11 @@ export default function AgregarProducto(props) {
         seleccionado.precio.push(precio3);
       }
       setModalInsertarPrecio(false);
-      alert('Precios agregados exitosamente');
+      Confirm.open({
+        title: '',
+        message: 'Precios Agregados Exitosamente',
+        onok: () => {},
+      });
     }
     /*
     seleccionado.precio.push(document.getElementById('precio1').value);
@@ -171,15 +269,27 @@ export default function AgregarProducto(props) {
     */
   };
   const GuardarProveedores = () => {
-    seleccionado.proveedores.push(document.getElementById('prov1').value);
-    seleccionado.proveedores.push(document.getElementById('prov2').value);
-    seleccionado.proveedores.push(document.getElementById('prov3').value);
-    seleccionado.proveedores.push(document.getElementById('prov4').value);
-    seleccionado.proveedores.push(document.getElementById('prov5').value);
-    seleccionado.proveedores.push(document.getElementById('prov6').value);
-    seleccionado.proveedores.push(document.getElementById('prov7').value);
-    setModalInsertarProveedor(false);
-    alert(seleccionado.proveedores[0]);
+    if (document.getElementById('prov1').value === undefined) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar almenos el Proveedor 1.',
+        onok: () => {},
+      });
+    } else {
+      seleccionado.proveedores.push(document.getElementById('prov1').value);
+      seleccionado.proveedores.push(document.getElementById('prov2').value);
+      seleccionado.proveedores.push(document.getElementById('prov3').value);
+      seleccionado.proveedores.push(document.getElementById('prov4').value);
+      seleccionado.proveedores.push(document.getElementById('prov5').value);
+      seleccionado.proveedores.push(document.getElementById('prov6').value);
+      seleccionado.proveedores.push(document.getElementById('prov7').value);
+      setModalInsertarProveedor(false);
+    }
+  };
+  const maxLengthCheck = (object) => {
+    if (object.target.value.length > object.target.maxLength) {
+      object.target.value = object.target.value.slice(0, object.target.maxLength);
+    }
   };
   const handleChange = (e, num) => {
     if (num === 2) {
@@ -253,7 +363,12 @@ export default function AgregarProducto(props) {
       prueba();
       props.change();
     } else {
-      alert('Campos incompletos');
+      Confirm.open({
+        title: 'Error',
+        message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
+        onok: () => {},
+      });
+      //alert('Campos incompletos');
     }
   };
   const cerrarModalAgregarCodigos = () => {
@@ -269,7 +384,6 @@ export default function AgregarProducto(props) {
       }
       if (document.getElementById('cod2').value !== '') {
         setinputcod3(true);
-        alert('entro esta puercada, va pa fuera');
       }
       if (document.getElementById('cod3').value !== '') {
         setinputcod4(true);
@@ -288,19 +402,26 @@ export default function AgregarProducto(props) {
       }
     }
     setModalInsertarCodigo(false);
-    /**/
   };
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
     }
   };
+
+  const provseleccionados = [];
+  const proveedorSeleccionado = (provSel) => {
+    if (document.getElementById('prov1').value !== '') {
+      //alert(document.getElementById('prov1').value);
+      seleccionado.proveedores.push(document.getElementById('prov1').value);
+    }
+  };
+
   const options = [
     { value: 's', name: 'Small' },
     { value: 'm', name: 'Medium' },
     { value: 'l', name: 'Large' },
   ];
-  const [size, setSize] = useState(null);
   return (
     <div id="target">
       <Modal
@@ -469,7 +590,18 @@ export default function AgregarProducto(props) {
               </AvForm>
             </ModalBody>
             <ModalFooter>
-              <Button onClick={() => GuardarCodigos()} color="primary">
+              <Button
+                onClick={() =>
+                  Confirm.open({
+                    title: 'Insertar Codigos',
+                    message: 'Esta seguro de que quiere insertar estos codigos?',
+                    onok: () => {
+                      GuardarCodigos();
+                    },
+                  })
+                }
+                color="primary"
+              >
                 Insertar
               </Button>
               <Button onClick={() => cerrarModalAgregarCodigos()} color="danger">
@@ -496,26 +628,29 @@ export default function AgregarProducto(props) {
                 <label>Proveedor 1</label>
                 <SelectSearch
                   search
+                  onChange={setSize}
+                  id="prov1"
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-                  value={options[0].value}
-                  onClick={() => setSize(null)}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  onChange={handleOnChange(size)}
+                  value=""
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
+                <p>prov: {size}</p>
                 <br />
                 <label>Proveedor 2</label>
                 <SelectSearch
                   search
+                  id="prov2"
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 3</label>
@@ -524,9 +659,10 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  value=""
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 4</label>
@@ -535,9 +671,10 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  value=""
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 5</label>
@@ -546,9 +683,10 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  value=""
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 6</label>
@@ -557,9 +695,10 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  value=""
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
                 <label>Proveedor 7</label>
@@ -568,15 +707,27 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={options}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
+                  options={proveedores}
+                  value=""
+                  // options={this.state.productosEnBodega}
+                  // onChange={this.handleChange}
                 />
                 <br />
               </div>
             </ModalBody>
             <ModalFooter>
-              <button className="btn btn-primary" onClick={() => GuardarProveedores()}>
+              <button
+                className="btn btn-primary"
+                onClick={() =>
+                  Confirm.open({
+                    title: 'Insertar Proveedores',
+                    message: 'Esta seguro de que quiere insertar estos Proveedores?',
+                    onok: () => {
+                      GuardarProveedores();
+                    },
+                  })
+                }
+              >
                 Agregar Proveedores
               </button>
               <button className="btn btn-danger" onClick={() => setModalInsertarProveedor(false)}>
@@ -637,8 +788,8 @@ export default function AgregarProducto(props) {
               required
               autoComplete
               options={options}
-            // options={this.state.productosEnBodega}
-            // onChange={this.handleChange}
+              // options={this.state.productosEnBodega}
+              // onChange={this.handleChange}
             />
           </div>
           <br></br>
@@ -650,21 +801,27 @@ export default function AgregarProducto(props) {
             <h3>Cantidad</h3>
             <input
               className="form-control"
-              type="Number"
-              name="cantidad"
-              value={seleccionado ? seleccionado.cantidad : ''}
-              onChange={manejarCambio}
+              type="number"
+              id="cantidad"
+              min={
+                document.getElementById('cantidad_minima')
+                  ? document.getElementById('cantidad_minima').value
+                  : 2
+              }
+              onChange={(e) => manejarCambiocant(e, 0)}
             />
           </div>
           <div>
             <h3>Cantidad Mínima</h3>
             <input
               className="form-control"
-              type="Number"
-              name="cantidad_minima"
-              id="modcantidad_minima"
-              value={seleccionado ? seleccionado.cantidad_minima : ''}
-              onChange={manejarCambio}
+              type="number"
+              id="cantidad_minima"
+              /*max={
+                document.getElementById('cantidad') ? document.getElementById('cantidad').value : 0
+              }*/
+              min={1}
+              onChange={(e) => manejarCambiocantmin(e, 1)}
             />
           </div>
           <div>
@@ -700,7 +857,18 @@ export default function AgregarProducto(props) {
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={() => insertar(0)}>
+          <button
+            className="btn btn-primary"
+            onClick={() =>
+              Confirm.open({
+                title: 'Insertar Producto',
+                message: 'Esta seguro de que quiere insertar este producto?',
+                onok: () => {
+                  insertar();
+                },
+              })
+            }
+          >
             Agregar Producto
           </button>
           <button className="btn btn-danger" onClick={props.change}>
@@ -745,8 +913,8 @@ export default function AgregarProducto(props) {
               name="Fecha"
               name="precio2"
               id="precio2"
-            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>Precio 3</label>
@@ -756,13 +924,24 @@ export default function AgregarProducto(props) {
               name="Etiqueta"
               name="precio3"
               id="precio3"
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
+          <button
+            className="btn btn-primary"
+            onClick={() =>
+              Confirm.open({
+                title: 'Insertar Precios',
+                message: 'Esta seguro de que quiere insertar estos precios?',
+                onok: () => {
+                  GuardarPrecio();
+                },
+              })
+            }
+          >
             Agregar Producto
           </button>
           <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
