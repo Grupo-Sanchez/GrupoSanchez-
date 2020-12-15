@@ -23,6 +23,7 @@ import {
 } from 'availity-reactstrap-validation';
 import Formulario from './FormularioBodega';
 import CartaBodegas from './CartaBodega';
+import { STATES } from 'mongoose';
 
 const CrearBodega = (props) => {
   const [form, setForm] = useState({
@@ -41,16 +42,24 @@ const CrearBodega = (props) => {
   };
 
   const EscribirBodegas = async () => {
-    const campos = {
-      numBodega: form.numBodega,
-      descripcion: form.Description,
-      encargado: form.Encargado,
-      cantPasillos: form.CantPasillos,
-    };
-    const res = await axios.post('http://localhost:3001/api/bodegas', campos);
-    console.log(res);
-    alert('¡Bodega Agregada!');
-    cerrarModal();
+
+    //if(form.numBodega !== false && form.Description !== false && form.Encargado !== false && form.CantPasillos !== false){
+      const campos = {
+        numBodega: form.numBodega,
+        descripcion: form.Description,
+        encargado: form.Encargado,
+        cantPasillos: form.CantPasillos,
+      };
+      const res = await axios.post('http://localhost:3001/api/bodegas', campos);
+      console.log(res);
+      alert('¡Bodega Agregada!');
+      window.location.reload(false);
+      cerrarModal();
+    //}else{
+      //alert('Error en la creacion!')
+      //cerrarModal();
+    //}
+    
   };
 
   const handleChange = (e) => {
