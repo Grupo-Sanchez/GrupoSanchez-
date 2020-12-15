@@ -27,5 +27,9 @@ module.exports = {
     'operator-linebreak': 0,
     'spaced-comment': 0,
     'prefer-destructuring': ['error', { object: true, array: false }],
+    'prefer-const': 0,
+    'import/prefer-default-export': 0,
+    'prefer-object-spread': 0,
+    'object-shorthand': 0,
   },
 };
