@@ -42,8 +42,7 @@ const ModificarEliminarBodegas = (props) => {
 
   return (
     <Modal
-
-      isOpen={modalModificar}
+      isOpen={props.isOpen}
       className="text-center"
       style={{ maxWidth: '1700px', width: '80%' }}
     >
