@@ -25,6 +25,13 @@ export default function EliminarProducto(props) {
     { name: 'English', value: 'en' },
     { name: 'patito', value: 'patito' },
   ];
+  const [size, setSize] = useState('1');
+  const [size2, setSize2] = useState('2');
+  const [size3, setSize3] = useState('3');
+  const [size4, setSize4] = useState('4');
+  const [size5, setSize5] = useState('5');
+  const [size6, setSize6] = useState('6');
+  const [size7, setSize7] = useState('7');
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
@@ -55,15 +62,55 @@ export default function EliminarProducto(props) {
   });
   const [cantsel, setCantsel] = useState(seleccionado.cantidad);
   const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
-
+  let [proveedores, setProveedores] = useState([]);
   useEffect(() => {
     const fecthData = async () => {
       await axios.get('http://localhost:3001/api/productos').then((response) => {
         setData(response.data);
       });
     };
+    const fecthProveedores = async () => {
+      await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+        const proveedoresDB = response.data;
+        const proveedoresagregados = [];
+        for (let index = 0; index < proveedoresDB.length; index++) {
+          const element = proveedoresDB[index];
+          proveedoresagregados.push({
+            company: element.company,
+            value: element._id,
+            agencia: element.agencia,
+            name: element.nombre,
+            apellidos: element.apellidos,
+            genero: element.genero,
+            email: element.email,
+            telefono: element.telefono,
+            direccion1: element.direccion1,
+            direccion2: element.direccion2,
+            ciudad: element.ciudad,
+            departamento: element.departamento,
+            codigoPostal: element.codigoPostal,
+            pais: element.pais,
+            comentario: element.comentario,
+            _v: element._v,
+          });
+        }
+        setProveedores(proveedoresagregados);
+      });
+    };
+    fecthProveedores();
     fecthData();
   }, []);
+  const proveedoresSeleccionados = [];
+  const handleOnChange = (value) => {
+    for (let index = 0; index < proveedores.length; index++) {
+      const element = proveedores[index];
+      if (element.value === value) {
+        proveedoresSeleccionados.push(element);
+      }
+    }
+    proveedores = proveedores.filter((item) => item.value !== value);
+    console.log(JSON.stringify(proveedores));
+  };
   /*
   Metodo para fuardar codigos del ModalModificar
    */
@@ -139,7 +186,7 @@ export default function EliminarProducto(props) {
         codigos: seleccionado.codigos,
         proveedores: seleccionado.proveedores,
         ubicacion: document.getElementById('modubicacion').value,
-        marca: document.getElementById('modmarca').value,
+        marca: 'makita',
         precios: seleccionado.precios,
         cantidad: document.getElementById('modcantidad').value,
         descripcion_corta: document.getElementById('descripcion1').value,
@@ -259,18 +306,10 @@ export default function EliminarProducto(props) {
     setCodigo5(seleccionado.codigos[4]);
     setCodigo6(seleccionado.codigos[5]);
     setCodigo7(seleccionado.codigos[6]);
-    // verificarCodigo();
     setModalModificarCodigos(true);
   };
   const GuardarCodigos = (i) => {
     const array = [];
-    seleccionado.codigos[0] = document.getElementById('mcod1').value;
-    seleccionado.codigos[1] = document.getElementById('modcod2').value;
-    seleccionado.codigos[2] = document.getElementById('modcod3').value;
-    seleccionado.codigos[3] = document.getElementById('modcod4').value;
-    seleccionado.codigos[4] = document.getElementById('modcod5').value;
-    seleccionado.codigos[5] = document.getElementById('modcod6').value;
-    seleccionado.codigos[6] = document.getElementById('modcod7').value;
     // alert(JSON.stringify(seleccionado.codigos));
     if (i.codigos[0] === '') {
       Confirm.open({
@@ -299,22 +338,103 @@ export default function EliminarProducto(props) {
     if (i.codigos[6] !== '') {
       array.push(codigo7);
     }
-    seleccionado.codigos = [];
-    seleccionado.codigos = array;
-    // console.log(i.codigos[0]);
-    /*
-    seleccionado.codigos[0] = document.getElementById('mcod1').value;
-    // console.log(seleccionado.codigos[0]);
-    seleccionado.codigos[1] = document.getElementById('modcod2').value;
-    seleccionado.codigos[2] = document.getElementById('modcod3').value;
-    seleccionado.codigos[3] = document.getElementById('modcod4').value;
-    seleccionado.codigos[4] = document.getElementById('modcod5').value;
-    seleccionado.codigos[5] = document.getElementById('modcod6').value;
-    seleccionado.codigos[6] = document.getElementById('modcod7').value;
-    setModalModificarCodigos(false);
-    // alert(seleccionado.codigos[1]);
-    */
-    setModalModificarCodigos(false);
+    let entra = false;
+    for (let ind = 0; ind < array.length; ind++) {
+      for (let j = 0; j < array.length; j++) {
+        if (ind !== j) {
+          if (array[ind] === array[j]) {
+            entra = true;
+            break;
+          }
+        }
+      }
+    }
+    let yaesta = false;
+    let mensaje = [];
+    let codigos2 = [];
+    let mansajenot = '';
+    for (let index = 0; index < data.length; index++) {
+      const element = data[index];
+      if (element._id !== seleccionado._id) {
+        for (let p = 0; p < element.codigos.length; p++) {
+          const element2 = element.codigos[p];
+          for (let j = 0; j < array.length; j++) {
+            const element3 = array[j];
+            if (element2 === element3) {
+              mensaje.push(element.nombre);
+              codigos2.push(element2);
+              yaesta = true;
+            }
+          }
+        }
+      }
+    }
+    //const codigosUnicos = new Set(codigos2);
+    let codigosUnicos = codigos2.filter(
+      (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+    );
+    let productosUnicos = mensaje.filter(
+      (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+    );
+
+    let codString = '';
+    let prodString = '';
+    for (let k = 0; k < codigosUnicos.length; k++) {
+      const element = codigosUnicos[k];
+      codString += ` ${element},`;
+    }
+    for (let k = 0; k < productosUnicos.length; k++) {
+      const element = productosUnicos[k];
+      prodString += ` ${element},`;
+    }
+    if (codigosUnicos.length !== 1) {
+      mansajenot = `Los codigos ${codString.substring(
+        0,
+        codString.length - 1,
+      )} ingresados ya se encuentra en los productos ${prodString.substring(
+        0,
+        prodString.length - 1,
+      )}.`;
+    } else {
+      mansajenot = `El codigo ${codString.substring(
+        0,
+        codString.length - 1,
+      )} ingresado ya se encuentra en los productos ${prodString.substring(
+        0,
+        prodString.length - 1,
+      )}.`;
+    }
+    if (entra) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+        onok: () => {},
+      });
+      entra = false;
+    } else if (yaesta) {
+      Confirm.open({
+        title: 'Error',
+        message: mansajenot,
+        onok: () => {
+          setCodigo1(seleccionado.codigos[0]);
+          setCodigo2(seleccionado.codigos[1]);
+          setCodigo3(seleccionado.codigos[2]);
+          setCodigo4(seleccionado.codigos[3]);
+          setCodigo5(seleccionado.codigos[4]);
+          setCodigo6(seleccionado.codigos[5]);
+          setCodigo7(seleccionado.codigos[6]);
+        },
+      });
+    } else {
+      seleccionado.codigos = [];
+      seleccionado.codigos = array;
+      setModalModificarCodigos(false);
+      Confirm.open({
+        title: '',
+        message: 'Códigos Agregados Exitosamente',
+        onok: () => {},
+      });
+    }
   };
   const [proveedor1, setproveedor1] = useState('');
   const [proveedor2, setproveedor2] = useState('');
@@ -325,13 +445,27 @@ export default function EliminarProducto(props) {
   const [proveedor7, setproveedor7] = useState('');
 
   const changeProveedor = () => {
-    setproveedor1(seleccionado.proveedores[0]);
-    setproveedor2(seleccionado.proveedores[1]);
-    setproveedor3(seleccionado.proveedores[2]);
-    setproveedor4(seleccionado.proveedores[3]);
-    setproveedor5(seleccionado.proveedores[4]);
-    setproveedor6(seleccionado.proveedores[5]);
-    setproveedor7(seleccionado.proveedores[6]);
+    if (seleccionado.proveedores[0] !== undefined) {
+      setSize(seleccionado.proveedores[0].value);
+    }
+    if (seleccionado.proveedores[1] !== undefined) {
+      setSize2(seleccionado.proveedores[1].value);
+    }
+    if (seleccionado.proveedores[2] !== undefined) {
+      setSize3(seleccionado.proveedores[2].value);
+    }
+    if (seleccionado.proveedores[3] !== undefined) {
+      setSize4(seleccionado.proveedores[3].value);
+    }
+    if (seleccionado.proveedores[4] !== undefined) {
+      setSize5(seleccionado.proveedores[4].value);
+    }
+    if (seleccionado.proveedores[5] !== undefined) {
+      setSize6(seleccionado.proveedores[5].value);
+    }
+    if (seleccionado.proveedores[6] !== undefined) {
+      setSize7(seleccionado.proveedores[6].value);
+    }
     setModalModificarProveedores(true);
   };
   const [precio1, setprecio1] = useState('');
@@ -370,13 +504,12 @@ export default function EliminarProducto(props) {
     const num2 = document.getElementById('modcantidad').value;
     if (num > num2) {
       document.getElementById('modcantidad_minima').onchange = limit;
-      setCantminsel(e.target.value);
       // seleccionado.cantidad_minima = e.target.value;
     } else {
       document.getElementById('modcantidad').onchange = limit;
-      setCantminsel(e.target.value);
       //seleccionado.cantidad_minima = e.target.value;
     }
+    setCantminsel(e.target.value);
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
   };
   const handleKeyDown = (e) => {
@@ -548,7 +681,7 @@ export default function EliminarProducto(props) {
                       name="mcodigo1"
                       id="mcod1"
                       // placeholder = {seleccionado.codigos[0]}
-                      value={seleccionado.codigos[0]}
+                      value={codigo1}
                       required
                       errorMessage="Este codigo es requerido"
                       validate={{
@@ -570,7 +703,7 @@ export default function EliminarProducto(props) {
                       type="text"
                       name="modcodigo2"
                       id="modcod2"
-                      value={seleccionado.codigos[1]}
+                      value={codigo2}
                       validate={{
                         pattern: { value: '^[A-Za-z0-9]+$' },
                         minLength: { value: 1 },
@@ -717,218 +850,170 @@ export default function EliminarProducto(props) {
                   <label>Proveedor 1</label>
                   <SelectSearch
                     search
-                    // placeholder="Encuentre el Proveedor del Producto"
                     required
                     autoComplete
-                    options={options}
+                    onChange={setSize}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
                     placeholder={
                       seleccionado.proveedores[0]
-                        ? seleccionado.proveedores[0]
+                        ? seleccionado.proveedores[0].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[0]
-                        ? seleccionado.proveedores[0]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    onClick={handleOnChange(size)}
+                    value={size}
                   />
                   <br />
                   <label>Proveedor 2</label>
                   <SelectSearch
                     search
-                    // placeholder="Encuentre el Proveedor del Producto"
                     required
                     autoComplete
-                    options={options}
+                    onChange={setSize2}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
                     placeholder={
                       seleccionado.proveedores[1]
-                        ? seleccionado.proveedores[1]
+                        ? seleccionado.proveedores[1].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[1]
-                        ? seleccionado.proveedores[1]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    value={size2}
+                    onClick={handleOnChange(size2)}
                   />
                   <br />
                   <label>Proveedor 3</label>
                   <SelectSearch
                     search
-                    //placeholder="Encuentre el Proveedor del Producto"
                     required
                     autoComplete
-                    options={options}
+                    onChange={setSize3}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
                     placeholder={
                       seleccionado.proveedores[2]
-                        ? seleccionado.proveedores[2]
+                        ? seleccionado.proveedores[2].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[2]
-                        ? seleccionado.proveedores[2]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    value={size3}
+                    onClick={handleOnChange(size3)}
                   />
                   <br />
                   <label>Proveedor 4</label>
                   <SelectSearch
                     search
-                    //placeholder="Encuentre el Proveedor del Producto"
                     required
+                    onChange={setSize4}
                     autoComplete
-                    options={options}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
                     placeholder={
                       seleccionado.proveedores[3]
-                        ? seleccionado.proveedores[3]
+                        ? seleccionado.proveedores[3].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[3]
-                        ? seleccionado.proveedores[3]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    value={size4}
+                    onClick={handleOnChange(size4)}
                   />
                   <br />
                   <label>Proveedor 5</label>
                   <SelectSearch
                     search
-                    //placeholder="Encuentre el Proveedor del Producto"
                     required
+                    onChange={setSize5}
                     autoComplete
-                    options={options}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
                     placeholder={
                       seleccionado.proveedores[4]
-                        ? seleccionado.proveedores[4]
+                        ? seleccionado.proveedores[4].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[4]
-                        ? seleccionado.proveedores[4]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    value={size5}
+                    onClick={handleOnChange(size5)}
                   />
                   <br />
                   <label>Proveedor 6</label>
                   <SelectSearch
                     search
-                    //placeholder="Encuentre el Proveedor del Producto"
+                    onChange={setSize6}
                     required
                     autoComplete
-                    options={options}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size &&
+                        item.value !== size7,
+                    )}
                     placeholder={
                       seleccionado.proveedores[5]
-                        ? seleccionado.proveedores[5]
+                        ? seleccionado.proveedores[5].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[5]
-                        ? seleccionado.proveedores[5]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    value={size6}
+                    onClick={handleOnChange(size6)}
                   />
                   <br />
                   <label>Proveedor 7</label>
                   <SelectSearch
                     search
                     required
+                    onChange={setSize7}
                     autoComplete
-                    options={options}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size,
+                    )}
                     placeholder={
                       seleccionado.proveedores[6]
-                        ? seleccionado.proveedores[6]
+                        ? seleccionado.proveedores[6].name
                         : 'Encuentre el Proveedor del Producto'
                     }
-                    value={
-                      seleccionado.proveedores[6]
-                        ? seleccionado.proveedores[6]
-                        : 'Encuentre el Proveedor del Producto'
-                    }
-                    // options={this.state.productosEnBodega}
-                    // onChange={this.handleChange}
+                    value={size7}
+                    onClick={handleOnChange(size7)}
                   />
-                  {/*<label>proveedor 1</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor1"
-                    id="modprov1"
-                    placeholder={seleccionado.proveedores[0]}
-                    value={proveedor1}
-                    onChange={(event) => setproveedor1(event.target.value)}
-                  />
-                  <br />
-                  <label>proveedor 2</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor2"
-                    id="modprov2"
-                    value={proveedor2}
-                    onChange={(event) => setproveedor2(event.target.value)}
-                  />
-                  <br />
-                  <label>proveedor 3</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor3"
-                    id="modprov3"
-                    value={proveedor3}
-                    onChange={(event) => setproveedor3(event.target.value)}
-                  />
-                  <br />
-                  <label>proveedor 4</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor4"
-                    id="modprov4"
-                    value={proveedor4}
-                    onChange={(event) => setproveedor4(event.target.value)}
-                  />
-                  <br />
-                  <label>proveedor 5</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor5"
-                    id="modprov5"
-                    value={proveedor5}
-                    onChange={(event) => setproveedor5(event.target.value)}
-                  />
-                  <br />
-                  <label>proveedor 6</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor6"
-                    id="modprov6"
-                    value={proveedor6}
-                    onChange={(event) => setproveedor6(event.target.value)}
-                  />
-                  <br />
-                  <label>proveedor 7</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor7"
-                    id="modprov7"
-                    value={proveedor7}
-                    onChange={(event) => setproveedor7(event.target.value)}
-                  />*/}
                   <br />
                 </div>
               </ModalBody>

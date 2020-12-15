@@ -25,8 +25,16 @@ export default function AgregarProducto(props) {
   const [cod4, setcod4] = useState('');
   const [cod5, setcod5] = useState('');
   const [cod6, setcod6] = useState('');
+  const [marca, setMarca] = useState('');
   const [cod7, setcod7] = useState('');
-  const [size, setSize] = useState(null);
+  const [size, setSize] = useState('1');
+  const [size2, setSize2] = useState('2');
+  const [size3, setSize3] = useState('3');
+  const [size4, setSize4] = useState('4');
+  const [size5, setSize5] = useState('5');
+  const [size6, setSize6] = useState('6');
+  const [size7, setSize7] = useState('7');
+  const proveedoresSeleccionados = [];
   const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
   const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
   const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
@@ -56,7 +64,8 @@ export default function AgregarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
-  const [proveedores, setProveedores] = useState({});
+  let [proveedores, setProveedores] = useState([]);
+  const [productos, setProductos] = useState([]);
   useEffect(() => {
     const fecthData = async () => {
       await axios.get('http://localhost:3001/api/proveedor').then((response) => {
@@ -87,16 +96,23 @@ export default function AgregarProducto(props) {
         setProveedores(proveedoresagregados);
       });
     };
+    const fecthProductos = async () => {
+      await axios.get('http://localhost:3001/api/productos').then((response) => {
+        setProductos(response.data);
+      });
+    };
     fecthData();
+    fecthProductos();
   }, []);
   const prueba = async () => {
+    seleccionado.proveedores = proveedoresSeleccionados;
     const campos = {
       nombre: seleccionado.nombre,
       area: seleccionado.area,
       codigos: seleccionado.codigos,
       proveedores: seleccionado.proveedores,
       ubicacion: seleccionado.ubicacion,
-      marca: seleccionado.marca,
+      marca: 'makita',
       precios: seleccionado.precio,
       cantidad: seleccionado.cantidad,
       descripcion_corta: seleccionado.descripcion_corta,
@@ -117,32 +133,19 @@ export default function AgregarProducto(props) {
       this.setState({some:'val',arr:this.state.arr})
   }
   */
-  const proveedoresSeleccionados = [{}];
+
+  const prove = [];
   const handleOnChange = (value) => {
-    proveedores.filter((x) => {
-      if (x.value === value) {
-        proveedoresSeleccionados.push({
-          company: x.company,
-          value: x._id,
-          agencia: x.agencia,
-          name: x.nombre,
-          apellidos: x.apellidos,
-          genero: x.genero,
-          email: x.email,
-          telefono: x.telefono,
-          direccion1: x.direccion1,
-          direccion2: x.direccion2,
-          ciudad: x.ciudad,
-          departamento: x.departamento,
-          codigoPostal: x.codigoPostal,
-          pais: x.pais,
-          comentario: x.comentario,
-          _v: x._v,
-        });
+    for (let index = 0; index < proveedores.length; index++) {
+      const element = proveedores[index];
+      if (element.value === value) {
+        proveedoresSeleccionados.push(element);
+        seleccionado.proveedores = proveedoresSeleccionados;
       }
-      return 0;
-    });
+    }
+    proveedores = proveedores.filter((item) => item.value !== value);
   };
+
   function limit() {
     const temp = document.getElementById('cantidad_minima');
     const maxValue = document.getElementById('cantidad').value;
@@ -164,15 +167,15 @@ export default function AgregarProducto(props) {
     const num2 = document.getElementById('cantidad').value;
     if (num > num2) {
       document.getElementById('cantidad_minima').onchange = limit;
-      seleccionado.cantidad_minima = e.target.value;
     } else {
       document.getElementById('cantidad').onchange = limit;
-      seleccionado.cantidad_minima = e.target.value;
     }
+    seleccionado.cantidad_minima = e.target.value;
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
   };
   const GuardarCodigos = () => {
     seleccionado.codigos = [];
+    const duplicates = [];
     if (document.getElementById('cod1').value === '') {
       Confirm.open({
         title: 'Error',
@@ -186,47 +189,129 @@ export default function AgregarProducto(props) {
       setinputcod6(false);
       setinputcod7(false);
     } else {
-      seleccionado.codigos.push(document.getElementById('cod1').value);
+      // seleccionado.codigos.push(document.getElementById('cod1').value);
+      duplicates.push(document.getElementById('cod1').value);
       setinputcod2(true);
       if (document.getElementById('cod2').value !== '') {
+        // seleccionado.codigos.push(document.getElementById('cod2').value);
         setinputcod3(true);
-        seleccionado.codigos.push(document.getElementById('cod2').value);
+        duplicates.push(document.getElementById('cod2').value);
       }
       if (document.getElementById('cod3').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod3').value);
+        // seleccionado.codigos.push(document.getElementById('cod3').value);
         setinputcod4(true);
+        duplicates.push(document.getElementById('cod3').value);
       }
       if (document.getElementById('cod4').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod4').value);
+        // seleccionado.codigos.push(document.getElementById('cod4').value);
         setinputcod5(true);
+        duplicates.push(document.getElementById('cod4').value);
       }
       if (document.getElementById('cod5').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod5').value);
+        // seleccionado.codigos.push(document.getElementById('cod5').value);
         setinputcod6(true);
+        duplicates.push(document.getElementById('cod5').value);
       }
       if (document.getElementById('cod6').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod6').value);
+        // seleccionado.codigos.push(document.getElementById('cod6').value);
         setinputcod7(true);
+        duplicates.push(document.getElementById('cod6').value);
       }
       if (document.getElementById('cod7').value !== '') {
-        seleccionado.codigos.push(cod7);
+        // seleccionado.codigos.push(cod7);
+        duplicates.push(document.getElementById('cod7').value);
       }
-      setModalInsertarCodigo(false);
-      /* setinputcod4(false);
-      setinputcod5(false);
-      setinputcod6(false);
-      setinputcod7(false); */
-      Confirm.open({
-        title: '',
-        message: 'Codigos Agregados Exitosamente',
-        onok: () => {},
-      });
+      let entra = false;
+      for (let i = 0; i < duplicates.length; i++) {
+        for (let j = 0; j < duplicates.length; j++) {
+          if (i !== j) {
+            if (duplicates[i] === duplicates[j]) {
+              entra = true;
+              break;
+            }
+          }
+        }
+      }
+      let yaesta = false;
+      let mensaje = [];
+      let codigos2 = [];
+      let mansajenot = '';
+      for (let index = 0; index < productos.length; index++) {
+        const element = productos[index];
+        for (let p = 0; p < element.codigos.length; p++) {
+          const element2 = element.codigos[p];
+          for (let j = 0; j < duplicates.length; j++) {
+            const element3 = duplicates[j];
+            if (element2 === element3) {
+              mensaje.push(element.nombre);
+              codigos2.push(element2);
+              yaesta = true;
+            }
+          }
+        }
+      }
+      let codigosUnicos = codigos2.filter(
+        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+      );
+      let productosUnicos = mensaje.filter(
+        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+      );
+      let codString = '';
+      let prodString = '';
+      for (let k = 0; k < codigosUnicos.length; k++) {
+        const element = codigosUnicos[k];
+        codString += ` ${element},`;
+      }
+      for (let k = 0; k < productosUnicos.length; k++) {
+        const element = productosUnicos[k];
+        prodString += ` ${element},`;
+      }
+      if (codigosUnicos.length !== 1) {
+        mansajenot = `Los codigos ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresados ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      } else {
+        mansajenot = `El codigo ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresado ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      }
+      if (entra) {
+        Confirm.open({
+          title: 'Error',
+          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          onok: () => {},
+        });
+        entra = false;
+      } else if (yaesta) {
+        Confirm.open({
+          title: 'Error',
+          message: mansajenot,
+          onok: () => {},
+        });
+      } else {
+        seleccionado.codigos = duplicates;
+        setModalInsertarCodigo(false);
+        Confirm.open({
+          title: '',
+          message: 'Códigos Agregados Exitosamente',
+          onok: () => {},
+        });
+      }
     }
   };
   const insertarCodigos = () => {
     setModalInsertarCodigo(true);
   };
   const GuardarPrecio = () => {
+    seleccionado.precio = [];
     let precio1 = '';
     let precio2 = '';
     let precio3 = '';
@@ -234,10 +319,10 @@ export default function AgregarProducto(props) {
       precio1 = document.getElementById('precio1').value;
     }
     if (document.getElementById('precio2').value != null) {
-      precio2 = document.getElementById('precio2').value != null;
+      precio2 = document.getElementById('precio2').value;
     }
     if (document.getElementById('precio3').value != null) {
-      precio3 = document.getElementById('precio3').value != null;
+      precio3 = document.getElementById('precio3').value;
     }
     if (precio1.toString().trim() === '') {
       Confirm.open({
@@ -269,20 +354,14 @@ export default function AgregarProducto(props) {
     */
   };
   const GuardarProveedores = () => {
-    if (document.getElementById('prov1').value === undefined) {
+    if (size === '1') {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
         onok: () => {},
       });
     } else {
-      seleccionado.proveedores.push(document.getElementById('prov1').value);
-      seleccionado.proveedores.push(document.getElementById('prov2').value);
-      seleccionado.proveedores.push(document.getElementById('prov3').value);
-      seleccionado.proveedores.push(document.getElementById('prov4').value);
-      seleccionado.proveedores.push(document.getElementById('prov5').value);
-      seleccionado.proveedores.push(document.getElementById('prov6').value);
-      seleccionado.proveedores.push(document.getElementById('prov7').value);
+      seleccionado.proveedores = proveedoresSeleccionados;
       setModalInsertarProveedor(false);
     }
   };
@@ -294,12 +373,6 @@ export default function AgregarProducto(props) {
   const handleChange = (e, num) => {
     if (num === 2) {
       setinputcod2(e.target.value);
-      /* setinputcod3(false);
-      setinputcod4(false);
-      setinputcod5(false);
-      setinputcod6(false);
-      setinputcod7(false); */
-
       if (inputcod2 === false) {
         console.log('entra');
       } else {
@@ -354,7 +427,6 @@ export default function AgregarProducto(props) {
     // setModalInsertar(false);
     seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
-    seleccionado.cantidad_minima = document.getElementsByName('cantidad_minima').value;
     if (
       seleccionado.codigos.length > 0 &&
       seleccionado.proveedores.length > 0 &&
@@ -416,7 +488,6 @@ export default function AgregarProducto(props) {
       seleccionado.proveedores.push(document.getElementById('prov1').value);
     }
   };
-
   const options = [
     { value: 's', name: 'Small' },
     { value: 'm', name: 'Medium' },
@@ -633,84 +704,138 @@ export default function AgregarProducto(props) {
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  onChange={handleOnChange(size)}
-                  value=""
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size2 &&
+                      item.value !== size3 &&
+                      item.value !== size4 &&
+                      item.value !== size5 &&
+                      item.value !== size6 &&
+                      item.value !== size7,
+                  )}
+                  onClick={handleOnChange(size)}
+                  value={size}
                 />
-                <p>prov: {size}</p>
                 <br />
                 <label>Proveedor 2</label>
                 <SelectSearch
                   search
                   id="prov2"
+                  onChange={setSize2}
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size &&
+                      item.value !== size3 &&
+                      item.value !== size4 &&
+                      item.value !== size5 &&
+                      item.value !== size6 &&
+                      item.value !== size7,
+                  )}
+                  onClick={handleOnChange(size2)}
+                  value={size2}
                 />
                 <br />
                 <label>Proveedor 3</label>
                 <SelectSearch
                   search
+                  onChange={setSize3}
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  value=""
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size2 &&
+                      item.value !== size &&
+                      item.value !== size4 &&
+                      item.value !== size5 &&
+                      item.value !== size6 &&
+                      item.value !== size7,
+                  )}
+                  onClick={handleOnChange(size3)}
+                  value={size3}
                 />
                 <br />
                 <label>Proveedor 4</label>
                 <SelectSearch
                   search
+                  onChange={setSize4}
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  value=""
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size2 &&
+                      item.value !== size3 &&
+                      item.value !== size &&
+                      item.value !== size5 &&
+                      item.value !== size6 &&
+                      item.value !== size7,
+                  )}
+                  onClick={handleOnChange(size4)}
+                  value={size4}
                 />
                 <br />
                 <label>Proveedor 5</label>
                 <SelectSearch
                   search
+                  onChange={setSize5}
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  value=""
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size2 &&
+                      item.value !== size3 &&
+                      item.value !== size4 &&
+                      item.value !== size &&
+                      item.value !== size6 &&
+                      item.value !== size7,
+                  )}
+                  onClick={handleOnChange(size5)}
+                  value={size5}
                 />
                 <br />
                 <label>Proveedor 6</label>
                 <SelectSearch
                   search
+                  onChange={setSize6}
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  value=""
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size2 &&
+                      item.value !== size3 &&
+                      item.value !== size4 &&
+                      item.value !== size5 &&
+                      item.value !== size &&
+                      item.value !== size7,
+                  )}
+                  onClick={handleOnChange(size6)}
+                  value={size6}
                 />
                 <br />
                 <label>Proveedor 7</label>
                 <SelectSearch
                   search
+                  onChange={setSize7}
                   placeholder="Encuentre el Proveedor del Producto"
                   required
                   autoComplete
-                  options={proveedores}
-                  value=""
-                  // options={this.state.productosEnBodega}
-                  // onChange={this.handleChange}
+                  options={proveedores.filter(
+                    (item) =>
+                      item.value !== size2 &&
+                      item.value !== size3 &&
+                      item.value !== size4 &&
+                      item.value !== size5 &&
+                      item.value !== size6 &&
+                      item.value !== size,
+                  )}
+                  onClick={handleOnChange(size7)}
+                  value={size7}
                 />
                 <br />
               </div>
@@ -788,6 +913,7 @@ export default function AgregarProducto(props) {
               required
               autoComplete
               options={options}
+              value={marca}
               // options={this.state.productosEnBodega}
               // onChange={this.handleChange}
             />
@@ -903,30 +1029,40 @@ export default function AgregarProducto(props) {
                 validate={{
                   required: { value: true },
                 }}
+                value={seleccionado.precio[0] ? seleccionado.precio[0] : 0}
+              />
+
+              <br />
+              <label>Precio 2</label>
+              <AvField
+                className="form-control"
+                type="Number"
+                name="Fecha"
+                name="precio2"
+                id="precio2"
+                validate={{
+                  required: { value: false },
+                }}
+                value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
+              />
+              <br />
+              <label>Precio 3</label>
+              <AvField
+                className="form-control"
+                type="Number"
+                name="Etiqueta"
+                name="precio3"
+                id="precio3"
+                validate={{
+                  required: { value: false },
+                }}
+                value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
             </AvForm>
-            <br />
-            <label>Precio 2</label>
-            <input
-              className="form-control"
-              type="Number"
-              name="Fecha"
-              name="precio2"
-              id="precio2"
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>Precio 3</label>
-            <input
-              className="form-control"
-              type="Number"
-              name="Etiqueta"
-              name="precio3"
-              id="precio3"
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
           </div>
         </ModalBody>
         <ModalFooter>
