@@ -67,9 +67,9 @@ const CrearBodega = (props) => {
       [e.target.name]: e.target.value,
     });
   };
-  const handleRemove = (e) => {
-    props.change;
-  };
+  // const handleRemove = (e) => {
+  //   props.change;
+  // };
 
   return (
     <Modal
@@ -142,9 +142,7 @@ const CrearBodega = (props) => {
             <Button className="btn btn-success" onClick={() => EscribirBodegas()}>
               CREAR
             </Button>
-            <Button className="btn btn-danger" onClick={handleRemove}>
-              CANCELAR
-            </Button>
+            <Button className="btn btn-danger">CANCELAR</Button>
           </div>
         </FormGroup>
       </ModalFooter>
