@@ -135,10 +135,6 @@ export default function AgregarProducto(props) {
   }
   */
 
-  const prove = [];
-
-  const proveedoresSeleccionados = [{}];
-
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
@@ -149,7 +145,6 @@ export default function AgregarProducto(props) {
     }
     proveedores = proveedores.filter((item) => item.value !== value);
   };
-
 
   function limit() {
     const temp = document.getElementById('cantidad_minima');
@@ -720,7 +715,6 @@ export default function AgregarProducto(props) {
                   )}
                   onClick={handleOnChange(size)}
                   value={size}
-
                 />
                 <br />
                 <label>Proveedor 2</label>
