@@ -50,6 +50,7 @@ export default function AgregarProducto(props) {
   const [inputprov5, setinputprov5] = useState(false);
   const [inputprov6, setinputprov6] = useState(false);
   const [inputprov7, setinputprov7] = useState(false);
+  const [existe, setExiste] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -135,6 +136,9 @@ export default function AgregarProducto(props) {
   */
 
   const prove = [];
+
+  const proveedoresSeleccionados = [{}];
+
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
@@ -145,6 +149,7 @@ export default function AgregarProducto(props) {
     }
     proveedores = proveedores.filter((item) => item.value !== value);
   };
+
 
   function limit() {
     const temp = document.getElementById('cantidad_minima');
@@ -715,6 +720,7 @@ export default function AgregarProducto(props) {
                   )}
                   onClick={handleOnChange(size)}
                   value={size}
+
                 />
                 <br />
                 <label>Proveedor 2</label>
