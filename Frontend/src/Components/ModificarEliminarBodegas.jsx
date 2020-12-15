@@ -13,7 +13,6 @@ import {
 import axios from 'axios';
 import Modificar from './ModificarBodega.jsx';
 
-
 const ModificarEliminarBodegas = (props) => {
   const [modalModificar, setModalModificar] = useState(false);
   const dataApuntes = [];
@@ -83,7 +82,7 @@ const ModificarEliminarBodegas = (props) => {
                   <td>{elemento.encargado}</td>
                   <td>{elemento.cantPasillos}</td>
                   <td>
-                    <Button onClick = {setModalModificar(true)} color="success">Modificar</Button>
+                    <Button color="success">Modificar</Button>
                   </td>
                   <td>
                     <Button onClick={() => eliminar(elemento._id)} color="danger">
@@ -102,13 +101,9 @@ const ModificarEliminarBodegas = (props) => {
         </button>
       </ModalFooter>
     </Modal>
-    
-    
   );
 };
 
 export default ModificarEliminarBodegas;
 
-
-//onClick = {() => setModalModificar(true)}
-//
+// onClick = {() => setModalModificar(true)}

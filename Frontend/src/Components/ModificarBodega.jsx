@@ -42,23 +42,21 @@ const ModificarBodega = (props) => {
   };
 
   const EscribirBodegas = async () => {
-
     //if(form.numBodega !== false && form.Description !== false && form.Encargado !== false && form.CantPasillos !== false){
-      const campos = {
-        numBodega: form.numBodega,
-        descripcion: form.Description,
-        encargado: form.Encargado,
-        cantPasillos: form.CantPasillos,
-      };
-      const res = await axios.post('http://localhost:3001/api/bodegas', campos);
-      console.log(res);
-      alert('¡Bodega Agregada!');
-      cerrarModal();
+    const campos = {
+      numBodega: form.numBodega,
+      descripcion: form.Description,
+      encargado: form.Encargado,
+      cantPasillos: form.CantPasillos,
+    };
+    const res = await axios.post('http://localhost:3001/api/bodegas', campos);
+    console.log(res);
+    alert('¡Bodega Agregada!');
+    cerrarModal();
     //}else{
-      //alert('Error en la creacion!')
-      //cerrarModal();
+    //alert('Error en la creacion!')
+    //cerrarModal();
     //}
-    
   };
 
   const handleChange = (e) => {

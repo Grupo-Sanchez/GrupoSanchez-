@@ -21,9 +21,9 @@ import {
   AvCheckboxGroup,
   AvCheckbox,
 } from 'availity-reactstrap-validation';
+// import { STATES } from 'mongoose';
 import Formulario from './FormularioBodega';
 import CartaBodegas from './CartaBodega';
-import { STATES } from 'mongoose';
 
 const CrearBodega = (props) => {
   const [form, setForm] = useState({
@@ -42,24 +42,23 @@ const CrearBodega = (props) => {
   };
 
   const EscribirBodegas = async () => {
-
-    //if(form.numBodega !== false && form.Description !== false && form.Encargado !== false && form.CantPasillos !== false){
-      const campos = {
-        numBodega: form.numBodega,
-        descripcion: form.Description,
-        encargado: form.Encargado,
-        cantPasillos: form.CantPasillos,
-      };
-      const res = await axios.post('http://localhost:3001/api/bodegas', campos);
-      console.log(res);
-      alert('¡Bodega Agregada!');
-      window.location.reload(false);
-      cerrarModal();
-    //}else{
-      //alert('Error en la creacion!')
-      //cerrarModal();
-    //}
-    
+    // if(form.numBodega !== false && form.Description !==
+    // false && form.Encargado !== false && form.CantPasillos !== false){
+    const campos = {
+      numBodega: form.numBodega,
+      descripcion: form.Description,
+      encargado: form.Encargado,
+      cantPasillos: form.CantPasillos,
+    };
+    const res = await axios.post('http://localhost:3001/api/bodegas', campos);
+    console.log(res);
+    alert('¡Bodega Agregada!');
+    window.location.reload(false);
+    cerrarModal();
+    // }else{
+    // alert('Error en la creacion!')
+    // cerrarModal();
+    // }
   };
 
   const handleChange = (e) => {
@@ -67,6 +66,9 @@ const CrearBodega = (props) => {
       ...form,
       [e.target.name]: e.target.value,
     });
+  };
+  const handleRemove = (e) => {
+    props.change;
   };
 
   return (
@@ -93,7 +95,7 @@ const CrearBodega = (props) => {
                 label="Numero de bodega"
                 type="number"
                 onChange={handleChange}
-                value={form.numBodega}
+                value={(form.numBodega, require)}
               />
               <AvField
                 name="Description"
@@ -137,10 +139,10 @@ const CrearBodega = (props) => {
       <ModalFooter>
         <FormGroup>
           <div className="row">
-            <Button className="btn btn-primary" onClick={() => EscribirBodegas()}>
+            <Button className="btn btn-success" onClick={() => EscribirBodegas()}>
               CREAR
             </Button>
-            <Button className="btn btn-primary" onClick={props.change}>
+            <Button className="btn btn-danger" onClick={handleRemove}>
               CANCELAR
             </Button>
           </div>
