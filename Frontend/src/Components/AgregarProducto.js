@@ -42,6 +42,7 @@ export default function AgregarProducto(props) {
   const [inputprov5, setinputprov5] = useState(false);
   const [inputprov6, setinputprov6] = useState(false);
   const [inputprov7, setinputprov7] = useState(false);
+  const [existe, setExiste] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -118,6 +119,7 @@ export default function AgregarProducto(props) {
   }
   */
   const proveedoresSeleccionados = [{}];
+  /*
   const handleOnChange = (value) => {
     proveedores.filter((x) => {
       if (x.value === value) {
@@ -143,6 +145,7 @@ export default function AgregarProducto(props) {
       return 0;
     });
   };
+  */
   function limit() {
     const temp = document.getElementById('cantidad_minima');
     const maxValue = document.getElementById('cantidad').value;
@@ -173,6 +176,7 @@ export default function AgregarProducto(props) {
   };
   const GuardarCodigos = () => {
     seleccionado.codigos = [];
+    const duplicates = [];
     if (document.getElementById('cod1').value === '') {
       Confirm.open({
         title: 'Error',
@@ -186,41 +190,69 @@ export default function AgregarProducto(props) {
       setinputcod6(false);
       setinputcod7(false);
     } else {
-      seleccionado.codigos.push(document.getElementById('cod1').value);
+      // seleccionado.codigos.push(document.getElementById('cod1').value);
+      duplicates.push(document.getElementById('cod1').value);
       setinputcod2(true);
       if (document.getElementById('cod2').value !== '') {
+        // seleccionado.codigos.push(document.getElementById('cod2').value);
         setinputcod3(true);
-        seleccionado.codigos.push(document.getElementById('cod2').value);
+        duplicates.push(document.getElementById('cod2').value);
       }
       if (document.getElementById('cod3').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod3').value);
+        // seleccionado.codigos.push(document.getElementById('cod3').value);
         setinputcod4(true);
+        duplicates.push(document.getElementById('cod3').value);
       }
       if (document.getElementById('cod4').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod4').value);
+        // seleccionado.codigos.push(document.getElementById('cod4').value);
         setinputcod5(true);
+        duplicates.push(document.getElementById('cod4').value);
       }
       if (document.getElementById('cod5').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod5').value);
+        // seleccionado.codigos.push(document.getElementById('cod5').value);
         setinputcod6(true);
+        duplicates.push(document.getElementById('cod5').value);
       }
       if (document.getElementById('cod6').value !== '') {
-        seleccionado.codigos.push(document.getElementById('cod6').value);
+        // seleccionado.codigos.push(document.getElementById('cod6').value);
         setinputcod7(true);
+        duplicates.push(document.getElementById('cod6').value);
       }
       if (document.getElementById('cod7').value !== '') {
-        seleccionado.codigos.push(cod7);
+        // seleccionado.codigos.push(cod7);
+        duplicates.push(document.getElementById('cod7').value);
       }
-      setModalInsertarCodigo(false);
+      let entra = false;
+      for (let i = 0; i < duplicates.length; i++) {
+        for (let j = 0; j < duplicates.length; j++) {
+          if (i !== j) {
+            if (duplicates[i] === duplicates[j]) {
+              entra = true;
+              break;
+            }
+          }
+        }
+      }
+      if (entra) {
+        Confirm.open({
+          title: 'Error',
+          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          onok: () => {},
+        });
+        entra = false;
+      } else {
+        seleccionado.codigos = duplicates;
+        setModalInsertarCodigo(false);
+        Confirm.open({
+          title: '',
+          message: 'Códigos Agregados Exitosamente',
+          onok: () => {},
+        });
+      }
       /* setinputcod4(false);
       setinputcod5(false);
       setinputcod6(false);
       setinputcod7(false); */
-      Confirm.open({
-        title: '',
-        message: 'Codigos Agregados Exitosamente',
-        onok: () => {},
-      });
     }
   };
   const insertarCodigos = () => {
@@ -634,7 +666,7 @@ export default function AgregarProducto(props) {
                   required
                   autoComplete
                   options={proveedores}
-                  onChange={handleOnChange(size)}
+                  // onChange={handleOnChange(size)}
                   value=""
                   // options={this.state.productosEnBodega}
                   // onChange={this.handleChange}
