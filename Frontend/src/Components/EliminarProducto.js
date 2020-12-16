@@ -63,43 +63,43 @@ export default function EliminarProducto(props) {
   const [cantsel, setCantsel] = useState(seleccionado.cantidad);
   const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
   let [proveedores, setProveedores] = useState([]);
+  const fecthData = async () => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
+      setData(response.data);
+    });
+  };
+  const fecthProveedores = async () => {
+    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+      const proveedoresDB = response.data;
+      const proveedoresagregados = [];
+      for (let index = 0; index < proveedoresDB.length; index++) {
+        const element = proveedoresDB[index];
+        proveedoresagregados.push({
+          company: element.company,
+          value: element._id,
+          agencia: element.agencia,
+          name: element.nombre,
+          apellidos: element.apellidos,
+          genero: element.genero,
+          email: element.email,
+          telefono: element.telefono,
+          direccion1: element.direccion1,
+          direccion2: element.direccion2,
+          ciudad: element.ciudad,
+          departamento: element.departamento,
+          codigoPostal: element.codigoPostal,
+          pais: element.pais,
+          comentario: element.comentario,
+          _v: element._v,
+        });
+      }
+      setProveedores(proveedoresagregados);
+    });
+  };
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/productos').then((response) => {
-        setData(response.data);
-      });
-    };
-    const fecthProveedores = async () => {
-      await axios.get('http://localhost:3001/api/proveedor').then((response) => {
-        const proveedoresDB = response.data;
-        const proveedoresagregados = [];
-        for (let index = 0; index < proveedoresDB.length; index++) {
-          const element = proveedoresDB[index];
-          proveedoresagregados.push({
-            company: element.company,
-            value: element._id,
-            agencia: element.agencia,
-            name: element.nombre,
-            apellidos: element.apellidos,
-            genero: element.genero,
-            email: element.email,
-            telefono: element.telefono,
-            direccion1: element.direccion1,
-            direccion2: element.direccion2,
-            ciudad: element.ciudad,
-            departamento: element.departamento,
-            codigoPostal: element.codigoPostal,
-            pais: element.pais,
-            comentario: element.comentario,
-            _v: element._v,
-          });
-        }
-        setProveedores(proveedoresagregados);
-      });
-    };
     fecthProveedores();
     fecthData();
-  }, []);
+  }, [data]);
   const proveedoresSeleccionados = [];
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
@@ -177,7 +177,7 @@ export default function EliminarProducto(props) {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
-  const updateItem = (Id) => {
+  const updateItem = async (Id) => {
     setModalModificar(false);
     axios
       .put(`http://localhost:3001/api/productos/${Id}`, {
@@ -192,9 +192,6 @@ export default function EliminarProducto(props) {
         descripcion_corta: document.getElementById('descripcion1').value,
         descripcion_larga: document.getElementById('descripcion2').value,
         cantidad_minima: document.getElementById('modcantidad_minima').value,
-      })
-      .then((response) => {
-        console.log(response);
       })
       .catch((error) => {
         console.log(error);
