@@ -18,8 +18,9 @@ import { Confirm } from './Confirm';
 
 export default function AgregarProducto(props) {
   const dataApuntes = [];
-  const [cod, setcod] = useState('');
+  /* https://stackblitz.com/edit/react-tag-input-1nelrc */
   const [cod1, setcod1] = useState('');
+  let cod = '';
   const [cod2, setcod2] = useState('');
   const [cod3, setcod3] = useState('');
   const [cod4, setcod4] = useState('');
@@ -125,7 +126,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
   };
   /*
@@ -180,7 +181,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => {},
+        onok: () => { },
       });
       setinputcod2(false);
       setinputcod3(false);
@@ -191,34 +192,41 @@ export default function AgregarProducto(props) {
     } else {
       // seleccionado.codigos.push(document.getElementById('cod1').value);
       duplicates.push(document.getElementById('cod1').value);
+      setcod1(document.getElementById('cod1').value);
       setinputcod2(true);
       if (document.getElementById('cod2').value !== '') {
         // seleccionado.codigos.push(document.getElementById('cod2').value);
         setinputcod3(true);
+        setcod2(document.getElementById('cod2').value);
         duplicates.push(document.getElementById('cod2').value);
       }
       if (document.getElementById('cod3').value !== '') {
         // seleccionado.codigos.push(document.getElementById('cod3').value);
         setinputcod4(true);
+        setcod3(document.getElementById('cod3').value);
         duplicates.push(document.getElementById('cod3').value);
       }
       if (document.getElementById('cod4').value !== '') {
         // seleccionado.codigos.push(document.getElementById('cod4').value);
+        setcod4(document.getElementById('cod4').value);
         setinputcod5(true);
         duplicates.push(document.getElementById('cod4').value);
       }
       if (document.getElementById('cod5').value !== '') {
         // seleccionado.codigos.push(document.getElementById('cod5').value);
+        setcod5(document.getElementById('cod5').value);
         setinputcod6(true);
         duplicates.push(document.getElementById('cod5').value);
       }
       if (document.getElementById('cod6').value !== '') {
         // seleccionado.codigos.push(document.getElementById('cod6').value);
         setinputcod7(true);
+        setcod6(document.getElementById('cod6').value);
         duplicates.push(document.getElementById('cod6').value);
       }
       if (document.getElementById('cod7').value !== '') {
         // seleccionado.codigos.push(cod7);
+        setcod7(document.getElementById('cod7').value);
         duplicates.push(document.getElementById('cod7').value);
       }
       let entra = false;
@@ -287,14 +295,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-          onok: () => {},
+          onok: () => { },
         });
         entra = false;
       } else if (yaesta) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         seleccionado.codigos = duplicates;
@@ -302,7 +310,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: '',
           message: 'Códigos Agregados Exitosamente',
-          onok: () => {},
+          onok: () => { },
         });
       }
     }
@@ -328,7 +336,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio.push(precio1);
@@ -342,7 +350,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: '',
         message: 'Precios Agregados Exitosamente',
-        onok: () => {},
+        onok: () => { },
       });
     }
     /*
@@ -358,7 +366,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.proveedores = proveedoresSeleccionados;
@@ -372,22 +380,67 @@ export default function AgregarProducto(props) {
   };
   const handleChange = (e, num) => {
     if (num === 2) {
-      setinputcod2(e.target.value);
-      if (inputcod2 === false) {
-        console.log('entra');
-      } else {
-        setcod(' ');
+      if (e.target.value === '') {
+        setcod2(' ');
+        setcod3(' ');
+        setcod4(' ');
+        setcod5(' ');
+        setcod6(' ');
+        setcod7(' ');
+        setinputcod2(false);
+        setinputcod3(false);
+        setinputcod5(false);
+        setinputcod6(false);
+        setinputcod7(false);
+        setinputcod4(false);
       }
+      setinputcod2(e.target.value);
     } else if (num === 3) {
+      if (e.target.value === '') {
+        setcod3(' ');
+        setcod4(' ');
+        setcod5(' ');
+        setcod6(' ');
+        setcod7(' ');
+        setinputcod3(false);
+        setinputcod5(false);
+        setinputcod6(false);
+        setinputcod7(false);
+        setinputcod4(false);
+      }
       setinputcod3(e.target.value);
       setinputcod4(false);
     } else if (num === 4) {
+      if (e.target.value === '') {
+        setcod4(' ');
+        setcod5(' ');
+        setcod6(' ');
+        setcod7(' ');
+        setinputcod5(false);
+        setinputcod6(false);
+        setinputcod7(false);
+        setinputcod4(false);
+      }
       setinputcod4(e.target.value);
       setinputcod5(false);
     } else if (num === 5) {
+      if (e.target.value === '') {
+        setcod5(' ');
+        setcod6(' ');
+        setcod7(' ');
+        setinputcod5(false);
+        setinputcod6(false);
+        setinputcod7(false);
+      }
       setinputcod5(e.target.value);
       setinputcod6(false);
     } else if (num === 6) {
+      if (e.target.value === '') {
+        setcod6(' ');
+        setcod7(' ');
+        setinputcod6(false);
+        setinputcod7(false);
+      }
       setinputcod6(e.target.value);
       setinputcod7(false);
     } else if (num === 7) {
@@ -430,7 +483,10 @@ export default function AgregarProducto(props) {
     if (
       seleccionado.codigos.length > 0 &&
       seleccionado.proveedores.length > 0 &&
-      seleccionado.precio.length > 0
+      seleccionado.precio.length > 0 &&
+      seleccionado.nombre.toString().trim() !== '' &&
+      seleccionado.area.toString().trim() !== '' &&
+      seleccionado.descripcion_corta.toString().trim() !== ''
     ) {
       prueba();
       props.change();
@@ -438,7 +494,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
       //alert('Campos incompletos');
     }
@@ -486,6 +542,19 @@ export default function AgregarProducto(props) {
     if (document.getElementById('prov1').value !== '') {
       //alert(document.getElementById('prov1').value);
       seleccionado.proveedores.push(document.getElementById('prov1').value);
+    }
+  };
+  const evaluarespacio = (e) => {
+    if (cod2 === ' ') {
+      setcod2('');
+    } else if (cod3 === ' ') {
+      setcod3('');
+    } else if (cod4 === ' ') {
+      setcod4('');
+    } else if (cod5 === ' ') {
+      setcod5('');
+    } else if (cod6 === ' ') {
+      setcod6('');
     }
   };
   const options = [
@@ -559,6 +628,7 @@ export default function AgregarProducto(props) {
                 />
                 <h3>Código 2</h3>
                 <AvField
+                  updatable={true}
                   className="form-control"
                   type="text"
                   name="codigo2"
@@ -569,10 +639,11 @@ export default function AgregarProducto(props) {
                     pattern: { value: '^[A-Za-z0-9]+$' },
                     minLength: { value: 1 },
                   }}
-                  value={seleccionado.codigos[1]}
+                  value={cod2}
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod2}
                   onChange={(e) => handleChange(e, 3)}
+                  onClick={(e) => evaluarespacio(e)}
                 />
                 <h3>Código 3</h3>
                 <AvField
@@ -580,7 +651,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo3"
                   id="cod3"
-                  value={seleccionado.codigos[2]}
+                  value={cod3}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -590,6 +661,7 @@ export default function AgregarProducto(props) {
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod3}
                   onChange={(e) => handleChange(e, 4)}
+                  onClick={(e) => evaluarespacio(e)}
                 />
                 <h3>Código 4</h3>
                 <AvField
@@ -597,7 +669,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo4"
                   id="cod4"
-                  value={seleccionado.codigos[3]}
+                  value={cod4}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -607,6 +679,7 @@ export default function AgregarProducto(props) {
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod4}
                   onChange={(e) => handleChange(e, 5)}
+                  onClick={(e) => evaluarespacio(e)}
                 />
                 <h3>Código 5</h3>
                 <AvField
@@ -614,7 +687,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo5"
                   id="cod5"
-                  value={seleccionado.codigos[4]}
+                  value={cod5}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -624,6 +697,7 @@ export default function AgregarProducto(props) {
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod5}
                   onChange={(e) => handleChange(e, 6)}
+                  onClick={(e) => evaluarespacio(e)}
                 />
                 <h3>Código 6</h3>
                 <AvField
@@ -631,7 +705,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo6"
                   id="cod6"
-                  value={seleccionado.codigos[5]}
+                  value={cod6}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -641,6 +715,7 @@ export default function AgregarProducto(props) {
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod6}
                   onChange={(e) => handleChange(e, 7)}
+                  onClick={(e) => evaluarespacio(e)}
                 />
                 <h3>Código 7</h3>
                 <AvField
@@ -648,7 +723,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo7"
                   id="cod7"
-                  value={seleccionado.codigos[6]}
+                  value={cod7}
                   errorMessage="Codigo Invalido"
                   validate={{
                     required: { value: false },
@@ -657,6 +732,7 @@ export default function AgregarProducto(props) {
                   }}
                   onKeyDown={handleKeyDown}
                   disabled={!inputcod7}
+                  onClick={(e) => evaluarespacio(e)}
                 />
               </AvForm>
             </ModalBody>
@@ -914,8 +990,8 @@ export default function AgregarProducto(props) {
               autoComplete
               options={options}
               value={marca}
-              // options={this.state.productosEnBodega}
-              // onChange={this.handleChange}
+            // options={this.state.productosEnBodega}
+            // onChange={this.handleChange}
             />
           </div>
           <br></br>
@@ -1044,8 +1120,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1059,8 +1135,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
             </AvForm>
           </div>
