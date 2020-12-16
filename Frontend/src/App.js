@@ -35,59 +35,14 @@ import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProve
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
 
+// Import de crear usuarios 
+import CrearUsuario from './Components/CrearUsuario.js';
+
 // Instancia de la react app
 const App = () => {
   console.log('Hola desde app.js');
   return (
-    <Router>
-      {/* Prueba de rutas  */}
-      <Route exact path="/">
-        <LoginSignup />
-      </Route>
-      {/*  Login  */}
-      <Route exact path="/login"></Route>
-      {/* Ambientes propietario */}
-      <Route exact path="/Propietario">
-        <AmbientePropietario />
-      </Route>
-      <Route exact path="/Propietario/Bodegas">
-        <AmbientePropietarioBodegas />
-      </Route>
-      <Route exact path="/Propietario/Productos">
-        <AmbientePropietarioProductos />
-      </Route>
-      <Route exact path="/Propietario/Usuarios">
-        <AmbientePropietarioUsuarios />
-      </Route>
-      <Route exact path="/Propietario/Clientes">
-        <AmbientePropietarioClientes />
-      </Route>
-      {/* Ambientes administrador */}
-      <Route exact path="/Administrador">
-        <AmbienteAdministrador />
-      </Route>
-      {/* Ambientes propietario */}
-      <Route exact path="/JefeTienda">
-        <AmbienteJefeTienda />
-      </Route>
-      <Route exact path="/JefeTienda/Facturar">
-        <AmbienteJefeTiendaFacturar />
-      </Route>
-      <Route exact path="/JefeTienda/Devoluciones">
-        <AmbienteJefeTiendaDevoluciones />
-      </Route>
-      {/* Ambientes vendedor */}
-      <Route exact path="/Vendedor">
-        <AmbienteVendedor />
-      </Route>
-      <Route exact path="/Vendedor/Facturacion">
-        <AmbienteVendedorFacturacion />
-      </Route>
-      {/* Pagina en construccion o error */}
-      <Route exact path="/EnConstruccion">
-        <EnConstruccion />
-      </Route>
-    </Router>
+    <CrearUsuario/>
   );
 };
 
