@@ -43,7 +43,6 @@ const ModificarEliminarBodegas = (props) => {
   };
 
   const EscribirBodegas = async () => {
-    //if(form.numBodega !== false && form.Description !== false && form.Encargado !== false && form.CantPasillos !== false){
     const campos = {
       numBodega: form.numBodega,
       descripcion: form.Description,
@@ -54,10 +53,6 @@ const ModificarEliminarBodegas = (props) => {
     console.log(res);
     alert('¡Bodega Agregada!');
     cerrarModal();
-    //}else{
-    //alert('Error en la creacion!')
-    //cerrarModal();
-    //}
   };
 
   const handleChange = (e) => {
@@ -86,6 +81,7 @@ const ModificarEliminarBodegas = (props) => {
 
   const onDelete = (memberId) => {
     axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
+    window.location.reload(false);
   };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
