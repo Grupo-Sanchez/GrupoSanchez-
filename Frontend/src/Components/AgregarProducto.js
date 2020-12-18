@@ -21,6 +21,7 @@ export default function AgregarProducto(props) {
   /* https://stackblitz.com/edit/react-tag-input-1nelrc */
   const [cod1, setcod1] = useState('');
   let cod = '';
+  const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
   const [cod2, setcod2] = useState('');
   const [cod3, setcod3] = useState('');
   const [cod4, setcod4] = useState('');
@@ -53,6 +54,7 @@ export default function AgregarProducto(props) {
   const [inputprov7, setinputprov7] = useState(false);
   const [existe, setExiste] = useState(false);
   const [data, setData] = useState(dataApuntes);
+  const isAlphanumeric = require('is-alphanumeric');
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
@@ -256,85 +258,104 @@ export default function AgregarProducto(props) {
         setcod7(document.getElementById('cod7').value);
         duplicates.push(document.getElementById('cod7').value);
       }
-      let entra = false;
-      for (let i = 0; i < duplicates.length; i++) {
-        for (let j = 0; j < duplicates.length; j++) {
-          if (i !== j) {
-            if (duplicates[i] === duplicates[j]) {
-              entra = true;
-              break;
-            }
-          }
-        }
-      }
-      let yaesta = false;
-      let mensaje = [];
-      let codigos2 = [];
-      let mansajenot = '';
-      for (let index = 0; index < productos.length; index++) {
-        const element = productos[index];
-        for (let p = 0; p < element.codigos.length; p++) {
-          const element2 = element.codigos[p];
+      if (
+        isAlphanumeric(document.getElementById('cod7').value) &&
+        isAlphanumeric(document.getElementById('cod6').value) &&
+        isAlphanumeric(document.getElementById('cod5').value) &&
+        isAlphanumeric(document.getElementById('cod4').value) &&
+        isAlphanumeric(document.getElementById('cod3').value) &&
+        isAlphanumeric(document.getElementById('cod2').value) &&
+        isAlphanumeric(document.getElementById('cod1').value)
+      ) {
+        let entra = false;
+        for (let i = 0; i < duplicates.length; i++) {
           for (let j = 0; j < duplicates.length; j++) {
-            const element3 = duplicates[j];
-            if (element2 === element3) {
-              mensaje.push(element.nombre);
-              codigos2.push(element2);
-              yaesta = true;
+            if (i !== j) {
+              if (duplicates[i] === duplicates[j]) {
+                entra = true;
+                break;
+              }
             }
           }
         }
-      }
-      let codigosUnicos = codigos2.filter(
-        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
-      );
-      let productosUnicos = mensaje.filter(
-        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
-      );
-      let codString = '';
-      let prodString = '';
-      for (let k = 0; k < codigosUnicos.length; k++) {
-        const element = codigosUnicos[k];
-        codString += ` ${element},`;
-      }
-      for (let k = 0; k < productosUnicos.length; k++) {
-        const element = productosUnicos[k];
-        prodString += ` ${element},`;
-      }
-      if (codigosUnicos.length !== 1) {
-        mansajenot = `Los codigos ${codString.substring(
-          0,
-          codString.length - 1,
-        )} ingresados ya se encuentra en los productos ${prodString.substring(
-          0,
-          prodString.length - 1,
-        )}.`;
+        let yaesta = false;
+        let mensaje = [];
+        let codigos2 = [];
+        let mansajenot = '';
+        for (let index = 0; index < productos.length; index++) {
+          const element = productos[index];
+          for (let p = 0; p < element.codigos.length; p++) {
+            const element2 = element.codigos[p];
+            for (let j = 0; j < duplicates.length; j++) {
+              const element3 = duplicates[j];
+              if (element2 === element3) {
+                mensaje.push(element.nombre);
+                codigos2.push(element2);
+                yaesta = true;
+              }
+            }
+          }
+        }
+        let codigosUnicos = codigos2.filter(
+          (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+        );
+        let productosUnicos = mensaje.filter(
+          (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+        );
+        let codString = '';
+        let prodString = '';
+        for (let k = 0; k < codigosUnicos.length; k++) {
+          const element = codigosUnicos[k];
+          codString += ` ${element},`;
+        }
+        for (let k = 0; k < productosUnicos.length; k++) {
+          const element = productosUnicos[k];
+          prodString += ` ${element},`;
+        }
+        if (codigosUnicos.length !== 1) {
+          mansajenot = `Los codigos ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresados ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        } else {
+          mansajenot = `El codigo ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresado ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        }
+
+        if (entra) {
+          Confirm.open({
+            title: 'Error',
+            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+            onok: () => {},
+          });
+          entra = false;
+        } else if (yaesta) {
+          Confirm.open({
+            title: 'Error',
+            message: mansajenot,
+            onok: () => {},
+          });
+        } else {
+          seleccionado.codigos = duplicates;
+          setModalInsertarCodigo(false);
+        }
       } else {
-        mansajenot = `El codigo ${codString.substring(
-          0,
-          codString.length - 1,
-        )} ingresado ya se encuentra en los productos ${prodString.substring(
-          0,
-          prodString.length - 1,
-        )}.`;
-      }
-      if (entra) {
         Confirm.open({
           title: 'Error',
+          message: 'Los Codigos solo pueden ser Alfanumericos',
+          onok: () => {},
+        });
           message: 'Existen códigos duplicados, verifique e intente nuevamente.',
           onok: () => { },
         });
-        entra = false;
-      } else if (yaesta) {
-        Confirm.open({
-          title: 'Error',
-          message: mansajenot,
-          onok: () => { },
-        });
-      } else {
-        seleccionado.codigos = duplicates;
-        setModalInsertarCodigo(false);
-      }
     }
   };
   const insertarCodigos = () => {
@@ -506,8 +527,19 @@ export default function AgregarProducto(props) {
       seleccionado.area.toString().trim() !== '' &&
       seleccionado.descripcion_corta.toString().trim() !== ''
     ) {
-      prueba();
-      props.change();
+      if (
+        regex.test(document.getElementById('modnombre').value) &&
+        regex.test(document.getElementById('modarea').value)
+      ) {
+        prueba();
+        props.change();
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
+          onok: () => {},
+        });
+      }
     } else {
       Confirm.open({
         title: 'Error',
@@ -667,7 +699,7 @@ export default function AgregarProducto(props) {
                   id="cod1"
                   value={seleccionado.codigos[0]}
                   required
-                  errorMessage="Este codigo es requerido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: true },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -683,7 +715,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo2"
                   id="cod2"
-                  errorMessage="Codigo Invalido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: false },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -702,7 +734,7 @@ export default function AgregarProducto(props) {
                   name="codigo3"
                   id="cod3"
                   value={cod3}
-                  errorMessage="Codigo Invalido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: false },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -720,7 +752,7 @@ export default function AgregarProducto(props) {
                   name="codigo4"
                   id="cod4"
                   value={cod4}
-                  errorMessage="Codigo Invalido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: false },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -738,7 +770,7 @@ export default function AgregarProducto(props) {
                   name="codigo5"
                   id="cod5"
                   value={cod5}
-                  errorMessage="Codigo Invalido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: false },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -756,7 +788,7 @@ export default function AgregarProducto(props) {
                   name="codigo6"
                   id="cod6"
                   value={cod6}
-                  errorMessage="Codigo Invalido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: false },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -774,7 +806,7 @@ export default function AgregarProducto(props) {
                   name="codigo7"
                   id="cod7"
                   value={cod7}
-                  errorMessage="Codigo Invalido"
+                  errorMessage="Código Invalido"
                   validate={{
                     required: { value: false },
                     pattern: { value: '^[A-Za-z0-9]+$' },
@@ -996,11 +1028,12 @@ export default function AgregarProducto(props) {
                 errorMessage="Nombre Inválido"
                 validate={{
                   required: { value: true },
-                  //pattern: { value: '^[A-Za-z0-9]+$' },
+                  pattern: { value: regex },
+
                   minLength: { value: 1 },
                 }}
                 value={seleccionado ? seleccionado.nombre : ''}
-                onChange={manejarCambio}
+                onChange={(e) => manejarCambio(e)}
               />
             </AvForm>
           </div>
@@ -1014,10 +1047,11 @@ export default function AgregarProducto(props) {
                 errorMessage="Campo Obligatorio"
                 validate={{
                   required: { value: true },
+                  pattern: { value: regex },
                   minLength: { value: 1 },
                 }}
                 value={seleccionado ? seleccionado.area : ''}
-                onChange={manejarCambio}
+                onChange={(e) => manejarCambio(e)}
               />
             </AvForm>
           </div>

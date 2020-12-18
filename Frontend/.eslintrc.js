@@ -31,5 +31,6 @@ module.exports = {
     'import/prefer-default-export': 0,
     'prefer-object-spread': 0,
     'object-shorthand': 0,
+    'global-require': 0,
   },
 };
