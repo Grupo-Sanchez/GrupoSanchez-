@@ -444,10 +444,11 @@ export default function AgregarProducto(props) {
       setinputcod6(e.target.value);
       setinputcod7(false);
     } else if (num === 7) {
-      setinputcod7(e.target.value);
-      setcod7(' ');
-      setinputcod7(false);
+      if (e.target.value === '') {
+        setcod7(' ');
+      }
     }
+    setinputcod7(e.target.value);
   };
   const handleChangeProv = (e, num) => {
     if (num === 2) {
@@ -549,16 +550,16 @@ export default function AgregarProducto(props) {
   const evaluarespacio = (e) => {
     if (cod2 === ' ') {
       setcod2('');
-    } else if (cod3 === ' ') {
+    } if (cod3 === ' ') {
       setcod3('');
-    } else if (cod4 === ' ') {
+    } if (cod4 === ' ') {
       setcod4('');
-    } else if (cod5 === ' ') {
+    } if (cod5 === ' ') {
       setcod5('');
-    } else if (cod6 === ' ') {
+    } if (cod6 === ' ') {
       setcod6('');
-    } else if (cod7 === ' ') {
-      setcod6('');
+    } if (cod7 === ' ') {
+      setcod7('');
     }
   };
   const options = [
