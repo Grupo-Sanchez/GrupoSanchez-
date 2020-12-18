@@ -54,7 +54,6 @@ export default function AgregarProducto(props) {
   const [inputprov7, setinputprov7] = useState(false);
   const [existe, setExiste] = useState(false);
   const [data, setData] = useState(dataApuntes);
-  const isAlphanumeric = require('is-alphanumeric');
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
@@ -203,6 +202,7 @@ export default function AgregarProducto(props) {
     seleccionado.cantidad_minima = e.target.value;
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
   };
+  const isAlphanumeric = require('is-alphanumeric');
   const GuardarCodigos = () => {
     seleccionado.codigos = [];
     const duplicates = [];
@@ -387,7 +387,27 @@ export default function AgregarProducto(props) {
       if (precio3.toString().trim() !== '') {
         seleccionado.precio.push(precio3);
       }
-      setModalInsertarPrecio(false);
+      let entra = false;
+      for (let i = 0; i < seleccionado.precio.length; i++) {
+        for (let j = 0; j < seleccionado.precio.length; j++) {
+          if (i !== j) {
+            if (seleccionado.precio[i] === seleccionado.precio[j]) {
+              entra = true;
+              break;
+            }
+          }
+        }
+      }
+      if (entra) {
+        seleccionado.precio = [];
+        Confirm.open({
+          title: 'Error',
+          message: 'Los precios deben ser diferentes.',
+          onok: () => {},
+        });
+      } else {
+        setModalInsertarPrecio(false);
+      }
     }
     /*
     seleccionado.precio.push(document.getElementById('precio1').value);
@@ -1234,7 +1254,7 @@ export default function AgregarProducto(props) {
               })
             }
           >
-            Agregar Producto
+            Agregar Precio
           </button>
           <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
             Cancelar
