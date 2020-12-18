@@ -143,7 +143,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => { },
+      onok: () => {},
     });
   };
   /*
@@ -208,7 +208,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => { },
+        onok: () => {},
       });
       setinputcod2(false);
       setinputcod3(false);
@@ -322,14 +322,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-          onok: () => { },
+          onok: () => {},
         });
         entra = false;
       } else if (yaesta) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => { },
+          onok: () => {},
         });
       } else {
         seleccionado.codigos = duplicates;
@@ -358,7 +358,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.precio.push(precio1);
@@ -383,7 +383,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.proveedores = proveedoresSeleccionados;
@@ -512,7 +512,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -569,15 +569,20 @@ export default function AgregarProducto(props) {
   const evaluarespacio = (e) => {
     if (cod2 === ' ') {
       setcod2('');
-    } if (cod3 === ' ') {
+    }
+    if (cod3 === ' ') {
       setcod3('');
-    } if (cod4 === ' ') {
+    }
+    if (cod4 === ' ') {
       setcod4('');
-    } if (cod5 === ' ') {
+    }
+    if (cod5 === ' ') {
       setcod5('');
-    } if (cod6 === ' ') {
+    }
+    if (cod6 === ' ') {
       setcod6('');
-    } if (cod7 === ' ') {
+    }
+    if (cod7 === ' ') {
       setcod7('');
     }
   };
@@ -1015,7 +1020,6 @@ export default function AgregarProducto(props) {
               options={marcas}
               value={marca}
               onChange={(e) => handleChange2(e)}
-
             />
           </div>
           <br></br>
@@ -1144,8 +1148,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1159,8 +1163,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
             </AvForm>
           </div>
