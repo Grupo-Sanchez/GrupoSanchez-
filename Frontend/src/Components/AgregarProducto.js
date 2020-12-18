@@ -447,8 +447,8 @@ export default function AgregarProducto(props) {
       if (e.target.value === '') {
         setcod7(' ');
       }
+      setinputcod7(e.target.value);
     }
-    setinputcod7(e.target.value);
   };
   const handleChangeProv = (e, num) => {
     if (num === 2) {
