@@ -555,6 +555,8 @@ export default function AgregarProducto(props) {
       setcod5('');
     } else if (cod6 === ' ') {
       setcod6('');
+    } else if (cod7 === ' ') {
+      setcod6('');
     }
   };
   const options = [
