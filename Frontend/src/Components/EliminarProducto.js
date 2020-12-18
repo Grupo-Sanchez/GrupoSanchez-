@@ -1094,7 +1094,6 @@ export default function EliminarProducto(props) {
               <h3>Marca</h3>
               <SelectSearch
                 search
-                //placeholder="Encuentre la Marca del Producto"
                 placeholder={
                   seleccionado.marca[0]
                     ? seleccionado.marca[0].name
@@ -1103,8 +1102,6 @@ export default function EliminarProducto(props) {
                 options={marcas}
                 value={marcaSel}
                 onChange={setMarcaSel}
-                // options={this.state.productosEnBodega}
-                // onChange={this.handleChange}
               />
               <br />
             </div>
