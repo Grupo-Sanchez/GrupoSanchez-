@@ -465,7 +465,7 @@ export default function AgregarProducto(props) {
         setinputcod4(false);
       }
       setinputcod3(e.target.value);
-      setinputcod4(false);
+      // setinputcod4(false);
     } else if (num === 4) {
       if (e.target.value === '') {
         setcod4(' ');
@@ -478,7 +478,7 @@ export default function AgregarProducto(props) {
         setinputcod4(false);
       }
       setinputcod4(e.target.value);
-      setinputcod5(false);
+      // setinputcod5(false);
     } else if (num === 5) {
       if (e.target.value === '') {
         setcod5(' ');
@@ -489,7 +489,7 @@ export default function AgregarProducto(props) {
         setinputcod7(false);
       }
       setinputcod5(e.target.value);
-      setinputcod6(false);
+      // setinputcod6(false);
     } else if (num === 6) {
       if (e.target.value === '') {
         setcod6(' ');
@@ -498,7 +498,7 @@ export default function AgregarProducto(props) {
         setinputcod7(false);
       }
       setinputcod6(e.target.value);
-      setinputcod7(false);
+      // setinputcod7(false);
     } else if (num === 7) {
       if (e.target.value === '') {
         setcod7(' ');
