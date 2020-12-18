@@ -515,6 +515,17 @@ export default function AgregarProducto(props) {
         onok: () => { },
       });
     }
+    seleccionado.nombre = '';
+    seleccionado.area = '';
+    seleccionado.ubicacion = '';
+    seleccionado.descripcion_corta = '';
+    seleccionado.descripcion_larga = '';
+    seleccionado.cantidad = '';
+    seleccionado.cantidad_minima = '';
+    seleccionado.marca = '';
+    seleccionado.codigos = [];
+    seleccionado.precio = [];
+    seleccionado.proveedores = [];
   };
   const cerrarModalAgregarCodigos = () => {
     setinputcod2(false);
@@ -579,6 +590,14 @@ export default function AgregarProducto(props) {
     seleccionado.nombre = '';
     seleccionado.area = '';
     seleccionado.ubicacion = '';
+    seleccionado.descripcion_corta = '';
+    seleccionado.descripcion_larga = '';
+    seleccionado.cantidad = '';
+    seleccionado.cantidad_minima = '';
+    seleccionado.marca = '';
+    seleccionado.codigos = [];
+    seleccionado.precio = [];
+    seleccionado.proveedores = [];
   };
   const provseleccionados = [];
   const proveedorSeleccionado = (provSel) => {
