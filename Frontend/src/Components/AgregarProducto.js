@@ -145,7 +145,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => { },
+      onok: () => {},
     });
   };
   /*
@@ -210,7 +210,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => { },
+        onok: () => {},
       });
       setinputcod2(false);
       setinputcod3(false);
@@ -353,9 +353,7 @@ export default function AgregarProducto(props) {
           message: 'Los Codigos solo pueden ser Alfanumericos',
           onok: () => {},
         });
-          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-          onok: () => { },
-        });
+      }
     }
   };
   const insertarCodigos = () => {
@@ -379,7 +377,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.precio.push(precio1);
@@ -404,7 +402,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.proveedores = proveedoresSeleccionados;
@@ -525,7 +523,9 @@ export default function AgregarProducto(props) {
       seleccionado.precio.length > 0 &&
       seleccionado.nombre.toString().trim() !== '' &&
       seleccionado.area.toString().trim() !== '' &&
-      seleccionado.descripcion_corta.toString().trim() !== ''
+      seleccionado.descripcion_corta.toString().trim() !== '' &&
+      document.getElementById('cantidad').value > 0 &&
+      document.getElementById('cantidad_minima').value > 0
     ) {
       if (
         regex.test(document.getElementById('modnombre').value) &&
@@ -544,7 +544,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
     seleccionado.nombre = '';
@@ -1091,7 +1091,7 @@ export default function AgregarProducto(props) {
               min={
                 document.getElementById('cantidad_minima')
                   ? document.getElementById('cantidad_minima').value
-                  : 2
+                  : 0
               }
               onChange={(e) => manejarCambiocant(e, 0)}
             />
@@ -1102,10 +1102,7 @@ export default function AgregarProducto(props) {
               className="form-control"
               type="number"
               id="cantidad_minima"
-              /*max={
-                document.getElementById('cantidad') ? document.getElementById('cantidad').value : 0
-              }*/
-              min={1}
+              min={0}
               onChange={(e) => manejarCambiocantmin(e, 1)}
             />
           </div>
@@ -1203,8 +1200,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1218,8 +1215,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
             </AvForm>
           </div>
