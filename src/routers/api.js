@@ -6,6 +6,7 @@ const productos = require('./productosRoutes');
 const devoluciones = require('./DevolucionRoutes');
 const facturas = require('./FacturaRoutes');
 const proveedores = require('./proveedorRoutes');
+const marcas = require('./marcaRoutes');
 
 const api = express.Router();
 
@@ -23,4 +24,7 @@ api.use('/clientes', clientes);
 api.get('/clientes', clientes);
 api.use('/proveedor', proveedores);
 api.get('/proveedor', proveedores);
+api.use('/marcas', marcas);
+api.get('./marcas', marcas);
+
 module.exports = api;

@@ -68,6 +68,7 @@ export default function AgregarProducto(props) {
   });
   let [proveedores, setProveedores] = useState([]);
   const [productos, setProductos] = useState([]);
+  let [marcas, setMarcas] = useState([]);
   useEffect(() => {
     const fecthData = async () => {
       await axios.get('http://localhost:3001/api/proveedor').then((response) => {
@@ -98,6 +99,21 @@ export default function AgregarProducto(props) {
         setProveedores(proveedoresagregados);
       });
     };
+    const fecthMarcas = async () => {
+      await axios.get('http://localhost:3001/api/marcas').then((response) => {
+        const marcasobtenidas = response.data;
+        const marcasAgregar = [];
+        for (let index = 0; index < marcasobtenidas.length; index++) {
+          const element = marcasobtenidas[index];
+          marcasAgregar.push({
+            value: element._id,
+            name: element.nombre,
+            _v: element._v,
+          });
+        }
+        setMarcas(marcasAgregar);
+      });
+    };
     const fecthProductos = async () => {
       await axios.get('http://localhost:3001/api/productos').then((response) => {
         setProductos(response.data);
@@ -105,6 +121,7 @@ export default function AgregarProducto(props) {
     };
     fecthData();
     fecthProductos();
+    fecthMarcas();
   }, []);
   const prueba = async () => {
     seleccionado.proveedores = proveedoresSeleccionados;
@@ -114,7 +131,7 @@ export default function AgregarProducto(props) {
       codigos: seleccionado.codigos,
       proveedores: seleccionado.proveedores,
       ubicacion: seleccionado.ubicacion,
-      marca: 'makita',
+      marca: seleccionado.marca,
       precios: seleccionado.precio,
       cantidad: seleccionado.cantidad,
       descripcion_corta: seleccionado.descripcion_corta,
@@ -135,7 +152,17 @@ export default function AgregarProducto(props) {
       this.setState({some:'val',arr:this.state.arr})
   }
   */
-
+  const agregarMarca = (idToSearch) => {
+    marcas.filter((item) => {
+      if (item.value === idToSearch) {
+        seleccionado.marca = item;
+      }
+      return 0;
+    });
+  };
+  const handleChange2 = (e) => {
+    agregarMarca(e);
+  };
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
@@ -307,11 +334,6 @@ export default function AgregarProducto(props) {
       } else {
         seleccionado.codigos = duplicates;
         setModalInsertarCodigo(false);
-        Confirm.open({
-          title: '',
-          message: 'Códigos Agregados Exitosamente',
-          onok: () => { },
-        });
       }
     }
   };
@@ -347,11 +369,6 @@ export default function AgregarProducto(props) {
         seleccionado.precio.push(precio3);
       }
       setModalInsertarPrecio(false);
-      Confirm.open({
-        title: '',
-        message: 'Precios Agregados Exitosamente',
-        onok: () => { },
-      });
     }
     /*
     seleccionado.precio.push(document.getElementById('precio1').value);
@@ -476,11 +493,9 @@ export default function AgregarProducto(props) {
   };
   const insertar = () => {
     const valorInsertar = seleccionado;
-    // valorInsertar.N = data[data.length].N + 1;
     const dataNueva = data;
     dataNueva.push(valorInsertar);
     setData(dataNueva);
-    // setModalInsertar(false);
     seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
     seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     if (
@@ -499,7 +514,6 @@ export default function AgregarProducto(props) {
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
         onok: () => { },
       });
-      //alert('Campos incompletos');
     }
   };
   const cerrarModalAgregarCodigos = () => {
@@ -539,7 +553,12 @@ export default function AgregarProducto(props) {
       e.preventDefault();
     }
   };
-
+  const cerrarModalAgregarProducto = () => {
+    props.change();
+    seleccionado.nombre = '';
+    seleccionado.area = '';
+    seleccionado.ubicacion = '';
+  };
   const provseleccionados = [];
   const proveedorSeleccionado = (provSel) => {
     if (document.getElementById('prov1').value !== '') {
@@ -746,7 +765,7 @@ export default function AgregarProducto(props) {
                 onClick={() =>
                   Confirm.open({
                     title: 'Insertar Codigos',
-                    message: 'Esta seguro de que quiere insertar estos codigos?',
+                    message: '¿Esta seguro de que quiere insertar estos codigos?',
                     onok: () => {
                       GuardarCodigos();
                     },
@@ -927,7 +946,7 @@ export default function AgregarProducto(props) {
                 onClick={() =>
                   Confirm.open({
                     title: 'Insertar Proveedores',
-                    message: 'Esta seguro de que quiere insertar estos Proveedores?',
+                    message: '¿Esta seguro de que quiere insertar estos Proveedores?',
                     onok: () => {
                       GuardarProveedores();
                     },
@@ -993,10 +1012,10 @@ export default function AgregarProducto(props) {
               placeholder="Encuentre la Marca del Producto"
               required
               autoComplete
-              options={options}
+              options={marcas}
               value={marca}
-            // options={this.state.productosEnBodega}
-            // onChange={this.handleChange}
+              onChange={(e) => handleChange2(e)}
+
             />
           </div>
           <br></br>
@@ -1069,7 +1088,7 @@ export default function AgregarProducto(props) {
             onClick={() =>
               Confirm.open({
                 title: 'Insertar Producto',
-                message: 'Esta seguro de que quiere insertar este producto?',
+                message: '¿Esta seguro de que quiere insertar este producto?',
                 onok: () => {
                   insertar();
                 },
@@ -1078,7 +1097,7 @@ export default function AgregarProducto(props) {
           >
             Agregar Producto
           </button>
-          <button className="btn btn-danger" onClick={props.change}>
+          <button className="btn btn-danger" onClick={cerrarModalAgregarProducto}>
             Cancelar
           </button>
         </ModalFooter>
@@ -1152,7 +1171,7 @@ export default function AgregarProducto(props) {
             onClick={() =>
               Confirm.open({
                 title: 'Insertar Precios',
-                message: 'Esta seguro de que quiere insertar estos precios?',
+                message: '¿Esta seguro de que quiere insertar estos precios?',
                 onok: () => {
                   GuardarPrecio();
                 },
