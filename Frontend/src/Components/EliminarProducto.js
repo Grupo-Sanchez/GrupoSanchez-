@@ -53,7 +53,7 @@ export default function EliminarProducto(props) {
     codigos: [],
     proveedores: [],
     ubicacion: '',
-    marca: '',
+    marca: [],
     precios: [],
     cantidad: '',
     descripcion_corta: '',
@@ -63,10 +63,12 @@ export default function EliminarProducto(props) {
   const [cantsel, setCantsel] = useState(seleccionado.cantidad);
   const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
   let [proveedores, setProveedores] = useState([]);
+  let [marcas, setMarcas] = useState([]);
   const fecthData = async () => {
     await axios.get('http://localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
+    // alert(JSON.stringify(data));
   };
   const fecthProveedores = async () => {
     await axios.get('http://localhost:3001/api/proveedor').then((response) => {
@@ -96,9 +98,25 @@ export default function EliminarProducto(props) {
       setProveedores(proveedoresagregados);
     });
   };
+  const fecthMarcas = async () => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+      const marcasobtenidas = response.data;
+      const marcasAgregar = [];
+      for (let index = 0; index < marcasobtenidas.length; index++) {
+        const element = marcasobtenidas[index];
+        marcasAgregar.push({
+          value: element._id,
+          name: element.nombre,
+          _v: element._v,
+        });
+      }
+      setMarcas(marcasAgregar);
+    });
+  };
   useEffect(() => {
     fecthProveedores();
     fecthData();
+    fecthMarcas();
   }, [data]);
   const proveedoresSeleccionados = [];
   const handleOnChange = (value) => {
@@ -177,6 +195,8 @@ export default function EliminarProducto(props) {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
+
+  let [marcaSel, setMarcaSel] = useState(seleccionado.marca[0]);
   const updateItem = async (Id) => {
     setModalModificar(false);
     axios
@@ -186,7 +206,7 @@ export default function EliminarProducto(props) {
         codigos: seleccionado.codigos,
         proveedores: seleccionado.proveedores,
         ubicacion: document.getElementById('modubicacion').value,
-        marca: 'makita',
+        marca: marcaSel,
         precios: seleccionado.precios,
         cantidad: document.getElementById('modcantidad').value,
         descripcion_corta: document.getElementById('descripcion1').value,
@@ -206,6 +226,17 @@ export default function EliminarProducto(props) {
     this.setState({
       name: value,
     });
+  };
+  const agregarMarca = (idToSearch) => {
+    marcas.filter((item) => {
+      if (item.value === idToSearch) {
+        setMarcaSel(item);
+      }
+      return 0;
+    });
+  };
+  const handleChange2 = (e) => {
+    agregarMarca(e);
   };
   const verificarCodigo = () => {
     /*
@@ -243,12 +274,12 @@ export default function EliminarProducto(props) {
     }
     return 0;
   };*/
-
   const Modificar = (element) => {
     setSeleccionado(element);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
-    seleccionado.marca = element.marca;
+    setMarcaSel(element.marca[0].value);
+    //alert(JSON.stringify(marcaSel));
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -575,7 +606,7 @@ export default function EliminarProducto(props) {
                 <td>{elemento.nombre}</td>
                 <td>{elemento.area}</td>
                 <td>{elemento.ubicacion}</td>
-                <td>{elemento.marca}</td>
+                <td>{elemento.marca[0].name}</td>
                 <td>{elemento.cantidad}</td>
                 <td>{elemento.cantidad_minima}</td>
                 <td>
@@ -1064,22 +1095,17 @@ export default function EliminarProducto(props) {
               <SelectSearch
                 search
                 //placeholder="Encuentre la Marca del Producto"
-                options={options}
-                //placeholder={seleccionado.marca}
-                //printOptions="on-focus"
-                value={seleccionado.marca}
+                placeholder={
+                  seleccionado.marca[0]
+                    ? seleccionado.marca[0].name
+                    : 'Encuentre el Marca del Producto'
+                }
+                options={marcas}
+                value={marcaSel}
+                onChange={setMarcaSel}
                 // options={this.state.productosEnBodega}
                 // onChange={this.handleChange}
               />
-              {/*<input
-                className="form-control"
-                type="text"
-                name="marca"
-                id="modmarca"
-                placeholder={seleccionado.marca}
-                value={seleccionado ? seleccionado.marca : ''}
-                onChange={manejarCambio}
-              />*/}
               <br />
             </div>
             <Button onClick={() => changePrecio()} color="primary">

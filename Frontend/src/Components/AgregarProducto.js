@@ -67,6 +67,7 @@ export default function AgregarProducto(props) {
   });
   let [proveedores, setProveedores] = useState([]);
   const [productos, setProductos] = useState([]);
+  let [marcas, setMarcas] = useState([]);
   useEffect(() => {
     const fecthData = async () => {
       await axios.get('http://localhost:3001/api/proveedor').then((response) => {
@@ -97,6 +98,21 @@ export default function AgregarProducto(props) {
         setProveedores(proveedoresagregados);
       });
     };
+    const fecthMarcas = async () => {
+      await axios.get('http://localhost:3001/api/marcas').then((response) => {
+        const marcasobtenidas = response.data;
+        const marcasAgregar = [];
+        for (let index = 0; index < marcasobtenidas.length; index++) {
+          const element = marcasobtenidas[index];
+          marcasAgregar.push({
+            value: element._id,
+            name: element.nombre,
+            _v: element._v,
+          });
+        }
+        setMarcas(marcasAgregar);
+      });
+    };
     const fecthProductos = async () => {
       await axios.get('http://localhost:3001/api/productos').then((response) => {
         setProductos(response.data);
@@ -104,6 +120,7 @@ export default function AgregarProducto(props) {
     };
     fecthData();
     fecthProductos();
+    fecthMarcas();
   }, []);
   const prueba = async () => {
     seleccionado.proveedores = proveedoresSeleccionados;
@@ -113,7 +130,7 @@ export default function AgregarProducto(props) {
       codigos: seleccionado.codigos,
       proveedores: seleccionado.proveedores,
       ubicacion: seleccionado.ubicacion,
-      marca: 'makita',
+      marca: seleccionado.marca,
       precios: seleccionado.precio,
       cantidad: seleccionado.cantidad,
       descripcion_corta: seleccionado.descripcion_corta,
@@ -134,7 +151,17 @@ export default function AgregarProducto(props) {
       this.setState({some:'val',arr:this.state.arr})
   }
   */
-
+  const agregarMarca = (idToSearch) => {
+    marcas.filter((item) => {
+      if (item.value === idToSearch) {
+        seleccionado.marca = item;
+      }
+      return 0;
+    });
+  };
+  const handleChange2 = (e) => {
+    agregarMarca(e);
+  };
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
@@ -907,8 +934,9 @@ export default function AgregarProducto(props) {
               placeholder="Encuentre la Marca del Producto"
               required
               autoComplete
-              options={options}
+              options={marcas}
               value={marca}
+              onChange={(e) => handleChange2(e)}
               // options={this.state.productosEnBodega}
               // onChange={this.handleChange}
             />
