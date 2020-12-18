@@ -195,27 +195,75 @@ export default function EliminarProducto(props) {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
-
-  let [marcaSel, setMarcaSel] = useState(seleccionado.marca[0]);
+  const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
+  const isAlphanumeric = require('is-alphanumeric');
+  const [marcaSel, setMarcaSel] = useState([]);
   const updateItem = async (Id) => {
-    setModalModificar(false);
-    axios
-      .put(`http://localhost:3001/api/productos/${Id}`, {
-        nombre: document.getElementById('modnombre').value,
-        area: document.getElementById('modarea').value,
-        codigos: seleccionado.codigos,
-        proveedores: seleccionado.proveedores,
-        ubicacion: document.getElementById('modubicacion').value,
-        marca: marcaSel,
-        precios: seleccionado.precios,
-        cantidad: document.getElementById('modcantidad').value,
-        descripcion_corta: document.getElementById('descripcion1').value,
-        descripcion_larga: document.getElementById('descripcion2').value,
-        cantidad_minima: document.getElementById('modcantidad_minima').value,
-      })
-      .catch((error) => {
-        console.log(error);
+    for (let index = 0; index < marcas.length; index++) {
+      const element = marcas[index];
+      if (element.value === marcaSel) {
+        for (let i = 0; i < data.length; i++) {
+          const element2 = data[i];
+          if (element2._id === Id) {
+            seleccionado.marca = element;
+            break;
+          }
+        }
+      }
+    }
+    if (
+      seleccionado.codigos.length > 0 &&
+      seleccionado.proveedores.length > 0 &&
+      seleccionado.precios.length > 0 &&
+      seleccionado.nombre.toString().trim() !== '' &&
+      seleccionado.area.toString().trim() !== '' &&
+      seleccionado.descripcion_corta.toString().trim() !== ''
+    ) {
+      if (
+        regex.test(document.getElementById('modnombre').value) &&
+        regex.test(document.getElementById('modarea').value)
+        //isAlphanumeric(document.getElementById('modnombre').value) &&
+        // isAlphanumeric(document.getElementById('modarea').value)
+      ) {
+        setModalModificar(false);
+        axios
+          .put(`http://localhost:3001/api/productos/${Id}`, {
+            nombre: document.getElementById('modnombre').value,
+            area: document.getElementById('modarea').value,
+            codigos: seleccionado.codigos,
+            proveedores: seleccionado.proveedores,
+            ubicacion: document.getElementById('modubicacion').value,
+            marca: seleccionado.marca,
+            precios: seleccionado.precios,
+            cantidad: document.getElementById('modcantidad').value,
+            descripcion_corta: document.getElementById('descripcion1').value,
+            descripcion_larga: document.getElementById('descripcion2').value,
+            cantidad_minima: document.getElementById('modcantidad_minima').value,
+          })
+          .then(
+            Confirm.open({
+              title: '',
+              message: `Producto ${seleccionado.nombre} modificado exitosamente`,
+              onok: () => {},
+            }),
+          )
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
+          onok: () => {},
+        });
+      }
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
+        onok: () => {},
       });
+    }
   };
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
@@ -230,13 +278,15 @@ export default function EliminarProducto(props) {
   const agregarMarca = (idToSearch) => {
     marcas.filter((item) => {
       if (item.value === idToSearch) {
-        setMarcaSel(item);
+        setMarcaSel(item.value);
+        //alert(marcaSel);
       }
       return 0;
     });
   };
   const handleChange2 = (e) => {
     agregarMarca(e);
+    // alert('sadf');
   };
   const verificarCodigo = () => {
     /*
@@ -274,12 +324,13 @@ export default function EliminarProducto(props) {
     }
     return 0;
   };*/
+  const [nombreProducto, setNombre] = useState('');
   const Modificar = (element) => {
     setSeleccionado(element);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
     setMarcaSel(element.marca[0].value);
-    //alert(JSON.stringify(marcaSel));
+    setNombre(element.nombre);
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -338,128 +389,143 @@ export default function EliminarProducto(props) {
   };
   const GuardarCodigos = (i) => {
     const array = [];
-    // alert(JSON.stringify(seleccionado.codigos));
-    if (i.codigos[0] === '') {
-      Confirm.open({
-        title: 'Error',
-        message: `El Codigo 1 de ${seleccionado.nombre} esta vacio`,
-        onok: () => {},
-      });
-    } else {
-      array.push(codigo1);
-    }
-    if (i.codigos[1] !== '') {
-      array.push(codigo2);
-    }
-    if (i.codigos[2] !== '') {
-      array.push(codigo3);
-    }
-    if (i.codigos[3] !== '') {
-      array.push(codigo4);
-    }
-    if (i.codigos[4] !== '') {
-      array.push(codigo5);
-    }
-    if (i.codigos[5] !== '') {
-      array.push(codigo6);
-    }
-    if (i.codigos[6] !== '') {
-      array.push(codigo7);
-    }
-    let entra = false;
-    for (let ind = 0; ind < array.length; ind++) {
-      for (let j = 0; j < array.length; j++) {
-        if (ind !== j) {
-          if (array[ind] === array[j]) {
-            entra = true;
-            break;
-          }
-        }
+    if (
+      isAlphanumeric(codigo1) &&
+      isAlphanumeric(codigo2) &&
+      isAlphanumeric(codigo3) &&
+      isAlphanumeric(codigo4) &&
+      isAlphanumeric(codigo5) &&
+      isAlphanumeric(codigo6) &&
+      isAlphanumeric(codigo7)
+    ) {
+      if (i.codigos[0] === '') {
+        Confirm.open({
+          title: 'Error',
+          message: `El Codigo 1 de ${seleccionado.nombre} esta vacio`,
+          onok: () => {},
+        });
+      } else {
+        array.push(codigo1);
       }
-    }
-    let yaesta = false;
-    let mensaje = [];
-    let codigos2 = [];
-    let mansajenot = '';
-    for (let index = 0; index < data.length; index++) {
-      const element = data[index];
-      if (element._id !== seleccionado._id) {
-        for (let p = 0; p < element.codigos.length; p++) {
-          const element2 = element.codigos[p];
-          for (let j = 0; j < array.length; j++) {
-            const element3 = array[j];
-            if (element2 === element3) {
-              mensaje.push(element.nombre);
-              codigos2.push(element2);
-              yaesta = true;
+      if (i.codigos[1] !== '') {
+        array.push(codigo2);
+      }
+      if (i.codigos[2] !== '') {
+        array.push(codigo3);
+      }
+      if (i.codigos[3] !== '') {
+        array.push(codigo4);
+      }
+      if (i.codigos[4] !== '') {
+        array.push(codigo5);
+      }
+      if (i.codigos[5] !== '') {
+        array.push(codigo6);
+      }
+      if (i.codigos[6] !== '') {
+        array.push(codigo7);
+      }
+      let entra = false;
+      for (let ind = 0; ind < array.length; ind++) {
+        for (let j = 0; j < array.length; j++) {
+          if (ind !== j) {
+            if (array[ind] === array[j]) {
+              entra = true;
+              break;
             }
           }
         }
       }
-    }
-    //const codigosUnicos = new Set(codigos2);
-    let codigosUnicos = codigos2.filter(
-      (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
-    );
-    let productosUnicos = mensaje.filter(
-      (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
-    );
+      let yaesta = false;
+      let mensaje = [];
+      let codigos2 = [];
+      let mansajenot = '';
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        if (element._id !== seleccionado._id) {
+          for (let p = 0; p < element.codigos.length; p++) {
+            const element2 = element.codigos[p];
+            for (let j = 0; j < array.length; j++) {
+              const element3 = array[j];
+              if (element2 === element3) {
+                mensaje.push(element.nombre);
+                codigos2.push(element2);
+                yaesta = true;
+              }
+            }
+          }
+        }
+      }
+      //const codigosUnicos = new Set(codigos2);
+      let codigosUnicos = codigos2.filter(
+        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+      );
+      let productosUnicos = mensaje.filter(
+        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+      );
 
-    let codString = '';
-    let prodString = '';
-    for (let k = 0; k < codigosUnicos.length; k++) {
-      const element = codigosUnicos[k];
-      codString += ` ${element},`;
-    }
-    for (let k = 0; k < productosUnicos.length; k++) {
-      const element = productosUnicos[k];
-      prodString += ` ${element},`;
-    }
-    if (codigosUnicos.length !== 1) {
-      mansajenot = `Los codigos ${codString.substring(
-        0,
-        codString.length - 1,
-      )} ingresados ya se encuentra en los productos ${prodString.substring(
-        0,
-        prodString.length - 1,
-      )}.`;
+      let codString = '';
+      let prodString = '';
+      for (let k = 0; k < codigosUnicos.length; k++) {
+        const element = codigosUnicos[k];
+        codString += ` ${element},`;
+      }
+      for (let k = 0; k < productosUnicos.length; k++) {
+        const element = productosUnicos[k];
+        prodString += ` ${element},`;
+      }
+      if (codigosUnicos.length !== 1) {
+        mansajenot = `Los codigos ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresados ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      } else {
+        mansajenot = `El codigo ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresado ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      }
+      if (entra) {
+        Confirm.open({
+          title: 'Error',
+          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          onok: () => {},
+        });
+        entra = false;
+      } else if (yaesta) {
+        Confirm.open({
+          title: 'Error',
+          message: mansajenot,
+          onok: () => {
+            setCodigo1(seleccionado.codigos[0]);
+            setCodigo2(seleccionado.codigos[1]);
+            setCodigo3(seleccionado.codigos[2]);
+            setCodigo4(seleccionado.codigos[3]);
+            setCodigo5(seleccionado.codigos[4]);
+            setCodigo6(seleccionado.codigos[5]);
+            setCodigo7(seleccionado.codigos[6]);
+          },
+        });
+      } else {
+        seleccionado.codigos = [];
+        seleccionado.codigos = array;
+        setModalModificarCodigos(false);
+        Confirm.open({
+          title: '',
+          message: 'Códigos Agregados Exitosamente',
+          onok: () => {},
+        });
+      }
     } else {
-      mansajenot = `El codigo ${codString.substring(
-        0,
-        codString.length - 1,
-      )} ingresado ya se encuentra en los productos ${prodString.substring(
-        0,
-        prodString.length - 1,
-      )}.`;
-    }
-    if (entra) {
       Confirm.open({
         title: 'Error',
-        message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-        onok: () => {},
-      });
-      entra = false;
-    } else if (yaesta) {
-      Confirm.open({
-        title: 'Error',
-        message: mansajenot,
-        onok: () => {
-          setCodigo1(seleccionado.codigos[0]);
-          setCodigo2(seleccionado.codigos[1]);
-          setCodigo3(seleccionado.codigos[2]);
-          setCodigo4(seleccionado.codigos[3]);
-          setCodigo5(seleccionado.codigos[4]);
-          setCodigo6(seleccionado.codigos[5]);
-          setCodigo7(seleccionado.codigos[6]);
-        },
-      });
-    } else {
-      seleccionado.codigos = [];
-      seleccionado.codigos = array;
-      setModalModificarCodigos(false);
-      Confirm.open({
-        title: '',
-        message: 'Códigos Agregados Exitosamente',
+        message: 'Los Codigos solo pueden ser Alfanumericos',
         onok: () => {},
       });
     }
@@ -1058,26 +1124,42 @@ export default function EliminarProducto(props) {
               </ModalFooter>
             </Modal>
             <div>
-              <h3>Nombre</h3>
-              <input
-                className="form-control"
-                type="text"
-                name="nombre"
-                id="modnombre"
-                value={seleccionado ? seleccionado.nombre : ''}
-                onChange={manejarCambio}
-              />
+              <AvForm>
+                <h3>Nombre</h3>
+                <AvField
+                  //className="form-control"
+                  type="text"
+                  name="nombre"
+                  id="modnombre"
+                  value={seleccionado ? seleccionado.nombre : ''}
+                  errorMessage="Nombre Inválido"
+                  validate={{
+                    required: { value: true },
+                    pattern: { value: regex },
+                    minLength: { value: 1 },
+                  }}
+                  onChange={(e) => manejarCambio(e)}
+                />
+              </AvForm>
             </div>
             <div>
-              <h3>Área</h3>
-              <input
-                className="form-control"
-                type="text"
-                name="area"
-                id="modarea"
-                value={seleccionado ? seleccionado.area : ''}
-                onChange={manejarCambio}
-              />
+              <AvForm>
+                <h3>Área</h3>
+                <AvField
+                  className="form-control"
+                  type="text"
+                  name="area"
+                  id="modarea"
+                  errorMessage="Campo Obligatorio"
+                  validate={{
+                    required: { value: true },
+                    pattern: { value: regex },
+                    minLength: { value: 1 },
+                  }}
+                  value={seleccionado ? seleccionado.area : ''}
+                  onChange={(e) => manejarCambio(e)}
+                />
+              </AvForm>
             </div>
             <div>
               <h3>Ubicación</h3>
@@ -1094,14 +1176,15 @@ export default function EliminarProducto(props) {
               <h3>Marca</h3>
               <SelectSearch
                 search
-                placeholder={
+                /*placeholder={
                   seleccionado.marca[0]
                     ? seleccionado.marca[0].name
                     : 'Encuentre el Marca del Producto'
-                }
+                }*/
                 options={marcas}
                 value={marcaSel}
-                onChange={setMarcaSel}
+                //onChange={setMarcaSel}
+                onChange={(e) => handleChange2(e)}
               />
               <br />
             </div>
@@ -1139,16 +1222,23 @@ export default function EliminarProducto(props) {
             <div>
               <div>
                 <h3>Descripción corta</h3>
-                <FormGroup class="style">
-                  <Label for="exampleText"></Label>
-                  <Input
-                    type="textarea"
-                    name="text"
-                    id="descripcion1"
-                    value={seleccionado ? seleccionado.descripcion_corta : ''}
-                    onChange={manejarCambio}
-                  />
-                </FormGroup>
+                <AvForm>
+                  <FormGroup class="style">
+                    <Label for="exampleText"></Label>
+                    <AvField
+                      type="textarea"
+                      name="text"
+                      id="descripcion1"
+                      errorMessage="Campo Obligatorio"
+                      validate={{
+                        required: { value: true },
+                        minLength: { value: 1 },
+                      }}
+                      value={seleccionado ? seleccionado.descripcion_corta : ''}
+                      onChange={manejarCambio}
+                    />
+                  </FormGroup>
+                </AvForm>
               </div>
             </div>
             <div>
@@ -1173,7 +1263,7 @@ export default function EliminarProducto(props) {
               onClick={() =>
                 Confirm.open({
                   title: 'Guardar Cambios',
-                  message: `Esta seguro de que quiere modificar la/el ${seleccionado.nombre}?`,
+                  message: `Esta seguro de que quiere modificar la/el ${nombreProducto}?`,
                   onok: () => {
                     updateItem(seleccionado._id);
                   },
@@ -1377,7 +1467,7 @@ export default function EliminarProducto(props) {
               className="form-control"
               type="text"
               name="Apunte"
-              value={seleccionado.proveedores[0]}
+              value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
               readOnly
               // onChange={manejarCambio}
             />
@@ -1388,7 +1478,7 @@ export default function EliminarProducto(props) {
               type="text"
               name="Fecha"
               readOnly
-              value={seleccionado.proveedores[1]}
+              value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
               // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
               // onChange={manejarCambio}
             />
@@ -1398,7 +1488,7 @@ export default function EliminarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[2]}
+              value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -1409,7 +1499,7 @@ export default function EliminarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[3]}
+              value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -1420,7 +1510,7 @@ export default function EliminarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[4]}
+              value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -1431,7 +1521,7 @@ export default function EliminarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[5]}
+              value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -1442,7 +1532,7 @@ export default function EliminarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[6]}
+              value={seleccionado.proveedores[6] ? seleccionado.proveedores[6].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
