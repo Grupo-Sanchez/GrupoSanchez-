@@ -178,10 +178,25 @@ export default function EliminarProducto(props) {
     }
   };
   const GuardarPrecio = () => {
-    seleccionado.precios[0] = document.getElementById('modprecio1').value;
-    seleccionado.precios[1] = document.getElementById('modprecio2').value;
-    seleccionado.precios[2] = document.getElementById('modprecio3').value;
-    setModalModificarPrecios(false);
+    let menor = false;
+    seleccionado.precios[0] = parseInt(document.getElementById('modprecio1').value, 10);
+    seleccionado.precios[1] = parseInt(document.getElementById('modprecio2').value, 10);
+    seleccionado.precios[2] = parseInt(document.getElementById('modprecio3').value, 10);
+    if (
+      (seleccionado.precios[0] > seleccionado.precios[1]) &&
+      (seleccionado.precios[1] > seleccionado.precios[2])
+    ) {
+      menor = true;
+    }
+    if (!menor) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Los precios deben ser diferentes y descendentes.',
+        onok: () => {},
+      });
+    } else {
+      setModalModificarPrecios(false);
+    }
   };
   const onDelete = (memberId) => {
     axios.delete(`http://localhost:3001/api/productos/${memberId}`);
@@ -219,7 +234,8 @@ export default function EliminarProducto(props) {
       seleccionado.area.toString().trim() !== '' &&
       seleccionado.descripcion_corta.toString().trim() !== '' &&
       document.getElementById('modcantidad').value > 0 &&
-      document.getElementById('modcantidad_minima').value > 0
+      document.getElementById('modcantidad_minima').value > 0 &&
+      seleccionado.marca[0] !== null
     ) {
       if (
         regex.test(document.getElementById('modnombre').value) &&
