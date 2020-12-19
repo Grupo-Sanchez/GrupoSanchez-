@@ -144,7 +144,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     seleccionado.nombre = '';
     seleccionado.area = '';
@@ -214,7 +214,28 @@ export default function AgregarProducto(props) {
   const manejarCambiocant = (e, n) => {
     seleccionado.cantidad = e.target.value;
   };
+  const cerrarModalAgregarProducto = () => {
+    props.change();
 
+    seleccionado.nombre = '';
+    seleccionado.area = '';
+    seleccionado.ubicacion = '';
+    seleccionado.descripcion_corta = '';
+    seleccionado.descripcion_larga = '';
+    seleccionado.cantidad = '';
+    seleccionado.cantidad_minima = '';
+    seleccionado.marca = '';
+    seleccionado.codigos = [];
+    seleccionado.precio = [];
+    seleccionado.proveedores = [];
+  };
+  const descartarcambios = () => {
+    Confirm.open({
+      title: '¡Advertencia!',
+      message: '¿Desea descartar todos los campos?',
+      onok: () => { cerrarModalAgregarProducto(); },
+    });
+  };
   const manejarCambiocantmin = (e, n) => {
     const num = document.getElementById('cantidad_minima').value;
     const num2 = document.getElementById('cantidad').value;
@@ -234,7 +255,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => {},
+        onok: () => { },
       });
       setinputcod2(false);
       setinputcod3(false);
@@ -358,14 +379,14 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => {},
+            onok: () => { },
           });
           entra = false;
         } else if (yaesta) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else {
           seleccionado.codigos = duplicates;
@@ -375,7 +396,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los Codigos solo pueden ser Alfanumericos',
-          onok: () => {},
+          onok: () => { },
         });
       }
     }
@@ -401,7 +422,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -436,7 +457,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -455,7 +476,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.proveedores = proveedoresSeleccionados;
@@ -591,14 +612,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -659,20 +680,6 @@ export default function AgregarProducto(props) {
     if (e.key === ' ') {
       e.preventDefault();
     }
-  };
-  const cerrarModalAgregarProducto = () => {
-    props.change();
-    seleccionado.nombre = '';
-    seleccionado.area = '';
-    seleccionado.ubicacion = '';
-    seleccionado.descripcion_corta = '';
-    seleccionado.descripcion_larga = '';
-    seleccionado.cantidad = '';
-    seleccionado.cantidad_minima = '';
-    seleccionado.marca = '';
-    seleccionado.codigos = [];
-    seleccionado.precio = [];
-    seleccionado.proveedores = [];
   };
   const provseleccionados = [];
   const proveedorSeleccionado = (provSel) => {
@@ -1198,7 +1205,7 @@ export default function AgregarProducto(props) {
           >
             Agregar Producto
           </button>
-          <button className="btn btn-danger" onClick={cerrarModalAgregarProducto}>
+          <button className="btn btn-danger" onClick={(e) => descartarcambios()}>
             Cancelar
           </button>
         </ModalFooter>
@@ -1245,8 +1252,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1260,8 +1267,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
             </AvForm>
           </div>
