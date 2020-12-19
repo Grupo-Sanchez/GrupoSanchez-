@@ -60,7 +60,7 @@ export default function AgregarProducto(props) {
     codigos: [],
     proveedores: [],
     ubicacion: '',
-    marca: '',
+    marca: [],
     precio: [],
     cantidad: '',
     descripcion_corta: '',
@@ -146,6 +146,29 @@ export default function AgregarProducto(props) {
       message: '¡Producto Agregado!',
       onok: () => {},
     });
+    seleccionado.nombre = '';
+    seleccionado.area = '';
+    seleccionado.ubicacion = '';
+    seleccionado.descripcion_corta = '';
+    seleccionado.descripcion_larga = '';
+    seleccionado.cantidad = '';
+    seleccionado.cantidad_minima = '';
+    seleccionado.marca = [];
+    seleccionado.codigos = [];
+    seleccionado.precio = [];
+    seleccionado.proveedores = [];
+    setcod2('');
+    setcod3('');
+    setcod4('');
+    setcod5('');
+    setcod6('');
+    setcod7('');
+    setinputcod2(false);
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);
   };
   /*
   HandleChange(event){
@@ -157,6 +180,7 @@ export default function AgregarProducto(props) {
     marcas.filter((item) => {
       if (item.value === idToSearch) {
         seleccionado.marca = item;
+        alert(JSON.stringify(item));
       }
       return 0;
     });
@@ -360,7 +384,7 @@ export default function AgregarProducto(props) {
     setModalInsertarCodigo(true);
   };
   const GuardarPrecio = () => {
-    seleccionado.precio = [];
+    seleccionado.precio = [0, 0, 0];
     let precio1 = '';
     let precio2 = '';
     let precio3 = '';
@@ -380,29 +404,38 @@ export default function AgregarProducto(props) {
         onok: () => {},
       });
     } else {
-      seleccionado.precio.push(precio1);
-      if (precio2.toString().trim() !== '') {
-        seleccionado.precio.push(precio2);
+      seleccionado.precio[0] = parseInt(precio1, 10);
+      if (precio2.toString() !== '') {
+        seleccionado.precio[1] = parseInt(precio2, 10);
       }
-      if (precio3.toString().trim() !== '') {
-        seleccionado.precio.push(precio3);
+      if (precio3.toString() !== '') {
+        seleccionado.precio[2] = parseInt(precio3, 10);
       }
-      let entra = false;
-      for (let i = 0; i < seleccionado.precio.length; i++) {
-        for (let j = 0; j < seleccionado.precio.length; j++) {
-          if (i !== j) {
-            if (seleccionado.precio[i] === seleccionado.precio[j]) {
-              entra = true;
-              break;
-            }
-          }
-        }
+      let menor = false;
+      if (
+        precio2.toString() !== '' &&
+        precio3.toString() === '' &&
+        seleccionado.precio[0] > seleccionado.precio[1]
+      ) {
+        menor = true;
+      } else if (
+        precio3.toString() !== '' &&
+        precio2.toString() === '' &&
+        seleccionado.precio[0] > seleccionado.precio[2]
+      ) {
+        menor = true;
+      } else if (
+        precio2.toString() !== '' &&
+        precio3.toString() !== '' &&
+        (seleccionado.precio[0] > seleccionado.precio[1] && seleccionado.precio[1] > seleccionado.precio[2])
+      ) {
+        menor = true;
       }
-      if (entra) {
+      if (!menor) {
         seleccionado.precio = [];
         Confirm.open({
           title: 'Error',
-          message: 'Los precios deben ser diferentes.',
+          message: 'Los precios deben ser diferentes y descendentes.',
           onok: () => {},
         });
       } else {
@@ -545,11 +578,12 @@ export default function AgregarProducto(props) {
       seleccionado.area.toString().trim() !== '' &&
       seleccionado.descripcion_corta.toString().trim() !== '' &&
       document.getElementById('cantidad').value > 0 &&
-      document.getElementById('cantidad_minima').value > 0
+      document.getElementById('cantidad_minima').value > 0 &&
+      seleccionado.marca[0] !== null
     ) {
       if (
-        regex.test(document.getElementById('modnombre').value) &&
-        regex.test(document.getElementById('modarea').value)
+        regex.test(document.getElementById('nombre_producto').value) &&
+        regex.test(document.getElementById('area_agregar').value)
       ) {
         prueba();
         props.change();
@@ -567,17 +601,6 @@ export default function AgregarProducto(props) {
         onok: () => {},
       });
     }
-    seleccionado.nombre = '';
-    seleccionado.area = '';
-    seleccionado.ubicacion = '';
-    seleccionado.descripcion_corta = '';
-    seleccionado.descripcion_larga = '';
-    seleccionado.cantidad = '';
-    seleccionado.cantidad_minima = '';
-    seleccionado.marca = '';
-    seleccionado.codigos = [];
-    seleccionado.precio = [];
-    seleccionado.proveedores = [];
   };
   const cerrarModalAgregarCodigos = () => {
     setinputcod2(false);
@@ -1045,6 +1068,7 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="nombre"
+                id="nombre_producto"
                 errorMessage="Nombre Inválido"
                 validate={{
                   required: { value: true },
@@ -1064,6 +1088,7 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="area"
+                id="area_agregar"
                 errorMessage="Campo Obligatorio"
                 validate={{
                   required: { value: true },
