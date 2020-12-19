@@ -46,6 +46,7 @@ const ListarBodegas = (props) => {
                   Encargado={Bodegas.encargado}
                   CantPasillos={Bodegas.cantPasillos}
                 />
+                <span>‎ ‏‏‎</span>
               </div>
             );
           })}

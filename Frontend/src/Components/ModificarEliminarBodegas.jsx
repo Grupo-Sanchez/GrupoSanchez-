@@ -81,11 +81,16 @@ const ModificarEliminarBodegas = (props) => {
 
   const onDelete = (memberId) => {
     axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
-    window.location.reload(false);
+    // window.location.reload(false);
   };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
+  };
+
+  const recargar = () => {
+    // props.change;
+    window.location.reload(false);
   };
 
   return (
@@ -148,7 +153,7 @@ const ModificarEliminarBodegas = (props) => {
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-danger" onClick={props.change}>
+          <button className="btn btn-danger" onClick={() => recargar()}>
             CANCELAR
           </button>
         </ModalFooter>
@@ -224,6 +229,7 @@ const ModificarEliminarBodegas = (props) => {
               <Button className="btn btn-primary" onClick={() => alert('Daniel')}>
                 Modificar
               </Button>
+              <span>‎      ‏‏‎</span>
               <Button className="btn btn-primary" onClick={() => setModalModificarBodega(false)}>
                 CANCELAR
               </Button>
