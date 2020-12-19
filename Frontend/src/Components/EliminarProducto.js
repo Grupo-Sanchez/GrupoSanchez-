@@ -249,8 +249,7 @@ export default function EliminarProducto(props) {
       seleccionado.area.toString().trim() !== '' &&
       seleccionado.descripcion_corta.toString().trim() !== '' &&
       document.getElementById('modcantidad').value > 0 &&
-      document.getElementById('modcantidad_minima').value > 0 &&
-      seleccionado.marca[0] !== null
+      document.getElementById('modcantidad_minima').value > 0
     ) {
       if (
         regex.test(document.getElementById('modnombre').value) &&
