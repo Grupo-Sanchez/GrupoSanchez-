@@ -42,6 +42,7 @@ const CrearBodega = (props) => {
     form.Encargado = '';
     form.cantPasillos = 0;
   };
+
   async function handleValidSubmit(event, values) {
     console.log('aca en handle');
     try {
@@ -131,7 +132,7 @@ const CrearBodega = (props) => {
             <Button type="submit" color="primary">
               Agregar Bodega
             </Button>
-            <span>‎      ‏‏‎</span>
+            <span>‎ ‏‏‎</span>
             <Button className="btn btn-danger" onClick={cerrarModal}>
               CANCELAR
             </Button>

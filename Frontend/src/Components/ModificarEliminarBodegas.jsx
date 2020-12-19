@@ -25,6 +25,14 @@ import axios from 'axios';
 import CartaBodegas from './CartaBodega';
 
 const ModificarEliminarBodegas = (props) => {
+  const [Seleccionado, setSeleccionado] = useState({
+    _id: '',
+    numBodega: '',
+    descripcion: '',
+    encargado: '',
+    cantPasillos: '',
+  });
+
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
 
   const [form, setForm] = useState({
@@ -42,18 +50,26 @@ const ModificarEliminarBodegas = (props) => {
     form.cantPasillos = 0;
   };
 
-  const EscribirBodegas = async () => {
-    const campos = {
-      numBodega: form.numBodega,
-      descripcion: form.Description,
-      encargado: form.Encargado,
-      cantPasillos: form.CantPasillos,
-    };
-    const res = await axios.post('http://localhost:3001/api/bodegas', campos);
-    console.log(res);
-    alert('¡Bodega Agregada!');
-    cerrarModal();
-  };
+  function handleInvalidSubmit(event, errors, values) {
+    console.log('invalid submit', { event, errors, values });
+  }
+
+  async function handleValidSubmit(event, values) {
+    const Id = Seleccionado._id;
+    axios
+      .put(`http://localhost:3001/api/bodegas/${Id}`, {
+        numBodega: values.numBodega,
+        descripcion: values.Description,
+        encargado: values.Encargado,
+        cantPasillos: values.CantPasillos,
+      })
+      .then(alert('entro'))
+      .catch((error) => {
+        console.log(error);
+      });
+
+    setModalModificarBodega(false);
+  }
 
   const handleChange = (e) => {
     setForm({
@@ -64,12 +80,7 @@ const ModificarEliminarBodegas = (props) => {
 
   const dataApuntes = [];
   const [data, setData] = useState(dataApuntes);
-  const [seleccionado, setSeleccionado] = useState({
-    numBodega: '',
-    Description: '',
-    Encargado: '',
-    CantPasillos: '',
-  });
+
   useEffect(() => {
     const fecthData = async () => {
       await axios.get('http://localhost:3001/api/bodegas').then((response) => {
@@ -86,6 +97,11 @@ const ModificarEliminarBodegas = (props) => {
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
+  };
+
+  const llenar = (i) => {
+    setSeleccionado(i);
+    setModalModificarBodega(true);
   };
 
   const recargar = () => {
@@ -137,7 +153,7 @@ const ModificarEliminarBodegas = (props) => {
                     <td>{elemento.encargado}</td>
                     <td>{elemento.cantPasillos}</td>
                     <td>
-                      <Button onClick={() => setModalModificarBodega(true)} color="success">
+                      <Button onClick={() => llenar(elemento)} color="success">
                         Modificar
                       </Button>
                     </td>
@@ -164,38 +180,34 @@ const ModificarEliminarBodegas = (props) => {
         className="text-center"
         style={{ maxWidth: '1700px', width: '80%' }}
       >
-        <ModalHeader>
-          <div>
-            <h3>Modificacion DE BODEGAS</h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div className="row">
-            <div className="col-sm ">
-              <CartaBodegas {...form} />
+        <AvForm onValidSubmit={handleValidSubmit} onInvalidSubmit={handleInvalidSubmit}>
+          <ModalHeader>
+            <div>
+              <h3>CREACION DE BODEGAS</h3>
             </div>
-            <div className="col-sm">
-              {/* <Formulario onChange={handleChange} form={form} /> */}
-              <AvForm>
+          </ModalHeader>
+          <ModalBody>
+            <div className="row">
+              <div className="col-sm ">
+                <CartaBodegas {...form} />
+              </div>
+              <div className="col-sm">
                 <AvField
                   name="numBodega"
                   label="Numero de bodega"
                   type="number"
                   onChange={handleChange}
-                  value={form.numBodega}
+                  value={Seleccionado.numBodega}
+                  validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
                 />
                 <AvField
                   name="Description"
                   label="Descripcion"
                   type="text"
                   onChange={handleChange}
-                  value={form.Description}
+                  value={Seleccionado.descripcion}
                   validate={{
                     required: { value: true, errorMessage: 'Campo debe ser llenado ' },
-                    pattern: {
-                      value: '^[A-Za-z0-9]',
-                      errorMessage: 'Este campo debe estar compuesto solo de letras y numeros',
-                    },
                   }}
                 />
                 <AvField
@@ -203,13 +215,9 @@ const ModificarEliminarBodegas = (props) => {
                   label="Encargado"
                   type="text"
                   onChange={handleChange}
-                  value={form.Encargado}
+                  value={Seleccionado.encargado}
                   validate={{
                     required: { value: true, errorMessage: 'Campo debe ser llenado' },
-                    pattern: {
-                      value: '^[A-Za-z0-9]',
-                      errorMessage: 'Este Campo debe ser llenado con letras y numeros',
-                    },
                   }}
                 />
                 <AvField
@@ -217,25 +225,26 @@ const ModificarEliminarBodegas = (props) => {
                   label="Cantidad de pasillos"
                   type="number"
                   onChange={handleChange}
-                  value={form.CantPasillos}
+                  value={Seleccionado.cantPasillos}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado' },
+                  }}
                 />
-              </AvForm>
+              </div>
             </div>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <FormGroup>
-            <div className="row">
-              <Button className="btn btn-primary" onClick={() => alert('Daniel')}>
-                Modificar
+          </ModalBody>
+          <ModalFooter>
+            <FormGroup>
+              <Button type="submit" color="primary">
+                Editar Bodega
               </Button>
-              <span>‎      ‏‏‎</span>
-              <Button className="btn btn-primary" onClick={() => setModalModificarBodega(false)}>
+              <span>‎ ‏‏‎</span>
+              <Button className="btn btn-danger" onClick={() => setModalModificarBodega(false)}>
                 CANCELAR
               </Button>
-            </div>
-          </FormGroup>
-        </ModalFooter>
+            </FormGroup>
+          </ModalFooter>
+        </AvForm>
       </Modal>
     </div>
   );
