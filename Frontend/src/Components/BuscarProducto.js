@@ -277,7 +277,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Apunte"
-              value={seleccionado.proveedores[0]}
+              value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
               readOnly
             // onChange={manejarCambio}
             />
@@ -288,7 +288,7 @@ export default function BuscarProducto(props) {
               type="text"
               name="Fecha"
               readOnly
-              value={seleccionado.proveedores[1]}
+              value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
             // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
             // onChange={manejarCambio}
             />
@@ -298,7 +298,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[2]}
+              value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
               readOnly
             // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             // onChange={manejarCambio}
@@ -309,7 +309,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[3]}
+              value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
               readOnly
             // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             // onChange={manejarCambio}
@@ -320,7 +320,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[4]}
+              value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
               readOnly
             // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             // onChange={manejarCambio}
@@ -331,7 +331,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[5]}
+              value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
               readOnly
             // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             // onChange={manejarCambio}
@@ -342,7 +342,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[6]}
+              value={seleccionado.proveedores[6] ? seleccionado.proveedores[6].name : ''}
               readOnly
             // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
             // onChange={manejarCambio}
