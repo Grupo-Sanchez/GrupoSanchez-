@@ -1,72 +1,71 @@
-//var mongoose = require("mongoose"),
-//Entry = mongoose.model("Entry");
+const users = require('../models/usersModel');
 
-const user = require('../models/userModel');
-
-//read entries normal
 exports.read_users = async (req, res) => {
-  try {
-    const ret = await user.find();
-    res.json(ret);
-  } catch (error) {
-    res.send({ message: 'Bad request: ' + error });
-  }
-};
-
-//READ ENTRIES CON FILTRO REGISTERED == TRUE Y TAMBIEN CON SORT == TRUE
-
-/*
-
-exports.read_entries = async (req, res) => {
-  try {
-    var ret = await user.find();
-    if (req.query.sort === "true") {
-      ret = ret.sort((a, b) => b.score - a.score);
+    try {
+      const ret = await users.find();
+      res.json(ret);
+    } catch (error) {
+      res.send({ message: 'Bad request: ' + error });
     }
-    if (req.query.registered === "yes") {
-      ret = ret.filter(a => a.registered === "yes");
+  };
+
+  exports.create_users = async (req, res) => {
+    const {
+      identidad,
+      nombre,
+      segundo_nombre,
+      primer_apellido,
+      segundo_apellido,
+      rtn,
+      telefono,
+      correo,
+      rol,
+    } = req.body;
+    try {
+      const new_users = new users({
+        identidad,
+        nombre,
+        segundo_nombre,
+        primer_apellido,
+        segundo_apellido,
+        rtn,
+        telefono,
+        correo,
+        rol,
+      });
+      ret = await new_users.save();
+      res.json(ret);
+    } catch (error) {
+      res.send({ message: 'Bad request: ' + error });
     }
-    res.json(ret);
-  } catch (error) {
-    res.send({ message: "Bad GET Request: " + error });
-  }
-};
+  };
 
-*/
+  exports.read_users = async (req, res) => {
+    try {
+      const ret = await users.find();
+      res.send(ret);
+    } catch (error) {
+      res.send({ message: 'Bad request: ' + error });
+    }
+  };
 
-exports.create_user = async (req, res) => {
-  try {
-    const new_user = new user(req.query);
-    ret = await new_user.save();
-    res.json(ret);
-  } catch (error) {
-    res.send({ message: 'Bad request: ' + error });
-  }
-};
+  exports.update_users = async (req, res) => {
+    try {
+      const ret = await users.findByIdAndUpdate({ _id: req.params.usersId }, req.body, {
+        new: true,
+      });
+      res.json(ret);
+    } catch (error) {
+      res.send({ message: 'Bad request: ' + error });
+    }
+  };
 
-exports.read_user = async (req, res) => {
-  try {
-    const ret = await user.findById(req.params.userId);
-    res.send(ret);
-  } catch (error) {
-    res.send({ message: 'Bad request: ' + error });
-  }
-};
-
-exports.update_user = async (req, res) => {
-  try {
-    const ret = await user.findByIdAndUpdate({ _id: req.params.userId }, req.query, { new: true });
-    res.json(ret);
-  } catch (error) {
-    res.send({ message: 'Bad request: ' + error });
-  }
-};
-
-exports.delete_user = async (req, res) => {
-  try {
-    const ret = await user.deleteOne({ _id: req.params.userId });
-    res.json({ message: 'Deleted user' });
-  } catch (error) {
-    res.send({ message: 'Bad Request: ' + error });
-  }
-};
+  exports.delete_users = async (req, res) => {
+    try {
+      const ret = await users.deleteOne({ _id: req.params.usersId });
+      res.json({ message: 'Deleted user' });
+    } catch (error) {
+      res.send({ message: 'Bad Request: ' + error });
+    }
+  };
+  

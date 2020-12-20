@@ -4,9 +4,11 @@ import CartasOpciones from './CartasOpciones.jsx';
 import AgregarUsuario from '../Icons/CrearUsuario.svg';
 import EliminarUsuario from '../Icons/EliminarUsuario.svg';
 import EditarUsuario from '../Icons/EditarUsuario.svg';
+import Agregar from './AgregarUsuario';
 
 const OpcionesUsuarios = () => {
   const [modalInsertar, setModalInsertar] = useState(false);
+  const [modalAgregar, setModalAgregar] = useState(false);
   const items = [
     {
       titulo: 'Agregar Usuarios',
@@ -23,7 +25,7 @@ const OpcionesUsuarios = () => {
         />
       ),
       to: '/asd',
-      isOpen: () => setModalInsertar(true),
+      isOpen: () => setModalAgregar(true),
     },
     {
       titulo: 'Eliminar Usuarios',
@@ -61,6 +63,7 @@ const OpcionesUsuarios = () => {
 
   return (
     <Container>
+      <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Usuarios</h1>
       <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
