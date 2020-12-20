@@ -63,11 +63,11 @@ const ModificarEliminarBodegas = (props) => {
         encargado: values.Encargado,
         cantPasillos: values.CantPasillos,
       })
-      .then(alert('entro'))
+      .then(alert('Modificado con exito'))
       .catch((error) => {
         console.log(error);
       });
-
+    Window.location.reload(false);
     setModalModificarBodega(false);
   }
 
