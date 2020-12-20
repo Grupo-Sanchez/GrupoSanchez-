@@ -61,7 +61,7 @@ export default function AgregarProducto(props) {
     codigos: [],
     proveedores: [],
     ubicacion: '',
-    marca: '',
+    marca: [],
     precio: [],
     cantidad: '',
     descripcion_corta: '',
@@ -145,8 +145,31 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => { },
+      onok: () => {},
     });
+    seleccionado.nombre = '';
+    seleccionado.area = '';
+    seleccionado.ubicacion = '';
+    seleccionado.descripcion_corta = '';
+    seleccionado.descripcion_larga = '';
+    seleccionado.cantidad = '';
+    seleccionado.cantidad_minima = '';
+    seleccionado.marca = [];
+    seleccionado.codigos = [];
+    seleccionado.precio = [];
+    seleccionado.proveedores = [];
+    setcod2('');
+    setcod3('');
+    setcod4('');
+    setcod5('');
+    setcod6('');
+    setcod7('');
+    setinputcod2(false);
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);
   };
   /*
   HandleChange(event){
@@ -155,9 +178,10 @@ export default function AgregarProducto(props) {
   }
   */
   const agregarMarca = (idToSearch) => {
+    seleccionado.marca = [];
     marcas.filter((item) => {
       if (item.value === idToSearch) {
-        seleccionado.marca = item;
+        seleccionado.marca.push(item);
       }
       return 0;
     });
@@ -210,7 +234,9 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '¡Advertencia!',
       message: '¿Desea descartar todos los campos?',
-      onok: () => { cerrarModalAgregarProducto(); },
+      onok: () => {
+        cerrarModalAgregarProducto();
+      },
     });
   };
   const manejarCambiocantmin = (e, n) => {
@@ -231,7 +257,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => { },
+        onok: () => {},
       });
       setinputcod2(false);
       setinputcod3(false);
@@ -355,14 +381,14 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => { },
+            onok: () => {},
           });
           entra = false;
         } else if (yaesta) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else {
           seleccionado.codigos = duplicates;
@@ -372,14 +398,15 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los Codigos solo pueden ser Alfanumericos',
-          onok: () => { },
+          onok: () => {},
         });
       }
     }
   };
   const insertarCodigos = () => {
     setModalInsertarCodigo(true);
-  };const GuardarPrecio = () => {
+  };
+  const GuardarPrecio = () => {
     seleccionado.precio = [0, 0, 0];
     let precio1 = '';
     let precio2 = '';
@@ -397,7 +424,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -423,8 +450,11 @@ export default function AgregarProducto(props) {
       } else if (
         precio2.toString() !== '' &&
         precio3.toString() !== '' &&
-        (seleccionado.precio[0] > seleccionado.precio[1] && seleccionado.precio[1] > seleccionado.precio[2])
+        seleccionado.precio[0] > seleccionado.precio[1] &&
+        seleccionado.precio[1] > seleccionado.precio[2]
       ) {
+        menor = true;
+      } else if (precio2.toString() === '' && precio3.toString() === '') {
         menor = true;
       }
       if (!menor) {
@@ -432,7 +462,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => { },
+          onok: () => {},
         });
       } else {
         setModalInsertarPrecio(false);
@@ -451,7 +481,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.proveedores = proveedoresSeleccionados;
@@ -574,11 +604,12 @@ export default function AgregarProducto(props) {
       seleccionado.area.toString().trim() !== '' &&
       seleccionado.descripcion_corta.toString().trim() !== '' &&
       document.getElementById('cantidad').value > 0 &&
-      document.getElementById('cantidad_minima').value > 0
+      document.getElementById('cantidad_minima').value > 0 &&
+      seleccionado.marca[0] !== undefined
     ) {
       if (
-        regex.test(document.getElementById('modnombre').value) &&
-        regex.test(document.getElementById('modarea').value)
+        regex.test(document.getElementById('nombre_agregar').value) &&
+        regex.test(document.getElementById('area_agregar').value)
       ) {
         prueba();
         props.change();
@@ -586,27 +617,16 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
-    seleccionado.nombre = '';
-    seleccionado.area = '';
-    seleccionado.ubicacion = '';
-    seleccionado.descripcion_corta = '';
-    seleccionado.descripcion_larga = '';
-    seleccionado.cantidad = '';
-    seleccionado.cantidad_minima = '';
-    seleccionado.marca = '';
-    seleccionado.codigos = [];
-    seleccionado.precio = [];
-    seleccionado.proveedores = [];
   };
   const cerrarModalAgregarCodigos = () => {
     setinputcod2(false);
@@ -1060,6 +1080,7 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="nombre"
+                id="nombre_agregar"
                 errorMessage="Nombre Inválido"
                 validate={{
                   required: { value: true },
@@ -1079,6 +1100,7 @@ export default function AgregarProducto(props) {
                 className="form-control"
                 type="text"
                 name="area"
+                id="area_agregar"
                 errorMessage="Campo Obligatorio"
                 validate={{
                   required: { value: true },
@@ -1235,8 +1257,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1250,8 +1272,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
             </AvForm>
           </div>
@@ -1269,7 +1291,7 @@ export default function AgregarProducto(props) {
               })
             }
           >
-            Agregar Producto
+            Agregar Precio
           </button>
           <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
             Cancelar
