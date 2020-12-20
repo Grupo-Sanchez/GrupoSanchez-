@@ -21,14 +21,16 @@ const ModificarEliminarProveedor = () => {
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
   const [input, setInput] = useState('');
+
+  const fetchData = async () => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+      setData(response.data);
+    });
+  };
+
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/marcas').then((response) => {
-        setData(response.data);
-      });
-    };
-    fecthData();
-  });
+    fetchData();
+  }, []);
 
   const modifyMarca = async (values) => {
     try {
@@ -37,7 +39,7 @@ const ModificarEliminarProveedor = () => {
         descripcion: values.descripcion,
       };
       setModal(false);
-      axios
+      await axios
         .put(`http://localhost:3001/api/marcas/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
@@ -45,8 +47,8 @@ const ModificarEliminarProveedor = () => {
         .catch((error) => {
           console.log(error);
         });
-
       setModal(false);
+      fetchData();
     } catch (err) {
       console.err(err.response.payload);
     }
@@ -89,13 +91,14 @@ const ModificarEliminarProveedor = () => {
     }
   };
 
-  const modificarModal = async (i) => {
+  const modificarModal = (i) => {
     setModificar(data[i]);
     setModal(true);
   };
 
-  const onDelete = (i) => {
-    axios.delete(`http://localhost:3001/api/marcas/${data[i]._id}`);
+  const onDelete = async (i) => {
+    await axios.delete(`http://localhost:3001/api/marcas/${data[i]._id}`);
+    fetchData();
   };
 
   function handleInvalidSubmit(event, errors, values) {
@@ -106,7 +109,7 @@ const ModificarEliminarProveedor = () => {
     <div>
       <Modal isOpen={modal} style={{ maxWidth: '1400px', width: '60%' }}>
         <ModalHeader>
-          <h3>Agregar Proveedor</h3>
+          <h3>Modificar Proveedor</h3>
         </ModalHeader>
         <AvForm
           onValidSubmit={handleValidSubmit}
@@ -167,7 +170,7 @@ const ModificarEliminarProveedor = () => {
             <tr>
               <td>{i + 1}</td>
               <td>{elemento.nombre}</td>
-              <td>{elemento.descripcion}</td>
+              <td style={{ whiteSpace: 'normal' }}>{elemento.descripcion}</td>
               <td>
                 <Button onClick={() => modificarModal(i)} color="success">
                   Modificar

@@ -8,8 +8,10 @@ import BuscarProducto from '../Icons/BuscarProducto.svg';
 
 const OpcionesProductos = () => {
   const [modalAgregar, setModalAgregar] = useState(false);
+
   const [modalEliminar, setModalEliminar] = useState(false);
   const [modalListar, setModalListar] = useState(false);
+
   const items = [
     {
       titulo: 'Agregar Productos',
@@ -22,14 +24,14 @@ const OpcionesProductos = () => {
             paddingBottom: '20px',
             marginLeft: 'auto',
             marginRight: 'auto',
+            fill: '#FFFF',
           }}
         />
       ),
-      to: '/asd',
       isOpen: () => setModalAgregar(true),
     },
     {
-      titulo: 'Modificar / Eliminar Producto',
+      titulo: 'Gestionar Producto',
       icon: (
         <img
           src={EditarProducto}
@@ -42,8 +44,7 @@ const OpcionesProductos = () => {
           }}
         />
       ),
-      to: '/Propietario/Productos/EliminaryModificar',
-      isOpen: () => setModalEliminar(true),
+      to: '/Propietario/Productos/Gestionar',
     },
     {
       titulo: 'Buscar Producto',
@@ -73,7 +74,6 @@ const OpcionesProductos = () => {
             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />
           </Col>
         ))}
-        ;
       </Row>
     </Container>
   );
