@@ -4,12 +4,13 @@ import CartasOpciones from './CartasOpciones.jsx';
 import Agregar from './AgregarProducto';
 import AgregarProducto from '../Icons/AgregarProducto.svg';
 import EditarProducto from '../Icons/EditarProducto.svg';
-import EliminarProducto from '../Icons/EliminarProducto.svg';
 import BuscarProducto from '../Icons/BuscarProducto.svg';
-import Eliminar from './EliminarProducto';
 
 const OpcionesProductos = () => {
   const [modalAgregar, setModalAgregar] = useState(false);
+
+  const [modalEliminar, setModalEliminar] = useState(false);
+  const [modalListar, setModalListar] = useState(false);
 
   const items = [
     {
@@ -47,6 +48,7 @@ const OpcionesProductos = () => {
     },
     {
       titulo: 'Buscar Producto',
+      to: '/Propietario/Productos/Buscar',
       icon: (
         <img
           src={BuscarProducto}
@@ -59,7 +61,6 @@ const OpcionesProductos = () => {
           }}
         />
       ),
-      to: '/asd',
     },
   ];
 
