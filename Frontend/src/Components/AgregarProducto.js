@@ -73,7 +73,7 @@ export default function AgregarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
         // setData(response.data);
         const proveedoresDB = response.data;
         const proveedoresagregados = [];
@@ -102,7 +102,7 @@ export default function AgregarProducto(props) {
       });
     };
     const fecthMarcas = async () => {
-      await axios.get('http://localhost:3001/api/marcas').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
         const marcasobtenidas = response.data;
         const marcasAgregar = [];
         for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -117,7 +117,7 @@ export default function AgregarProducto(props) {
       });
     };
     const fecthProductos = async () => {
-      await axios.get('http://localhost:3001/api/productos').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
         setProductos(response.data);
       });
     };
@@ -140,7 +140,7 @@ export default function AgregarProducto(props) {
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: seleccionado.cantidad_minima,
     };
-    const res = await axios.post('http://localhost:3001/api/productos', campos);
+    const res = await axios.post('http://178.128.67.247:3001/api/productos', campos);
     console.log(res);
     Confirm.open({
       title: '',

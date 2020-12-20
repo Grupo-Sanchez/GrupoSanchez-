@@ -23,7 +23,7 @@ const ModificarEliminarProveedor = () => {
   const [input, setInput] = useState('');
 
   const fetchData = async () => {
-    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
       setData(response.data);
     });
   };
@@ -52,7 +52,7 @@ const ModificarEliminarProveedor = () => {
       };
       setModal(false);
       await axios
-        .put(`http://localhost:3001/api/proveedor/${modificar._id}`, payload)
+        .put(`http://178.128.67.247:3001/api/proveedor/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
         })
@@ -110,7 +110,7 @@ const ModificarEliminarProveedor = () => {
   };
 
   const onDelete = async (i) => {
-    await axios.delete(`http://localhost:3001/api/proveedor/${data[i]._id}`);
+    await axios.delete(`http://178.128.67.247:3001/api/proveedor/${data[i]._id}`);
     fetchData();
   };
 
