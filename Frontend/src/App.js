@@ -32,6 +32,8 @@ import AmbienteVendedorFacturacion from './Views/AmbienteVendedorFactura.jsx';
 // Import de funcionalidades administrador
 import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProveedores.jsx';
 
+import AmbientePropietarioMarcas from './Views/AmbientePropietarioMarcas.jsx';
+
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
 import Header from './Components/Header.jsx';
@@ -62,6 +64,9 @@ const App = () => {
       </Route>
       <Route exact path="/Propietario/Clientes">
         <AmbientePropietarioClientes />
+      </Route>
+      <Route exact path="/Propietario/Marcas">
+        <AmbientePropietarioMarcas />
       </Route>
       {/* Ambientes administrador */}
       <Route exact path="/Administrador">
