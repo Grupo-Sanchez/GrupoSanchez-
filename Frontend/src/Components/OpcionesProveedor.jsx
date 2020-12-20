@@ -23,11 +23,10 @@ const OpcionesProveedor = () => {
           }}
         />
       ),
-      to: '/asd',
       isOpen: () => setModalInsertar(true),
     },
     {
-      titulo: 'Eliminar Proveedor',
+      titulo: 'Gestionar Proveedor',
       icon: (
         <img
           src={EliminarUsuario}
@@ -40,10 +39,10 @@ const OpcionesProveedor = () => {
           }}
         />
       ),
-      to: '/asd',
+      to: '/Propietario/Proveedores/Gestionar',
     },
     {
-      titulo: 'Modificar Proveedor',
+      titulo: 'Consultar Proveedor',
       icon: (
         <img
           src={EditarUsuario}

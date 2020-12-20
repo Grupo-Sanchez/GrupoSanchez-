@@ -38,6 +38,7 @@ import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProve
 
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
+import Header from './Components/Header.jsx';
 
 // Instancia de la react app
 const App = () => {
