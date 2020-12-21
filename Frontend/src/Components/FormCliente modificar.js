@@ -44,9 +44,11 @@ const formClienteModificar = (props) => {
       email: values.email,
     };
 
-    await axios.put(`http://localhost:3001/api/clientes/${props.id}`, payload).then((res) => {
-      console.log(res.data.message);
-    });
+    await axios
+      .put(`http://178.128.67.247:3001:3001/api/clientes/${props.id}`, payload)
+      .then((res) => {
+        console.log(res.data.message);
+      });
     Confirm.open({
       title: 'Aviso',
       message: 'cliente modificado',

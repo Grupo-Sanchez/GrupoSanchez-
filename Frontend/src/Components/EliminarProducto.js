@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Label, FormGroup, Input, Modal,
-  ModalBody, ModalHeader, ModalFooter } from 'reactstrap';
+import {
+  Button,
+  Table,
+  Label,
+  FormGroup,
+  Input,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from 'reactstrap';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import imagePath from '../Icons/lupa1.jpeg';
@@ -32,7 +41,7 @@ export default function EliminarProducto(props) {
   });
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/productos').then((res) => {
+      await axios.get('http://178.128.67.247:3001:3001/api/productos').then((res) => {
         setData(res.data);
         console.log(res.data);
       });
@@ -76,8 +85,7 @@ export default function EliminarProducto(props) {
     alert(seleccionado.precios[0]);
   };
   const onDelete = (memberId) => {
-    axios
-      .delete(`http://localhost:3001/api/productos/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
@@ -86,7 +94,7 @@ export default function EliminarProducto(props) {
   const updateItem = (Id) => {
     setModalModificar(false);
     axios
-      .put(`http://localhost:3001/api/productos/${Id}`, {
+      .put(`http://178.128.67.247:3001:3001/api/productos/${Id}`, {
         nombre: document.getElementById('modnombre').value,
         area: document.getElementById('modarea').value,
         codigos: seleccionado.codigos,
