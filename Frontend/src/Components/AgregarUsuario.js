@@ -120,7 +120,7 @@ export default function AgregarUsuario(props) {
         correo: seleccionado.correo,
         rol: seleccionado.rol,
       };
-      const res = await axios.post('http://localhost:3001/api/Users', campos);
+      const res = await axios.post('http://178.128.67.247:3001/api/Users', campos);
       console.log(res);
       Confirm.open({
         title: 'Exito',
