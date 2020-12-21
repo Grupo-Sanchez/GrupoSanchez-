@@ -93,7 +93,7 @@ const OpcionesBodegas = () => {
       <Modificar isOpen={modalModificar} change={() => setModalModificar(!modalModificar)} />
       <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
-          <Col>
+          <Col key={i}>
             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />
           </Col>
         ))}

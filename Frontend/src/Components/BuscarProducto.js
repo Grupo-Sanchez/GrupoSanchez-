@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/SearchBarInterfazProductos.css';
+import '../Styles/SearchBar.css';
 import {
   Button,
   Table,
@@ -16,26 +16,34 @@ import axios from 'axios';
 import imagePath from '../Icons/lupa1.jpeg';
 
 export default function BuscarProducto(props) {
-  const dataApuntes = [];
-
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
-  const [data, setData] = useState(dataApuntes);
+
+  const [data, setData] = useState([]);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
     codigos: [],
     proveedores: [],
     ubicacion: '',
-    marca: '',
+    marca: [],
     precios: [],
     cantidad: '',
     descripcion_corta: '',
     descripcion_larga: '',
     cantidad_minima: '',
   });
+
+  const fecthData = async () => {
+    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+      setData(response.data);
+    });
+  };
+  useEffect(() => {
+    fecthData();
+  }, []);
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
     console.log(i.nombre);
@@ -79,17 +87,10 @@ export default function BuscarProducto(props) {
       }
     }
   };
-  useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
-        setData(response.data);
-      });
-    };
-    fecthData();
-  }, []);
+
   return (
-    <div>
-      <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
+    <div align="center">
+      <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
       <input
         type="text"
         id="myInput"
@@ -100,72 +101,78 @@ export default function BuscarProducto(props) {
           'background-image': `url('${imagePath}')`,
           'background-position': '10px 10px',
           'background-repeat': 'no-repeat',
-          width: '100%',
+          width: '50%',
           'font-size': '16px',
           padding: '12px 20px 12px 40px',
           border: '1px solid #ddd',
           'margin-bottom': '12px',
         }}
       ></input>
-      <Table
-        responsive
-        striped
-        bordered
-        hover
-        dark
-        align="center"
-        size="sm"
-        id="myTable"
-        style={{ width: '500px' }}
+      <div
+        style={{
+          maxHeight: '600px',
+          overflowY: 'auto',
+        }}
       >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Nombre</th>
-            <th>Area</th>
-            <th>Ubicación</th>
-            <th>Marca</th>
-            <th>Cantidad Mínima</th>
-            <th>Códigos</th>
-            <th>Proveedores </th>
-            <th>Descripciones </th>
-            <th>Precios</th>
-            <th class="text-center"> Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((elemento, index) => (
+        <Table
+          responsive
+          striped
+          bordered
+          hover
+          dark
+          align="center"
+          size="sm"
+          id="myTable"
+          style={{ width: '500px' }}
+        >
+          <thead>
             <tr>
-              <td>{(index += 1)}</td>
-              <td>{elemento.nombre}</td>
-              <td>{elemento.area}</td>
-              <td>{elemento.ubicacion}</td>
-              <td>{elemento.marca}</td>
-              <td>{elemento.cantidad_minima}</td>
-              <td>
-                <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
-                  Ver
-                </Button>
-              </td>
-              <td>
-                <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
-                  Ver
-                </Button>
-              </td>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Area</th>
+              <th>Ubicación</th>
+              <th>Marca</th>
+              <th>Cantidad Mínima</th>
+              <th>Códigos</th>
+              <th>Proveedores </th>
+              <th>Descripciones </th>
+              <th>Precios</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data.map((elemento, index) => (
+              <tr>
+                <td>{(index += 1)}</td>
+                <td>{elemento.nombre}</td>
+                <td>{elemento.area}</td>
+                <td>{elemento.ubicacion}</td>
+                <td>{elemento.marca[0].name}</td>
+                <td>{elemento.cantidad_minima}</td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       <Modal isOpen={modalVerCodigos}>
         <ModalHeader>
           <div className="text-center">
@@ -272,7 +279,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Apunte"
-              value={seleccionado.proveedores[0]}
+              value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
               readOnly
               // onChange={manejarCambio}
             />
@@ -283,7 +290,7 @@ export default function BuscarProducto(props) {
               type="text"
               name="Fecha"
               readOnly
-              value={seleccionado.proveedores[1]}
+              value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
               // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
               // onChange={manejarCambio}
             />
@@ -293,7 +300,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[2]}
+              value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -304,7 +311,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[3]}
+              value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -315,7 +322,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[4]}
+              value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -326,7 +333,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[5]}
+              value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -337,7 +344,7 @@ export default function BuscarProducto(props) {
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[6]}
+              value={seleccionado.proveedores[6] ? seleccionado.proveedores[6].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}

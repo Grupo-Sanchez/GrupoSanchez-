@@ -11,12 +11,30 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import '../Styles/InterfazProducto.css';
+import SelectSearch from 'react-select-search';
 import axios from 'axios';
+import AvField from 'availity-reactstrap-validation/lib/AvField';
+import AvForm from 'availity-reactstrap-validation/lib/AvForm';
 import imagePath from '../Icons/lupa1.jpeg';
+import { Confirm } from './Confirm';
 
 export default function EliminarProducto(props) {
   const dataApuntes = [];
-
+  const options = [
+    { name: 'Swedish', value: 'sv' },
+    { name: 'English', value: 'en' },
+    { name: 'patito', value: 'patito' },
+  ];
+  const [size, setSize] = useState('1');
+  const [size2, setSize2] = useState('2');
+  const [size3, setSize3] = useState('3');
+  const [size4, setSize4] = useState('4');
+  const [size5, setSize5] = useState('5');
+  const [size6, setSize6] = useState('6');
+  const [size7, setSize7] = useState('7');
+  const [precio1, setprecio1] = useState('');
+  const [precio2, setprecio2] = useState('');
+  const [precio3, setprecio3] = useState('');
   const [modalVerCodigos, setModalVerCodigos] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
@@ -25,6 +43,12 @@ export default function EliminarProducto(props) {
   const [ModalModificarProveedores, setModalModificarProveedores] = useState(false);
   const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
+  const [inputcod2, setinputcod2] = useState(false);
+  const [inputcod3, setinputcod3] = useState(false);
+  const [inputcod4, setinputcod4] = useState(false);
+  const [inputcod5, setinputcod5] = useState(false);
+  const [inputcod6, setinputcod6] = useState(false);
+  const [inputcod7, setinputcod7] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -32,86 +56,247 @@ export default function EliminarProducto(props) {
     codigos: [],
     proveedores: [],
     ubicacion: '',
-    marca: '',
+    marca: [],
     precios: [],
     cantidad: '',
     descripcion_corta: '',
     descripcion_larga: '',
     cantidad_minima: '',
   });
+  const [cantsel, setCantsel] = useState(seleccionado.cantidad);
+  const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
+  let [proveedores, setProveedores] = useState([]);
+  let [marcas, setMarcas] = useState([]);
+  const fecthData = async () => {
+    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+      setData(response.data);
+    });
+    // alert(JSON.stringify(data));
+  };
+  const fecthProveedores = async () => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+      const proveedoresDB = response.data;
+      const proveedoresagregados = [];
+      for (let index = 0; index < proveedoresDB.length; index++) {
+        const element = proveedoresDB[index];
+        proveedoresagregados.push({
+          company: element.company,
+          value: element._id,
+          agencia: element.agencia,
+          name: element.nombre,
+          apellidos: element.apellidos,
+          genero: element.genero,
+          email: element.email,
+          telefono: element.telefono,
+          direccion1: element.direccion1,
+          direccion2: element.direccion2,
+          ciudad: element.ciudad,
+          departamento: element.departamento,
+          codigoPostal: element.codigoPostal,
+          pais: element.pais,
+          comentario: element.comentario,
+          _v: element._v,
+        });
+      }
+      setProveedores(proveedoresagregados);
+    });
+  };
+  const fecthMarcas = async () => {
+    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+      const marcasobtenidas = response.data;
+      const marcasAgregar = [];
+      for (let index = 0; index < marcasobtenidas.length; index++) {
+        const element = marcasobtenidas[index];
+        marcasAgregar.push({
+          value: element._id,
+          name: element.nombre,
+          _v: element._v,
+        });
+      }
+      setMarcas(marcasAgregar);
+    });
+  };
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
-        setData(response.data);
-      });
-    };
+    fecthProveedores();
     fecthData();
-  }, []);
+    fecthMarcas();
+  }, [data]);
+  const proveedoresSeleccionados = [];
+  const handleOnChange = (value) => {
+    for (let index = 0; index < proveedores.length; index++) {
+      const element = proveedores[index];
+      if (element.value === value) {
+        proveedoresSeleccionados.push(element);
+      }
+    }
+    proveedores = proveedores.filter((item) => item.value !== value);
+    console.log(JSON.stringify(proveedores));
+  };
   /*
   Metodo para fuardar codigos del ModalModificar
    */
-  const GuardarCodigos = (i) => {
-    console.log(i.codigos[0]);
-    seleccionado.codigos[0] = document.getElementById('mcod1').value;
-    console.log(seleccionado.codigos[0]);
 
-    seleccionado.codigos[1] = document.getElementById('modcod2').value;
-    seleccionado.codigos[2] = document.getElementById('modcod3').value;
-    seleccionado.codigos[3] = document.getElementById('modcod4').value;
-    seleccionado.codigos[4] = document.getElementById('modcod5').value;
-    seleccionado.codigos[5] = document.getElementById('modcod6').value;
-    seleccionado.codigos[6] = document.getElementById('modcod7').value;
-    setModalModificarCodigos(false);
-    alert(seleccionado.codigos[1]);
+  const handleChange = (e, num) => {
+    if (num === 2) {
+      setinputcod2(e.target.value);
+      setinputcod3(false);
+      setinputcod4(false);
+      setinputcod5(false);
+      setinputcod6(false);
+      setinputcod7(false);
+    } else if (num === 3 && document.getElementById('modcod4').value === null) {
+      setinputcod3(e.target.value);
+      setinputcod4(false);
+    } else if (num === 4 && document.getElementById('modcod5').value === null) {
+      setinputcod4(e.target.value);
+      setinputcod5(false);
+    } else if (num === 5 && document.getElementById('modcod6').value === null) {
+      setinputcod5(e.target.value);
+      setinputcod6(false);
+    } else if (num === 6 && document.getElementById('modcod7').value === null) {
+      setinputcod6(e.target.value);
+      setinputcod7(false);
+    } else if (num === 7) {
+      setinputcod7(e.target.value);
+    }
   };
+
   /* Metodo para fuardar codigos del ModalModificar */
   const GuardarProveedores = () => {
-    seleccionado.proveedores[0] = document.getElementById('modprov1').value;
-    seleccionado.proveedores[1] = document.getElementById('modprov2').value;
-    seleccionado.proveedores[2] = document.getElementById('modprov3').value;
-    seleccionado.proveedores[3] = document.getElementById('modprov4').value;
-    seleccionado.proveedores[4] = document.getElementById('modprov5').value;
-    seleccionado.proveedores[5] = document.getElementById('modprov6').value;
-    seleccionado.proveedores[6] = document.getElementById('modprov7').value;
-    setModalModificarProveedores(false);
-    alert(seleccionado.proveedores[0]);
+    seleccionado.proveedores = proveedoresSeleccionados;
+    if (seleccionado.proveedores[0] === null) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar almenos el Proveedor 1.',
+        onok: () => {},
+      });
+    } else {
+      Confirm.open({
+        title: 'Modificar Proveedores',
+        message: '¿Está seguro que desea guardar estos cambios?',
+        onok: () => {
+          setModalModificarProveedores(false);
+        },
+      });
+    }
   };
   const GuardarPrecio = () => {
-    seleccionado.precios[0] = document.getElementById('modprecio1').value;
-    seleccionado.precios[1] = document.getElementById('modprecio2').value;
-    seleccionado.precios[2] = document.getElementById('modprecio3').value;
-    setModalModificarPrecios(false);
-    alert(seleccionado.precios[0]);
+    let menor = false;
+    seleccionado.precios[0] = parseInt(document.getElementById('modprecio1').value, 10);
+    seleccionado.precios[1] = parseInt(document.getElementById('modprecio2').value, 10);
+    seleccionado.precios[2] = parseInt(document.getElementById('modprecio3').value, 10);
+    if (precio2 !== '' && precio3 === '' && seleccionado.precios[0] > seleccionado.precios[1]) {
+      menor = true;
+    } else if (
+      precio3 !== '' &&
+      precio2 === '' &&
+      seleccionado.precios[0] > seleccionado.precios[2]
+    ) {
+      menor = true;
+    } else if (
+      precio2 !== '' &&
+      precio3 !== '' &&
+      seleccionado.precios[0] > seleccionado.precios[1] &&
+      seleccionado.precios[1] > seleccionado.precios[2]
+    ) {
+      menor = true;
+    } else if (precio2 === '' && precio3 === '') {
+      menor = true;
+    }
+    if (!menor) {
+      seleccionado.precio = [];
+      Confirm.open({
+        title: 'Error',
+        message: 'Los precios deben ser diferentes y descendentes.',
+        onok: () => {},
+      });
+    } else {
+      setModalModificarPrecios(false);
+    }
   };
   const onDelete = (memberId) => {
     axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
+    /*Confirm.open({
+      title: '',
+      message: 'Producto Eliminado Exitosamente',
+      onok: () => {},
+    });*/
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
-  const updateItem = (Id) => {
-    setModalModificar(false);
-    axios
-      .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
-        nombre: document.getElementById('modnombre').value,
-        area: document.getElementById('modarea').value,
-        codigos: seleccionado.codigos,
-        proveedores: seleccionado.proveedores,
-        ubicacion: document.getElementById('modubicacion').value,
-        marca: document.getElementById('modmarca').value,
-        precios: seleccionado.precios,
-        cantidad: document.getElementById('modcantidad').value,
-        descripcion_corta: document.getElementById('descripcion1').value,
-        descripcion_larga: document.getElementById('descripcion2').value,
-        cantidad_minima: document.getElementById('modcantidad_minima').value,
-      })
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
+  const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
+  const isAlphanumeric = require('is-alphanumeric');
+  const [marcaSel, setMarcaSel] = useState([]);
+  const updateItem = async (Id) => {
+    for (let index = 0; index < marcas.length; index++) {
+      const element = marcas[index];
+      if (element.value === marcaSel) {
+        for (let i = 0; i < data.length; i++) {
+          const element2 = data[i];
+          if (element2._id === Id) {
+            seleccionado.marca = element;
+            break;
+          }
+        }
+      }
+    }
+    if (
+      seleccionado.codigos.length > 0 &&
+      seleccionado.proveedores.length > 0 &&
+      seleccionado.precios.length > 0 &&
+      seleccionado.nombre.toString().trim() !== '' &&
+      seleccionado.area.toString().trim() !== '' &&
+      seleccionado.descripcion_corta.toString().trim() !== '' &&
+      document.getElementById('modcantidad').value > 0 &&
+      document.getElementById('modcantidad_minima').value > 0
+    ) {
+      if (
+        regex.test(document.getElementById('modnombre').value) &&
+        regex.test(document.getElementById('modarea').value)
+        //isAlphanumeric(document.getElementById('modnombre').value) &&
+        // isAlphanumeric(document.getElementById('modarea').value)
+      ) {
+        setModalModificar(false);
+        axios
+          .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
+            nombre: document.getElementById('modnombre').value,
+            area: document.getElementById('modarea').value,
+            codigos: seleccionado.codigos,
+            proveedores: seleccionado.proveedores,
+            ubicacion: document.getElementById('modubicacion').value,
+            marca: seleccionado.marca,
+            precios: seleccionado.precios,
+            cantidad: document.getElementById('modcantidad').value,
+            descripcion_corta: document.getElementById('descripcion1').value,
+            descripcion_larga: document.getElementById('descripcion2').value,
+            cantidad_minima: document.getElementById('modcantidad_minima').value,
+          })
+          .then(
+            Confirm.open({
+              title: '',
+              message: `Producto ${seleccionado.nombre} modificado exitosamente`,
+              onok: () => {},
+            }),
+          )
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
+          onok: () => {},
+        });
+      }
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
+        onok: () => {},
       });
+    }
   };
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
@@ -123,9 +308,71 @@ export default function EliminarProducto(props) {
       name: value,
     });
   };
-  const Modificar = (elemento) => {
-    setSeleccionado(elemento);
-    console.log(elemento.nombre);
+  const agregarProveedor = (idToSearch) => {
+    proveedores.filter((item) => {
+      if (item.value === idToSearch) {
+        setMarcaSel(item.value);
+        //alert(marcaSel);
+      }
+      return 0;
+    });
+  };
+  const agregarMarca = (idToSearch) => {
+    marcas.filter((item) => {
+      if (item.value === idToSearch) {
+        setMarcaSel(item.value);
+        //alert(marcaSel);
+      }
+      return 0;
+    });
+  };
+  const handleChange2 = (e) => {
+    agregarMarca(e);
+    // alert('sadf');
+  };
+  const verificarCodigo = () => {
+    /*
+    if (seleccionado.codigos[0] !== null) {
+      setinputcod2(true);
+    }
+    if (seleccionado.codigos[1] !== null) {
+      setinputcod3(true);
+    }
+    if (seleccionado.codigos[2] !== null) {
+      setinputcod4(true);
+    }
+    if (seleccionado.codigos[3] !== null) {
+      setinputcod5(true);
+    }
+    if (seleccionado.codigos[4] !== null) {
+      setinputcod6(true);
+    }
+    if (seleccionado.codigos[5] !== null) {
+      setinputcod7(true);
+    }
+    */
+    /*if (document.getElementById('modcod2').value() != null) {
+      seleccionado.codigos;
+    }
+    */
+  };
+  /*const colocarValorMarca = () => {
+    alert(marca);
+    for (let index = 0; index < options.length; index++) {
+      const element = options[index];
+      if (element.name === marca) {
+        return marca;
+      }
+    }
+    return 0;
+  };*/
+  const [nombreProducto, setNombre] = useState('');
+  const Modificar = (element) => {
+    setSeleccionado(element);
+    setCantminsel(element.cantidad_minima);
+    setCantsel(element.cantidad);
+    setMarcaSel(element.marca[0].value);
+    setNombre(element.nombre);
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -136,10 +383,7 @@ export default function EliminarProducto(props) {
     setSeleccionado(elemento);
     setmodalVerDescripciones(true);
   };
-  const options = [
-    { name: 'Swedish', value: 'sv' },
-    { name: 'English', value: 'en' },
-  ];
+
   const myFunction = () => {
     // alert("eentoroo");
     const input = document.getElementById('myInput');
@@ -185,6 +429,153 @@ export default function EliminarProducto(props) {
     setCodigo7(seleccionado.codigos[6]);
     setModalModificarCodigos(true);
   };
+  const descartarcambios = () => {
+    Confirm.open({
+      title: '¡Advertencia!',
+      message: '¿Desea descartar todos los cambios?',
+      onok: () => {
+        setModalModificar(false);
+      },
+    });
+  };
+  const GuardarCodigos = (i) => {
+    const array = [];
+    if (
+      isAlphanumeric(document.getElementById('mcod1').value) &&
+      isAlphanumeric(document.getElementById('modcod2').value) &&
+      isAlphanumeric(document.getElementById('modcod3').value) &&
+      isAlphanumeric(document.getElementById('modcod4').value) &&
+      isAlphanumeric(document.getElementById('modcod5').value) &&
+      isAlphanumeric(document.getElementById('modcod6').value) &&
+      isAlphanumeric(document.getElementById('modcod7').value)
+    ) {
+      if (document.getElementById('mcod1').value === '') {
+        Confirm.open({
+          title: 'Error',
+          message: `El Codigo 1 de ${seleccionado.nombre} esta vacio`,
+          onok: () => {},
+        });
+      } else {
+        array.push(codigo1);
+      }
+      if (document.getElementById('modcod2').value !== '') {
+        array.push(codigo2);
+      }
+      if (document.getElementById('modcod3').value !== '') {
+        array.push(codigo3);
+      }
+      if (document.getElementById('modcod4').value !== '') {
+        array.push(codigo4);
+      }
+      if (document.getElementById('modcod5').value !== '') {
+        array.push(codigo5);
+      }
+      if (document.getElementById('modcod6').value !== '') {
+        array.push(codigo6);
+      }
+      if (document.getElementById('modcod7').value !== '') {
+        array.push(codigo7);
+      }
+      let entra = false;
+      for (let ind = 0; ind < array.length; ind++) {
+        for (let j = 0; j < array.length; j++) {
+          if (ind !== j) {
+            if (array[ind] === array[j]) {
+              entra = true;
+              break;
+            }
+          }
+        }
+      }
+      let yaesta = false;
+      let mensaje = [];
+      let codigos2 = [];
+      let mansajenot = '';
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        if (element._id !== seleccionado._id) {
+          for (let p = 0; p < element.codigos.length; p++) {
+            const element2 = element.codigos[p];
+            for (let j = 0; j < array.length; j++) {
+              const element3 = array[j];
+              if (element2 === element3) {
+                mensaje.push(element.nombre);
+                codigos2.push(element2);
+                yaesta = true;
+              }
+            }
+          }
+        }
+      }
+      //const codigosUnicos = new Set(codigos2);
+      let codigosUnicos = codigos2.filter(
+        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+      );
+      let productosUnicos = mensaje.filter(
+        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+      );
+
+      let codString = '';
+      let prodString = '';
+      for (let k = 0; k < codigosUnicos.length; k++) {
+        const element = codigosUnicos[k];
+        codString += ` ${element},`;
+      }
+      for (let k = 0; k < productosUnicos.length; k++) {
+        const element = productosUnicos[k];
+        prodString += ` ${element},`;
+      }
+      if (codigosUnicos.length !== 1) {
+        mansajenot = `Los codigos ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresados ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      } else {
+        mansajenot = `El codigo ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresado ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      }
+      if (entra) {
+        Confirm.open({
+          title: 'Error',
+          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          onok: () => {},
+        });
+        entra = false;
+      } else if (yaesta) {
+        Confirm.open({
+          title: 'Error',
+          message: mansajenot,
+          onok: () => {
+            setCodigo1(seleccionado.codigos[0]);
+            setCodigo2(seleccionado.codigos[1]);
+            setCodigo3(seleccionado.codigos[2]);
+            setCodigo4(seleccionado.codigos[3]);
+            setCodigo5(seleccionado.codigos[4]);
+            setCodigo6(seleccionado.codigos[5]);
+            setCodigo7(seleccionado.codigos[6]);
+          },
+        });
+      } else {
+        seleccionado.codigos = [];
+        seleccionado.codigos = array;
+        setModalModificarCodigos(false);
+      }
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Los Codigos solo pueden ser Alfanumericos',
+        onok: () => {},
+      });
+    }
+  };
   const [proveedor1, setproveedor1] = useState('');
   const [proveedor2, setproveedor2] = useState('');
   const [proveedor3, setproveedor3] = useState('');
@@ -194,19 +585,29 @@ export default function EliminarProducto(props) {
   const [proveedor7, setproveedor7] = useState('');
 
   const changeProveedor = () => {
-    setproveedor1(seleccionado.proveedores[0]);
-    setproveedor2(seleccionado.proveedores[1]);
-    setproveedor3(seleccionado.proveedores[2]);
-    setproveedor4(seleccionado.proveedores[3]);
-    setproveedor5(seleccionado.proveedores[4]);
-    setproveedor6(seleccionado.proveedores[5]);
-    setproveedor7(seleccionado.proveedores[6]);
+    if (seleccionado.proveedores[0] !== undefined) {
+      setSize(seleccionado.proveedores[0].value);
+    }
+    if (seleccionado.proveedores[1] !== undefined) {
+      setSize2(seleccionado.proveedores[1].value);
+    }
+    if (seleccionado.proveedores[2] !== undefined) {
+      setSize3(seleccionado.proveedores[2].value);
+    }
+    if (seleccionado.proveedores[3] !== undefined) {
+      setSize4(seleccionado.proveedores[3].value);
+    }
+    if (seleccionado.proveedores[4] !== undefined) {
+      setSize5(seleccionado.proveedores[4].value);
+    }
+    if (seleccionado.proveedores[5] !== undefined) {
+      setSize6(seleccionado.proveedores[5].value);
+    }
+    if (seleccionado.proveedores[6] !== undefined) {
+      setSize7(seleccionado.proveedores[6].value);
+    }
     setModalModificarProveedores(true);
   };
-  const [precio1, setprecio1] = useState('');
-  const [precio2, setprecio2] = useState('');
-  const [precio3, setprecio3] = useState('');
-
   const changePrecio = () => {
     setprecio1(seleccionado.precios[0]);
     setprecio2(seleccionado.precios[1]);
@@ -225,32 +626,60 @@ export default function EliminarProducto(props) {
       [name]: value,
     }));
   };
+  function limit() {
+    const temp = document.getElementById('modcantidad_minima');
+    const maxValue = document.getElementById('modcantidad').value;
+    temp.value = Math.min(maxValue, temp.value);
+  }
+  const manejarCambiocant = (e, n) => {
+    setCantsel(e.target.value);
+  };
+
+  const manejarCambiocantmin = (e, n) => {
+    const num = document.getElementById('modcantidad_minima').value;
+    const num2 = document.getElementById('modcantidad').value;
+    if (num > num2) {
+      document.getElementById('modcantidad_minima').onchange = limit;
+      // seleccionado.cantidad_minima = e.target.value;
+    } else {
+      document.getElementById('modcantidad').onchange = limit;
+      //seleccionado.cantidad_minima = e.target.value;
+    }
+    setCantminsel(e.target.value);
+    //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === ' ') {
+      e.preventDefault();
+    }
+  };
 
   return (
-    <div>
-      <Modal
-        isOpen={props.isOpen}
-        className="text-center"
-        style={{ maxWidth: '1700px', width: '80%', 'text-align': 'center', 'padding-top': '200px' }}
+    <div align="center">
+      <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
+      <input
+        type="text"
+        id="myInput"
+        onChange={() => myFunction()}
+        placeholder="Search for names.."
+        title="Type in a name"
+        style={{
+          'background-image': `url('${imagePath}')`,
+          'background-position': '10px 10px',
+          'background-repeat': 'no-repeat',
+          width: '60%',
+          'font-size': '16px',
+          padding: '12px 20px 12px 40px',
+          border: '1px solid #ddd',
+          'margin-bottom': '12px',
+        }}
+      ></input>
+      <div
+        style={{
+          maxHeight: '600px',
+          overflowY: 'auto',
+        }}
       >
-        <h4 class="text-center">PRODUCTOS EN INVENTARIO</h4>
-        <input
-          type="text"
-          id="myInput"
-          onChange={() => myFunction()}
-          placeholder="Search for names.."
-          title="Type in a name"
-          style={{
-            'background-image': `url('${imagePath}')`,
-            'background-position': '10px 10px',
-            'background-repeat': 'no-repeat',
-            width: '100%',
-            'font-size': '16px',
-            padding: '12px 20px 12px 40px',
-            border: '1px solid #ddd',
-            'margin-bottom': '12px',
-          }}
-        ></input>
         <Table
           responsive
           striped
@@ -269,6 +698,7 @@ export default function EliminarProducto(props) {
               <th>Area</th>
               <th>Ubicación</th>
               <th>Marca</th>
+              <th>Cantidad</th>
               <th>Cantidad Mínima</th>
               <th>Códigos</th>
               <th>Proveedores </th>
@@ -284,7 +714,8 @@ export default function EliminarProducto(props) {
                 <td>{elemento.nombre}</td>
                 <td>{elemento.area}</td>
                 <td>{elemento.ubicacion}</td>
-                <td>{elemento.marca}</td>
+                <td>{elemento.marca[0].name}</td>
+                <td>{elemento.cantidad}</td>
                 <td>{elemento.cantidad_minima}</td>
                 <td>
                   <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
@@ -312,7 +743,18 @@ export default function EliminarProducto(props) {
                   </Button>{' '}
                 </td>
                 <td>
-                  <Button onClick={() => eliminar(elemento._id)} color="danger">
+                  <Button
+                    onClick={() =>
+                      Confirm.open({
+                        title: 'Eliminar Producto',
+                        message: `Esta seguro de que quiere eliminar el Producto ${elemento.nombre}?`,
+                        onok: () => {
+                          eliminar(elemento._id);
+                        },
+                      })
+                    }
+                    color="danger"
+                  >
                     Eliminar
                   </Button>{' '}
                 </td>
@@ -320,10 +762,7 @@ export default function EliminarProducto(props) {
             ))}
           </tbody>
         </Table>
-        <Button color="danger" onClick={props.change}>
-          Cerrar
-        </Button>
-      </Modal>
+      </div>
       <div>
         <Modal
           isOpen={ModalModificar}
@@ -332,6 +771,7 @@ export default function EliminarProducto(props) {
             height: '95vh',
             'overflow-y': 'auto',
             top: '20px',
+            maxWidth: '550px',
           }}
         >
           <ModalHeader>
@@ -353,7 +793,15 @@ export default function EliminarProducto(props) {
                 Modificar Proveedor
               </Button>{' '}
             </div>
-            <Modal isOpen={ModalModificarCodigos}>
+            <Modal
+              style={{
+                height: '95vh',
+                'overflow-y': 'auto',
+                top: '20px',
+                maxWidth: '550px',
+              }}
+              isOpen={ModalModificarCodigos}
+            >
               <ModalHeader>
                 <div className="text-center">
                   <h3>Modificar Códigos</h3>
@@ -361,81 +809,157 @@ export default function EliminarProducto(props) {
               </ModalHeader>
               <ModalBody>
                 <div className="form-group">
-                  <label>codigo 1</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="mcodigo1"
-                    id="mcod1"
-                    // placeholder = {seleccionado.codigos[0]}
-                    value={codigo1}
-                    onChange={(event) => setCodigo1(event.target.value)}
-                  />
+                  <AvForm>
+                    <label>Codigo 1</label>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="mcodigo1"
+                      id="mcod1"
+                      // placeholder = {seleccionado.codigos[0]}
+                      value={codigo1}
+                      required
+                      errorMessage="Este codigo es requerido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onKeyDown={handleKeyDown}
+                      // onClick={verificarCodigo()}
+                      onChange={(event) => setCodigo1(event.target.value)}
+                      //onChange={(e) => handleChange(e, 2)}
+                    />
+                  </AvForm>
                   <br />
-                  <label>codigo 2</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo2"
-                    id="modcod2"
-                    value={codigo2}
-                    onChange={(event) => setCodigo2(event.target.value)}
-                  />
+                  <label>Codigo 2</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo2"
+                      id="modcod2"
+                      value={codigo2}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo2(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod2}
+                      // onChange={(e) => handleChange(e, 3)}
+                    />
+                  </AvForm>
                   <br />
-                  <label>codigo 3</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo3"
-                    id="modcod3"
-                    value={codigo3}
-                    onChange={(event) => setCodigo3(event.target.value)}
-                  />
+                  <label>Codigo 3</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo3"
+                      id="modcod3"
+                      value={codigo3}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo3(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod3}
+                      // onChange={(e) => handleChange(e, 4)}
+                    />
+                  </AvForm>
                   <br />
-                  <label>codigo 4</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo4"
-                    id="modcod4"
-                    value={codigo4}
-                    onChange={(event) => setCodigo4(event.target.value)}
-                  />
+                  <label>Codigo 4</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo4"
+                      id="modcod4"
+                      value={codigo4}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo4(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod4}
+                      // onChange={(e) => handleChange(e, 5)}
+                    />
+                  </AvForm>
                   <br />
-                  <label>codigo 5</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo5"
-                    id="modcod5"
-                    value={codigo5}
-                    onChange={(event) => setCodigo5(event.target.value)}
-                  />
+                  <label>Codigo 5</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo5"
+                      id="modcod5"
+                      value={codigo5}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo5(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod5}
+                      // onChange={(e) => handleChange(e, 6)}
+                    />
+                  </AvForm>
                   <br />
-                  <label>codigo 6</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo6"
-                    id="modcod6"
-                    value={codigo6}
-                    onChange={(event) => setCodigo6(event.target.value)}
-                  />
+                  <label>Codigo 6</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo6"
+                      id="modcod6"
+                      value={codigo6}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo6(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod6}
+                      // onChange={(e) => handleChange(e, 7)}
+                    />
+                  </AvForm>
                   <br />
-                  <label>codigo 7</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modcodigo7"
-                    id="modcod7"
-                    value={codigo7}
-                    onChange={(event) => setCodigo7(event.target.value)}
-                  />
+                  <label>Codigo 7</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo7"
+                      id="modcod7"
+                      value={codigo7}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onKeyDown={handleKeyDown}
+                      onChange={(event) => setCodigo7(event.target.value)}
+                      // disabled={!inputcod7}
+                    />
+                  </AvForm>
                   <br />
                 </div>
               </ModalBody>
               <ModalFooter>
-                <button className="btn btn-primary" onClick={() => GuardarCodigos(seleccionado)}>
+                <button
+                  className="btn btn-primary"
+                  onClick={() =>
+                    Confirm.open({
+                      title: 'Modificar Codigos',
+                      message: '¿Está seguro de que quiere modificar estos codigos?',
+                      onok: () => {
+                        GuardarCodigos(seleccionado);
+                      },
+                    })
+                  }
+                >
                   Modificar Código
                 </button>
                 <button className="btn btn-danger" onClick={() => setModalModificarCodigos(false)}>
@@ -443,7 +967,15 @@ export default function EliminarProducto(props) {
                 </button>
               </ModalFooter>
             </Modal>
-            <Modal isOpen={ModalModificarProveedores}>
+            <Modal
+              style={{
+                height: '95vh',
+                'overflow-y': 'auto',
+                top: '20px',
+                maxWidth: '550px',
+              }}
+              isOpen={ModalModificarProveedores}
+            >
               <ModalHeader>
                 <div>
                   <h3>Modificar Proveedores</h3>
@@ -451,82 +983,179 @@ export default function EliminarProducto(props) {
               </ModalHeader>
               <ModalBody>
                 <div className="form-group">
-                  <label>proveedor 1</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor1"
-                    id="modprov1"
-                    placeholder={seleccionado.proveedores[0]}
-                    value={proveedor1}
-                    onChange={(event) => setproveedor1(event.target.value)}
+                  <label>Proveedor 1</label>
+                  <SelectSearch
+                    search
+                    required
+                    autoComplete
+                    onChange={setSize}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[0]
+                        ? seleccionado.proveedores[0].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    onClick={handleOnChange(size)}
+                    value={size}
                   />
                   <br />
-                  <label>proveedor 2</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor2"
-                    id="modprov2"
-                    value={proveedor2}
-                    onChange={(event) => setproveedor2(event.target.value)}
+                  <label>Proveedor 2</label>
+                  <SelectSearch
+                    search
+                    required
+                    autoComplete
+                    onChange={setSize2}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[1]
+                        ? seleccionado.proveedores[1].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={size2}
+                    onClick={handleOnChange(size2)}
                   />
                   <br />
-                  <label>proveedor 3</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor3"
-                    id="modprov3"
-                    value={proveedor3}
-                    onChange={(event) => setproveedor3(event.target.value)}
+                  <label>Proveedor 3</label>
+                  <SelectSearch
+                    search
+                    required
+                    autoComplete
+                    onChange={setSize3}
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[2]
+                        ? seleccionado.proveedores[2].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={size3}
+                    onClick={handleOnChange(size3)}
                   />
                   <br />
-                  <label>proveedor 4</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor4"
-                    id="modprov4"
-                    value={proveedor4}
-                    onChange={(event) => setproveedor4(event.target.value)}
+                  <label>Proveedor 4</label>
+                  <SelectSearch
+                    search
+                    required
+                    onChange={setSize4}
+                    autoComplete
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[3]
+                        ? seleccionado.proveedores[3].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={size4}
+                    onClick={handleOnChange(size4)}
                   />
                   <br />
-                  <label>proveedor 5</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor5"
-                    id="modprov5"
-                    value={proveedor5}
-                    onChange={(event) => setproveedor5(event.target.value)}
+                  <label>Proveedor 5</label>
+                  <SelectSearch
+                    search
+                    required
+                    onChange={setSize5}
+                    autoComplete
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size &&
+                        item.value !== size6 &&
+                        item.value !== size7,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[4]
+                        ? seleccionado.proveedores[4].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={size5}
+                    onClick={handleOnChange(size5)}
                   />
                   <br />
-                  <label>proveedor 6</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor6"
-                    id="modprov6"
-                    value={proveedor6}
-                    onChange={(event) => setproveedor6(event.target.value)}
+                  <label>Proveedor 6</label>
+                  <SelectSearch
+                    search
+                    onChange={setSize6}
+                    required
+                    autoComplete
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size &&
+                        item.value !== size7,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[5]
+                        ? seleccionado.proveedores[5].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={size6}
+                    onClick={handleOnChange(size6)}
                   />
                   <br />
-                  <label>proveedor 7</label>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="modproveedor7"
-                    id="modprov7"
-                    value={proveedor7}
-                    onChange={(event) => setproveedor7(event.target.value)}
+                  <label>Proveedor 7</label>
+                  <SelectSearch
+                    search
+                    required
+                    onChange={setSize7}
+                    autoComplete
+                    options={proveedores.filter(
+                      (item) =>
+                        item.value !== size2 &&
+                        item.value !== size3 &&
+                        item.value !== size4 &&
+                        item.value !== size5 &&
+                        item.value !== size6 &&
+                        item.value !== size,
+                    )}
+                    placeholder={
+                      seleccionado.proveedores[6]
+                        ? seleccionado.proveedores[6].name
+                        : 'Encuentre el Proveedor del Producto'
+                    }
+                    value={size7}
+                    onClick={handleOnChange(size7)}
                   />
                   <br />
                 </div>
               </ModalBody>
               <ModalFooter>
                 <button className="btn btn-primary" onClick={() => GuardarProveedores()}>
-                  Modificar Proveedores*
+                  Modificar Proveedores
                 </button>
                 <button
                   className="btn btn-danger"
@@ -537,26 +1166,42 @@ export default function EliminarProducto(props) {
               </ModalFooter>
             </Modal>
             <div>
-              <h3>Nombre</h3>
-              <input
-                className="form-control"
-                type="text"
-                name="nombre"
-                id="modnombre"
-                value={seleccionado ? seleccionado.nombre : ''}
-                onChange={manejarCambio}
-              />
+              <AvForm>
+                <h3>Nombre</h3>
+                <AvField
+                  //className="form-control"
+                  type="text"
+                  name="nombre"
+                  id="modnombre"
+                  value={seleccionado ? seleccionado.nombre : ''}
+                  errorMessage="Nombre Inválido"
+                  validate={{
+                    required: { value: true },
+                    pattern: { value: regex },
+                    minLength: { value: 1 },
+                  }}
+                  onChange={(e) => manejarCambio(e)}
+                />
+              </AvForm>
             </div>
             <div>
-              <h3>Área</h3>
-              <input
-                className="form-control"
-                type="text"
-                name="area"
-                id="modarea"
-                value={seleccionado ? seleccionado.area : ''}
-                onChange={manejarCambio}
-              />
+              <AvForm>
+                <h3>Área</h3>
+                <AvField
+                  className="form-control"
+                  type="text"
+                  name="area"
+                  id="modarea"
+                  errorMessage="Campo Obligatorio"
+                  validate={{
+                    required: { value: true },
+                    pattern: { value: regex },
+                    minLength: { value: 1 },
+                  }}
+                  value={seleccionado ? seleccionado.area : ''}
+                  onChange={(e) => manejarCambio(e)}
+                />
+              </AvForm>
             </div>
             <div>
               <h3>Ubicación</h3>
@@ -571,54 +1216,71 @@ export default function EliminarProducto(props) {
             </div>
             <div>
               <h3>Marca</h3>
-              <input
-                className="form-control"
-                type="text"
-                name="marca"
-                id="modmarca"
-                placeholder={seleccionado.marca}
-                value={seleccionado ? seleccionado.marca : ''}
-                onChange={manejarCambio}
+              <SelectSearch
+                search
+                /*placeholder={
+                  seleccionado.marca[0]
+                    ? seleccionado.marca[0].name
+                    : 'Encuentre el Marca del Producto'
+                }*/
+                options={marcas}
+                value={marcaSel}
+                //onChange={setMarcaSel}
+                onChange={(e) => handleChange2(e)}
               />
+              <br />
             </div>
             <Button onClick={() => changePrecio()} color="primary">
               Precios
-            </Button>{' '}
+            </Button>
             <div>
-              <h3>Cantidad</h3>
+              <br />
+              <div>
+                <h3>Cantidad</h3>
+              </div>
               <input
                 className="form-control"
-                type="Number"
-                name="cantidad"
+                type="number"
                 id="modcantidad"
-                value={seleccionado ? seleccionado.cantidad : ''}
-                onChange={manejarCambio}
+                //placeholder={seleccionado.cantidad}
+                min={cantminsel}
+                value={cantsel}
+                onChange={(e) => manejarCambiocant(e, 0)}
               />
             </div>
             <div>
               <h3>Cantidad Mínima</h3>
               <input
                 className="form-control"
-                type="Number"
-                name="cantidad_minima"
+                type="number"
                 id="modcantidad_minima"
-                value={seleccionado ? seleccionado.cantidad_minima : ''}
-                onChange={manejarCambio}
+                //placeholder={seleccionado.cantidad_minima}
+                max={cantsel}
+                value={cantminsel}
+                //min={seleccionado.cantidad_minima}
+                onChange={(e) => manejarCambiocantmin(e, 1)}
               />
             </div>
             <div>
               <div>
                 <h3>Descripción corta</h3>
-                <FormGroup class="style">
-                  <Label for="exampleText"></Label>
-                  <Input
-                    type="textarea"
-                    name="text"
-                    id="descripcion1"
-                    value={seleccionado ? seleccionado.descripcion_corta : ''}
-                    onChange={manejarCambio}
-                  />
-                </FormGroup>
+                <AvForm>
+                  <FormGroup class="style">
+                    <Label for="exampleText"></Label>
+                    <AvField
+                      type="textarea"
+                      name="text"
+                      id="descripcion1"
+                      errorMessage="Campo Obligatorio"
+                      validate={{
+                        required: { value: true },
+                        minLength: { value: 1 },
+                      }}
+                      value={seleccionado ? seleccionado.descripcion_corta : ''}
+                      onChange={manejarCambio}
+                    />
+                  </FormGroup>
+                </AvForm>
               </div>
             </div>
             <div>
@@ -638,15 +1300,34 @@ export default function EliminarProducto(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={() => updateItem(seleccionado._id)}>
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                Confirm.open({
+                  title: 'Guardar Cambios',
+                  message: `Esta seguro de que quiere modificar la/el ${nombreProducto}?`,
+                  onok: () => {
+                    updateItem(seleccionado._id);
+                  },
+                })
+              }
+            >
               Guardar Cambios
             </button>
-            <button className="btn btn-danger" onClick={() => setModalModificar(false)}>
+            <button className="btn btn-danger" onClick={() => descartarcambios()}>
               Cancelar
             </button>
           </ModalFooter>
         </Modal>
-        <Modal isOpen={ModalModificarPrecios}>
+        <Modal
+          style={{
+            height: '95vh',
+            'overflow-y': 'auto',
+            top: '20px',
+            maxWidth: '550px',
+          }}
+          isOpen={ModalModificarPrecios}
+        >
           <ModalHeader>
             <div className="text-center">
               <h3>Modificar Precios</h3>
@@ -686,7 +1367,18 @@ export default function EliminarProducto(props) {
             </div>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={() => GuardarPrecio()}>
+            <button
+              className="btn btn-primary"
+              onClick={() =>
+                Confirm.open({
+                  title: 'Modificar Precios',
+                  message: 'Esta seguro de que quiere modificar estos precios?',
+                  onok: () => {
+                    GuardarPrecio();
+                  },
+                })
+              }
+            >
               Modificar Precio
             </button>
             <button className="btn btn-danger" onClick={() => setModalModificarPrecios(false)}>
@@ -695,15 +1387,23 @@ export default function EliminarProducto(props) {
           </ModalFooter>
         </Modal>
       </div>
-      <Modal isOpen={modalVerCodigos}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalVerCodigos}
+      >
         <ModalHeader>
           <div className="text-center">
-            <h3>Agregar Productos</h3>
+            <h3>Codigos de {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label>codigo 1</label>
+            <label>Codigo 1</label>
             <input
               className="form-control"
               type="text"
@@ -714,7 +1414,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 2</label>
+            <label>Codigo 2</label>
             <input
               className="form-control"
               type="text"
@@ -725,7 +1425,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 3</label>
+            <label>Codigo 3</label>
             <input
               className="form-control"
               type="text"
@@ -736,7 +1436,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 4</label>
+            <label>Codigo 4</label>
             <input
               className="form-control"
               type="text"
@@ -747,7 +1447,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 5</label>
+            <label>Codigo 5</label>
             <input
               className="form-control"
               type="text"
@@ -758,7 +1458,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 6</label>
+            <label>Codigo 6</label>
             <input
               className="form-control"
               type="text"
@@ -769,7 +1469,7 @@ export default function EliminarProducto(props) {
               // onChange={manejarCambio}
             />
             <br />
-            <label>codigo 7</label>
+            <label>Codigo 7</label>
             <input
               className="form-control"
               type="text"
@@ -788,85 +1488,93 @@ export default function EliminarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalVerProveedor}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalVerProveedor}
+      >
         <ModalHeader>
           <div>
-            <h3>Modificar Productos</h3>
+            <h3>Proveedores de {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
           <div className="form-group">
-            <label>proveedor 1</label>
+            <label>Proveedor 1</label>
             <input
               className="form-control"
               type="text"
               name="Apunte"
-              value={seleccionado.proveedores[0]}
+              value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
               readOnly
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 2</label>
+            <label>Proveedor 2</label>
             <input
               className="form-control"
               type="text"
               name="Fecha"
               readOnly
-              value={seleccionado.proveedores[1]}
+              value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
               // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 3</label>
+            <label>Proveedor 3</label>
             <input
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[2]}
+              value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 4</label>
+            <label>Proveedor 4</label>
             <input
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[3]}
+              value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 5</label>
+            <label>Proveedor 5</label>
             <input
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[4]}
+              value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 6</label>
+            <label>Proveedor 6</label>
             <input
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[5]}
+              value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
             />
             <br />
-            <label>proveedor 7</label>
+            <label>Proveedor 7</label>
             <input
               className="form-control"
               type="text"
               name="Etiqueta"
-              value={seleccionado.proveedores[6]}
+              value={seleccionado.proveedores[6] ? seleccionado.proveedores[6].name : ''}
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
@@ -880,12 +1588,20 @@ export default function EliminarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalVerDescripciones}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={modalVerDescripciones}
+      >
         <ModalHeader></ModalHeader>
         <ModalBody>
           <div>
             <div>
-              <h3>Descripción corta</h3>
+              <h3>Descripción corta de {seleccionado.nombre}</h3>
             </div>
             <FormGroup class="style">
               <Label for="exampleText"></Label>
@@ -900,7 +1616,7 @@ export default function EliminarProducto(props) {
           </div>
           <div>
             <div>
-              <h3>Descripción larga </h3>
+              <h3>Descripción larga de {seleccionado.nombre}</h3>
             </div>
             <div className="form-group">
               <label htmlFor="exampleFormControlTextarea1"></label>
@@ -920,10 +1636,18 @@ export default function EliminarProducto(props) {
           </Button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={ModalVerPrecios}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={ModalVerPrecios}
+      >
         <ModalHeader>
           <div className="text-center">
-            <h3>Modificar Precios</h3>
+            <h3>Precios de {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
