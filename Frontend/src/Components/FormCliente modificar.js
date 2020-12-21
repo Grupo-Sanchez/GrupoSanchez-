@@ -44,18 +44,33 @@ const formClienteModificar = (props) => {
       email: values.email,
     };
 
-    await axios.put(`http://Localhost:3001/api/clientes/${props.id}`, payload).then((res) => {
-      console.log(res.data.message);
-    });
-    Confirm.open({
-      title: 'Aviso',
-      message: 'cliente modificado',
-      onok: () => {},
-    });
-    // props.toggle();
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
+    await axios
+      .put(`http://Localhost:3001/api/clientes/${props.id}`, payload)
+      .then((res) => {
+        if (res.data.message) {
+          Confirm.open({
+            title: 'aviso',
+            message: 'error campos duplicados',
+            onok: () => {},
+          });
+        } else {
+          Confirm.open({
+            title: '!exito!',
+            message: 'cliente modificado correctamente',
+            onok: () => {},
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      })
+      .catch((error) => {
+        Confirm.open({
+          title: 'error',
+          message: 'ha ocurrido un error',
+          onok: () => {},
+        });
+      });
   };
 
   async function handleValidSubmit(event, values) {
