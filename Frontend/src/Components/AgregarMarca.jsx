@@ -30,7 +30,7 @@ const AgregarProveedor = (props) => {
   return (
     <Modal isOpen={props.isOpen} style={{ maxWidth: '1400px', width: '60%' }}>
       <ModalHeader>
-        <h3>Agregar Proveedor</h3>
+        <h3>Agregar Marca</h3>
       </ModalHeader>
       <AvForm onValidSubmit={handleValidSubmit} onInvalidSubmit={handleInvalidSubmit}>
         <ModalBody>

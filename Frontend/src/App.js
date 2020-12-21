@@ -21,6 +21,12 @@ import AmbientePropietarioProductos from './Views/AmbientePropietarioProductos.j
 import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
 import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
 import AmbientePropietarioClientes from './Views/AmbientePropietarioClientes.jsx';
+import AmbientePropietarioMarcas from './Views/AmbientePropietarioMarcas.jsx';
+import AmbientePropietarioProveedores from './Views/AmbientePropietarioProveedor.jsx';
+import AmbientePropietarioModificarProveedores from './Views/AmbientePropietarioModificarProveedores.jsx';
+import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModificarMarcas.jsx';
+import AmbientePropietarioModificarProductos from './Views/AmbientePropietarioModificarProductos.jsx';
+import AmbientePropietarioBuscarProductos from './Views/AmbientePropietarioBuscarProductos.jsx';
 
 // Import de funcionalidades jefe  de tienda
 import AmbienteJefeTiendaDevoluciones from './Views/AmbienteJefeTiendaDevoluciones.jsx';
@@ -31,8 +37,6 @@ import AmbienteVendedorFacturacion from './Views/AmbienteVendedorFactura.jsx';
 
 // Import de funcionalidades administrador
 import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProveedores.jsx';
-
-import AmbientePropietarioMarcas from './Views/AmbientePropietarioMarcas.jsx';
 
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
@@ -67,6 +71,21 @@ const App = () => {
       </Route>
       <Route exact path="/Propietario/Marcas">
         <AmbientePropietarioMarcas />
+      </Route>
+      <Route exact path="/Propietario/Proveedores">
+        <AmbientePropietarioProveedores />
+      </Route>
+      <Route exact path="/Propietario/Proveedores/Gestionar">
+        <AmbientePropietarioModificarProveedores />
+      </Route>
+      <Route exact path="/Propietario/Marcas/Gestionar">
+        <AmbientePropietarioModificarMarcas />
+      </Route>
+      <Route exact path="/Propietario/Productos/Gestionar">
+        <AmbientePropietarioModificarProductos />
+      </Route>
+      <Route exact path="/Propietario/Productos/Buscar">
+        <AmbientePropietarioBuscarProductos />
       </Route>
       {/* Ambientes administrador */}
       <Route exact path="/Administrador">

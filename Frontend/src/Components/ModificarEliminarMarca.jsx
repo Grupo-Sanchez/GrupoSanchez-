@@ -109,7 +109,7 @@ const ModificarEliminarProveedor = () => {
     <div>
       <Modal isOpen={modal} style={{ maxWidth: '1400px', width: '60%' }}>
         <ModalHeader>
-          <h3>Modificar Proveedor</h3>
+          <h3>Modificar Marca</h3>
         </ModalHeader>
         <AvForm
           onValidSubmit={handleValidSubmit}
