@@ -59,7 +59,7 @@ const ModificarEliminarBodegas = (props) => {
   // async function handleValidSubmit(event, values) {
   //   const Id = Seleccionado._id;
   //   axios
-  //     .put(`http://Localhost:3001/api/bodegas/${Id}`, {
+  //     .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
   //       numBodega: values.numBodega,
   //       descripcion: values.Description,
   //       encargado: values.Encargado,
@@ -83,7 +83,7 @@ const ModificarEliminarBodegas = (props) => {
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
     axios
-      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
+      .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -129,7 +129,7 @@ const ModificarEliminarBodegas = (props) => {
 
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
         setData(response.data);
       });
     };
@@ -137,7 +137,7 @@ const ModificarEliminarBodegas = (props) => {
   }, []);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const eliminar = (i) => {
