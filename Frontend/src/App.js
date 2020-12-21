@@ -10,7 +10,6 @@ import './App.css';
 // Import de login & landingpages
 
 import LoginSignup from './Views/Login';
-
 import AmbientePropietario from './Views/AmbientePropietario.jsx';
 import AmbienteJefeTienda from './Views/AmbienteJefeTienda.jsx';
 import AmbienteVendedor from './Views/AmbienteVendedor.jsx';
@@ -21,6 +20,12 @@ import AmbientePropietarioProductos from './Views/AmbientePropietarioProductos.j
 import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
 import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
 import AmbientePropietarioClientes from './Views/AmbientePropietarioClientes.jsx';
+import AmbientePropietarioMarcas from './Views/AmbientePropietarioMarcas.jsx';
+import AmbientePropietarioProveedores from './Views/AmbientePropietarioProveedor.jsx';
+import AmbientePropietarioModificarProveedores from './Views/AmbientePropietarioModificarProveedores.jsx';
+import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModificarMarcas.jsx';
+import AmbientePropietarioModificarProductos from './Views/AmbientePropietarioModificarProductos.jsx';
+import AmbientePropietarioBuscarProductos from './Views/AmbientePropietarioBuscarProductos.jsx';
 
 // Import de funcionalidades jefe  de tienda
 import AmbienteJefeTiendaDevoluciones from './Views/AmbienteJefeTiendaDevoluciones.jsx';
@@ -34,6 +39,7 @@ import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProve
 
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
+import Header from './Components/Header.jsx';
 
 // Instancia de la react app
 const App = () => {
@@ -61,6 +67,24 @@ const App = () => {
       </Route>
       <Route exact path="/Propietario/Clientes">
         <AmbientePropietarioClientes />
+      </Route>
+      <Route exact path="/Propietario/Marcas">
+        <AmbientePropietarioMarcas />
+      </Route>
+      <Route exact path="/Propietario/Proveedores">
+        <AmbientePropietarioProveedores />
+      </Route>
+      <Route exact path="/Propietario/Proveedores/Gestionar">
+        <AmbientePropietarioModificarProveedores />
+      </Route>
+      <Route exact path="/Propietario/Marcas/Gestionar">
+        <AmbientePropietarioModificarMarcas />
+      </Route>
+      <Route exact path="/Propietario/Productos/Gestionar">
+        <AmbientePropietarioModificarProductos />
+      </Route>
+      <Route exact path="/Propietario/Productos/Buscar">
+        <AmbientePropietarioBuscarProductos />
       </Route>
       {/* Ambientes administrador */}
       <Route exact path="/Administrador">

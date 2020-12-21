@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import '../Styles/Sidebar.css';
 
@@ -41,7 +42,9 @@ const Header = (props) => {
         </button>
 
         <span>Grupo Sanchez</span>
+      </div>
 
+      <div>
         <img src={Notificacion} style={{ width: '1.4em', height: '1.4em', color: 'white' }} />
       </div>
 
@@ -74,7 +77,16 @@ const Header = (props) => {
         <div className="sidenav-content">
           {items.map(({ name, to, icon }, i) => (
             <div key={i} className="sidenav-item" onClick={handleItemClick.bind(this, to)}>
-              {icon}
+              <div
+                style={{
+                  width: '2em',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  marginRight: '0.5em',
+                }}
+              >
+                <FontAwesomeIcon icon={icon} />
+              </div>
               <span>{name}</span>
             </div>
           ))}
