@@ -61,7 +61,7 @@ class MainTable extends Component {
         </Row>
         <Row>
           <Col>
-            <ModalForm buttonLabel="Add Item" addItemToState={this.addItemToState} />
+            <ModalForm buttonLabel="add" addItemToState={this.addItemToState} />
           </Col>
         </Row>
       </Container>
