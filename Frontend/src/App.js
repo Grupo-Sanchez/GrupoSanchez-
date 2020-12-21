@@ -10,7 +10,6 @@ import './App.css';
 // Import de login & landingpages
 
 import LoginSignup from './Views/Login';
-
 import AmbientePropietario from './Views/AmbientePropietario.jsx';
 import AmbienteJefeTienda from './Views/AmbienteJefeTienda.jsx';
 import AmbienteVendedor from './Views/AmbienteVendedor.jsx';

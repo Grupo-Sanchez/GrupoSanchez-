@@ -20,6 +20,7 @@ export default function BuscarProducto(props) {
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
+
   const [data, setData] = useState([]);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -34,6 +35,7 @@ export default function BuscarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
+
   const fecthData = async () => {
     await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
       setData(response.data);
