@@ -22,8 +22,10 @@ export const Confirm = {
                     </div>
                     <div class="confirm__content">${options.message}</div>
                     <div class="confirm__buttons">
-                        <button class="confirm__button confirm__button--ok confirm__button--fill">${options.okText}</button>
-                        <button class="confirm__button confirm__button--cancel">${options.cancelText}</button>
+                        <button class="confirm__button confirm__button--ok confirm__button--fill">
+                        ${options.okText}</button>
+                        <button class="confirm__button confirm__button--cancel">
+                        ${options.cancelText}</button>
                     </div>
                 </div>
             </div>
