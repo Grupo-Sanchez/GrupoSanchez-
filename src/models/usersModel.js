@@ -16,7 +16,6 @@ const UsersSchema = new Schema({
     type: String,
     required: 'el primer apellido es requerido',
   },
-
   segundo_apellido: {
     type: String,
   },

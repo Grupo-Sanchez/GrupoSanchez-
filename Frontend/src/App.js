@@ -26,6 +26,9 @@ import AmbientePropietarioModificarProveedores from './Views/AmbientePropietario
 import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModificarMarcas.jsx';
 import AmbientePropietarioModificarProductos from './Views/AmbientePropietarioModificarProductos.jsx';
 import AmbientePropietarioBuscarProductos from './Views/AmbientePropietarioBuscarProductos.jsx';
+//------
+import AmbientePropietarioGestionarProductos from './Components/ModificarUsuarios.jsx';
+import AmbientePropietarioEliminarProductos from './Components/EliminarUsuarios.jsx';
 
 // Import de funcionalidades jefe  de tienda
 import AmbienteJefeTiendaDevoluciones from './Views/AmbienteJefeTiendaDevoluciones.jsx';
@@ -85,6 +88,12 @@ const App = () => {
       </Route>
       <Route exact path="/Propietario/Productos/Buscar">
         <AmbientePropietarioBuscarProductos />
+      </Route>
+      <Route exact path="/Propietario/Gestionar/Usuarios">
+        <AmbientePropietarioGestionarProductos />
+      </Route>
+      <Route exact path="/Propietario/Eliminar/Usuarios">
+        <AmbientePropietarioEliminarProductos />
       </Route>
       {/* Ambientes administrador */}
       <Route exact path="/Administrador">

@@ -16,7 +16,7 @@ const OpcionesUsuarios = () => {
         <img
           src={AgregarUsuario}
           style={{
-            width: '220px',
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -24,7 +24,6 @@ const OpcionesUsuarios = () => {
           }}
         />
       ),
-      to: '/asd',
       isOpen: () => setModalAgregar(true),
     },
     {
@@ -33,7 +32,7 @@ const OpcionesUsuarios = () => {
         <img
           src={EditarUsuario}
           style={{
-            width: '220px',
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -41,7 +40,23 @@ const OpcionesUsuarios = () => {
           }}
         />
       ),
-      to: '/asd',
+      to: '/Propietario/Gestionar/Usuarios',
+    },
+    {
+      titulo: 'Eliminar Usuarios',
+      icon: (
+        <img
+          src={EditarUsuario}
+          style={{
+            width: '240px',
+            height: 'auto',
+            paddingBottom: '20px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        />
+      ),
+      to: '/Propietario/Eliminar/Usuarios',
     },
   ];
 
