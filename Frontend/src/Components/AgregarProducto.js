@@ -46,7 +46,7 @@ export default function AgregarProducto(props) {
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: seleccionado.cantidad_minima,
     };
-    const res = await axios.post('http://178.128.67.247:3001:3001/api/productos', campos);
+    const res = await axios.post('http://178.128.67.247:3001/api/productos', campos);
     console.log(res);
     alert('¡Producto Agregado!');
   };
