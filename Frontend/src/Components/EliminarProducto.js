@@ -226,6 +226,7 @@ export default function EliminarProducto(props) {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
+
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
   const isAlphanumeric = require('is-alphanumeric');
   const [marcaSel, setMarcaSel] = useState([]);

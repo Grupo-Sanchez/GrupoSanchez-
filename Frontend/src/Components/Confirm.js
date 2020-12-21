@@ -26,6 +26,7 @@ export const Confirm = {
                         ${options.okText}</button>
                         <button class="confirm__button confirm__button--cancel">
                         ${options.cancelText}</button>
+
                     </div>
                 </div>
             </div>

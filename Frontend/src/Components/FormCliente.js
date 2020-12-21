@@ -2,6 +2,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+import { AvForm, AvField } from 'availity-reactstrap-validation';
+
 import {
   Container,
   Row,
@@ -119,6 +121,7 @@ const FormCliente = () => {
         setProfesion(event.value);
         break;
       case 'id':
+        console.log(event.value);
         setId(event.value);
         setValidId(!emptyVal);
         setInvalidId(emptyVal);
