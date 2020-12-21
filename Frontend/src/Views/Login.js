@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 // import React, { useState } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
 
 import { withRouter } from 'react-router-dom';
 
@@ -16,6 +16,9 @@ import '../Styles/App.css';
 import '../Styles/LoginSignupCard.css';
 
 const Login = (props) => {
+  const [visible, setVisible] = useState(false);
+
+  const onDismiss = () => setVisible(true);
   // States
   const { history } = props;
   const [email, setEmail] = useState('');
@@ -72,6 +75,7 @@ const Login = (props) => {
             .then((response) => console.log('Response: ', response));
           history.push(`/${json.ruta}`);
         } else {
+          setVisible(!visible);
           console.log('Incorrecto');
         }
       });
@@ -81,59 +85,64 @@ const Login = (props) => {
   // console.log('Login.js ', email);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <div className="LoginSignupCardContainer">
-          <div className="LogoEmpresaImg">
-            <img src={Logo} alt="Logo" />
+    <>
+      <div className="App">
+        <Alert color="info" isOpen={visible} toggle={onDismiss}>
+          Usuario o contraseña incorrecto, verifique sus datos porfavor.
+        </Alert>
+        <header className="App-header">
+          <div className="LoginSignupCardContainer">
+            <div className="LogoEmpresaImg">
+              <img src={Logo} alt="Logo" />
+            </div>
+            <Form className="FormContainer">
+              <FormGroup className="FormGroupContainer">
+                <Label className="FormLabel" for="exampleEmail">
+                  Email
+                </Label>
+                <Input
+                  className="FormInput"
+                  type="email"
+                  name="email"
+                  id="email"
+                  placeholder="antonio@gmail.com"
+                  // value={email}
+                  onChange={(event) => changeValue(event.currentTarget)}
+                />
+              </FormGroup>
+              <FormGroup className="FormGroupContainer">
+                <Label className="FormLabel" for="examplePassword">
+                  Contraseña
+                </Label>
+                <Input
+                  className="FormInput"
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="・・・・・・・・・"
+                  // value={password}
+                  onChange={(event) => changeValue(event.currentTarget)}
+                />
+              </FormGroup>
+              {/* <Button className="LoginButton">Login</Button> */}
+              <Button
+                block
+                className="LoginButton"
+                size="lg"
+                onClick={() => {
+                  // console.log('Email: ', email);
+                  // console.log('Contraseña: ', password);
+                  // handleSubmit(email, password);
+                  authMethod();
+                }}
+              >
+                Login
+              </Button>
+            </Form>
           </div>
-          <Form className="FormContainer">
-            <FormGroup className="FormGroupContainer">
-              <Label className="FormLabel" for="exampleEmail">
-                Email
-              </Label>
-              <Input
-                className="FormInput"
-                type="email"
-                name="email"
-                id="email"
-                placeholder="antonio@gmail.com"
-                // value={email}
-                onChange={(event) => changeValue(event.currentTarget)}
-              />
-            </FormGroup>
-            <FormGroup className="FormGroupContainer">
-              <Label className="FormLabel" for="examplePassword">
-                Contraseña
-              </Label>
-              <Input
-                className="FormInput"
-                type="password"
-                name="password"
-                id="password"
-                placeholder="・・・・・・・・・"
-                // value={password}
-                onChange={(event) => changeValue(event.currentTarget)}
-              />
-            </FormGroup>
-            {/* <Button className="LoginButton">Login</Button> */}
-            <Button
-              block
-              className="LoginButton"
-              size="lg"
-              onClick={() => {
-                // console.log('Email: ', email);
-                // console.log('Contraseña: ', password);
-                // handleSubmit(email, password);
-                authMethod();
-              }}
-            >
-              Login
-            </Button>
-          </Form>
-        </div>
-      </header>
-    </div>
+        </header>
+      </div>
+    </>
   );
 };
 

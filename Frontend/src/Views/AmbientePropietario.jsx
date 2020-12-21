@@ -1,6 +1,8 @@
 import AmbientePropietarioBase from '../Components/AmbientePropietarioBase.jsx';
 import Logo from '../Icons/grupoSanchezLogo.png';
 
+import '../Styles/LoginSignupCard.css';
+
 const AmbientePropietario = () => (
   <AmbientePropietarioBase>
     <div
