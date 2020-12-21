@@ -78,7 +78,7 @@ const Login = (props) => {
   };
 
   console.log('Login.js activated');
-  console.log('Login.js ', email);
+  // console.log('Login.js ', email);
 
   return (
     <div className="App">

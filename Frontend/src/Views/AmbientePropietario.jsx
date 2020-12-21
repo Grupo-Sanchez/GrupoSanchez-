@@ -1,11 +1,13 @@
 import AmbientePropietarioBase from '../Components/AmbientePropietarioBase.jsx';
+import Logo from '../Icons/grupoSanchezLogo.png';
 
 const AmbientePropietario = () => (
   <AmbientePropietarioBase>
     <div
       style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
-      Ambiente propietario
+      <img src={Logo} alt="Logo" />
+      {/* Ambiente propietario */}
     </div>
   </AmbientePropietarioBase>
 );

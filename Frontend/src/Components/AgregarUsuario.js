@@ -58,29 +58,33 @@ export default function AgregarUsuario(props) {
   const [marca, setMarca] = useState('');
 
   const signUpMethod = () => {
-    const jsonString = {
-      email: seleccionado.correo,
-      password: seleccionado.password,
-      rol: seleccionado.rol.value,
-    };
-    console.log('Mandando: ', jsonString);
-    //     fetch('http://178.128.67.247:3001/api/login', {
-    fetch('http://Localhost:3001/api/signup', {
-      method: 'post',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(jsonString),
-    })
-      // .then((res) => {
-      //   res.json();
-      //   console.log('Response: ', res);
-      // })
-      // .then((json) => {
-      //   console.log('JSON: ', json);
-      // });
-      .then((res) => res.json())
-      .then((json) => {
-        console.log('JSON SIGNUP: ', json);
-      });
+    if (seleccionado.rol) {
+      const jsonString = {
+        email: seleccionado.correo,
+        password: seleccionado.password,
+        rol: seleccionado.rol.value,
+      };
+
+      console.log('Mandando: ', typeof seleccionado.rol.value);
+      console.log('Mandando: ', jsonString);
+      //     fetch('http://178.128.67.247:3001/api/login', {
+      fetch('http://Localhost:3001/api/signup', {
+        method: 'post',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(jsonString),
+      })
+        // .then((res) => {
+        //   res.json();
+        //   console.log('Response: ', res);
+        // })
+        // .then((json) => {
+        //   console.log('JSON: ', json);
+        // });
+        .then((res) => res.json())
+        .then((json) => {
+          console.log('JSON SIGNUP: ', json);
+        });
+    }
   };
 
   const agregarMarca = (idToSearch) => {
