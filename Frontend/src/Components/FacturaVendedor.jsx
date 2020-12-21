@@ -61,7 +61,7 @@ export default class Facturas extends Component {
   };
   getProductos = async () => {
     await axios
-      .get('http://localhost:3001/api/productos')
+      .get('http://178.128.67.247:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         const productosagregados = [];
@@ -103,7 +103,7 @@ export default class Facturas extends Component {
       total: this.state.total,
       productosSeleccionado: this.state.productosSeleccionado,
     };
-    await axios.post('http://localhost:3001/api/facturas', campos);
+    await axios.post('http://178.128.67.247:3001/api/facturas', campos);
     window.location.reload();
   };
   updateTool = async (id) => {
@@ -115,7 +115,7 @@ export default class Facturas extends Component {
         break;
       }
     }
-    axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
+    axios.put(`http://178.128.67.247:3001/api/productos/${id}`, { cantidad: cantidad2 });
   };
   handleQuantityChange(e) {
     this.state.indice = 1;
@@ -135,7 +135,7 @@ export default class Facturas extends Component {
       }
     }
 
-    axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    axios.put(`http://178.128.67.247:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items = this.state.productosSeleccionado.filter((item) => item.value !== i);
     const nextState = this.state;
     nextState.productosSeleccionado = items;

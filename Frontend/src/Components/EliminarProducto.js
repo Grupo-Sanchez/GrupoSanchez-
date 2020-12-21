@@ -41,7 +41,7 @@ export default function EliminarProducto(props) {
   });
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/productos').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
         setData(response.data);
       });
     };
@@ -84,7 +84,7 @@ export default function EliminarProducto(props) {
     alert(seleccionado.precios[0]);
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
@@ -93,7 +93,7 @@ export default function EliminarProducto(props) {
   const updateItem = (Id) => {
     setModalModificar(false);
     axios
-      .put(`http://localhost:3001/api/productos/${Id}`, {
+      .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
         nombre: document.getElementById('modnombre').value,
         area: document.getElementById('modarea').value,
         codigos: seleccionado.codigos,

@@ -23,6 +23,8 @@ import {
 } from 'availity-reactstrap-validation';
 import axios from 'axios';
 import CartaBodegas from './CartaBodega';
+import '../Styles/ConfirmStyle.css';
+import { Confirm } from './Confirm';
 
 const ModificarEliminarBodegas = (props) => {
   const [Seleccionado, setSeleccionado] = useState({
@@ -54,20 +56,64 @@ const ModificarEliminarBodegas = (props) => {
     console.log('invalid submit', { event, errors, values });
   }
 
+  // async function handleValidSubmit(event, values) {
+  //   const Id = Seleccionado._id;
+  //   axios
+  //     .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
+  //       numBodega: values.numBodega,
+  //       descripcion: values.Description,
+  //       encargado: values.Encargado,
+  //       cantPasillos: values.CantPasillos,
+  //     })
+  //     .then(alert('Modificado con exito'))
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  //   window.location.reload(false);
+  //   setModalModificarBodega(false);
+  // }
+
+  // const handleChange = (e) => {
+  //   setForm({
+  //     ...form,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
+
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
     axios
-      .put(`http://localhost:3001/api/bodegas/${Id}`, {
+      .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
         cantPasillos: values.CantPasillos,
       })
-      .then(alert('Modificado con exito'))
+      .then((res) => {
+        if (res.data.message) {
+          Confirm.open({
+            title: 'aviso',
+            message: 'El numero de bodega ya existe',
+            onok: () => {},
+          });
+        } else {
+          Confirm.open({
+            title: '!exito!',
+            message: 'bodega modificada correctamente',
+            onok: () => {},
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      })
       .catch((error) => {
-        console.log(error);
+        Confirm.open({
+          title: 'error',
+          message: 'ha ocurrido un error',
+          onok: () => {},
+        });
       });
-    Window.location.reload(false);
     setModalModificarBodega(false);
   }
 
@@ -83,7 +129,7 @@ const ModificarEliminarBodegas = (props) => {
 
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/bodegas').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
         setData(response.data);
       });
     };
@@ -91,7 +137,7 @@ const ModificarEliminarBodegas = (props) => {
   }, []);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const eliminar = (i) => {

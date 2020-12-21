@@ -46,7 +46,7 @@ export default function AgregarProducto(props) {
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: seleccionado.cantidad_minima,
     };
-    const res = await axios.post('http://localhost:3001/api/productos', campos);
+    const res = await axios.post('http://178.128.67.247:3001/api/productos', campos);
     console.log(res);
     alert('¡Producto Agregado!');
   };
@@ -109,11 +109,15 @@ export default function AgregarProducto(props) {
 
   return (
     <div>
-      <Modal isOpen={props.isOpen} className="text-center" style={{
-        height: '95vh',
-        'overflow-y': 'auto',
-        top: '20px',
-      }}>
+      <Modal
+        isOpen={props.isOpen}
+        className="text-center"
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+        }}
+      >
         <ModalHeader>
           <div>
             <h3>AGREGAR PRODUCTOS</h3>
@@ -150,8 +154,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo2"
                   id="cod2"
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 3</label>
@@ -160,8 +164,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo3"
                   id="cod3"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 4</label>
@@ -170,8 +174,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo4"
                   id="cod4"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 5</label>
@@ -180,8 +184,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo5"
                   id="cod5"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 6</label>
@@ -190,8 +194,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo6"
                   id="cod6"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>codigo 7</label>
@@ -200,8 +204,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="codigo7"
                   id="cod7"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -229,8 +233,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor1"
                   id="prov1"
-                // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Apunte : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 2</label>
@@ -239,8 +243,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor2"
                   id="prov2"
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 3</label>
@@ -249,8 +253,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor3"
                   id="prov3"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 4</label>
@@ -259,8 +263,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor4"
                   id="prov4"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 5</label>
@@ -269,8 +273,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor5"
                   id="prov5"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 6</label>
@@ -279,8 +283,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor6"
                   id="prov6"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
                 <label>proveedor 7</label>
@@ -289,8 +293,8 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="proveedor7"
                   id="prov7"
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                 />
                 <br />
               </div>
@@ -358,16 +362,16 @@ export default function AgregarProducto(props) {
             />
           </div>
           <div>
-              <h3>Cantidad Mínima</h3>
-              <input
-                className="form-control"
-                type="Number"
-                name="cantidad_minima"
-                id="modcantidad_minima"
-                value={seleccionado ? seleccionado.cantidad_minima : ''}
-                onChange={manejarCambio}
-              />
-            </div>
+            <h3>Cantidad Mínima</h3>
+            <input
+              className="form-control"
+              type="Number"
+              name="cantidad_minima"
+              id="modcantidad_minima"
+              value={seleccionado ? seleccionado.cantidad_minima : ''}
+              onChange={manejarCambio}
+            />
+          </div>
           <div>
             <div>
               <h3>Descripción corta</h3>
@@ -414,8 +418,8 @@ export default function AgregarProducto(props) {
               name="Fecha"
               name="precio2"
               id="precio2"
-            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>Precio 3</label>
@@ -425,8 +429,8 @@ export default function AgregarProducto(props) {
               name="Etiqueta"
               name="precio3"
               id="precio3"
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
           </div>
         </ModalBody>

@@ -24,6 +24,8 @@ import {
 } from 'availity-reactstrap-validation';
 import Formulario from './FormularioBodega';
 import CartaBodegas from './CartaBodega';
+import '../Styles/ConfirmStyle.css';
+import { Confirm } from './Confirm';
 
 const CrearBodega = (props) => {
   const [form, setForm] = useState({
@@ -44,21 +46,39 @@ const CrearBodega = (props) => {
   };
 
   async function handleValidSubmit(event, values) {
-    console.log('aca en handle');
-    try {
-      const payload = {
-        numBodega: values.numBodega,
-        descripcion: values.Description,
-        encargado: values.Encargado,
-        cantPasillos: values.CantPasillos,
-      };
-      const response = await axios.post('http://localhost:3001/api/bodegas', payload);
-      console.log(response);
-      cerrarModal();
-      window.location.reload(false);
-    } catch (err) {
-      console.err(err.response.payload);
-    }
+    const campos = {
+      numBodega: values.numBodega,
+      descripcion: values.Description,
+      encargado: values.Encargado,
+      cantPasillos: values.CantPasillos,
+    };
+    await axios
+      .post('http://178.128.67.247:3001/api/bodegas', campos)
+      .then((res) => {
+        if (res.data.message) {
+          Confirm.open({
+            title: 'aviso',
+            message: 'El numero de bodega ya existe',
+            onok: () => {},
+          });
+        } else {
+          Confirm.open({
+            title: '!exito!',
+            message: 'bodega agregada correctamente',
+            onok: () => {},
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      })
+      .catch((error) => {
+        Confirm.open({
+          title: 'error',
+          message: 'ha ocurrido un error',
+          onok: () => {},
+        });
+      });
   }
 
   const handleChange = (e) => {

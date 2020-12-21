@@ -8,6 +8,7 @@ CantPasillos: "",',*/
   numBodega: {
     type: String,
     required: 'se requiere nombre',
+    unique: true,
   },
   descripcion: {
     type: String,
