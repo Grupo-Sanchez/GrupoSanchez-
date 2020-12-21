@@ -53,7 +53,7 @@ const CrearBodega = (props) => {
       cantPasillos: values.CantPasillos,
     };
     await axios
-      .post('http://178.128.67.247:3001/api/bodegas', campos)
+      .post('http://Localhost:3001/api/bodegas', campos)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({
