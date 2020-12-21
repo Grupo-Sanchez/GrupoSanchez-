@@ -33,5 +33,7 @@ module.exports = {
     'object-shorthand': 0,
     'global-require': 0,
     'no-useless-escape' :0,
+    'import/no-unresolved': 'off',
+
   },
 };

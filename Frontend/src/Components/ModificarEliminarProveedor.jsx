@@ -21,16 +21,18 @@ const ModificarEliminarProveedor = () => {
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
   const [input, setInput] = useState('');
-  useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://localhost:3001/api/proveedor').then((response) => {
-        setData(response.data);
-      });
-    };
-    fecthData();
-  });
 
-  async function handleValidSubmit(event, values) {
+  const fetchData = async () => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+      setData(response.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const modifyProveedor = async (values) => {
     try {
       const payload = {
         company: values.company,
@@ -49,19 +51,30 @@ const ModificarEliminarProveedor = () => {
         comentario: values.comentario,
       };
       setModal(false);
-      axios
-        .put(`http://localhost:3001/api/proveedor/${modificar._id}`, payload)
+      await axios
+        .put(`http://178.128.67.247:3001/api/proveedor/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {
           console.log(error);
         });
-
+      fetchData();
       setModal(false);
     } catch (err) {
       console.err(err.response.payload);
     }
+  };
+
+  async function handleValidSubmit(event, values) {
+    Confirm.open({
+      title: 'Modificar Proveedor',
+      message: '¿Esta seguro de que quiere modificar Proveedor?',
+      onok: () => {
+        modifyProveedor(values);
+        fetchData();
+      },
+    });
   }
 
   const handleChange = (e) => {
@@ -96,8 +109,9 @@ const ModificarEliminarProveedor = () => {
     setModal(true);
   };
 
-  const onDelete = (i) => {
-    axios.delete(`http://localhost:3001/api/proveedor/${data[i]._id}`);
+  const onDelete = async (i) => {
+    await axios.delete(`http://178.128.67.247:3001/api/proveedor/${data[i]._id}`);
+    fetchData();
   };
 
   function handleInvalidSubmit(event, errors, values) {
@@ -108,7 +122,7 @@ const ModificarEliminarProveedor = () => {
     <div>
       <Modal isOpen={modal} style={{ maxWidth: '1600px', width: '80%' }}>
         <ModalHeader>
-          <h3>Agregar Proveedor</h3>
+          <h3>Modificar Proveedor</h3>
         </ModalHeader>
         <AvForm
           onValidSubmit={handleValidSubmit}

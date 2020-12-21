@@ -7,7 +7,7 @@ class DataTable extends Component {
   deleteItem = async (id) => {
     const confirmDelete = window.confirm('borrar el cliente para siempre?');
     if (confirmDelete) {
-      await axios.delete(`http://localhost:3001/api/clientes/${id}`);
+      await axios.delete(`http://178.128.67.247:3001/api/clientes/${id}`);
     }
 
     this.props.deleteItemFromState(id);

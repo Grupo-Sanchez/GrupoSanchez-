@@ -28,23 +28,7 @@ const OpcionesUsuarios = () => {
       isOpen: () => setModalAgregar(true),
     },
     {
-      titulo: 'Eliminar Usuarios',
-      icon: (
-        <img
-          src={EliminarUsuario}
-          style={{
-            width: '220px',
-            height: 'auto',
-            paddingBottom: '20px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-          }}
-        />
-      ),
-      to: '/asd',
-    },
-    {
-      titulo: 'Modificar Usuarios',
+      titulo: 'Gestionar Usuarios',
       icon: (
         <img
           src={EditarUsuario}
@@ -65,7 +49,7 @@ const OpcionesUsuarios = () => {
     <Container>
       <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Usuarios</h1>
-      <Row md="3" style={{ paddingTop: '25px' }}>
+      <Row md="2" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
           <Col>
             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />
