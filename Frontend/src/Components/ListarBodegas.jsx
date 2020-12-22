@@ -15,7 +15,7 @@ const ListarBodegas = (props) => {
   });
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+      await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
         setData(response.data);
         console.log(data[0]);
       });
