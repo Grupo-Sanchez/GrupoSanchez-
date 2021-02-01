@@ -20,6 +20,7 @@ export default function BuscarProducto(props) {
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
+
   const [data, setData] = useState([]);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -34,8 +35,9 @@ export default function BuscarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
+
   const fecthData = async () => {
-    await axios.get('http://localhost:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
   };
@@ -186,8 +188,8 @@ export default function BuscarProducto(props) {
               name="nombre"
               value={seleccionado.codigos[0]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 2</label>
@@ -197,8 +199,8 @@ export default function BuscarProducto(props) {
               name="Fecha"
               value={seleccionado.codigos[1]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 3</label>
@@ -208,8 +210,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[2]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 4</label>
@@ -219,8 +221,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[3]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 5</label>
@@ -230,8 +232,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[4]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 6</label>
@@ -241,8 +243,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[5]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>codigo 7</label>
@@ -252,8 +254,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[6]}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
           </div>
@@ -279,7 +281,7 @@ export default function BuscarProducto(props) {
               name="Apunte"
               value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
               readOnly
-            // onChange={manejarCambio}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 2</label>
@@ -289,8 +291,8 @@ export default function BuscarProducto(props) {
               name="Fecha"
               readOnly
               value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
-            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 3</label>
@@ -300,8 +302,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 4</label>
@@ -311,8 +313,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 5</label>
@@ -322,8 +324,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 6</label>
@@ -333,8 +335,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
             <label>proveedor 7</label>
@@ -344,8 +346,8 @@ export default function BuscarProducto(props) {
               name="Etiqueta"
               value={seleccionado.proveedores[6] ? seleccionado.proveedores[6].name : ''}
               readOnly
-            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-            // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
             />
             <br />
           </div>
