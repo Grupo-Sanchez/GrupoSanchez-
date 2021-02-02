@@ -21,32 +21,61 @@ const ModificarEliminarProveedor = () => {
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
   const [input, setInput] = useState('');
+  const [product, setProduct] = useState('');
 
   const fetchData = async () => {
-    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
       setData(response.data);
+    });
+  };
+
+  const fetchProducts = async () => {
+    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+      setProduct(response.data);
     });
   };
 
   useEffect(() => {
     fetchData();
+    fetchProducts();
   }, []);
 
   const modifyMarca = async (values) => {
     try {
+      fetchProducts();
       const payload = {
         nombre: values.nombre,
         descripcion: values.descripcion,
       };
       setModal(false);
       await axios
-        .put(`http://Localhost:3001/api/marcas/${modificar._id}`, payload)
+        .put(`http://178.128.67.247:3001/api/marcas/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {
           console.log(error);
         });
+      for (let i = 0; i < product.length; i++) {
+        if (
+          product[i].marca[0].value === modificar._id &&
+          payload.nombre !== product[i].marca[0].name
+        ) {
+          const marcaNueva = {
+            value: modificar._id,
+            name: payload.nombre,
+          };
+          product[i].marca[0] = marcaNueva;
+          axios
+            .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, product[i])
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      }
       setModal(false);
       fetchData();
     } catch (err) {
