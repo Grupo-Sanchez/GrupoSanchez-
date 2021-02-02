@@ -4,9 +4,6 @@ const clienteSchema = new Schema({
   cedula: {
     type: String,
     required: 'se requiere la identidad',
-    unique: true,
-    minLength: 13,
-    maxLength: 13,
   },
   nombre: {
     type: String,
@@ -23,10 +20,10 @@ const clienteSchema = new Schema({
     type: String,
   },
   RTN: {
-    type: Number,
+    type: String,
   },
   tel: {
-    type: Number,
+    Type: String,
   },
   email: {
     type: String,

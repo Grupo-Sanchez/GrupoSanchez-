@@ -85,7 +85,7 @@ exports.read_cliente = async (req, res) => {
 
 exports.update_cliente = async (req, res) => {
   try {
-    const ret = await cliente.findByIdAndUpdate({ _id: req.params.clienteId }, req.body, {
+    const ret = await cliente.findByIdAndUpdate({ _id: req.params.clienteId }, req.query, {
       new: true,
     });
     res.json(ret);

@@ -1,27 +1,24 @@
 const { text } = require('body-parser');
 const { Schema, model } = require('mongoose');
-const BodegaSchema = new Schema({
-  /*     numBodega: "",
+const ProductoSchema = new Schema({
+/*     numBodega: "",
 Description: "",
 Encargado: "",
 CantPasillos: "",',*/
-  numBodega: {
-    type: String,
-    required: 'se requiere nombre',
-    unique: true,
-  },
-  descripcion: {
-    type: String,
-    required: 'area requerido',
-  },
-  encargado: {
-    type: String,
-    required: 'area requerido',
-  },
-  cantPasillos: {
-    type: String,
-    required: 'area requerido',
-  },
+    numBodega: {
+        type: String,
+        required: 'se requiere nombre',
+    },
+    descripcion: {
+        type: String,
+        required: 'area requerido',
+    },
+    encargado: {
+        type: String,
+    }, 
+    cantPasillos: {
+        type: String,
+    }
 });
 
-module.exports = model('Bodegas', BodegaSchema);
+module.exports = model('Bodegas', ProductoSchema);
