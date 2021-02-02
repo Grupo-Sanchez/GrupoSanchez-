@@ -68,13 +68,13 @@ export default function EliminarProducto(props) {
   let [proveedores, setProveedores] = useState([]);
   let [marcas, setMarcas] = useState([]);
   const fecthData = async () => {
-    await axios.get('http://localhost:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
     // alert(JSON.stringify(data));
   };
   const fecthProveedores = async () => {
-    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://Localhost:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
       for (let index = 0; index < proveedoresDB.length; index++) {
@@ -102,7 +102,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthMarcas = async () => {
-    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -215,7 +215,7 @@ export default function EliminarProducto(props) {
     }
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
+    axios.delete(`http://Localhost:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     /*Confirm.open({
@@ -226,6 +226,7 @@ export default function EliminarProducto(props) {
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
   };
+
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
   const isAlphanumeric = require('is-alphanumeric');
   const [marcaSel, setMarcaSel] = useState([]);
@@ -260,7 +261,7 @@ export default function EliminarProducto(props) {
       ) {
         setModalModificar(false);
         axios
-          .put(`http://localhost:3001/api/productos/${Id}`, {
+          .put(`http://Localhost:3001/api/productos/${Id}`, {
             nombre: document.getElementById('modnombre').value,
             area: document.getElementById('modarea').value,
             codigos: seleccionado.codigos,

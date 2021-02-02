@@ -42,7 +42,7 @@ const AgregarProveedor = (props) => {
         pais: values.pais,
         comentario: values.comentario,
       };
-      const response = await axios.post('http://localhost:3001/api/proveedor', payload);
+      const response = await axios.post('http://Localhost:3001/api/proveedor', payload);
       console.log(response);
       cerrarModal();
     } catch (err) {
