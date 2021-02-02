@@ -730,7 +730,7 @@ export default function AgregarProducto(props) {
               Insertar Proveedor
             </Button>{' '}
           </div>
-          <Modal
+          {/*<Modal
             style={{
               height: '95vh',
               'overflow-y': 'auto',
@@ -892,7 +892,7 @@ export default function AgregarProducto(props) {
                 Cancelar
               </Button>
             </ModalFooter>
-          </Modal>
+          </Modal>*/}
           <Modal
             style={{
               height: '95vh',
