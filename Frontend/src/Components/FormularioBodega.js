@@ -1,50 +1,62 @@
 import React from 'react';
+import {
+  AvForm,
+  AvField,
+  AvGroup,
+  AvInput,
+  AvFeedback,
+  AvRadioGroup,
+  AvRadio,
+  AvCheckboxGroup,
+  AvCheckbox,
+} from 'availity-reactstrap-validation';
+import { Button, Label, FormGroup, CustomInput } from 'reactstrap';
 
 const Formulario = ({ onChange, onSubmit, form }) => (
-  <div className="container">
-    <form onSubmit={onSubmit}>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Numero de bodega"
-          name="numBodega"
-          onChange={onChange}
-          value={form.numBodega}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Descripcion de Bodega"
-          name="Description"
-          onChange={onChange}
-          value={form.Description}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Encargado de Bodega"
-          name="Encargado"
-          onChange={onChange}
-          value={form.Encargado}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Cantidad de pasillos"
-          name="CantPasillos"
-          onChange={onChange}
-          value={form.CantPasillos}
-        />
-      </div>
-    </form>
-  </div>
+  <AvForm onSubmit={onSubmit}>
+    <AvField
+      name="numBodega"
+      label="Numero de bodega"
+      type="number"
+      onChange={onChange}
+      value={form.numBodega}
+    />
+    <AvField
+      name="Description"
+      label="Descripcion"
+      type="text"
+      onChange={onChange}
+      value={form.Description}
+      validate={{
+        required: { value: true, errorMessage: 'Campo debe ser llenado ' },
+        pattern: {
+          value: '^[A-Za-z0-9]',
+          errorMessage: 'Este campo debe estar compuesto solo de letras y numeros',
+        },
+      }}
+    />
+    <AvField
+      name="Encargado"
+      label="Encargado"
+      type="text"
+      onChange={onChange}
+      value={form.Encargado}
+      validate={{
+        required: { value: true, errorMessage: 'Campo debe ser llenado' },
+        pattern: {
+          value: '^[A-Za-z0-9]',
+          errorMessage: 'Este Campo debe ser llenado con letras y numeros',
+        },
+      }}
+    />
+    <AvField
+      name="CantPasillos"
+      label="Cantidad de pasillos"
+      type="number"
+      onChange={onChange}
+      value={form.CantPasillos}
+    />
+  </AvForm>
 );
 
 export default Formulario;

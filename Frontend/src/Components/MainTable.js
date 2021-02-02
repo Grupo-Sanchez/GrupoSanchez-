@@ -10,7 +10,7 @@ class MainTable extends Component {
   };
 
   getItems = async () => {
-    const res = await axios.get('http://localhost:3001/api/clientes');
+    const res = await axios.get('http://Localhost:3001/api/clientes');
     this.setState({ items: res.data });
   };
 
@@ -61,7 +61,7 @@ class MainTable extends Component {
         </Row>
         <Row>
           <Col>
-            <ModalForm buttonLabel="Add Item" addItemToState={this.addItemToState} />
+            <ModalForm buttonLabel="add" addItemToState={this.addItemToState} />
           </Col>
         </Row>
       </Container>

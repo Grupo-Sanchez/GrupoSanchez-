@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const userSchema = new Schema({
+const UsersSchema = new Schema({
   identidad: {
     type: String,
     required: 'se requiere la identidad',
@@ -16,7 +16,6 @@ const userSchema = new Schema({
     type: String,
     required: 'el primer apellido es requerido',
   },
-
   segundo_apellido: {
     type: String,
   },
@@ -25,15 +24,15 @@ const userSchema = new Schema({
   },
 
   telefono: {
-    Type: String,
+    type: String,
   },
   correo: {
     type: String,
   },
   rol: {
-    type: String,
+    type: Array,
     required: 'se requiere un rol',
   },
 });
 
-module.exports = model('user', userSchema);
+module.exports = model('Users', UsersSchema);
