@@ -24,13 +24,13 @@ const ModificarEliminarProveedor = () => {
   const [product, setProduct] = useState('');
 
   const fetchData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
       setData(response.data);
     });
   };
 
   const fetchProducts = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
@@ -49,7 +49,7 @@ const ModificarEliminarProveedor = () => {
       };
       setModal(false);
       await axios
-        .put(`http://178.128.67.247:3001/api/marcas/${modificar._id}`, payload)
+        .put(`http://Localhost:3001/api/marcas/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
         })
@@ -67,7 +67,7 @@ const ModificarEliminarProveedor = () => {
           };
           product[i].marca[0] = marcaNueva;
           axios
-            .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, product[i])
+            .put(`http://Localhost:3001/api/productos/${product[i]._id}`, product[i])
             .then((response) => {
               console.log(response);
             })
@@ -126,7 +126,25 @@ const ModificarEliminarProveedor = () => {
   };
 
   const onDelete = async (i) => {
-    await axios.delete(`http://Localhost:3001/api/marcas/${data[i]._id}`);
+    fetchProducts();
+    let isDeletable = true;
+    for (let j = 0; j < product.length; j++) {
+      if (product[j].marca[0].value === data[i]._id) {
+        isDeletable = false;
+        console.log(`Marca de producto: ${product[j].marca[0].value} || Marca: ${data[i]._id}`);
+        break;
+      }
+    }
+    if (isDeletable) {
+      await axios.delete(`http://Localhost:3001/api/marcas/${data[i]._id}`);
+      console.log('se puede borrar');
+    } else {
+      Confirm.open({
+        title: 'Advertencia',
+        message: 'No se puede borrar esta marca. Existen productos que tienen esta misma marca',
+        onok: () => {},
+      });
+    }
     fetchData();
   };
 
