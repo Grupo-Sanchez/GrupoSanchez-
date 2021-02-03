@@ -14,6 +14,8 @@ import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarInterfazProductos.css';
 import '../Styles/ConfirmStyle.css';
 import axios from 'axios';
+import InputTags from 'react-input-tags-hooks';
+import 'react-input-tags-hooks/build/index.css';
 import { Confirm } from './Confirm';
 
 export default function AgregarProducto(props) {
@@ -55,6 +57,10 @@ export default function AgregarProducto(props) {
   const [existe, setExiste] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const isAlphanumeric = require('is-alphanumeric');
+  const [tags, setTags] = useState([]);
+  const getTags = (tags1) => {
+    setTags(tags1);
+  };
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
@@ -145,7 +151,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     seleccionado.nombre = '';
     seleccionado.area = '';
@@ -251,62 +257,88 @@ export default function AgregarProducto(props) {
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
   };
   const GuardarCodigos = () => {
+    alert(tags);
     seleccionado.codigos = [];
     const duplicates = [];
-    if (document.getElementById('cod1').value === '') {
+    for (let index = 0; index < tags.length; index++) {
+      const tag = tags[index];
+      seleccionado.codigos.push(tag);
+      duplicates.push(tag);
+    }
+    let entra = false;
+    for (let i = 0; i < duplicates.length; i++) {
+      for (let j = 0; j < duplicates.length; j++) {
+        if (i !== j) {
+          if (duplicates[i] === duplicates[j]) {
+            entra = true;
+            break;
+          }
+        }
+      }
+    }
+    if (entra) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+        onok: () => { },
+      });
+      entra = false;
+    }
+    /*for (let j = 0; j < duplicates.length; j++) {
+      if (i !== j) {
+        if (duplicates[i] === duplicates[j]) {
+          entra = true;
+          break;
+        }
+      }
+    }*/
+    /*if (tags[0] === '') {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => {},
+        onok: () => { },
       });
-      setinputcod2(false);
-      setinputcod3(false);
-      setinputcod4(false);
-      setinputcod5(false);
-      setinputcod6(false);
-      setinputcod7(false);
     } else {
       // seleccionado.codigos.push(document.getElementById('cod1').value);
-      duplicates.push(document.getElementById('cod1').value);
-      setcod1(document.getElementById('cod1').value);
-      setinputcod2(true);
-      if (document.getElementById('cod2').value !== '') {
+      duplicates.push(tags[1]);
+      setcod1(tags[1]);
+      if (tags[1] !== '') {
         // seleccionado.codigos.push(document.getElementById('cod2').value);
         setinputcod3(true);
-        setcod2(document.getElementById('cod2').value);
-        duplicates.push(document.getElementById('cod2').value);
+        setcod2(tags[1]);
+        duplicates.push(tags[1]);
       }
-      if (document.getElementById('cod3').value !== '') {
+      if (tags[2] !== '') {
         // seleccionado.codigos.push(document.getElementById('cod3').value);
         setinputcod4(true);
-        setcod3(document.getElementById('cod3').value);
-        duplicates.push(document.getElementById('cod3').value);
+        setcod3(tags[2]);
+        duplicates.push(tags[2]);
       }
-      if (document.getElementById('cod4').value !== '') {
+      if (tags[3] !== '') {
         // seleccionado.codigos.push(document.getElementById('cod4').value);
-        setcod4(document.getElementById('cod4').value);
+        setcod4(tags[3]);
         setinputcod5(true);
-        duplicates.push(document.getElementById('cod4').value);
+        duplicates.push(tags[3]);
       }
-      if (document.getElementById('cod5').value !== '') {
+      if (tags[4] !== '') {
         // seleccionado.codigos.push(document.getElementById('cod5').value);
-        setcod5(document.getElementById('cod5').value);
+        setcod5(tags[4]);
         setinputcod6(true);
-        duplicates.push(document.getElementById('cod5').value);
+        duplicates.push(tags[4]);
       }
-      if (document.getElementById('cod6').value !== '') {
+      if (tags[5] !== '') {
         // seleccionado.codigos.push(document.getElementById('cod6').value);
         setinputcod7(true);
-        setcod6(document.getElementById('cod6').value);
-        duplicates.push(document.getElementById('cod6').value);
+        setcod6(tags[5]);
+        duplicates.push(tags[5]);
       }
-      if (document.getElementById('cod7').value !== '') {
+      if (tags[6].value !== '') {
         // seleccionado.codigos.push(cod7);
-        setcod7(document.getElementById('cod7').value);
-        duplicates.push(document.getElementById('cod7').value);
+        setcod7(tags[6]);
+        duplicates.push(tags[6]);
       }
       if (
-        isAlphanumeric(document.getElementById('cod7').value) &&
+        isAlphanumeric(tags[1])
         isAlphanumeric(document.getElementById('cod6').value) &&
         isAlphanumeric(document.getElementById('cod5').value) &&
         isAlphanumeric(document.getElementById('cod4').value) &&
@@ -381,14 +413,14 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => {},
+            onok: () => { },
           });
           entra = false;
         } else if (yaesta) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else {
           seleccionado.codigos = duplicates;
@@ -398,10 +430,10 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los Codigos solo pueden ser Alfanumericos',
-          onok: () => {},
+          onok: () => { },
         });
       }
-    }
+    }*/
   };
   const insertarCodigos = () => {
     setModalInsertarCodigo(true);
@@ -424,7 +456,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -462,7 +494,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -481,7 +513,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.proveedores = proveedoresSeleccionados;
@@ -617,14 +649,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -745,133 +777,11 @@ export default function AgregarProducto(props) {
               </div>
             </ModalHeader>
             <ModalBody>
-              <AvForm>
-                <h3>Código 1</h3>
-                <AvField
-                  className="form-control"
-                  type="text"
-                  name="codigo1"
-                  id="cod1"
-                  value={seleccionado.codigos[0]}
-                  required
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  onKeyDown={handleKeyDown}
-                  onChange={(e) => handleChange(e, 2)}
-                />
-                <h3>Código 2</h3>
-                <AvField
-                  updatable={true}
-                  className="form-control"
-                  type="text"
-                  name="codigo2"
-                  id="cod2"
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: false },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  value={cod2}
-                  onKeyDown={handleKeyDown}
-                  disabled={!inputcod2}
-                  onChange={(e) => handleChange(e, 3)}
-                  onClick={(e) => evaluarespacio(e)}
-                />
-                <h3>Código 3</h3>
-                <AvField
-                  className="form-control"
-                  type="text"
-                  name="codigo3"
-                  id="cod3"
-                  value={cod3}
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: false },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  onKeyDown={handleKeyDown}
-                  disabled={!inputcod3}
-                  onChange={(e) => handleChange(e, 4)}
-                  onClick={(e) => evaluarespacio(e)}
-                />
-                <h3>Código 4</h3>
-                <AvField
-                  className="form-control"
-                  type="text"
-                  name="codigo4"
-                  id="cod4"
-                  value={cod4}
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: false },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  onKeyDown={handleKeyDown}
-                  disabled={!inputcod4}
-                  onChange={(e) => handleChange(e, 5)}
-                  onClick={(e) => evaluarespacio(e)}
-                />
-                <h3>Código 5</h3>
-                <AvField
-                  className="form-control"
-                  type="text"
-                  name="codigo5"
-                  id="cod5"
-                  value={cod5}
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: false },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  onKeyDown={handleKeyDown}
-                  disabled={!inputcod5}
-                  onChange={(e) => handleChange(e, 6)}
-                  onClick={(e) => evaluarespacio(e)}
-                />
-                <h3>Código 6</h3>
-                <AvField
-                  className="form-control"
-                  type="text"
-                  name="codigo6"
-                  id="cod6"
-                  value={cod6}
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: false },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  onKeyDown={handleKeyDown}
-                  disabled={!inputcod6}
-                  onChange={(e) => handleChange(e, 7)}
-                  onClick={(e) => evaluarespacio(e)}
-                />
-                <h3>Código 7</h3>
-                <AvField
-                  className="form-control"
-                  type="text"
-                  name="codigo7"
-                  id="cod7"
-                  value={cod7}
-                  errorMessage="Código Invalido"
-                  validate={{
-                    required: { value: false },
-                    pattern: { value: '^[A-Za-z0-9]+$' },
-                    minLength: { value: 1 },
-                  }}
-                  onKeyDown={handleKeyDown}
-                  disabled={!inputcod7}
-                  onClick={(e) => evaluarespacio(e)}
-                />
-              </AvForm>
+              <InputTags
+                onTag={getTags}
+                tagColor={'#48c774'}
+                placeHolder="Press enter to add tags"
+              />
             </ModalBody>
             <ModalFooter>
               <Button
@@ -1257,8 +1167,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1272,8 +1182,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
             </AvForm>
           </div>
