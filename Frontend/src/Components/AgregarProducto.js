@@ -131,6 +131,7 @@ export default function AgregarProducto(props) {
     fecthProductos();
     fecthMarcas();
   }, []);
+  let hoy = new Date();
   const prueba = async () => {
     seleccionado.proveedores = proveedoresSeleccionados;
     const campos = {
@@ -145,6 +146,7 @@ export default function AgregarProducto(props) {
       descripcion_corta: seleccionado.descripcion_corta,
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: seleccionado.cantidad_minima,
+      fecha_creacion: hoy.toLocaleDateString('en-US'),
     };
     const res = await axios.post('http://Localhost:3001/api/productos', campos);
     console.log(res);
@@ -284,14 +286,6 @@ export default function AgregarProducto(props) {
       });
       entra = false;
     }
-    /*for (let j = 0; j < duplicates.length; j++) {
-      if (i !== j) {
-        if (duplicates[i] === duplicates[j]) {
-          entra = true;
-          break;
-        }
-      }
-    }*/
     /*if (tags[0] === '') {
       Confirm.open({
         title: 'Error',
@@ -434,6 +428,76 @@ export default function AgregarProducto(props) {
         });
       }
     }*/
+    let yaesta = false;
+    let mensaje = [];
+    let codigos2 = [];
+    let mansajenot = '';
+    for (let index = 0; index < productos.length; index++) {
+      const element = productos[index];
+      for (let p = 0; p < element.codigos.length; p++) {
+        const element2 = element.codigos[p];
+        for (let j = 0; j < duplicates.length; j++) {
+          const element3 = duplicates[j];
+          if (element2 === element3) {
+            mensaje.push(element.nombre);
+            codigos2.push(element2);
+            yaesta = true;
+          }
+        }
+      }
+    }
+    let codigosUnicos = codigos2.filter(
+      (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+    );
+    let productosUnicos = mensaje.filter(
+      (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+    );
+    let codString = '';
+    let prodString = '';
+    for (let k = 0; k < codigosUnicos.length; k++) {
+      const element = codigosUnicos[k];
+      codString += ` ${element},`;
+    }
+    for (let k = 0; k < productosUnicos.length; k++) {
+      const element = productosUnicos[k];
+      prodString += ` ${element},`;
+    }
+    if (codigosUnicos.length !== 1) {
+      mansajenot = `Los codigos ${codString.substring(
+        0,
+        codString.length - 1,
+      )} ingresados ya se encuentra en los productos ${prodString.substring(
+        0,
+        prodString.length - 1,
+      )}.`;
+    } else {
+      mansajenot = `El codigo ${codString.substring(
+        0,
+        codString.length - 1,
+      )} ingresado ya se encuentra en los productos ${prodString.substring(
+        0,
+        prodString.length - 1,
+      )}.`;
+    }
+
+    if (entra) {
+      Confirm.open({
+        title: 'Error',
+        message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+        onok: () => { },
+      });
+      entra = false;
+    } else if (yaesta) {
+      Confirm.open({
+        title: 'Error',
+        message: mansajenot,
+        onok: () => { },
+      });
+    } else {
+      seleccionado.codigos = duplicates;
+      alert('holaaa');
+      setModalInsertarCodigo(false);
+    }
   };
   const insertarCodigos = () => {
     setModalInsertarCodigo(true);
