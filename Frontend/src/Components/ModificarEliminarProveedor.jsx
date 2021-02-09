@@ -21,19 +21,28 @@ const ModificarEliminarProveedor = () => {
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
   const [input, setInput] = useState('');
+  const [product, setProduct] = useState('');
 
   const fetchData = async () => {
-    await axios.get('http://Localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
       setData(response.data);
+    });
+  };
+
+  const fetchProducts = async () => {
+    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+      setProduct(response.data);
     });
   };
 
   useEffect(() => {
     fetchData();
+    fetchProducts();
   }, []);
 
   const modifyProveedor = async (values) => {
     try {
+      fetchProducts();
       const payload = {
         company: values.company,
         agencia: values.agencia,
@@ -50,15 +59,50 @@ const ModificarEliminarProveedor = () => {
         pais: values.pais,
         comentario: values.comentario,
       };
+      const payloadProduct = {
+        company: values.company,
+        value: modificar._id,
+        agencia: values.agencia,
+        name: values.nombre,
+        apellidos: values.apellidos,
+        genero: values.genero,
+        email: values.email,
+        telefono: values.telefono,
+        direccion1: values.direccion1,
+        direccion2: values.direccion2,
+        ciudad: values.ciudad,
+        departamento: values.departamento,
+        codigoPostal: values.codigo,
+        pais: values.pais,
+        comentario: values.comentario,
+      };
       setModal(false);
       await axios
-        .put(`http://Localhost:3001/api/proveedor/${modificar._id}`, payload)
+        .put(`http://178.128.67.247:3001/api/proveedor/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
         })
         .catch((error) => {
           console.log(error);
         });
+      for (let i = 0; i < product.length; i++) {
+        for (let j = 0; j < product[i].proveedores.length; j++) {
+          if (
+            product[i].proveedores[j].value === modificar._id &&
+            JSON.stringify(product[i].proveedores[j]) !== JSON.stringify(payloadProduct)
+          ) {
+            product[i].proveedores[j] = payloadProduct;
+            axios
+              .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, product[i])
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
+        }
+      }
       fetchData();
       setModal(false);
     } catch (err) {
@@ -79,7 +123,6 @@ const ModificarEliminarProveedor = () => {
 
   const handleChange = (e) => {
     setInput(e.target.value);
-    console.log(input);
     let filter;
     let table;
     let tr;
@@ -110,7 +153,26 @@ const ModificarEliminarProveedor = () => {
   };
 
   const onDelete = async (i) => {
-    await axios.delete(`http://Localhost:3001/api/proveedor/${data[i]._id}`);
+    fetchProducts();
+    let isDeletable = true;
+    for (let j = 0; j < product.length; j++) {
+      for (let k = 0; k < product[j].proveedores.length; k++) {
+        if (product[j].proveedores[k].value === data[i]._id) {
+          isDeletable = false;
+        }
+      }
+    }
+    if (isDeletable) {
+      await axios.delete(`http://178.128.67.247:3001/api/proveedor/${data[i]._id}`);
+      console.log('borrado');
+    } else {
+      Confirm.open({
+        title: 'Advertencia',
+        message:
+          'No se puede borrar este proveedor. Existen productos que tienen este mismo proveedor',
+        onok: () => {},
+      });
+    }
     fetchData();
   };
 
@@ -188,7 +250,7 @@ const ModificarEliminarProveedor = () => {
                   <AvField name="departamento" label="Departamento" type="text" />
                 </Col>
               </Row>
-              <AvField name="codigoPostal" label="Código Postal" type="text" />
+              <AvField name="codigo" label="Código Postal" type="text" />
               <AvField name="pais" label="País" type="text" />
               <AvField name="comentario" label="Comentario" type="textarea" rows="3" />
             </AvGroup>
