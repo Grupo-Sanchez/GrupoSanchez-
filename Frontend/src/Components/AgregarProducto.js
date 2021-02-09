@@ -8,13 +8,12 @@ import {
   FormGroup,
   Input,
 } from 'reactstrap';
-import { AvForm, AvField } from 'availity-reactstrap-validation';
+import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
 import React, { useState, useEffect } from 'react';
 import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarInterfazProductos.css';
 import '../Styles/ConfirmStyle.css';
 import axios from 'axios';
-import InputTags from 'react-input-tags-hooks';
 import 'react-input-tags-hooks/build/index.css';
 import { Confirm } from './Confirm';
 
@@ -58,9 +57,6 @@ export default function AgregarProducto(props) {
   const [data, setData] = useState(dataApuntes);
   const isAlphanumeric = require('is-alphanumeric');
   const [tags, setTags] = useState([]);
-  const getTags = (tags1) => {
-    setTags(tags1);
-  };
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
     area: '',
@@ -258,245 +254,19 @@ export default function AgregarProducto(props) {
     seleccionado.cantidad_minima = e.target.value;
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
   };
+  const removeTags = (index) => {
+    setTags([...tags.filter((tag) => tags.indexOf(tag) !== index)]);
+  };
   const GuardarCodigos = () => {
-    alert(tags);
-    seleccionado.codigos = [];
-    const duplicates = [];
-    for (let index = 0; index < tags.length; index++) {
-      const tag = tags[index];
-      seleccionado.codigos.push(tag);
-      duplicates.push(tag);
-    }
-    let entra = false;
-    for (let i = 0; i < duplicates.length; i++) {
-      for (let j = 0; j < duplicates.length; j++) {
-        if (i !== j) {
-          if (duplicates[i] === duplicates[j]) {
-            entra = true;
-            break;
-          }
-        }
-      }
-    }
-    if (entra) {
-      Confirm.open({
-        title: 'Error',
-        message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-        onok: () => { },
-      });
-      entra = false;
-    }
-    /*if (tags[0] === '') {
-      Confirm.open({
-        title: 'Error',
-        message: 'Debe ingresar almenos el Codigo 1.',
-        onok: () => { },
-      });
-    } else {
-      // seleccionado.codigos.push(document.getElementById('cod1').value);
-      duplicates.push(tags[1]);
-      setcod1(tags[1]);
-      if (tags[1] !== '') {
-        // seleccionado.codigos.push(document.getElementById('cod2').value);
-        setinputcod3(true);
-        setcod2(tags[1]);
-        duplicates.push(tags[1]);
-      }
-      if (tags[2] !== '') {
-        // seleccionado.codigos.push(document.getElementById('cod3').value);
-        setinputcod4(true);
-        setcod3(tags[2]);
-        duplicates.push(tags[2]);
-      }
-      if (tags[3] !== '') {
-        // seleccionado.codigos.push(document.getElementById('cod4').value);
-        setcod4(tags[3]);
-        setinputcod5(true);
-        duplicates.push(tags[3]);
-      }
-      if (tags[4] !== '') {
-        // seleccionado.codigos.push(document.getElementById('cod5').value);
-        setcod5(tags[4]);
-        setinputcod6(true);
-        duplicates.push(tags[4]);
-      }
-      if (tags[5] !== '') {
-        // seleccionado.codigos.push(document.getElementById('cod6').value);
-        setinputcod7(true);
-        setcod6(tags[5]);
-        duplicates.push(tags[5]);
-      }
-      if (tags[6].value !== '') {
-        // seleccionado.codigos.push(cod7);
-        setcod7(tags[6]);
-        duplicates.push(tags[6]);
-      }
-      if (
-        isAlphanumeric(tags[1])
-        isAlphanumeric(document.getElementById('cod6').value) &&
-        isAlphanumeric(document.getElementById('cod5').value) &&
-        isAlphanumeric(document.getElementById('cod4').value) &&
-        isAlphanumeric(document.getElementById('cod3').value) &&
-        isAlphanumeric(document.getElementById('cod2').value) &&
-        isAlphanumeric(document.getElementById('cod1').value)
-      ) {
-        let entra = false;
-        for (let i = 0; i < duplicates.length; i++) {
-          for (let j = 0; j < duplicates.length; j++) {
-            if (i !== j) {
-              if (duplicates[i] === duplicates[j]) {
-                entra = true;
-                break;
-              }
-            }
-          }
-        }
-        let yaesta = false;
-        let mensaje = [];
-        let codigos2 = [];
-        let mansajenot = '';
-        for (let index = 0; index < productos.length; index++) {
-          const element = productos[index];
-          for (let p = 0; p < element.codigos.length; p++) {
-            const element2 = element.codigos[p];
-            for (let j = 0; j < duplicates.length; j++) {
-              const element3 = duplicates[j];
-              if (element2 === element3) {
-                mensaje.push(element.nombre);
-                codigos2.push(element2);
-                yaesta = true;
-              }
-            }
-          }
-        }
-        let codigosUnicos = codigos2.filter(
-          (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
-        );
-        let productosUnicos = mensaje.filter(
-          (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
-        );
-        let codString = '';
-        let prodString = '';
-        for (let k = 0; k < codigosUnicos.length; k++) {
-          const element = codigosUnicos[k];
-          codString += ` ${element},`;
-        }
-        for (let k = 0; k < productosUnicos.length; k++) {
-          const element = productosUnicos[k];
-          prodString += ` ${element},`;
-        }
-        if (codigosUnicos.length !== 1) {
-          mansajenot = `Los codigos ${codString.substring(
-            0,
-            codString.length - 1,
-          )} ingresados ya se encuentra en los productos ${prodString.substring(
-            0,
-            prodString.length - 1,
-          )}.`;
-        } else {
-          mansajenot = `El codigo ${codString.substring(
-            0,
-            codString.length - 1,
-          )} ingresado ya se encuentra en los productos ${prodString.substring(
-            0,
-            prodString.length - 1,
-          )}.`;
-        }
-
-        if (entra) {
-          Confirm.open({
-            title: 'Error',
-            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => { },
-          });
-          entra = false;
-        } else if (yaesta) {
-          Confirm.open({
-            title: 'Error',
-            message: mansajenot,
-            onok: () => { },
-          });
-        } else {
-          seleccionado.codigos = duplicates;
-          setModalInsertarCodigo(false);
-        }
-      } else {
-        Confirm.open({
-          title: 'Error',
-          message: 'Los Codigos solo pueden ser Alfanumericos',
-          onok: () => { },
-        });
-      }
-    }*/
-    let yaesta = false;
-    let mensaje = [];
-    let codigos2 = [];
-    let mansajenot = '';
-    for (let index = 0; index < productos.length; index++) {
-      const element = productos[index];
-      for (let p = 0; p < element.codigos.length; p++) {
-        const element2 = element.codigos[p];
-        for (let j = 0; j < duplicates.length; j++) {
-          const element3 = duplicates[j];
-          if (element2 === element3) {
-            mensaje.push(element.nombre);
-            codigos2.push(element2);
-            yaesta = true;
-          }
-        }
-      }
-    }
-    let codigosUnicos = codigos2.filter(
-      (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
-    );
-    let productosUnicos = mensaje.filter(
-      (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
-    );
-    let codString = '';
-    let prodString = '';
-    for (let k = 0; k < codigosUnicos.length; k++) {
-      const element = codigosUnicos[k];
-      codString += ` ${element},`;
-    }
-    for (let k = 0; k < productosUnicos.length; k++) {
-      const element = productosUnicos[k];
-      prodString += ` ${element},`;
-    }
-    if (codigosUnicos.length !== 1) {
-      mansajenot = `Los codigos ${codString.substring(
-        0,
-        codString.length - 1,
-      )} ingresados ya se encuentra en los productos ${prodString.substring(
-        0,
-        prodString.length - 1,
-      )}.`;
-    } else {
-      mansajenot = `El codigo ${codString.substring(
-        0,
-        codString.length - 1,
-      )} ingresado ya se encuentra en los productos ${prodString.substring(
-        0,
-        prodString.length - 1,
-      )}.`;
-    }
-
-    if (entra) {
-      Confirm.open({
-        title: 'Error',
-        message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-        onok: () => { },
-      });
-      entra = false;
-    } else if (yaesta) {
-      Confirm.open({
-        title: 'Error',
-        message: mansajenot,
-        onok: () => { },
-      });
-    } else {
-      seleccionado.codigos = duplicates;
-      alert('holaaa');
+    if (tags.length > 0) {
+      seleccionado.codigos = tags;
       setModalInsertarCodigo(false);
+    } else {
+      Confirm.open({
+        title: 'Códigos vacios',
+        message: 'No puede insertar si no existe ningun código',
+        onok: () => { },
+      });
     }
   };
   const insertarCodigos = () => {
@@ -724,36 +494,101 @@ export default function AgregarProducto(props) {
       });
     }
   };
-  const cerrarModalAgregarCodigos = () => {
-    setinputcod2(false);
-    setinputcod3(false);
-    setinputcod4(false);
-    setinputcod5(false);
-    setinputcod6(false);
-    setinputcod7(false);
-    if (seleccionado.codigos && seleccionado.codigos.length) {
-      if (document.getElementById('cod1').value !== '') {
-        setinputcod2(true);
-      }
-      if (document.getElementById('cod2').value !== '') {
-        setinputcod3(true);
-      }
-      if (document.getElementById('cod3').value !== '') {
-        setinputcod4(true);
-      }
-      if (document.getElementById('cod4').value !== '') {
-        setinputcod5(true);
-      }
-      if (document.getElementById('cod5').value !== '') {
-        setinputcod6(true);
-      }
-      if (document.getElementById('cod6').value !== '') {
-        setinputcod6(true);
-      }
-      if (document.getElementById('cod7').value !== '') {
-        setinputcod7(true);
-      }
+  const ValidacionesCodigo = () => {
+    alert('hola mundo');
+    if (isAlphanumeric(tags[1])) {
+      alert('uno entra');
     }
+  };
+  const addTags = (event) => {
+    if (event.key === 'Enter' && event.target.value !== '' && !isAlphanumeric(event.target.value)) {
+      Confirm.open({
+        title: 'Error',
+        message: `El código tiene caracteres inválidos:${' '}`,
+        onok: () => { },
+      });
+    } else if (event.key === 'Enter' && event.target.value !== '') {
+      seleccionado.codigos = [];
+      const duplicates = [];
+      for (let index = 0; index < tags.length; index++) {
+        const tag = tags[index];
+        seleccionado.codigos.push(tag);
+        duplicates.push(tag);
+      }
+      let yaesta = false;
+      let mensaje = [];
+      let codigos2 = [];
+      let mansajenot = '';
+      for (let index = 0; index < productos.length; index++) {
+        const element = productos[index];
+        for (let p = 0; p < element.codigos.length; p++) {
+          const element2 = element.codigos[p];
+          if (element2 === event.target.value) {
+            mensaje.push(element.nombre);
+            codigos2.push(element2);
+            yaesta = true;
+          }
+        }
+      }
+      let codigosUnicos = codigos2.filter(
+        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+      );
+      let productosUnicos = mensaje.filter(
+        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+      );
+      let codString = '';
+      let prodString = '';
+      for (let k = 0; k < codigosUnicos.length; k++) {
+        const element = codigosUnicos[k];
+        codString += ` ${element},`;
+      }
+      for (let k = 0; k < productosUnicos.length; k++) {
+        const element = productosUnicos[k];
+        prodString += ` ${element},`;
+      }
+      if (codigosUnicos.length !== 1) {
+        mansajenot = `Los codigos ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresados ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      } else {
+        mansajenot = `El codigo ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresado ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      }
+      let entra = false;
+      for (let i = 0; i < duplicates.length; i++) {
+        if (duplicates[i] === event.target.value) {
+          entra = true;
+          break;
+        }
+      }
+      if (yaesta) {
+        Confirm.open({
+          title: 'Error',
+          message: mansajenot,
+          onok: () => { },
+        });
+      } else if (entra) {
+        Confirm.open({
+          title: 'Error',
+          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+        });
+        entra = false;
+      } else {
+        setTags([...tags, event.target.value]);
+      }
+      event.target.value = '';
+    }
+  };
+  const cerrarModalAgregarCodigos = () => {
     setModalInsertarCodigo(false);
   };
   const evaluarespacio = (e) => {
@@ -777,7 +612,6 @@ export default function AgregarProducto(props) {
     }
   };
   const handleKeyDown = (e) => {
-    evaluarespacio(e);
     if (e.key === ' ') {
       e.preventDefault();
     }
@@ -789,7 +623,74 @@ export default function AgregarProducto(props) {
       seleccionado.proveedores.push(document.getElementById('prov1').value);
     }
   };
+  function paddingclose() {
+    return {
+      display: 'block',
+      width: '16px',
+      height: '16px',
+      'line-height': '16px',
+      'text-align': 'center',
+      'font-size': '14px',
+      'margin-left': '8px',
+      color: '#0052cc',
+      'border-radius': '50%',
+      background: '#fff',
+      cursor: 'pointer',
+    };
+  }
+  function paddingmain() {
+    return {
+      width: 'auto',
+      height: '32px',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      color: '#fff',
+      padding: '0 8px',
+      'font-size': '14px',
+      'list-style': 'none',
+      'border-radius': '6px',
+      margin: '0 8px 8px 0',
+      background: '#0052cc',
 
+    };
+  }
+  function paddingdiv() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '480px',
+      border: '1px solid #0052cc',
+      'border-radius': '6px',
+      padding: '0 8px',
+    };
+  }
+  function paddingInput() {
+    return {
+      flex: '1',
+      border: 'none',
+      height: '46px',
+      'font-size': '14px',
+      padding: '4px 0 0 0',
+      '&': 'focus',
+      outline: 'transparent',
+    };
+  }
+  function paddingtitle() {
+    return {
+      'margin-top': '3px',
+    };
+  }
+  function paddingul() {
+    return {
+      display: 'flex',
+      'flex-wrap': 'wrap',
+      padding: '0',
+      margin: '8px 0 0 0',
+    };
+  }
   const options = [
     { value: 's', name: 'Small' },
     { value: 'm', name: 'Medium' },
@@ -841,11 +742,27 @@ export default function AgregarProducto(props) {
               </div>
             </ModalHeader>
             <ModalBody>
-              <InputTags
-                onTag={getTags}
-                tagColor={'#48c774'}
-                placeHolder="Press enter to add tags"
-              />
+              <div style={paddingdiv()}>
+                <ul style={paddingul()}>
+                  {tags.map((tag, index) => (
+                    <li style={paddingmain()} key={index}>
+                      <span style={paddingtitle()}>{tag}</span>
+                      <i style={paddingclose()}
+                        onClick={() => removeTags(index)}
+                      >
+                        x
+                      </i>
+                    </li>
+                  ))}
+                </ul>
+                <input style={paddingInput()}
+                  updatable={true}
+                  type="text"
+                  onKeyUp={(event) => addTags(event)}
+                  placeholder="Press enter to add tags"
+                  onKeyDown={handleKeyDown}
+                />
+              </div>
             </ModalBody>
             <ModalFooter>
               <Button
