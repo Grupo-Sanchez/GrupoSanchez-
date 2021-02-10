@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import bg from '../Icons/Background.webp';
 import '../Styles/Sidebar.css';
 
 // Import de svg
@@ -55,7 +55,11 @@ const Header = (props) => {
       )}
 
       <aside className={`sidenav ${isOpen ? 'sidenav-opened' : 'sidenav-closed'}`}>
-        <div onClick={() => setOpen(!isOpen)} className="sidenav-header">
+        <img
+          src={bg}
+          style={{ objectFit: 'cover', position: 'absolute', height: '100%', width: '100%' }}
+        />
+        <div onClick={() => setOpen(!isOpen)} className="sidenav-header" style={{ zIndex: '11' }}>
           <svg
             style={{ width: '1em', height: '1em', cursor: 'pointer', marginRight: '0.5rem' }}
             fill="none"
@@ -74,7 +78,7 @@ const Header = (props) => {
           <span>Grupo Sanchez </span>
         </div>
 
-        <div className="sidenav-content">
+        <div className="sidenav-content" style={{ zIndex: '11' }}>
           {items.map(({ name, to, icon }, i) => (
             <div key={i} className="sidenav-item" onClick={handleItemClick.bind(this, to)}>
               <div
@@ -91,7 +95,7 @@ const Header = (props) => {
             </div>
           ))}
         </div>
-        <div onClick={() => history.push('/')} className="sidenav-footer">
+        <div onClick={() => history.push('/')} className="sidenav-footer" style={{ zIndex: '11' }}>
           Cerrar Sesion
         </div>
       </aside>
