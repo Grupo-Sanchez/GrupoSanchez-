@@ -13,8 +13,11 @@ import {
 import { AvForm, AvField, AvRadioGroup, AvGroup, AvRadio } from 'availity-reactstrap-validation';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
+import AgregarProveedor from './AgregarProveedor.jsx';
 import '../Styles/ConfirmStyle.css';
+import '../Styles/SearchBar.css';
 import { Confirm } from './Confirm';
+import imagePath from '../Icons/lupa1.jpeg';
 
 const ModificarEliminarProveedor = () => {
   const [modificar, setModificar] = useState({});
@@ -22,6 +25,7 @@ const ModificarEliminarProveedor = () => {
   const [modal, setModal] = useState(false);
   const [input, setInput] = useState('');
   const [product, setProduct] = useState('');
+  const [modalAgregar, setModalAgregar] = useState(false);
 
   const fetchData = async () => {
     await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
@@ -164,7 +168,6 @@ const ModificarEliminarProveedor = () => {
     }
     if (isDeletable) {
       await axios.delete(`http://178.128.67.247:3001/api/proveedor/${data[i]._id}`);
-      console.log('borrado');
     } else {
       Confirm.open({
         title: 'Advertencia',
@@ -180,162 +183,188 @@ const ModificarEliminarProveedor = () => {
     console.log('invalid submit', { event, errors, values });
   }
 
-  return (
-    <div>
-      <Modal isOpen={modal} style={{ maxWidth: '1600px', width: '80%' }}>
-        <ModalHeader>
-          <h3>Modificar Proveedor</h3>
-        </ModalHeader>
-        <AvForm
-          onValidSubmit={handleValidSubmit}
-          onInvalidSubmit={handleInvalidSubmit}
-          model={modificar}
-        >
-          <ModalBody>
-            <AvGroup>
-              <AvField
-                name="company"
-                label="Compañía"
-                type="text"
-                validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
-              />
-              <AvField name="agencia" label="Nombre de la Agencia" type="text" />
-              <Row noGutters>
-                <Col md={{ size: 5 }}>
-                  <AvField
-                    name="nombre"
-                    label="Nombre"
-                    type="text"
-                    validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
-                    style={{ marginRight: '30px' }}
-                  />
-                </Col>
-                <Col md={{ size: 5, offset: 1 }}>
-                  <AvField
-                    name="apellidos"
-                    label="Apellidos"
-                    type="text"
-                    validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
-                  />
-                </Col>
-              </Row>
-              <AvRadioGroup name="genero" label="Género">
-                <Row noGutters>
-                  <AvRadio label="M" value="M" />
-                  <AvRadio label="F" value="F" />
-                </Row>
-              </AvRadioGroup>
-              <AvField name="email" label="Email" type="email" />
-              <AvField
-                name="telefono"
-                label="Teléfono"
-                type="text"
-                validate={{
-                  pattern: { value: '^[0-9+]+$', errorMessage: 'Ingrese valores validos (0-9, +)' },
-                }}
-              />
-              <Row md="2" noGutters>
-                <Col md={{ size: 5 }}>
-                  <AvField name="direccion1" label="Dirección 1" type="textarea" rows="3" />
-                </Col>
-                <Col md={{ size: 5, offset: 1 }}>
-                  <AvField name="direccion2" label="Dirección 2" type="textarea" rows="3" />
-                </Col>
-              </Row>
-              <Row noGutters>
-                <Col md={{ size: 5 }}>
-                  <AvField name="ciudad" label="Ciudad" type="text" />
-                </Col>
-                <Col md={{ size: 5, offset: 1 }}>
-                  <AvField name="departamento" label="Departamento" type="text" />
-                </Col>
-              </Row>
-              <AvField name="codigo" label="Código Postal" type="text" />
-              <AvField name="pais" label="País" type="text" />
-              <AvField name="comentario" label="Comentario" type="textarea" rows="3" />
-            </AvGroup>
-          </ModalBody>
-          <ModalFooter>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <Button type="submit" color="primary">
-                Modificar Proveedor
-              </Button>
+  const closeModalAgregar = () => {
+    setModalAgregar(!modalAgregar);
+    fetchData();
+  };
 
-              <Button style={{ marginLeft: '1em' }} color="danger" onClick={() => setModal(false)}>
-                Cancelar
-              </Button>
-            </div>
-          </ModalFooter>
-        </AvForm>
-      </Modal>
-      <h4 class="text-center">Proveedores</h4>
-      <Row noGutters style={{ paddingBottom: '20px' }}>
-        <Col md={{ size: 6, offset: 3 }}>
-          <Input onChange={handleChange} />
-        </Col>
-      </Row>
-      <Table
-        responsive={true}
-        striped
-        bordered
-        hover
-        dark
-        align="center"
-        size="sm"
-        id="myTable"
-        style={{ width: '500px' }}
-      >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th scope="row">Compañía</th>
-            <th scope="row">Agencia</th>
-            <th scope="row">Nombre</th>
-            <th scope="row">Apellidos</th>
-            <th scope="row">Género</th>
-            <th scope="row">Email</th>
-            <th scope="row">Teléfono</th>
-            <th scope="row">Dirección 1</th>
-            <th scope="row">Dirección 2</th>
-            <th class="text-center"> Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((elemento, i) => (
-            <tr>
-              <td>{i + 1}</td>
-              <td>{elemento.company}</td>
-              <td>{elemento.agencia}</td>
-              <td>{elemento.nombre}</td>
-              <td>{elemento.apellidos}</td>
-              <td>{elemento.genero}</td>
-              <td>{elemento.email}</td>
-              <td>{elemento.telefono}</td>
-              <td>{elemento.direccion1}</td>
-              <td>{elemento.direccion2}</td>
-              <td>
-                <Button onClick={() => modificarModal(i)} color="success">
-                  Modificar
-                </Button>{' '}
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ width: '90%' }}>
+        <AgregarProveedor isOpen={modalAgregar} change={() => closeModalAgregar()} />
+        <Modal isOpen={modal} style={{ maxWidth: '1600px', width: '80%' }}>
+          <ModalHeader>
+            <h3>Modificar Proveedor</h3>
+          </ModalHeader>
+          <AvForm
+            onValidSubmit={handleValidSubmit}
+            onInvalidSubmit={handleInvalidSubmit}
+            model={modificar}
+          >
+            <ModalBody>
+              <AvGroup>
+                <AvField
+                  name="company"
+                  label="Compañía"
+                  type="text"
+                  validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
+                />
+                <AvField name="agencia" label="Nombre de la Agencia" type="text" />
+                <Row noGutters>
+                  <Col md={{ size: 5 }}>
+                    <AvField
+                      name="nombre"
+                      label="Nombre"
+                      type="text"
+                      validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
+                      style={{ marginRight: '30px' }}
+                    />
+                  </Col>
+                  <Col md={{ size: 5, offset: 1 }}>
+                    <AvField
+                      name="apellidos"
+                      label="Apellidos"
+                      type="text"
+                      validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
+                    />
+                  </Col>
+                </Row>
+                <AvRadioGroup name="genero" label="Género">
+                  <Row noGutters>
+                    <AvRadio label="M" value="M" />
+                    <AvRadio label="F" value="F" />
+                  </Row>
+                </AvRadioGroup>
+                <AvField name="email" label="Email" type="email" />
+                <AvField
+                  name="telefono"
+                  label="Teléfono"
+                  type="text"
+                  validate={{
+                    pattern: {
+                      value: '^[0-9+]+$',
+                      errorMessage: 'Ingrese valores validos (0-9, +)',
+                    },
+                  }}
+                />
+                <Row md="2" noGutters>
+                  <Col md={{ size: 5 }}>
+                    <AvField name="direccion1" label="Dirección 1" type="textarea" rows="3" />
+                  </Col>
+                  <Col md={{ size: 5, offset: 1 }}>
+                    <AvField name="direccion2" label="Dirección 2" type="textarea" rows="3" />
+                  </Col>
+                </Row>
+                <Row noGutters>
+                  <Col md={{ size: 5 }}>
+                    <AvField name="ciudad" label="Ciudad" type="text" />
+                  </Col>
+                  <Col md={{ size: 5, offset: 1 }}>
+                    <AvField name="departamento" label="Departamento" type="text" />
+                  </Col>
+                </Row>
+                <AvField name="codigo" label="Código Postal" type="text" />
+                <AvField name="pais" label="País" type="text" />
+                <AvField name="comentario" label="Comentario" type="textarea" rows="3" />
+              </AvGroup>
+            </ModalBody>
+            <ModalFooter>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <Button type="submit" color="primary">
+                  Modificar Proveedor
+                </Button>
+
                 <Button
-                  onClick={() =>
-                    Confirm.open({
-                      title: 'Eliminar Proveedor',
-                      message: '¿Esta seguro de que quiere eliminar proveedor?',
-                      onok: () => {
-                        onDelete(i);
-                      },
-                    })
-                  }
+                  style={{ marginLeft: '1em' }}
                   color="danger"
+                  onClick={() => setModal(false)}
                 >
-                  Eliminar
-                </Button>{' '}
-              </td>
+                  Cancelar
+                </Button>
+              </div>
+            </ModalFooter>
+          </AvForm>
+        </Modal>
+        <div style={{ justifyContent: '90%' }}>
+          <h1>Proveedores</h1>
+        </div>
+
+        <div style={{ display: 'flex', paddingBottom: '1em' }}>
+          <div style={{ flex: '1 0 auto' }}>
+            <Input
+              placeholder="Buscar Proveedor"
+              type="text"
+              style={{
+                'background-image': `url('${imagePath}')`,
+                'background-position': '10px 10px',
+                'background-repeat': 'no-repeat',
+                'font-size': '16px',
+                border: '1px solid #ddd',
+              }}
+              onChange={handleChange}
+            />
+          </div>
+          <div style={{ flex: '1 1 auto' }} />
+          <div>
+            <Button color="primary" onClick={() => setModalAgregar(true)}>
+              Agregar Proveedor
+            </Button>
+          </div>
+        </div>
+
+        <Table responsive hover align="center" bordered id="myTable" style={{ width: '500px' }}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th scope="row">Compañía</th>
+              <th scope="row">Agencia</th>
+              <th scope="row">Nombre</th>
+              <th scope="row">Apellidos</th>
+              <th scope="row">Género</th>
+              <th scope="row">Email</th>
+              <th scope="row">Teléfono</th>
+              <th scope="row">Dirección 1</th>
+              <th scope="row">Dirección 2</th>
+              <th class="text-center"> Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data.map((elemento, i) => (
+              <tr>
+                <td>{i + 1}</td>
+                <td>{elemento.company}</td>
+                <td>{elemento.agencia}</td>
+                <td>{elemento.nombre}</td>
+                <td>{elemento.apellidos}</td>
+                <td>{elemento.genero}</td>
+                <td>{elemento.email}</td>
+                <td>{elemento.telefono}</td>
+                <td>{elemento.direccion1}</td>
+                <td>{elemento.direccion2}</td>
+                <td>
+                  <Button onClick={() => modificarModal(i)} color="success">
+                    Modificar
+                  </Button>{' '}
+                  <Button
+                    onClick={() =>
+                      Confirm.open({
+                        title: 'Eliminar Proveedor',
+                        message: '¿Esta seguro de que quiere eliminar proveedor?',
+                        onok: () => {
+                          onDelete(i);
+                        },
+                      })
+                    }
+                    color="danger"
+                  >
+                    Eliminar
+                  </Button>{' '}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 };
