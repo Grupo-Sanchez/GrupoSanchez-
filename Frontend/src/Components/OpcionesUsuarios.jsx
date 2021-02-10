@@ -16,7 +16,7 @@ const OpcionesUsuarios = () => {
         <img
           src={AgregarUsuario}
           style={{
-            width: '220px',
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -24,8 +24,23 @@ const OpcionesUsuarios = () => {
           }}
         />
       ),
-      to: '/asd',
       isOpen: () => setModalAgregar(true),
+    },
+    {
+      titulo: 'Eliminar Usuarios',
+      icon: (
+        <img
+          src={EliminarUsuario}
+          style={{
+            width: '240px',
+            height: 'auto',
+            paddingBottom: '20px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+          }}
+        />
+      ),
+      to: '/Propietario/Eliminar/Usuarios',
     },
     {
       titulo: 'Gestionar Usuarios',
@@ -33,7 +48,7 @@ const OpcionesUsuarios = () => {
         <img
           src={EditarUsuario}
           style={{
-            width: '220px',
+            width: '240px',
             height: 'auto',
             paddingBottom: '20px',
             marginLeft: 'auto',
@@ -41,7 +56,7 @@ const OpcionesUsuarios = () => {
           }}
         />
       ),
-      to: '/asd',
+      to: '/Propietario/Gestionar/Usuarios',
     },
   ];
 
@@ -49,7 +64,7 @@ const OpcionesUsuarios = () => {
     <Container>
       <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Usuarios</h1>
-      <Row md="2" style={{ paddingTop: '25px' }}>
+      <Row md="3" style={{ paddingTop: '25px' }}>
         {items.map(({ titulo, to, icon, isOpen }, i) => (
           <Col>
             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />

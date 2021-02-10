@@ -52,9 +52,40 @@ export default function AgregarUsuario(props) {
     telefono: '',
     correo: '',
     rol: '',
+    password: '',
   });
 
   const [marca, setMarca] = useState('');
+
+  const signUpMethod = () => {
+    if (seleccionado.rol) {
+      const jsonString = {
+        email: seleccionado.correo,
+        password: seleccionado.password,
+        rol: seleccionado.rol.value,
+      };
+
+      console.log('Mandando: ', typeof seleccionado.rol.value);
+      console.log('Mandando: ', jsonString);
+      //     fetch('http://Localhost:3001/api/login', {
+      fetch('http://Localhost:3001/api/signup', {
+        method: 'post',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(jsonString),
+      })
+        // .then((res) => {
+        //   res.json();
+        //   console.log('Response: ', res);
+        // })
+        // .then((json) => {
+        //   console.log('JSON: ', json);
+        // });
+        .then((res) => res.json())
+        .then((json) => {
+          console.log('JSON SIGNUP: ', json);
+        });
+    }
+  };
 
   const agregarMarca = (idToSearch) => {
     options.filter((item) => {
@@ -81,6 +112,7 @@ export default function AgregarUsuario(props) {
     seleccionado.telefono = '';
     seleccionado.correo = '';
     seleccionado.rol = '';
+    seleccionado.password = '';
   };
 
   const descartarCambios = () => {
@@ -95,19 +127,20 @@ export default function AgregarUsuario(props) {
 
   const escribirUsuario = async () => {
     if (
-      regexSoloNumeros.test(document.getElementById('identidad').value) &&
-      regex.test(document.getElementById('nombre').value) &&
-      (regex.test(document.getElementById('segundo_nombre').value) ||
-        seleccionado.segundo_nombre === '') &&
-      regex.test(document.getElementById('primer_apellido').value) &&
-      (regex.test(document.getElementById('segundo_apellido').value) ||
-        seleccionado.segundo_apellido === '') &&
-      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-      regexSoloNumeros.test(document.getElementById('telefono').value) &&
-      regEmail.test(document.getElementById('correo').value) &&
-      seleccionado.rol[0] !== undefined &&
-      seleccionado.identidad.length === 13 &&
-      seleccionado.rtn.length === 14
+      (regexSoloNumeros.test(document.getElementById('identidad').value) &&
+        regex.test(document.getElementById('nombre').value) &&
+        (regex.test(document.getElementById('segundo_nombre').value) ||
+          seleccionado.segundo_nombre === '') &&
+        regex.test(document.getElementById('primer_apellido').value) &&
+        (regex.test(document.getElementById('segundo_apellido').value) ||
+          seleccionado.segundo_apellido === '') &&
+        (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
+        regexSoloNumeros.test(document.getElementById('telefono').value) &&
+        regEmail.test(document.getElementById('correo').value) &&
+        seleccionado.rol[0] !== undefined &&
+        seleccionado.identidad.length === 13 &&
+        seleccionado.rtn.length === 14,
+      seleccionado.password.length > 4)
     ) {
       const campos = {
         identidad: seleccionado.identidad,
@@ -119,8 +152,9 @@ export default function AgregarUsuario(props) {
         telefono: seleccionado.telefono,
         correo: seleccionado.correo,
         rol: seleccionado.rol,
+        password: seleccionado.password,
       };
-      const res = await axios.post('http://178.128.67.247:3001/api/Users', campos);
+      const res = await axios.post('http://Localhost:3001/api/Users', campos).then(signUpMethod());
       console.log(res);
       Confirm.open({
         title: 'Exito',
@@ -326,6 +360,24 @@ export default function AgregarUsuario(props) {
                 name="correo"
                 id="correo"
                 value={seleccionado ? seleccionado.correo : ''}
+                onChange={manejarCambio}
+              />
+            </AvForm>
+          </div>
+          <div>
+            <h3>Contraseña</h3>
+            <AvForm>
+              <AvField
+                errorMessage="Constraseña debe tener mas de 4 caracteres"
+                validate={{
+                  required: { value: true },
+                  minLength: { value: 4 },
+                }}
+                className="form-control"
+                type="text"
+                name="password"
+                id="password"
+                value={seleccionado ? seleccionado.password : ''}
                 onChange={manejarCambio}
               />
             </AvForm>

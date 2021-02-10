@@ -91,8 +91,9 @@ const Header = (props) => {
             </div>
           ))}
         </div>
-
-        <div className="sidenav-footer">Cerrar Sesion</div>
+        <div onClick={() => history.push('/')} className="sidenav-footer">
+          Cerrar Sesion
+        </div>
       </aside>
     </nav>
   );

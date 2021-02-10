@@ -7,6 +7,8 @@ import {
   FormGroup,
   Input,
   Modal,
+  Row,
+  Col,
   ModalBody,
   ModalHeader,
   ModalFooter,
@@ -20,6 +22,7 @@ export default function BuscarProducto(props) {
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalVerPrecios, setModalVerPrecios] = useState(false);
+  const [ModalVerCodigoBarra, setModalVerCodigoBarra] = useState(false);
   const [data, setData] = useState([]);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -34,8 +37,9 @@ export default function BuscarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: '',
   });
+
   const fecthData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
   };
@@ -59,6 +63,11 @@ export default function BuscarProducto(props) {
     setSeleccionado(elemento);
     setmodalVerDescripciones(true);
   };
+  const mostrarCodigoBarra = (elemento) => {
+    setSeleccionado(elemento);
+    setModalVerCodigoBarra(true);
+  };
+  const Barcode = require('react-barcode');
   const myFunction = () => {
     // alert("eentoroo");
     const input = document.getElementById('myInput');
@@ -117,7 +126,6 @@ export default function BuscarProducto(props) {
           striped
           bordered
           hover
-          dark
           align="center"
           size="sm"
           id="myTable"
@@ -135,6 +143,7 @@ export default function BuscarProducto(props) {
               <th>Proveedores </th>
               <th>Descripciones </th>
               <th>Precios</th>
+              <th>Codigo de Barra</th>
             </tr>
           </thead>
           <tbody>
@@ -163,6 +172,11 @@ export default function BuscarProducto(props) {
                 </td>
                 <td>
                   <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
+                    Ver
+                  </Button>
+                </td>
+                <td>
+                  <Button color="primary" onClick={() => mostrarCodigoBarra(elemento)}>
                     Ver
                   </Button>
                 </td>
@@ -264,80 +278,214 @@ export default function BuscarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalVerProveedor}>
+      <Modal
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '1550px',
+        }}
+        isOpen={modalVerProveedor}
+      >
         <ModalHeader>
           <div>
-            <h3>Modificar Productos</h3>
+            <h3>Proveedores del Producto {seleccionado.nombre}</h3>
           </div>
         </ModalHeader>
         <ModalBody>
-          <div className="form-group">
-            <label>proveedor 1</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Apunte"
-              value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
-              readOnly
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 2</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Fecha"
-              readOnly
-              value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 3</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 4</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 5</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 6</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 7</label>
+          <Row>
+            <Col
+              style={{
+                maxWidth: '700px',
+                'margin-left': '200px',
+                paddingRight: '50px',
+              }}
+              md={{ size: 5 }}
+            >
+              <label>Proveedor 1</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Apunte"
+                value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
+                readOnly
+                // onChange={manejarCambio}
+              />
+              <label>Precio Proveedor 1</label>
+              <input
+                className="form-control"
+                type="number"
+                readOnly
+                value={
+                  seleccionado.proveedores[0] && seleccionado.proveedores[0].precio !== ''
+                    ? seleccionado.proveedores[0].precio
+                    : 'No tiene precio asignado'
+                }
+              />
+              <br />
+            </Col>
+            <Col
+              style={{
+                maxWidth: '700px',
+                paddingRight: '50px',
+              }}
+            >
+              <label>Proveedor 2</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Fecha"
+                readOnly
+                value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
+              />
+              <label>Precio Proveedor 2</label>
+              <input
+                className="form-control"
+                type="number"
+                readOnly
+                value={
+                  seleccionado.proveedores[1] && seleccionado.proveedores[1].precio !== ''
+                    ? seleccionado.proveedores[1].precio
+                    : 'No tiene precio asignado'
+                }
+              />
+              <br />
+            </Col>
+          </Row>
+          <Row>
+            <Col
+              style={{
+                maxWidth: '700px',
+                'margin-left': '200px',
+                paddingRight: '50px',
+              }}
+              md={{ size: 5 }}
+            >
+              <label>Proveedor 3</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
+                readOnly
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
+              />
+              <label>Precio Proveedor 3</label>
+              <input
+                className="form-control"
+                type="number"
+                readOnly
+                value={
+                  seleccionado.proveedores[2] && seleccionado.proveedores[2].precio !== ''
+                    ? seleccionado.proveedores[2].precio
+                    : 'No tiene precio asignado'
+                }
+              />
+              <br />
+            </Col>
+            <Col
+              style={{
+                maxWidth: '700px',
+                paddingRight: '50px',
+              }}
+            >
+              <label>Proveedor 4</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
+                readOnly
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
+              />
+              <label>Precio Proveedor 4</label>
+              <input
+                className="form-control"
+                type="number"
+                readOnly
+                value={
+                  seleccionado.proveedores[3] && seleccionado.proveedores[3].precio !== ''
+                    ? seleccionado.proveedores[3].precio
+                    : 'No tiene precio asignado'
+                }
+              />
+              <br />
+            </Col>
+          </Row>
+          <Row>
+            <Col
+              style={{
+                maxWidth: '700px',
+                'margin-left': '200px',
+                paddingRight: '50px',
+              }}
+              md={{ size: 5 }}
+            >
+              <label>Proveedor 5</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
+                readOnly
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
+              />
+              <label>Precio Proveedor 5</label>
+              <input
+                className="form-control"
+                type="number"
+                readOnly
+                value={
+                  seleccionado.proveedores[4] && seleccionado.proveedores[4].precio !== ''
+                    ? seleccionado.proveedores[4].precio
+                    : 'No tiene precio asignado'
+                }
+              />
+              <br />
+            </Col>
+            <Col
+              style={{
+                maxWidth: '700px',
+                paddingRight: '50px',
+              }}
+            >
+              <label>Proveedor 6</label>
+              <input
+                className="form-control"
+                type="text"
+                name="Etiqueta"
+                value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
+                readOnly
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
+              />
+              <label>Precio Proveedor 6</label>
+              <input
+                className="form-control"
+                type="number"
+                readOnly
+                value={
+                  seleccionado.proveedores[5] && seleccionado.proveedores[5].precio !== ''
+                    ? seleccionado.proveedores[5].precio
+                    : 'No tiene precio asignado'
+                }
+              />
+              <br />
+            </Col>
+          </Row>
+          <div
+            style={{
+              maxWidth: '1100px',
+              paddingLeft: '500px',
+            }}
+            className="form-group"
+          >
+            <label>Proveedor 7</label>
             <input
               className="form-control"
               type="text"
@@ -346,6 +494,17 @@ export default function BuscarProducto(props) {
               readOnly
               // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
               // onChange={manejarCambio}
+            />
+            <label>Precio Proveedor 7</label>
+            <input
+              className="form-control"
+              type="number"
+              readOnly
+              value={
+                seleccionado.proveedores[6] && seleccionado.proveedores[6].precio !== ''
+                  ? seleccionado.proveedores[6].precio
+                  : 'No tiene precio asignado'
+              }
             />
             <br />
           </div>
@@ -437,6 +596,32 @@ export default function BuscarProducto(props) {
         </ModalBody>
         <ModalFooter>
           <button className="btn btn-primary" onClick={() => setModalVerPrecios(false)}>
+            OK
+          </button>
+        </ModalFooter>
+      </Modal>
+      <Modal
+        className="scrolling"
+        style={{
+          height: '95vh',
+          'overflow-y': 'auto',
+          top: '20px',
+          maxWidth: '550px',
+        }}
+        isOpen={ModalVerCodigoBarra}
+      >
+        <ModalHeader>
+          <div className="text-center">
+            <h3>Codigo de Barra del Producto {seleccionado.nombre}</h3>
+          </div>
+        </ModalHeader>
+        <ModalBody>
+          <div align="center">
+            <Barcode value={seleccionado.codigos[0]} />
+          </div>
+        </ModalBody>
+        <ModalFooter>
+          <button className="btn btn-primary" onClick={() => setModalVerCodigoBarra(false)}>
             OK
           </button>
         </ModalFooter>
