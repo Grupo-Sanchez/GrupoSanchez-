@@ -300,6 +300,7 @@ const ModificarEliminarProveedor = () => {
                 'background-repeat': 'no-repeat',
                 'font-size': '16px',
                 border: '1px solid #ddd',
+                padding: '12px 20px 12px 40px',
               }}
               onChange={handleChange}
             />
