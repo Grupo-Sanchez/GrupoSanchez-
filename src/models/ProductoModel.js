@@ -24,6 +24,9 @@ precio: '',*/
   ubicacion: {
     type: String,
   },
+  bodega: {
+    type: Array,
+  },
   marca: {
     type: Array,
   },
@@ -42,6 +45,9 @@ precio: '',*/
   },
   cantidad_minima: {
     type: Number,
+  },
+  fecha_creacion: {
+    type: Date,
   },
 });
 

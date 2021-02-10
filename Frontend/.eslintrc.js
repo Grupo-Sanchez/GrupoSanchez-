@@ -32,8 +32,11 @@ module.exports = {
     'prefer-object-spread': 0,
     'object-shorthand': 0,
     'global-require': 0,
-    'no-useless-escape' :0,
+    'no-useless-escape': 0,
     'import/no-unresolved': 'off',
-
+    'no-unneeded-ternary': 0,
+    'no-nested-ternary': 0,
+    'function-paren-newline': 0,
+    'arrow-body-style': 0,
   },
 };
