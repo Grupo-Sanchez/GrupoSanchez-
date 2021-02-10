@@ -137,10 +137,10 @@ export default function AgregarUsuario(props) {
         (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
         regexSoloNumeros.test(document.getElementById('telefono').value) &&
         regEmail.test(document.getElementById('correo').value) &&
-        seleccionado.rol[0] !== undefined &&
+        seleccionado.rol !== '' &&
         seleccionado.identidad.length === 13 &&
-        seleccionado.rtn.length === 14,
-      seleccionado.password.length > 4)
+        seleccionado.rtn.length === 14 &&
+        seleccionado.password.length >= 4)
     ) {
       const campos = {
         identidad: seleccionado.identidad,
@@ -374,7 +374,7 @@ export default function AgregarUsuario(props) {
                   minLength: { value: 4 },
                 }}
                 className="form-control"
-                type="text"
+                type="password"
                 name="password"
                 id="password"
                 value={seleccionado ? seleccionado.password : ''}
