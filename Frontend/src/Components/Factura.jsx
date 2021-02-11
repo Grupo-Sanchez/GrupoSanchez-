@@ -50,21 +50,23 @@ export default function Facturas() {
         const productosagregados = [];
         for (let index = 0; index < productos.length; index++) {
           const element = productos[index];
-          productosagregados.push({
-            indice: 0,
-            name: element.nombre,
-            value: element._id,
-            codigos: element.codigos,
-            proveedores: element.proveedores,
-            precios: element.precios,
-            area: element.area,
-            ubicacion: element.ubicacion,
-            marca: element.marca,
-            _v: element._v,
-            cantidad: element.cantidad,
-            precioUnitario: element.precios,
-            precioSumado: 0,
-          });
+          if (element.cantidad > 0) {
+            productosagregados.push({
+              indice: 0,
+              name: element.nombre,
+              value: element._id,
+              codigos: element.codigos,
+              proveedores: element.proveedores,
+              precios: element.precios,
+              area: element.area,
+              ubicacion: element.ubicacion,
+              marca: element.marca,
+              _v: element._v,
+              cantidad: element.cantidad,
+              precioUnitario: element.precios,
+              precioSumado: 0,
+            });
+          }
         }
         setproductosEnBodega(productosagregados);
       })
@@ -72,6 +74,7 @@ export default function Facturas() {
         alert('Error');
       });
   };
+  const [cantidadmax, setCantidadmax] = useState(0);
   const [sumatotal, setSumaTotal] = useState(0);
   const [impuestototal, setImpuestoTotal] = useState(0);
   const [totalfinal, setTotalFinal] = useState(0);
@@ -86,6 +89,7 @@ export default function Facturas() {
     setindice(1);
     setquantity(1);
   };
+
   const b = (idToSearch) => {
     productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
@@ -97,6 +101,7 @@ export default function Facturas() {
           precioUnitario: item.precios[0],
           precioSumado: 0,
         });
+        setCantidadmax(item.cantidad);
       }
       return 0;
     });
@@ -108,6 +113,7 @@ export default function Facturas() {
   const handleChange = (e) => {
     setindice(1);
     b(e);
+    setquantity(1);
   };
 
   const handleValidSubmit = async () => {
@@ -172,12 +178,9 @@ export default function Facturas() {
       }
     }
     axios.put(`http://Localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
+    setCantidadmax(1);
   };
-  const handleQuantityChange = (e) => {
-    setindice(1);
-    setquantity(e.target.value);
-    productoSeleccionado.cantidad = quantity;
-  };
+
   const eliminarProducto = async (i, cantidad) => {
     let cantidad2 = 0;
     getProductos();
@@ -216,6 +219,22 @@ export default function Facturas() {
     });
     updateTool(productoSeleccionado.value);
   };
+  function limit() {
+    const temp = document.getElementById('cantidad');
+    const maxValue = cantidadmax;
+    temp.value = Math.min(maxValue, temp.value);
+  }
+  const handleQuantityChange = (e) => {
+    const num = document.getElementById('cantidad').value;
+    const num2 = cantidadmax;
+    if (num > num2) {
+      document.getElementById('cantidad').onchange = limit;
+    }
+    setquantity(e.target.value);
+    setindice(1);
+    productoSeleccionado.cantidad = quantity;
+  };
+  const manejarCambiocantmin = (e, n) => {};
   const regexSoloNumeros = /^[0-9]+$/;
   return (
     <div>
@@ -236,22 +255,37 @@ export default function Facturas() {
             </div>
           </Col>
           <br />
-          <Col style={{ paddingRight: '400px' }}>
+          <Col style={{ paddingRight: '100px' }}>
             <div align="center">
-              <h4 style={{ display: 'inline', float: 'center' }}>Cantidad:</h4>
-              <input
-                style={{ float: 'center', marginLeft: '5px' }}
-                type="number"
-                value={quantity}
-                onChange={(e) => handleQuantityChange(e)}
-              />
-              <Button
-                color="primary"
-                style={{ marginLeft: '10px' }}
-                onClick={agregarProductoaTabla}
-              >
-                Agregar
-              </Button>
+              <Row>
+                <h4 style={{ display: 'inline', float: 'center' }}>Cantidad:</h4>
+                <input
+                  style={{ float: 'center', marginLeft: '5px', width: '200px' }}
+                  type="number"
+                  id="cantidad"
+                  max={cantidadmax}
+                  min={1}
+                  value={quantity}
+                  onChange={(e) => handleQuantityChange(e)}
+                />
+                <Button
+                  color="primary"
+                  style={{ marginLeft: '10px' }}
+                  onClick={agregarProductoaTabla}
+                >
+                  Agregar
+                </Button>
+              </Row>
+              <Row style={{ paddingTop: '10px' }}>
+                <h5 style={{ display: 'inline', float: 'center' }}>Cantidad Disponible:</h5>
+                <input
+                  style={{ float: 'center', marginLeft: '5px', width: '50px' }}
+                  type="number"
+                  id="cantidadDisp"
+                  disabled={true}
+                  value={cantidadmax}
+                />
+              </Row>
             </div>
           </Col>
         </Row>

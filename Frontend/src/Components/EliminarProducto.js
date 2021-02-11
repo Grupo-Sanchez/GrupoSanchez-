@@ -21,6 +21,7 @@ import imagePath from '../Icons/lupa1.jpeg';
 import AgregarProveedor from './AgregarProveedor.jsx';
 import AgregarBodega from './CrearBodega.jsx';
 import Agregar from './AgregarMarca.jsx';
+import AgregarProducto from './AgregarProducto';
 import { Confirm } from './Confirm';
 
 const thumbsContainer = {
@@ -82,6 +83,7 @@ export default function EliminarProducto(props) {
     { name: 'patito', value: 'patito' },
   ];
   const [tagstemp, setTagsTemp] = useState([]);
+  const [modalAgregarProducto, setModalAgregarProducto] = useState(false);
   const { Canvas } = require('canvas');
   const JsBarcode = require('jsbarcode');
   const [size, setSize] = useState('1');
@@ -1021,8 +1023,16 @@ export default function EliminarProducto(props) {
     setModalAgregarBodega(!modalAgregarBodega);
     fecthBodegas();
   };
+  const mostrarModalProducto = () => {
+    setModalAgregarProducto(true);
+  };
+  const cerraroAbrirModalProducto = () => {
+    setModalAgregarProducto(!modalAgregarProducto);
+    fecthData();
+  };
   return (
     <div align="center">
+      <br />
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
       <input
         type="text"
@@ -1041,12 +1051,20 @@ export default function EliminarProducto(props) {
           'margin-bottom': '12px',
         }}
       ></input>
+      <Button
+        style={{ 'margin-left': '25px' }}
+        onClick={() => mostrarModalProducto()}
+        color="primary"
+      >
+        Agregar Producto
+      </Button>
       <div
         style={{
           maxHeight: '600px',
           overflowY: 'auto',
         }}
       >
+        <br />
         <Table
           responsive
           striped
@@ -1113,8 +1131,6 @@ export default function EliminarProducto(props) {
                   <Button onClick={() => Modificar(elemento)} color="success">
                     Modificar
                   </Button>{' '}
-                </td>
-                <td>
                   <Button
                     onClick={() =>
                       Confirm.open({
@@ -2332,6 +2348,7 @@ export default function EliminarProducto(props) {
         </ModalFooter>
       </Modal>
       <AgregarBodega isOpen={modalAgregarBodega} change={() => cerraroAbrirModalBodega()} />
+      <AgregarProducto isOpen={modalAgregarProducto} change={() => cerraroAbrirModalProducto()} />
     </div>
   );
 }
