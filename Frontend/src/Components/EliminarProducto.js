@@ -91,6 +91,7 @@ export default function EliminarProducto(props) {
   const [codigoBarra, setCodigoBarra] = useState('');
   let [precioprov2, setPrecioProv2] = useState(true);
   const [tags, setTags] = useState([]);
+  const [codes, setCodes] = useState([]);
   let [precioprov3, setPrecioProv3] = useState(true);
   let [precioprov4, setPrecioProv4] = useState(true);
   let [precioprov5, setPrecioProv5] = useState(true);
@@ -147,6 +148,7 @@ export default function EliminarProducto(props) {
   const [precioprovedor5, setPrecioProvedor5] = useState('');
   const [precioprovedor6, setPrecioProvedor6] = useState('');
   const [precioprovedor7, setPrecioProvedor7] = useState('');
+  const array = [];
   const isAlphanumeric = require('is-alphanumeric');
   let [proveedores, setProveedores] = useState([]);
   let [marcas, setMarcas] = useState([]);
@@ -176,6 +178,7 @@ export default function EliminarProducto(props) {
           _v: element._v,
         });
       }
+
       setProveedores(proveedoresagregados);
     });
   };
@@ -187,7 +190,7 @@ export default function EliminarProducto(props) {
         const element = bodegasobtenidas[index];
         bodegasAgregar.push({
           value: element._id,
-          name: `Bodega ${element.numBodega}`,
+          name: element.numBodega,
         });
       }
       setBodegas(bodegasAgregar);
@@ -416,7 +419,7 @@ export default function EliminarProducto(props) {
           company: element.company,
           value: id,
           agencia: element.agencia,
-          name: element.nombre,
+          name: element.name,
           apellidos: element.apellidos,
           genero: element.genero,
           email: element.email,
@@ -615,7 +618,7 @@ export default function EliminarProducto(props) {
           const element2 = data[i];
           if (element2._id === Id) {
             bodegaMod = element;
-            alert(JSON.stringify(bodegaMod));
+
             break;
           }
         }
@@ -623,7 +626,7 @@ export default function EliminarProducto(props) {
     }
     if (
       seleccionado.bodega.length > 0 &&
-      seleccionado.codigos.length > 0 &&
+      codes.length > 0 &&
       seleccionado.proveedores.length > 0 &&
       seleccionado.precios.length > 0 &&
       seleccionado.nombre.toString().trim() !== '' &&
@@ -643,7 +646,7 @@ export default function EliminarProducto(props) {
           .put(`http://Localhost:3001/api/productos/${Id}`, {
             nombre: document.getElementById('modnombre').value,
             area: document.getElementById('modarea').value,
-            codigos: seleccionado.codigos,
+            codigos: codes,
             proveedores: seleccionado.proveedores,
             ubicacion: document.getElementById('modubicacion').value,
             marca: marcaMod,
@@ -777,6 +780,7 @@ export default function EliminarProducto(props) {
     setPrecioProvedor5('');
     setPrecioProvedor6('');
     setPrecioProvedor7('');
+    setCodes(element.codigos);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
     setMarcaSel(element.marca[0].value);
@@ -831,11 +835,18 @@ export default function EliminarProducto(props) {
   const [codigo7, setCodigo7] = useState('');
   const cerrarModalModificarCodigos = (n) => {
     setTags(tagstemp);
-    setCodigoBarra(tagstemp[0]);
+    setCodigoBarra(seleccionado.codigos[0]);
     setModalModificarCodigos(false);
   };
   const changeCode = () => {
-    setTags(tagstemp);
+    setCodigoBarra(codes[0]);
+    setCodigo1(codes[0]);
+    setCodigo2(codes[1]);
+    setCodigo3(codes[2]);
+    setCodigo4(codes[3]);
+    setCodigo5(codes[4]);
+    setCodigo6(codes[5]);
+    setCodigo7(codes[6]);
     setModalModificarCodigos(true);
   };
   const descartarcambios = () => {
@@ -848,14 +859,145 @@ export default function EliminarProducto(props) {
     });
   };
   const GuardarCodigos = (i) => {
-    if (tags.length > 0) {
-      seleccionado.codigos = tags;
-      setTagsTemp(tags);
-      setModalModificarCodigos(false);
+    let entra = false;
+    let mansajenot = '';
+    let yaesta = false;
+    if (
+      isAlphanumeric(document.getElementById('mcod1').value) &&
+      isAlphanumeric(document.getElementById('modcod2').value) &&
+      isAlphanumeric(document.getElementById('modcod3').value) &&
+      isAlphanumeric(document.getElementById('modcod4').value) &&
+      isAlphanumeric(document.getElementById('modcod5').value) &&
+      isAlphanumeric(document.getElementById('modcod6').value) &&
+      isAlphanumeric(document.getElementById('modcod7').value)
+    ) {
+      if (document.getElementById('mcod1').value !== '') {
+        array.push(codigo1);
+      }
+      if (document.getElementById('modcod2').value !== '') {
+        array.push(codigo2);
+      }
+      if (document.getElementById('modcod3').value !== '') {
+        array.push(codigo3);
+      }
+      if (document.getElementById('modcod4').value !== '') {
+        array.push(codigo4);
+      }
+      if (document.getElementById('modcod5').value !== '') {
+        array.push(codigo5);
+      }
+      if (document.getElementById('modcod6').value !== '') {
+        array.push(codigo6);
+      }
+      if (document.getElementById('modcod7').value !== '') {
+        array.push(codigo7);
+      }
+      let arrayVacio = false;
+      if (array.length === 0) {
+        arrayVacio = true;
+      } else {
+        setCodigoBarra(array[0]);
+        for (let ind = 0; ind < array.length; ind++) {
+          for (let j = 0; j < array.length; j++) {
+            if (ind !== j) {
+              if (array[ind] === array[j]) {
+                entra = true;
+                break;
+              }
+            }
+          }
+        }
+        let mensaje = [];
+        let codigos2 = [];
+        for (let index = 0; index < data.length; index++) {
+          const element = data[index];
+          if (element._id !== seleccionado._id) {
+            for (let p = 0; p < element.codigos.length; p++) {
+              const element2 = element.codigos[p];
+              for (let j = 0; j < array.length; j++) {
+                const element3 = array[j];
+                if (element2 === element3) {
+                  mensaje.push(element.nombre);
+                  codigos2.push(element2);
+                  yaesta = true;
+                }
+              }
+            }
+          }
+        }
+        //const codigosUnicos = new Set(codigos2);
+        let codigosUnicos = codigos2.filter(
+          (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+        );
+        let productosUnicos = mensaje.filter(
+          (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+        );
+
+        let codString = '';
+        let prodString = '';
+        for (let k = 0; k < codigosUnicos.length; k++) {
+          const element = codigosUnicos[k];
+          codString += ` ${element},`;
+        }
+        for (let k = 0; k < productosUnicos.length; k++) {
+          const element = productosUnicos[k];
+          prodString += ` ${element},`;
+        }
+        if (codigosUnicos.length !== 1) {
+          mansajenot = `Los codigos ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresados ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        } else {
+          mansajenot = `El codigo ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresado ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        }
+      }
+      if (!arrayVacio) {
+        if (entra) {
+          Confirm.open({
+            title: 'Error',
+            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+            onok: () => {},
+          });
+          entra = false;
+        } else if (yaesta) {
+          Confirm.open({
+            title: 'Error',
+            message: mansajenot,
+            onok: () => {
+              setCodigo1(seleccionado.codigos[0]);
+              setCodigo2(seleccionado.codigos[1]);
+              setCodigo3(seleccionado.codigos[2]);
+              setCodigo4(seleccionado.codigos[3]);
+              setCodigo5(seleccionado.codigos[4]);
+              setCodigo6(seleccionado.codigos[5]);
+              setCodigo7(seleccionado.codigos[6]);
+            },
+          });
+        } else {
+          setCodes(array);
+          setModalModificarCodigos(false);
+        }
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
+          onok: () => {},
+        });
+      }
     } else {
       Confirm.open({
-        title: 'Códigos vacios',
-        message: 'No puede insertar si no existe ningun código',
+        title: 'Error',
+        message: 'Los Codigos solo pueden ser Alfanumericos',
         onok: () => {},
       });
     }
@@ -947,7 +1089,11 @@ export default function EliminarProducto(props) {
     temp.value = Math.min(maxValue, temp.value);
   }
   const manejarCambiocant = (e, n) => {
-    setCantsel(e.target.value);
+    if (document.getElementById('modcantidad').value <= 0) {
+      document.getElementById('modcantidad').value = 1;
+    } else {
+      setCantsel(e.target.value);
+    }
   };
 
   const manejarCambiocantmin = (e, n) => {
@@ -959,6 +1105,9 @@ export default function EliminarProducto(props) {
     } else {
       document.getElementById('modcantidad').onchange = limit;
       //seleccionado.cantidad_minima = e.target.value;
+    }
+    if (num <= 0) {
+      document.getElementById('modcantidad_minima').value = 1;
     }
     setCantminsel(e.target.value);
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
@@ -1097,8 +1246,8 @@ export default function EliminarProducto(props) {
               <tr>
                 <td>{(index += 1)}</td>
                 <td>{elemento.nombre}</td>
-                <td>{elemento.area}</td>
-                <td>{elemento.ubicacion}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.area}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.ubicacion}</td>
                 <td>{elemento.marca[0].name}</td>
                 <td>{elemento.cantidad}</td>
                 <td>{elemento.cantidad_minima}</td>
@@ -1245,7 +1394,6 @@ export default function EliminarProducto(props) {
                 'overflow-y': 'auto',
                 top: '20px',
                 maxWidth: '550px',
-                paddingTop: '300px',
               }}
               isOpen={ModalModificarCodigos}
             >
@@ -1255,7 +1403,7 @@ export default function EliminarProducto(props) {
                 </div>
               </ModalHeader>
               <ModalBody>
-                <div style={paddingdiv()}>
+                {/*<div style={paddingdiv()}>
                   <ul style={paddingul()}>
                     {tags.map((tag, index) => (
                       <li style={paddingmain()} key={index}>
@@ -1274,6 +1422,141 @@ export default function EliminarProducto(props) {
                     placeholder="Press enter to add tags"
                     onKeyDown={handleKeyDown}
                   />
+                </div>*/}
+                <div className="form-group">
+                  <AvForm>
+                    <label>Codigo 1</label>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="mcodigo1"
+                      id="mcod1"
+                      // placeholder = {seleccionado.codigos[0]}
+                      value={codigo1}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onKeyDown={handleKeyDown}
+                      // onClick={verificarCodigo()}
+                      onChange={(event) => setCodigo1(event.target.value)}
+                      //onChange={(e) => handleChange(e, 2)}
+                    />
+                  </AvForm>
+                  <br />
+                  <label>Codigo 2</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo2"
+                      id="modcod2"
+                      value={codigo2}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo2(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod2}
+                      // onChange={(e) => handleChange(e, 3)}
+                    />
+                  </AvForm>
+                  <br />
+                  <label>Codigo 3</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo3"
+                      id="modcod3"
+                      value={codigo3}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo3(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod3}
+                      // onChange={(e) => handleChange(e, 4)}
+                    />
+                  </AvForm>
+                  <br />
+                  <label>Codigo 4</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo4"
+                      id="modcod4"
+                      value={codigo4}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo4(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod4}
+                      // onChange={(e) => handleChange(e, 5)}
+                    />
+                  </AvForm>
+                  <br />
+                  <label>Codigo 5</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo5"
+                      id="modcod5"
+                      value={codigo5}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo5(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod5}
+                      // onChange={(e) => handleChange(e, 6)}
+                    />
+                  </AvForm>
+                  <br />
+                  <label>Codigo 6</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo6"
+                      id="modcod6"
+                      value={codigo6}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onChange={(event) => setCodigo6(event.target.value)}
+                      onKeyDown={handleKeyDown}
+                      // disabled={!inputcod6}
+                      // onChange={(e) => handleChange(e, 7)}
+                    />
+                  </AvForm>
+                  <br />
+                  <label>Codigo 7</label>
+                  <AvForm>
+                    <AvField
+                      className="form-control"
+                      type="text"
+                      name="modcodigo7"
+                      id="modcod7"
+                      value={codigo7}
+                      validate={{
+                        pattern: { value: '^[A-Za-z0-9]+$' },
+                        minLength: { value: 1 },
+                      }}
+                      onKeyDown={handleKeyDown}
+                      onChange={(event) => setCodigo7(event.target.value)}
+                      // disabled={!inputcod7}
+                    />
+                  </AvForm>
+                  <br />
                 </div>
               </ModalBody>
               <ModalFooter>
@@ -1291,7 +1574,7 @@ export default function EliminarProducto(props) {
                 >
                   Modificar Código
                 </button>
-                <button className="btn btn-danger" onClick={() => cerrarModalModificarCodigos()}>
+                <button className="btn btn-danger" onClick={() => setModalModificarCodigos(false)}>
                   Cancelar
                 </button>
               </ModalFooter>
@@ -1701,6 +1984,7 @@ export default function EliminarProducto(props) {
                     //placeholder={seleccionado.cantidad_minima}
                     max={cantsel}
                     value={cantminsel}
+                    min={1}
                     //min={seleccionado.cantidad_minima}
                     onChange={(e) => manejarCambiocantmin(e, 1)}
                   />
@@ -2338,7 +2622,7 @@ export default function EliminarProducto(props) {
         </ModalHeader>
         <ModalBody>
           <div align="center">
-            <Barcode value={seleccionado.codigos[0]} />
+            <Barcode value={codigo1} />
           </div>
         </ModalBody>
         <ModalFooter>

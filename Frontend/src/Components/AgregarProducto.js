@@ -131,13 +131,15 @@ export default function AgregarProducto(props) {
     ubicacion: '',
     marca: [],
     precio: [],
-    cantidad: '',
+    cantidad: 1,
     bodega: [],
     descripcion_corta: '',
     descripcion_larga: '',
-    cantidad_minima: '',
+    cantidad_minima: 1,
     fecha_creacion: '',
   });
+  const [cantsel, setCantsel] = useState(1);
+  const [cantminsel, setCantminsel] = useState(1);
   const [codigoBarra, setCodigoBarra] = useState('');
   let [proveedores, setProveedores] = useState([]);
   const [productos, setProductos] = useState([]);
@@ -173,7 +175,7 @@ export default function AgregarProducto(props) {
         const element = bodegasobtenidas[index];
         bodegasAgregar.push({
           value: element._id,
-          name: `Bodega ${element.numBodega}`,
+          name: element.numBodega,
         });
       }
       setBodegas(bodegasAgregar);
@@ -230,10 +232,10 @@ export default function AgregarProducto(props) {
       marca: seleccionado.marca,
       bodega: seleccionado.bodega,
       precios: seleccionado.precio,
-      cantidad: seleccionado.cantidad,
+      cantidad: cantsel,
       descripcion_corta: seleccionado.descripcion_corta,
       descripcion_larga: seleccionado.descripcion_larga,
-      cantidad_minima: seleccionado.cantidad_minima,
+      cantidad_minima: cantminsel,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
     };
     const res = await axios.post('http://Localhost:3001/api/productos', campos);
@@ -377,7 +379,11 @@ export default function AgregarProducto(props) {
     }));
   };
   const manejarCambiocant = (e, n) => {
-    seleccionado.cantidad = e.target.value;
+    if (document.getElementById('cantidad').value <= 0) {
+      document.getElementById('cantidad').value = 1;
+    } else {
+      setCantsel(e.target.value);
+    }
   };
   const manejarCambioPrecioProveedor = (e, value) => {
     if (value === 1) {
@@ -398,7 +404,8 @@ export default function AgregarProducto(props) {
   };
   const cerrarModalAgregarProducto = () => {
     props.change();
-
+    setCantsel(1);
+    setCantminsel(1);
     seleccionado.nombre = '';
     seleccionado.area = '';
     seleccionado.ubicacion = '';
@@ -442,7 +449,10 @@ export default function AgregarProducto(props) {
     } else {
       document.getElementById('cantidad').onchange = limit;
     }
-    seleccionado.cantidad_minima = e.target.value;
+    if (num <= 0) {
+      document.getElementById('cantidad_minima').value = 1;
+    }
+    setCantminsel(e.target.value);
     //document.getElementById('cantidad').min = seleccionado.cantidad_minima;
   };
   const removeTags = (index) => {
@@ -1494,6 +1504,7 @@ export default function AgregarProducto(props) {
                   className="form-control"
                   type="number"
                   id="cantidad"
+                  value={cantsel}
                   min={
                     document.getElementById('cantidad_minima')
                       ? document.getElementById('cantidad_minima').value
@@ -1513,7 +1524,9 @@ export default function AgregarProducto(props) {
                   className="form-control"
                   type="number"
                   id="cantidad_minima"
-                  min={0}
+                  min={1}
+                  max={cantsel}
+                  value={cantminsel}
                   onChange={(e) => manejarCambiocantmin(e, 1)}
                 />
               </Col>
