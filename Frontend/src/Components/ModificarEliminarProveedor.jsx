@@ -335,7 +335,7 @@ const ModificarEliminarProveedor = () => {
                 <td>{i + 1}</td>
                 <td>{elemento.company}</td>
                 <td>{elemento.agencia}</td>
-                <td>{elemento.nombre}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.nombre}</td>
                 <td>{elemento.apellidos}</td>
                 <td>{elemento.genero}</td>
                 <td>{elemento.email}</td>
