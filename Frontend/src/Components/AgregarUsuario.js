@@ -130,21 +130,23 @@ export default function AgregarUsuario(props) {
   };
 
   const escribirUsuario = async () => {
+    alert(JSON.stringify(seleccionado.rol));
+    alert(marca);
     if (
-      (regexSoloNumeros.test(document.getElementById('identidad').value) &&
-        regex.test(document.getElementById('nombre').value) &&
-        (regex.test(document.getElementById('segundo_nombre').value) ||
-          seleccionado.segundo_nombre === '') &&
-        regex.test(document.getElementById('primer_apellido').value) &&
-        (regex.test(document.getElementById('segundo_apellido').value) ||
-          seleccionado.segundo_apellido === '') &&
-        (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-        regexSoloNumeros.test(document.getElementById('telefono').value) &&
-        regEmail.test(document.getElementById('correo').value) &&
-        seleccionado.rol[0] !== undefined &&
-        seleccionado.identidad.length === 13 &&
-        seleccionado.rtn.length === 14,
-      seleccionado.password.length > 4)
+      seleccionado.rol !== '' &&
+      regexSoloNumeros.test(document.getElementById('identidad').value) &&
+      regex.test(document.getElementById('nombre').value) &&
+      (regex.test(document.getElementById('segundo_nombre').value) ||
+        seleccionado.segundo_nombre === '') &&
+      regex.test(document.getElementById('primer_apellido').value) &&
+      (regex.test(document.getElementById('segundo_apellido').value) ||
+        seleccionado.segundo_apellido === '') &&
+      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
+      regexSoloNumeros.test(document.getElementById('telefono').value) &&
+      regEmail.test(document.getElementById('correo').value) &&
+      seleccionado.identidad.length === 13 &&
+      seleccionado.rtn.length === 14 &&
+      seleccionado.password.length > 4
     ) {
       const campos = {
         identidad: seleccionado.identidad,
