@@ -71,8 +71,8 @@ export default function AgregarUsuario(props) {
 
       console.log('Mandando: ', typeof seleccionado.rol.value);
       console.log('Mandando: ', jsonString);
-      //     fetch('http://Localhost:3001/api/login', {
-      fetch('http://Localhost:3001/api/signup', {
+      //     fetch('http://Localhost:178.128.67.247/api/login', {
+      fetch('http://Localhost:178.128.67.247/api/signup', {
         method: 'post',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(jsonString),
@@ -133,20 +133,20 @@ export default function AgregarUsuario(props) {
     alert(JSON.stringify(seleccionado.rol));
     alert(marca);
     if (
-      (regexSoloNumeros.test(document.getElementById('identidad').value) &&
-        regex.test(document.getElementById('nombre').value) &&
-        (regex.test(document.getElementById('segundo_nombre').value) ||
-          seleccionado.segundo_nombre === '') &&
-        regex.test(document.getElementById('primer_apellido').value) &&
-        (regex.test(document.getElementById('segundo_apellido').value) ||
-          seleccionado.segundo_apellido === '') &&
-        (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-        regexSoloNumeros.test(document.getElementById('telefono').value) &&
-        regEmail.test(document.getElementById('correo').value) &&
-        seleccionado.rol !== '' &&
-        seleccionado.identidad.length === 13 &&
-        seleccionado.rtn.length === 14 &&
-        seleccionado.password.length >= 4)
+      regexSoloNumeros.test(document.getElementById('identidad').value) &&
+      regex.test(document.getElementById('nombre').value) &&
+      (regex.test(document.getElementById('segundo_nombre').value) ||
+        seleccionado.segundo_nombre === '') &&
+      regex.test(document.getElementById('primer_apellido').value) &&
+      (regex.test(document.getElementById('segundo_apellido').value) ||
+        seleccionado.segundo_apellido === '') &&
+      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
+      regexSoloNumeros.test(document.getElementById('telefono').value) &&
+      regEmail.test(document.getElementById('correo').value) &&
+      seleccionado.rol !== '' &&
+      seleccionado.identidad.length === 13 &&
+      seleccionado.rtn.length === 14 &&
+      seleccionado.password.length >= 4
     ) {
       const campos = {
         identidad: seleccionado.identidad,
@@ -160,7 +160,9 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://Localhost:3001/api/Users', campos).then(signUpMethod());
+      const res = await axios
+        .post('http://Localhost:178.128.67.247/api/Users', campos)
+        .then(signUpMethod());
       console.log(res);
       Confirm.open({
         title: 'Exito',

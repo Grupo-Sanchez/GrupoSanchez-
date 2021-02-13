@@ -48,7 +48,7 @@ const CrearBodega = (props) => {
     form.cantPasillos = 0;
   };
   const fecthData = async () => {
-    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+    await axios.get('http://Localhost:178.128.67.247/api/bodegas').then((response) => {
       setData(response.data);
     });
   };
@@ -61,7 +61,7 @@ const CrearBodega = (props) => {
       CantProductos: '0',
     };
     await axios
-      .post('http://Localhost:3001/api/bodegas', campos)
+      .post('http://Localhost:178.128.67.247/api/bodegas', campos)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({

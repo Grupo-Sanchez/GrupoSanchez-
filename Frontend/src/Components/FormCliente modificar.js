@@ -45,7 +45,7 @@ const formClienteModificar = (props) => {
     };
 
     await axios
-      .put(`http://Localhost:3001/api/clientes/${props.id}`, payload)
+      .put(`http://Localhost:178.128.67.247/api/clientes/${props.id}`, payload)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({

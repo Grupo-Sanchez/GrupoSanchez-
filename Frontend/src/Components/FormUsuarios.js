@@ -19,11 +19,9 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
-
 import '../Styles/FormularioCliente.css';
 
 const FormUsuario = () => {
-
   // States cliente
   const [primerNombre, setPrimerNombre] = useState('');
   const [segundoNombre, setSegundoNombre] = useState('');
@@ -33,7 +31,7 @@ const FormUsuario = () => {
   const [id, setId] = useState('');
   const [telefono, setTelefono] = useState('');
   const [correo, setCorreo] = useState('');
-  
+
   // State para validaciones
   const [validNom, setValidNom] = useState(false);
   const [invalidNom, setInvalidNom] = useState(false);
@@ -120,7 +118,7 @@ const FormUsuario = () => {
       tel: telefono,
       email: correo,
     };
-    const res = await axios.post('http://localhost:3001/api/clientes', campos);
+    const res = await axios.post('http://Localhost:178.128.67.247/api/clientes', campos);
     console.log(res);
   };
 
@@ -131,7 +129,7 @@ const FormUsuario = () => {
 
   const onSave = async (e) => {
     // e.preventDefault();
-    const res = await axios.post('http://localhost:3001/api/clientes', {
+    const res = await axios.post('http://Localhost:178.128.67.247/api/clientes', {
       nombre: 'Eddas',
     });
     console.log(res);
@@ -257,7 +255,7 @@ const FormUsuario = () => {
                     />
                   </Col>
                 </FormGroup>
-                
+
                 <FormGroup row>
                   <div
                     style={{
