@@ -115,7 +115,7 @@ export default function ModificarUsuario(props) {
       (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
       regexSoloNumeros.test(document.getElementById('telefono').value) &&
       regEmail.test(document.getElementById('correo').value) &&
-      seleccionado.rol[0] !== undefined &&
+      seleccionado.rol !== '' &&
       seleccionado.identidad.length === 13 &&
       seleccionado.rtn.length === 14
     ) {
@@ -217,7 +217,6 @@ export default function ModificarUsuario(props) {
           striped
           bordered
           hover
-          dark
           align="center"
           size="sm"
           id="myTable"
@@ -235,6 +234,7 @@ export default function ModificarUsuario(props) {
               <th>Telefono</th>
               <th>Correo</th>
               <th>Rol</th>
+              <th>Accion</th>
             </tr>
           </thead>
           <tbody>
@@ -253,6 +253,20 @@ export default function ModificarUsuario(props) {
                 <td>
                   <Button onClick={() => modificar(elemento)} color="primary">
                     Modificar
+                  </Button>
+                  <Button
+                    color="danger"
+                    onClick={() =>
+                      Confirm.open({
+                        title: '¡Advertencia!',
+                        message: '¿Esta seguro que desea eliminar el usuario?.',
+                        onok: () => {
+                          onDelete(elemento._id);
+                        },
+                      })
+                    }
+                  >
+                    Eliminar
                   </Button>
                 </td>
               </tr>
@@ -438,6 +452,7 @@ export default function ModificarUsuario(props) {
                 onChange={(e) => handleChange2(e)}
               />
             </div>
+
           </ModalBody>
           <ModalFooter>
             <button className="btn btn-primary" onClick={() => modificarUsuario()}>

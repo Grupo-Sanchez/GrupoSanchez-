@@ -133,20 +133,20 @@ export default function AgregarUsuario(props) {
     alert(JSON.stringify(seleccionado.rol));
     alert(marca);
     if (
-      seleccionado.rol !== '' &&
-      regexSoloNumeros.test(document.getElementById('identidad').value) &&
-      regex.test(document.getElementById('nombre').value) &&
-      (regex.test(document.getElementById('segundo_nombre').value) ||
-        seleccionado.segundo_nombre === '') &&
-      regex.test(document.getElementById('primer_apellido').value) &&
-      (regex.test(document.getElementById('segundo_apellido').value) ||
-        seleccionado.segundo_apellido === '') &&
-      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-      regexSoloNumeros.test(document.getElementById('telefono').value) &&
-      regEmail.test(document.getElementById('correo').value) &&
-      seleccionado.identidad.length === 13 &&
-      seleccionado.rtn.length === 14 &&
-      seleccionado.password.length > 4
+      (regexSoloNumeros.test(document.getElementById('identidad').value) &&
+        regex.test(document.getElementById('nombre').value) &&
+        (regex.test(document.getElementById('segundo_nombre').value) ||
+          seleccionado.segundo_nombre === '') &&
+        regex.test(document.getElementById('primer_apellido').value) &&
+        (regex.test(document.getElementById('segundo_apellido').value) ||
+          seleccionado.segundo_apellido === '') &&
+        (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
+        regexSoloNumeros.test(document.getElementById('telefono').value) &&
+        regEmail.test(document.getElementById('correo').value) &&
+        seleccionado.rol !== '' &&
+        seleccionado.identidad.length === 13 &&
+        seleccionado.rtn.length === 14 &&
+        seleccionado.password.length >= 4)
     ) {
       const campos = {
         identidad: seleccionado.identidad,
@@ -383,24 +383,19 @@ export default function AgregarUsuario(props) {
 
           <div>
             <AvForm>
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <AvField
-                    label="Contraseña"
-                    errorMessage="Constraseña debe tener mas de 4 caracteres"
-                    validate={{
-                      required: { value: true },
-                      minLength: { value: 4 },
-                    }}
-                    className="form-control"
-                    type="text"
-                    name="password"
-                    id="password"
-                    value={seleccionado ? seleccionado.password : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-              </Row>
+              <AvField
+                errorMessage="Constraseña debe tener mas de 4 caracteres"
+                validate={{
+                  required: { value: true },
+                  minLength: { value: 4 },
+                }}
+                className="form-control"
+                type="password"
+                name="password"
+                id="password"
+                value={seleccionado ? seleccionado.password : ''}
+                onChange={manejarCambio}
+              />
             </AvForm>
           </div>
           <div>
