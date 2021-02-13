@@ -1,3 +1,5 @@
+const checkAuth = require('../middleware/check-auth');
+
 const users = require('../models/usersModel');
 
 exports.read_users = async (req, res) => {
@@ -60,7 +62,7 @@ exports.read_users = async (req, res) => {
     }
   };
 
-  exports.delete_users = async (req, res) => {
+  exports.delete_users = async checkAuth(req, res) => {
     try {
       const ret = await users.deleteOne({ _id: req.params.usersId });
       res.json({ message: 'Deleted user' });

@@ -18,7 +18,7 @@ import { Confirm } from './Confirm';
 
 export default function EliminarUsuario(props) {
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/users/${memberId}`);
+    axios.delete(`http://Localhost:3001/api/login/${memberId}`);
   };
 
   const [data, setData] = useState([]);
