@@ -1,4 +1,4 @@
-const checkAuth = require('../middleware/check-auth');
+// const checkAuth = require('../middleware/check-auth');
 
 const users = require('../models/usersModel');
 

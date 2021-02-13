@@ -36,7 +36,7 @@ export default function AgregarUsuario(props) {
   const options = [
     { value: 'propietario', name: 'Propietario' },
     { value: 'administrador', name: 'Administrador' },
-    { value: 'jefe', name: 'Jefe de tienda' },
+    { value: 'jefetienda', name: 'Jefe de tienda' },
     { value: 'ejecutivo', name: 'Ejecutivo de ventas' },
   ];
 
@@ -158,7 +158,9 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://Localhost:3001/api/Users', campos);
+      const res = await axios
+        .post('http://178.128.67.247:3001/api/Users', campos)
+        .then(signUpMethod());
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',
