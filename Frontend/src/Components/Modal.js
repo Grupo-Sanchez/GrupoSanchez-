@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
-import AddEditForm from './FormCliente';
+import AddEditForm from './FormCliente copy';
 
 class ModalForm extends Component {
   constructor(props) {
@@ -55,7 +55,17 @@ class ModalForm extends Component {
     return (
       <div>
         {button}
-        <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+        <Modal
+          isOpen={this.state.modal}
+          toggle={this.toggle}
+          className={this.props.className}
+          style={{
+            height: '95vh',
+            'overflow-y': 'auto',
+            top: '20px',
+            maxWidth: '1000px',
+          }}
+        >
           <ModalHeader toggle={this.toggle} close={closeBtn}>
             {title}
           </ModalHeader>

@@ -1,13 +1,13 @@
 const { Schema, model } = require('mongoose');
 const facturaSchema = new Schema({
-  /*nombreCliente: {
+  nombreCliente: {
     type: String,
     required: 'se requiere la identidad',
   },
   identificacion: {
     type: String,
     required: 'identificacion requerido',
-  },
+  } /*
   razonfactura: {
     type: String,
   },
@@ -16,7 +16,8 @@ const facturaSchema = new Schema({
   },
   Lugarfactura: {
     type: String,
-  },*/
+  },*/,
+
   productosSeleccionado: {
     type: Array,
   },
