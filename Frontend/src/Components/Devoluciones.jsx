@@ -7,8 +7,8 @@ import Facturar from '../Icons/Facturar.svg';
 import '../Styles/SearchBar.css';
 import Devolucion from '../Icons/Devolucion.svg';
 
-export default class Devoluciones extends Component {
-  constructor(props) {
+export default function Devoluciones() {
+  /*constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -28,14 +28,14 @@ export default class Devoluciones extends Component {
       Estado: '',
       LugarDevolucion: '',
     };
-  }
-  addRow(producto) {
+  }*/
+  /*addRow(producto) {
     this.state.indice = 1;
     const nextState = this.state;
     nextState.productosDevolucion.push(producto);
     this.setState(nextState);
-  }
-  b(idToSearch) {
+  }*/
+  /*b(idToSearch) {
     this.state.indice = 1;
     this.state.productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
@@ -150,211 +150,226 @@ export default class Devoluciones extends Component {
     const nextState = this.state;
     nextState.quantity = 1;
     this.setState(nextState);
-  }
-  render() {
-    return (
-      <div align="center">
-        <h1 align="center">DEVOLUCIONES</h1>
-        <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
-          <div align="center">
-            <SelectSearch
-              options={this.state.productosEnBodega}
-              search
-              placeholder="Encuentre el Producto"
-              onChange={this.handleChange.bind(this)}
-            />
-          </div>
-          <div align="center">
-            <h4 style={{ display: 'inline', float: 'center' }}>Cantidad:</h4>
-            <input
-              style={{ float: 'center', marginLeft: '5px' }}
-              type="number"
-              value={this.state.quantity}
-              onChange={this.handleQuantityChange.bind(this)}
-            />
-            <Button style={{ marginRight: '20px' }} onClick={this.agregarProductoaTabla}>
-              Agregar
-            </Button>
-          </div>
-        </div>
-        <div
-          style={{
-            maxHeight: '300px',
-            overflowY: 'auto',
-          }}
-        >
-          <Table
-            height="50"
-            responsive="sm"
-            striped
-            bordered
-            hover
-            dark
-            align="center"
-            size="sm"
+  }*/
+  return (
+    <div align="center">
+      <h1 align="center">DEVOLUCIONES</h1>
+      <br />
+      <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
+        <Row>
+          <h4 style={{ paddingLeft: '200px' }}>Factura:</h4>
+          <Col>
+            <div align="center">
+              <SelectSearch
+                //options={this.state.productosEnBodega}
+                search
+                placeholder="Encuentre la Factura"
+                //onChange={this.handleChange.bind(this)}
+              />
+            </div>
+          </Col>
+          <br />
+          <Col>
+            <div align="center">
+              <Row style={{ paddingTop: '10px' }}>
+                <h5 style={{ display: 'inline', float: 'center' }}>
+                  Cantidad Productos en Factura:
+                </h5>
+                <input
+                  style={{ float: 'center', marginLeft: '8px', width: '150px' }}
+                  type="number"
+                  id="cantidadDisp"
+                  disabled={true}
+                  //value={cantidadmax}
+                />
+              </Row>
+              <Row style={{ paddingTop: '10px' }}>
+                <h5 style={{ display: 'inline', float: 'center' }}>
+                  Cantidad Productos a Devolver:
+                </h5>
+                <input
+                  style={{ float: 'center', marginLeft: '5px', width: '150px' }}
+                  type="number"
+                  id="cantidadDisp"
+                  disabled={true}
+                  //value={cantidadmax}
+                />
+              </Row>
+            </div>
+          </Col>
+        </Row>
+        <br />
+      </div>
+      <br />
+      <Row>
+        <Col>
+          <div
             style={{
-              'padding-top': '500px',
+              maxHeight: '750px',
+              overflowY: 'auto',
+              paddingLeft: '100px',
             }}
           >
-            <thead>
-              <tr>
-                <td classname="channel-name">#</td>
-                <td classname="channel-name">Nombre Producto</td>
-                <td classname="channel-description">Codigo</td>
-                <td classname="channel-description">Cantidad</td>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.productosDevolucion.map((row) => (
+            <Table height="50" responsive="sm" striped bordered hover align="center" size="lg">
+              <thead>
                 <tr>
-                  <th>{this.state.indice++}</th>
-                  <th>{row.name}</th>
-                  <th>{row.codigo[0]}</th>
-                  <th>{row.cantidad}</th>
-                  <th>
-                    <Button
-                      style={{ marginLeft: '10px' }}
-                      classname="btn btn-danger"
-                      onClick={() => this.eliminarProducto(row.value, row.cantidad)}
-                    >
-                      Eliminar
-                    </Button>
-                  </th>
+                  <th>#</th>
+                  <th>Nombre Producto</th>
+                  <th>Codigo</th>
+                  <th>Cantidad</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-        <Form
-          style={{
-            'padding-top': '10px',
-            height: '36px',
-            width: '500px',
-            'text-align': 'left',
-          }}
-        >
-          <Row form>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="examplenameCliente">Nombre del Cliente</Label>
-                <Input
-                  type="text"
-                  name="text"
-                  id="examplenameCliente"
-                  placeholder="Nombre del Cliente"
-                  value={this.state.nombreCliente}
-                  onChange={(event) =>
-                    this.setState({ nombreCliente: event.target.value, indice: 1 })
-                  }
-                />
-              </FormGroup>
-            </Col>
-            <Col md={6}>
-              <FormGroup>
-                <Label for="exampleIdentificacion">Identificacion</Label>
-                <Input
-                  type="text"
-                  name="text"
-                  id="exampleIdentificacion"
-                  onChange={(event) =>
-                    this.setState({ identificacion: event.target.value, indice: 1 })
-                  }
-                  placeholder="Identificacion del Cliente"
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <FormGroup row align="center">
-            <Label for="exampleText" sm={5}>
-              Razon de Devolucion
-            </Label>
-            <Col sm={12}>
-              <Input
-                onChange={(event) =>
-                  this.setState({ razonDevolucion: event.target.value, indice: 1 })
-                }
-                type="textarea"
-                name="text"
-                id="exampleText"
-              />
-            </Col>
-          </FormGroup>
-          <FormGroup row></FormGroup>
-          <FormGroup tag="fieldset" row>
-            <legend classname="col-form-label col-sm-2">Estado</legend>
-            <Col style={{ display: 'inline', float: 'center' }} sm={10}>
-              <FormGroup check>
-                <Label check>
-                  <Input
-                    onChange={(event) => this.setState({ Estado: 'Nuevo', indice: 1 })}
-                    type="radio"
-                    name="radio2"
-                  />{' '}
-                  Nuevo
-                </Label>
-                <Label style={{ marginLeft: '25px' }} check>
-                  <Input
-                    onChange={(event) => this.setState({ Estado: 'Usado', indice: 1 })}
-                    type="radio"
-                    name="radio2"
-                  />{' '}
-                  Usado
-                </Label>
-                <Label style={{ marginLeft: '25px' }} check>
-                  <Input
-                    onChange={(event) => this.setState({ Estado: 'Defectuoso', indice: 1 })}
-                    type="radio"
-                    name="radio2"
-                  />
-                  Defectuoso
-                </Label>
-              </FormGroup>
-              <FormGroup row>
-                <legend classname="col-form-label col-sm-2">Checkbox</legend>
-
-                <Col style={{ display: 'inline', float: 'center', marginRight: '25px' }} sm={10}>
-                  <FormGroup check>
-                    <Label check>
-                      <Input
-                        onChange={(event) =>
-                          this.setState({ LugarDevolucion: 'Tienda', indice: 1 })
-                        }
-                        type="checkbox"
-                        id="checkbox2"
-                      />{' '}
-                      Tienda
-                    </Label>
-                    <Label style={{ marginLeft: '25px' }} check>
-                      <Input
-                        onChange={(event) =>
-                          this.setState({ LugarDevolucion: 'Bodega', indice: 1 })
-                        }
-                        type="checkbox"
-                        id="checkbox1"
-                      />{' '}
-                      Bodega
-                    </Label>
-                  </FormGroup>
+              </thead>
+              <tbody>
+                {/*this.state.productosDevolucion.map((row) => (
+              <tr>
+                <th>{this.state.indice++}</th>
+                <th>{row.name}</th>
+                <th>{row.codigo[0]}</th>
+                <th>{row.cantidad}</th>
+                <th>
                   <Button
-                    color="primary"
-                    style={{
-                      width: '100px',
-                      height: '50px',
-                      'font-weight': 'bold',
-                      position: 'absolute',
-                      marginLeft: '350px',
-                      top: '-40px',
-                    }}
-                    onClick={this.write}
+                    style={{ marginLeft: '10px' }}
+                    classname="btn btn-danger"
+                    onClick={() => this.eliminarProducto(row.value, row.cantidad)}
                   >
-                    Devolver
+                    Eliminar
                   </Button>
-                </Col>
-              </FormGroup>
-            </Col>
-          </FormGroup>
-        </Form>
-      </div>
-    );
-  }
+                </th>
+              </tr>
+            ))*/}
+              </tbody>
+            </Table>
+          </div>
+        </Col>
+        <Col>
+          <h2 align="center">Formulario Devolucion</h2>
+          <Form
+            style={{
+              paddingRight: '100px',
+              paddingLeft: '100px',
+              height: '36px',
+              'text-align': 'left',
+            }}
+          >
+            <Row form>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="examplenameCliente">Nombre del Cliente</Label>
+                  <Input
+                    type="text"
+                    name="text"
+                    id="examplenameCliente"
+                    placeholder="Nombre del Cliente"
+                    // value={this.state.nombreCliente}
+                    //onChange={(event) =>
+                    //  this.setState({ nombreCliente: event.target.value, indice: 1 })
+                    // }
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label for="exampleIdentificacion">Identificacion</Label>
+                  <Input
+                    type="text"
+                    name="text"
+                    id="exampleIdentificacion"
+                    // onChange={(event) =>
+                    //   this.setState({ identificacion: event.target.value, indice: 1 })
+                    // }
+                    placeholder="Identificacion del Cliente"
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <FormGroup row align="center">
+              <Label for="exampleText" sm={5}>
+                Razon de Devolucion
+              </Label>
+              <Col sm={12}>
+                <Input
+                  // onChange={(event) =>
+                  //   this.setState({ razonDevolucion: event.target.value, indice: 1 })
+                  //  }
+                  type="textarea"
+                  name="text"
+                  id="exampleText"
+                />
+              </Col>
+            </FormGroup>
+            <FormGroup row></FormGroup>
+            <FormGroup tag="fieldset" row>
+              <legend classname="col-form-label col-sm-2">Estado</legend>
+              <Col style={{ display: 'inline', float: 'center' }} sm={10}>
+                <FormGroup check>
+                  <Label check>
+                    <Input
+                      // onChange={(event) => this.setState({ Estado: 'Nuevo', indice: 1 })}
+                      type="radio"
+                      name="radio2"
+                    />{' '}
+                    Nuevo
+                  </Label>
+                  <Label style={{ marginLeft: '25px' }} check>
+                    <Input
+                      //onChange={(event) => this.setState({ Estado: 'Usado', indice: 1 })}
+                      type="radio"
+                      name="radio2"
+                    />{' '}
+                    Usado
+                  </Label>
+                  <Label style={{ marginLeft: '25px' }} check>
+                    <Input
+                      //onChange={(event) => this.setState({ Estado: 'Defectuoso', indice: 1 })}
+                      type="radio"
+                      name="radio2"
+                    />
+                    Defectuoso
+                  </Label>
+                </FormGroup>
+                <FormGroup row>
+                  <legend classname="col-form-label col-sm-2">Checkbox</legend>
+
+                  <Col style={{ display: 'inline', float: 'center', marginRight: '25px' }} sm={10}>
+                    <FormGroup check>
+                      <Label check>
+                        <Input
+                          //onChange={(event) => this.setState({ LugarDevolucion: 'Tienda', indice: 1 })}
+                          type="checkbox"
+                          id="checkbox2"
+                        />{' '}
+                        Tienda
+                      </Label>
+                      <Label style={{ marginLeft: '25px' }} check>
+                        <Input
+                          //onChange={(event) => this.setState({ LugarDevolucion: 'Bodega', indice: 1 })}
+                          type="checkbox"
+                          id="checkbox1"
+                        />{' '}
+                        Bodega
+                      </Label>
+                    </FormGroup>
+                    <Button
+                      color="primary"
+                      style={{
+                        width: '100px',
+                        height: '50px',
+                        'font-weight': 'bold',
+                        position: 'absolute',
+                        marginLeft: '350px',
+                        top: '-40px',
+                      }}
+                      // onClick={this.write}
+                    >
+                      Devolver
+                    </Button>
+                  </Col>
+                </FormGroup>
+              </Col>
+            </FormGroup>
+          </Form>
+        </Col>
+      </Row>
+    </div>
+  );
 }

@@ -47,6 +47,17 @@ const items = [
       />
     ),
   },
+  {
+    name: 'Notificaciones',
+    to: '/Propietario/Notificaciones',
+    icon: (
+      <img
+        src={Informes}
+        style={{ width: '2em', height: '2em', marginRight: '0.5rem' }}
+        alt="logo"
+      />
+    ),
+  },
 ];
 
 const AmbientePopietarioBuscarProducto = () => (

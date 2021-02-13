@@ -8,7 +8,7 @@ const AmbientePropietario = () => (
     <div
       style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
-      <img src={Logo} alt="Logo" />
+      {/* <img src={Logo} alt="Logo" /> */}
       {/* Ambiente propietario */}
     </div>
   </AmbientePropietarioBase>

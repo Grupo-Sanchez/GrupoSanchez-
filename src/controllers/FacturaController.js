@@ -10,13 +10,22 @@ exports.read_factura = async (req, res) => {
   }
 };
 exports.create_factura = async (req, res) => {
-  const { productosSeleccionado, subtotal, impuesto, total } = req.body;
+  const {
+    productosSeleccionado,
+    subtotal,
+    impuesto,
+    total,
+    nombreCliente,
+    identificacion,
+  } = req.body;
   try {
     const new_factura = new factura({
       productosSeleccionado,
       subtotal,
       impuesto,
       total,
+      nombreCliente,
+      identificacion,
     });
     ret = await new_factura.save();
     res.json(ret);
@@ -36,7 +45,7 @@ exports.read_factura = async (req, res) => {
 
 exports.update_factura = async (req, res) => {
   try {
-    const ret = await factura.findByIdAndUpdate({ _id: req.params.facturaId }, req.query, {
+    const ret = await factura.findByIdAndUpdate({ _id: req.params.facturaId }, req.body, {
       new: true,
     });
     alert('simon');

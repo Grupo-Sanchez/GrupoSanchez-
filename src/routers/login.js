@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const checkAuth = require('../middleware/check-auth');
+
 const User = require('../models/loginModel');
 
 router.post('/signup', (req, res, next) => {
@@ -19,6 +21,7 @@ router.post('/signup', (req, res, next) => {
           message: 'Mail exists',
         });
       } else {
+        // eslint-disable-next-line consistent-return
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           if (err) {
             return res.status(500).json({
@@ -74,7 +77,7 @@ router.post('/login', (req, res, next) => {
             },
             process.env.JWT_KEY,
             {
-              expiresIn: '1h',
+              expiresIn: 120,
             },
           );
           console.log('Verificando: ', user[0].rol);
@@ -98,7 +101,8 @@ router.post('/login', (req, res, next) => {
     });
 });
 
-router.delete('/:userId', (req, res, next) => {
+router.delete('/:userId', checkAuth, (req, res, next) => {
+  console.log('#######Deberia verificar######');
   User.remove({ _id: req.params.userId })
     .exec()
     .then((result) => {
