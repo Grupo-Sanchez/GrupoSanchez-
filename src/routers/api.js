@@ -1,7 +1,6 @@
 const express = require('express');
 const administrador = require('./administrador.router');
-// const users = require('./usersRoutes');
-const users = require('./login');
+const users = require('./usersRoutes');
 const clientes = require('./clientesRoutes');
 const productos = require('./productosRoutes');
 const devoluciones = require('./DevolucionRoutes');

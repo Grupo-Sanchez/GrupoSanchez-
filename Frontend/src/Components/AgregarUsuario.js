@@ -128,25 +128,22 @@ export default function AgregarUsuario(props) {
       },
     });
   };
-
   const escribirUsuario = async () => {
-    alert(JSON.stringify(seleccionado.rol));
-    alert(marca);
     if (
-      (regexSoloNumeros.test(document.getElementById('identidad').value) &&
-        regex.test(document.getElementById('nombre').value) &&
-        (regex.test(document.getElementById('segundo_nombre').value) ||
-          seleccionado.segundo_nombre === '') &&
-        regex.test(document.getElementById('primer_apellido').value) &&
-        (regex.test(document.getElementById('segundo_apellido').value) ||
-          seleccionado.segundo_apellido === '') &&
-        (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-        regexSoloNumeros.test(document.getElementById('telefono').value) &&
-        regEmail.test(document.getElementById('correo').value) &&
-        seleccionado.rol !== '' &&
-        seleccionado.identidad.length === 13 &&
-        seleccionado.rtn.length === 14 &&
-        seleccionado.password.length >= 4)
+      seleccionado.rol !== '' &&
+      regexSoloNumeros.test(document.getElementById('identidad').value) &&
+      regex.test(document.getElementById('nombre').value) &&
+      (regex.test(document.getElementById('segundo_nombre').value) ||
+        seleccionado.segundo_nombre === '') &&
+      regex.test(document.getElementById('primer_apellido').value) &&
+      (regex.test(document.getElementById('segundo_apellido').value) ||
+        seleccionado.segundo_apellido === '') &&
+      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
+      regexSoloNumeros.test(document.getElementById('telefono').value) &&
+      regEmail.test(document.getElementById('correo').value) &&
+      seleccionado.identidad.length === 13 &&
+      seleccionado.rtn.length === 14 &&
+      seleccionado.password.length > 4
     ) {
       const campos = {
         identidad: seleccionado.identidad,
@@ -160,8 +157,7 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://Localhost:3001/api/Users', campos).then(signUpMethod());
-      console.log(res);
+      const res = await axios.post('http://Localhost:3001/api/Users', campos);
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',
@@ -177,12 +173,6 @@ export default function AgregarUsuario(props) {
       });
     }
   };
-  /*
-    HandleChange(event){
-        this.state.codigos.push();
-        this.setState({some:'val',arr:this.state.arr})
-    }
-    */
 
   const manejarCambio = (e) => {
     const { name, value } = e.target;
@@ -191,11 +181,6 @@ export default function AgregarUsuario(props) {
       [name]: value,
     }));
   };
-
-  // handleChange(e) {
-  //   this.state.indice = 1;
-  //   this.b(e);
-  // };
 
   const insertar = () => {};
 
