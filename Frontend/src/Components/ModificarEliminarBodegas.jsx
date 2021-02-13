@@ -56,7 +56,7 @@ const ModificarEliminarBodegas = (props) => {
     form.cantPasillos = 0;
   };
   const fetchProducts = async () => {
-    await axios.get('http://178.128.67.247:3001:3001/api/productos').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
