@@ -1,0 +1,25 @@
+{
+	
+	"array": [
+		{
+			"texto" : "el inventario de martillos esta agotado",
+			"fecha" : "12/febrero/2021 09:31:50",
+			"name" : "productos"
+
+
+		},
+
+		{
+			"texto" : "devoluciones requieren atencion",
+			"fecha" : "11/febrero/2021 09:33:50",
+			"name" : "devoluciones"
+
+
+		}
+
+
+
+
+
+	]
+}
