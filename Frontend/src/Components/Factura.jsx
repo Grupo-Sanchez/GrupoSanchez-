@@ -74,7 +74,7 @@ export default function Facturas() {
         alert('Error');
       });
   };
-  const [cantidadmax, setCantidadmax] = useState(0);
+  const [cantidadmax, setCantidadmax] = useState(1);
   const [sumatotal, setSumaTotal] = useState(0);
   const [impuestototal, setImpuestoTotal] = useState(0);
   const [totalfinal, setTotalFinal] = useState(0);
@@ -173,17 +173,19 @@ export default function Facturas() {
     for (let index = 0; index < productosEnBodega.length; index++) {
       const element = productosEnBodega[index];
       if (element.value === id) {
-        cantidad2 = Number(element.cantidad) - Number(productoSeleccionado.cantidad);
+        cantidad2 = Number(element.cantidad) - quantity;
         break;
       }
     }
-    axios.put(`http://Localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
+    //axios.put(`http://Localhost:3001/api/productos/${id}`, { cantidad: cantidad2 }).then().catch();
+    setproductoSeleccionado([]);
     setCantidadmax(1);
+    await getProductos();
   };
 
   const eliminarProducto = async (i, cantidad) => {
-    let cantidad2 = 0;
     getProductos();
+    let cantidad2 = 0;
     for (let index = 0; index < productosEnBodega.length; index++) {
       const element = productosEnBodega[index];
       if (element.value === i) {
@@ -191,7 +193,8 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    // alert(cantidad2);
+    //axios.put(`http://Localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items = productosSeleccionado.filter((item) => item.value !== i);
     setproductosSeleccionado(items);
     setresult(0);
@@ -201,6 +204,9 @@ export default function Facturas() {
     setImpuestoTotal(0);
     setSumaTotal(0);
     setTotalFinal(0);
+    setproductoSeleccionado([]);
+    setCantidadmax(1);
+    getProductos();
   };
   const handleChangeNombe = (event) => {
     setnombre(event.target.value);
@@ -279,7 +285,7 @@ export default function Facturas() {
               <Row style={{ paddingTop: '10px' }}>
                 <h5 style={{ display: 'inline', float: 'center' }}>Cantidad Disponible:</h5>
                 <input
-                  style={{ float: 'center', marginLeft: '5px', width: '50px' }}
+                  style={{ float: 'center', marginLeft: '5px', width: '150px' }}
                   type="number"
                   id="cantidadDisp"
                   disabled={true}
