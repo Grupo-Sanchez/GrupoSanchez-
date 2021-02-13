@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 // import React, { useState } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText, Alert } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Container, Alert } from 'reactstrap';
 
 import { withRouter } from 'react-router-dom';
 
@@ -9,13 +9,13 @@ import axios from 'axios';
 // eslint-disable-next-line max-len
 // eslint-disable-no-shadow
 // import Logo from '../Icons/kisspng-online-shopping-logo-flip-flops-sneakers-shop-5ac7402aea65f5.0006220115230075309601.png';
-import Logo from '../Icons/settings.png';
+import Logo from '../Icons/renovation.svg';
 
-import '../Styles/App.css';
-
-import '../Styles/LoginSignupCard.css';
+import '../Styles/newLogin.css';
 
 const Login = (props) => {
+  const [hidden, setHidden] = useState(true);
+
   const [visible, setVisible] = useState(false);
 
   const onDismiss = () => setVisible(true);
@@ -86,12 +86,61 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="App">
-        <Alert color="info" isOpen={visible} toggle={onDismiss}>
-          Usuario o contraseña incorrecto, verifique sus datos porfavor.
-        </Alert>
-        <header className="App-header">
-          <div className="LoginSignupCardContainer">
+      <div className="pageContent">
+        <div className="outsideCard">
+          <img
+            src={
+              'https://global-uploads.webflow.com/5e157547d6f791d34ea4e2bf/5e17558f848f82e664c09d67_logo-dark.svg'
+            }
+            className="imageLogo"
+            alt="Logo"
+          />
+          <div className={hidden ? 'loginForm loginFormHidden' : 'loginForm'}>
+            <div className="innerForm">
+              <Label className="labelFormLogin" for="exampleEmail">
+                Correo
+              </Label>
+              <Input
+                className="inputFormLogin"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Ingrese su correo"
+                onChange={(event) => changeValue(event.currentTarget)}
+              />
+            </div>
+            <div className="innerForm">
+              <Label className="labelFormLogin" for="examplePassword">
+                Contraseña
+              </Label>
+              <Input
+                className="inputFormLogin"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Ingrese su contraseña"
+                onChange={(event) => changeValue(event.currentTarget)}
+              />
+            </div>
+          </div>
+          <div>
+            <Button
+              className="loginButton"
+              onClick={() => {
+                setHidden(!hidden);
+                if (password !== '' || email !== '') {
+                  authMethod();
+                }
+              }}
+            >
+              {' '}
+              Autenticarme
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="LoginSignupCardContainer">
             <div className="LogoEmpresaImg">
               <img src={Logo} alt="Logo" />
             </div>
@@ -106,7 +155,6 @@ const Login = (props) => {
                   name="email"
                   id="email"
                   placeholder="antonio@gmail.com"
-                  // value={email}
                   onChange={(event) => changeValue(event.currentTarget)}
                 />
               </FormGroup>
@@ -124,24 +172,26 @@ const Login = (props) => {
                   onChange={(event) => changeValue(event.currentTarget)}
                 />
               </FormGroup>
-              {/* <Button className="LoginButton">Login</Button> */}
               <Button
                 block
                 className="LoginButton"
                 size="lg"
                 onClick={() => {
-                  // console.log('Email: ', email);
-                  // console.log('Contraseña: ', password);
-                  // handleSubmit(email, password);
                   authMethod();
                 }}
               >
                 Login
               </Button>
             </Form>
-          </div>
-        </header>
-      </div>
+          </div> */}
+      <Alert
+        className={visible ? 'alertMessage' : 'alertMessage alertMessageHidden'}
+        color="info"
+        isOpen={visible}
+        toggle={onDismiss}
+      >
+        Usuario o contraseña incorrecto, verifique sus datos porfavor.
+      </Alert>
     </>
   );
 };
