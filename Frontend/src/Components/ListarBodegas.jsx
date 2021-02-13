@@ -205,24 +205,14 @@ const ListarBodegas = (props) => {
     const Id = Seleccionado._id;
     const payload = { value: bodegaMigrar._id, name: bodegaMigrar.numBodega };
     //hacer migracion
+
+    alert('sssss');
     for (let i = 0; i < dataproductos.length; i++) {
       if (dataproductos[i].bodega[0].value === Id) {
-        dataproductos[i].bodega[0] = payload;
+        //dataproductos[i].bodega[0] = payload;
         axios
           .put(`http://Localhost:3001/api/productos/${dataproductos[i]._id}`, {
-            nombre: dataproductos[i].nombre,
-            area: dataproductos[i].area,
-            codigos: dataproductos[i].codigos,
-            proveedores: dataproductos[i].proveedores,
-            ubicacion: dataproductos[i].ubicacion,
-            marca: dataproductos[i].marca,
             bodega: payload,
-            precios: dataproductos[i].precios,
-            cantidad: dataproductos[i].cantidad,
-            descripcion_corta: dataproductos[i].descripcion_corta,
-            descripcion_larga: dataproductos[i].descripcion_larga,
-            cantidad_minima: dataproductos[i].cantidad_minima,
-            fecha_creacion: dataproductos[i].fecha_creacion,
           })
           .then((response) => {
             console.log(response);
@@ -231,11 +221,9 @@ const ListarBodegas = (props) => {
               message: 'Migracion de datos exitosamente',
               onok: () => {},
             });
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
           })
           .catch((error) => {
+            alert('adsfasdf');
             console.log(error);
           });
       }
