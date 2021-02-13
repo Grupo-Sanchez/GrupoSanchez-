@@ -28,11 +28,14 @@ import '../Styles/ConfirmStyle.css';
 import { Confirm } from './Confirm';
 
 const CrearBodega = (props) => {
+  const dataApuntes = [];
+  const [data, setData] = useState(dataApuntes);
   const [form, setForm] = useState({
     numBodega: '',
     Description: '',
     Encargado: '',
     CantPasillos: '',
+    CantProductos: '',
   });
   function handleInvalidSubmit(event, errors, values) {
     console.log('invalid submit', { event, errors, values });
@@ -44,13 +47,18 @@ const CrearBodega = (props) => {
     form.Encargado = '';
     form.cantPasillos = 0;
   };
-
+  const fecthData = async () => {
+    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+      setData(response.data);
+    });
+  };
   async function handleValidSubmit(event, values) {
     const campos = {
       numBodega: values.numBodega,
       descripcion: values.Description,
       encargado: values.Encargado,
       cantPasillos: values.CantPasillos,
+      CantProductos: '0',
     };
     await axios
       .post('http://Localhost:3001/api/bodegas', campos)
@@ -67,9 +75,8 @@ const CrearBodega = (props) => {
             message: 'bodega agregada correctamente',
             onok: () => {},
           });
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          fecthData();
+          cerrarModal();
         }
       })
       .catch((error) => {
@@ -87,6 +94,10 @@ const CrearBodega = (props) => {
       [e.target.name]: e.target.value,
     });
   };
+
+  useEffect(() => {
+    fecthData();
+  }, []);
 
   return (
     <Modal

@@ -27,7 +27,7 @@ import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModif
 import AmbientePropietarioModificarProductos from './Views/AmbientePropietarioModificarProductos.jsx';
 import AmbientePropietarioBuscarProductos from './Views/AmbientePropietarioBuscarProductos.jsx';
 //ajustar al estadar
-import AmbientePropietarioNotificaciones from './Components/PanelNotificaciones';
+import AmbientePropietarioNotificaciones from './Views/AmbientePropietarioNotificaciones.jsx';
 //------
 import AmbientePropietarioGestionarProductos from './Components/ModificarUsuarios.jsx';
 import AmbientePropietarioEliminarProductos from './Components/EliminarUsuarios.jsx';
