@@ -119,7 +119,7 @@ export default function Facturas() {
       nombreCliente: nombre,
       rtn: rtn,
     };
-    alert(JSON.stringify(campos));
+    //alert(JSON.stringify(campos));
     // await axios.post('http://178.128.67.247:3001/api/facturas', campos);
     setproductosSeleccionado([]);
     setresult(0);

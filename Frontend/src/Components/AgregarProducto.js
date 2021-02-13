@@ -591,7 +591,6 @@ export default function AgregarProducto(props) {
       ) {
         proveedoresSeleccionados[6].precio = precioprovedor7;
       }
-      alert(JSON.stringify(proveedoresSeleccionados));
       seleccionado.proveedores = proveedoresSeleccionados;
       setModalInsertarProveedor(false);
     }
