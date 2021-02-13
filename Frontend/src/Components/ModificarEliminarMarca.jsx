@@ -27,13 +27,13 @@ const ModificarEliminarProveedor = () => {
   const [modalAddMarca, setModalAddMarca] = useState(false);
 
   const fetchData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
       setData(response.data);
     });
   };
 
   const fetchProducts = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
@@ -52,7 +52,7 @@ const ModificarEliminarProveedor = () => {
       };
       setModal(false);
       await axios
-        .put(`http://178.128.67.247:3001/api/marcas/${modificar._id}`, payload)
+        .put(`http://Localhost:3001/api/marcas/${modificar._id}`, payload)
         .then((response) => {
           console.log(response);
         })
@@ -70,7 +70,7 @@ const ModificarEliminarProveedor = () => {
           };
           product[i].marca[0] = marcaNueva;
           axios
-            .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, product[i])
+            .put(`http://Localhost:3001/api/productos/${product[i]._id}`, product[i])
             .then((response) => {
               console.log(response);
             })
@@ -139,7 +139,7 @@ const ModificarEliminarProveedor = () => {
       }
     }
     if (isDeletable) {
-      await axios.delete(`http://178.128.67.247:3001/api/marcas/${data[i]._id}`);
+      await axios.delete(`http://Localhost:3001/api/marcas/${data[i]._id}`);
       console.log('se puede borrar');
     } else {
       Confirm.open({
