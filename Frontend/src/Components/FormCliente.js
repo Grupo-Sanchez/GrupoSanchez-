@@ -151,7 +151,7 @@ const FormCliente = () => {
       tel: telefono,
       email: correo,
     };
-    const res = await axios.post('http://178.128.67.247/api/clientes', campos);
+    const res = await axios.post('http://178.128.67.247:3001/api/clientes', campos);
     console.log(res);
   };
 
@@ -199,7 +199,7 @@ const FormCliente = () => {
 
   const onSave = async (e) => {
     // e.preventDefault();
-    const res = await axios.post('http://178.128.67.247/api/clientes', {
+    const res = await axios.post('http://178.128.67.247:3001/api/clientes', {
       nombre: 'Eddas',
     });
     console.log(res);

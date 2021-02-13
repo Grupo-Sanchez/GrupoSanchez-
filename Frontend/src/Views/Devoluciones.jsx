@@ -65,7 +65,7 @@ export default class Devoluciones extends Component {
       productosDevueltos: this.state.productosDevolucion,
     };
     alert('saliooo');
-    await axios.post('http://178.128.67.247/api/devoluciones', campos);
+    await axios.post('http://178.128.67.247:3001/api/devoluciones', campos);
     alert('escribio?');
     window.location.reload();
   };
@@ -75,7 +75,7 @@ export default class Devoluciones extends Component {
 
   getProductos = async () => {
     await axios
-      .get('http://178.128.67.247/api/productos')
+      .get('http://178.128.67.247:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         var productosagregados = [];
@@ -116,7 +116,7 @@ export default class Devoluciones extends Component {
       }
     }
     axios
-      .put(`http://178.128.67.247/api/productos/${id}`, { cantidad: cantidad2 })
+      .put(`http://178.128.67.247:3001/api/productos/${id}`, { cantidad: cantidad2 })
       .then(function (response) {
         console.log(response.data);
       })
@@ -136,7 +136,7 @@ export default class Devoluciones extends Component {
       }
     }
     axios
-      .put(`http://178.128.67.247/api/productos/${i}`, { cantidad: cantidad2 })
+      .put(`http://178.128.67.247:3001/api/productos/${i}`, { cantidad: cantidad2 })
       .then(function (response) {
         console.log(response.data);
       })
