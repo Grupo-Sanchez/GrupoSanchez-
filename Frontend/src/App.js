@@ -26,6 +26,8 @@ import AmbientePropietarioModificarProveedores from './Views/AmbientePropietario
 import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModificarMarcas.jsx';
 import AmbientePropietarioModificarProductos from './Views/AmbientePropietarioModificarProductos.jsx';
 import AmbientePropietarioBuscarProductos from './Views/AmbientePropietarioBuscarProductos.jsx';
+//ajustar al estadar
+import AmbientePropietarioNotificaciones from './Components/PanelNotificaciones';
 //------
 import AmbientePropietarioGestionarProductos from './Components/ModificarUsuarios.jsx';
 import AmbientePropietarioEliminarProductos from './Components/EliminarUsuarios.jsx';
@@ -94,6 +96,9 @@ const App = () => {
       </Route>
       <Route exact path="/Propietario/Eliminar/Usuarios">
         <AmbientePropietarioEliminarProductos />
+      </Route>
+      <Route exact path="/Propietario/Notificaciones">
+        <AmbientePropietarioNotificaciones />
       </Route>
       {/* Ambientes administrador */}
       <Route exact path="/Administrador">

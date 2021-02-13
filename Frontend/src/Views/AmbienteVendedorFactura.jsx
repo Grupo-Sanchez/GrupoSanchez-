@@ -21,7 +21,6 @@ const AmbienteVendedorFactura = () => (
       </Row>
       <FacturaVendedor />
     </Container>
-    <h1>Ambiente Vendedor</h1>
   </div>
 );
 
