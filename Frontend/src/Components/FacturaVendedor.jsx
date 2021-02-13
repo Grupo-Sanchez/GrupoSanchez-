@@ -44,7 +44,7 @@ export default function Facturas() {
   const [productosSeleccionado, setproductosSeleccionado] = useState([]);
   const getProductos = async () => {
     await axios
-      .get('http://Localhost:178.128.67.247/api/productos')
+      .get('http://178.128.67.247/api/productos')
       .then((response) => {
         const productos = response.data;
         const productosagregados = [];
@@ -120,7 +120,7 @@ export default function Facturas() {
       rtn: rtn,
     };
     alert(JSON.stringify(campos));
-    // await axios.post('http://Localhost:178.128.67.247/api/facturas', campos);
+    // await axios.post('http://178.128.67.247/api/facturas', campos);
     setproductosSeleccionado([]);
     setresult(0);
     setindice(1);
@@ -143,7 +143,7 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:178.128.67.247/api/productos/${id}`, { cantidad: cantidad2 });
+    axios.put(`http://178.128.67.247/api/productos/${id}`, { cantidad: cantidad2 });
   };
   const handleQuantityChange = (e) => {
     setindice(1);
@@ -160,7 +160,7 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:178.128.67.247/api/productos/${i}`, { cantidad: cantidad2 });
+    axios.put(`http://178.128.67.247/api/productos/${i}`, { cantidad: cantidad2 });
     const items = productosSeleccionado.filter((item) => item.value !== i);
     setproductosSeleccionado(items);
     setresult(0);

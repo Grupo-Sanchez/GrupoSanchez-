@@ -9,7 +9,7 @@ class DataTable extends Component {
   deleteItem = async (id) => {
     const confirmDelete = window.confirm('borrar el cliente para siempre?');
     if (confirmDelete) {
-      await axios.delete(`http://Localhost:178.128.67.247/api/clientes/${id}`);
+      await axios.delete(`http://178.128.67.247/api/clientes/${id}`);
       Confirm.open({
         title: 'Aviso',
         message: 'cliente eliminado',
@@ -26,7 +26,7 @@ class DataTable extends Component {
   modificarCliente = async (id) => {
     const confirmModificar = window.confirm('seguro que quiere modificar el cliente?');
     if (confirmModificar) {
-      await axios.put(`http://Localhost:178.128.67.247/api/clientes/${id}`);
+      await axios.put(`http://178.128.67.247/api/clientes/${id}`);
       window.confirm('cliente modificado exitosamente');
       window.location.reload();
 

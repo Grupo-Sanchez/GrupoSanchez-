@@ -42,7 +42,7 @@ const AgregarProveedor = (props) => {
         pais: values.pais,
         comentario: values.comentario,
       };
-      const response = await axios.post('http://Localhost:178.128.67.247/api/proveedor', payload);
+      const response = await axios.post('http://178.128.67.247/api/proveedor', payload);
       console.log(response);
       cerrarModal();
     } catch (err) {
