@@ -13,14 +13,18 @@ import {
 import { AvForm, AvField, AvGroup } from 'availity-reactstrap-validation';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
+import AddMarca from './AgregarMarca.jsx';
 import '../Styles/ConfirmStyle.css';
 import { Confirm } from './Confirm';
+import imagePath from '../Icons/lupa1.jpeg';
 
 const ModificarEliminarProveedor = () => {
   const [modificar, setModificar] = useState({});
   const [data, setData] = useState([]);
   const [modal, setModal] = useState(false);
   const [input, setInput] = useState('');
+  const [product, setProduct] = useState('');
+  const [modalAddMarca, setModalAddMarca] = useState(false);
 
   const fetchData = async () => {
     await axios.get('http://Localhost:3001/api/marcas').then((response) => {
@@ -28,12 +32,20 @@ const ModificarEliminarProveedor = () => {
     });
   };
 
+  const fetchProducts = async () => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
+      setProduct(response.data);
+    });
+  };
+
   useEffect(() => {
     fetchData();
+    fetchProducts();
   }, []);
 
   const modifyMarca = async (values) => {
     try {
+      fetchProducts();
       const payload = {
         nombre: values.nombre,
         descripcion: values.descripcion,
@@ -47,6 +59,26 @@ const ModificarEliminarProveedor = () => {
         .catch((error) => {
           console.log(error);
         });
+      for (let i = 0; i < product.length; i++) {
+        if (
+          product[i].marca[0].value === modificar._id &&
+          payload.nombre !== product[i].marca[0].name
+        ) {
+          const marcaNueva = {
+            value: modificar._id,
+            name: payload.nombre,
+          };
+          product[i].marca[0] = marcaNueva;
+          axios
+            .put(`http://Localhost:3001/api/productos/${product[i]._id}`, product[i])
+            .then((response) => {
+              console.log(response);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        }
+      }
       setModal(false);
       fetchData();
     } catch (err) {
@@ -97,7 +129,25 @@ const ModificarEliminarProveedor = () => {
   };
 
   const onDelete = async (i) => {
-    await axios.delete(`http://Localhost:3001/api/marcas/${data[i]._id}`);
+    fetchProducts();
+    let isDeletable = true;
+    for (let j = 0; j < product.length; j++) {
+      if (product[j].marca[0].value === data[i]._id) {
+        isDeletable = false;
+        console.log(`Marca de producto: ${product[j].marca[0].value} || Marca: ${data[i]._id}`);
+        break;
+      }
+    }
+    if (isDeletable) {
+      await axios.delete(`http://Localhost:3001/api/marcas/${data[i]._id}`);
+      console.log('se puede borrar');
+    } else {
+      Confirm.open({
+        title: 'Advertencia',
+        message: 'No se puede borrar esta marca. Existen productos que tienen esta misma marca',
+        onok: () => {},
+      });
+    }
     fetchData();
   };
 
@@ -105,95 +155,119 @@ const ModificarEliminarProveedor = () => {
     console.log('invalid submit', { event, errors, values });
   }
 
-  return (
-    <div>
-      <Modal isOpen={modal} style={{ maxWidth: '1400px', width: '60%' }}>
-        <ModalHeader>
-          <h3>Modificar Marca</h3>
-        </ModalHeader>
-        <AvForm
-          onValidSubmit={handleValidSubmit}
-          onInvalidSubmit={handleInvalidSubmit}
-          model={modificar}
-        >
-          <ModalBody>
-            <AvGroup>
-              <AvField
-                name="nombre"
-                label="Nombre de la Marca"
-                type="text"
-                validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
-              />
-              <AvField name="descripcion" label="Descripcion" type="textarea" rows="3" />
-            </AvGroup>
-          </ModalBody>
-          <ModalFooter>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-              <Button type="submit" color="primary">
-                Modificar Marca
-              </Button>
+  const change = () => {
+    setModalAddMarca(!modalAddMarca);
+    fetchData();
+  };
 
-              <Button style={{ marginLeft: '1em' }} color="danger" onClick={() => setModal(false)}>
-                Cancelar
-              </Button>
-            </div>
-          </ModalFooter>
-        </AvForm>
-      </Modal>
-      <h4 class="text-center">Marcas</h4>
-      <Row noGutters style={{ paddingBottom: '20px' }}>
-        <Col md={{ size: 6, offset: 3 }}>
-          <Input onChange={handleChange} />
-        </Col>
-      </Row>
-      <Table
-        responsive={true}
-        striped
-        bordered
-        hover
-        dark
-        align="center"
-        size="sm"
-        id="myTable"
-        style={{ width: '500px' }}
-      >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th scope="row">Nombre</th>
-            <th scope="row">Decripción</th>
-            <th scope="row">Acción</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((elemento, i) => (
-            <tr>
-              <td>{i + 1}</td>
-              <td>{elemento.nombre}</td>
-              <td style={{ whiteSpace: 'normal' }}>{elemento.descripcion}</td>
-              <td>
-                <Button onClick={() => modificarModal(i)} color="success">
-                  Modificar
-                </Button>{' '}
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ width: '50%' }}>
+        <AddMarca isOpen={modalAddMarca} change={() => change()} />
+        <Modal isOpen={modal} style={{ maxWidth: '1400px', width: '60%' }}>
+          <ModalHeader>
+            <h3>Modificar Marca</h3>
+          </ModalHeader>
+          <AvForm
+            onValidSubmit={handleValidSubmit}
+            onInvalidSubmit={handleInvalidSubmit}
+            model={modificar}
+          >
+            <ModalBody>
+              <AvGroup>
+                <AvField
+                  name="nombre"
+                  label="Nombre de la Marca"
+                  type="text"
+                  validate={{ required: { value: true, errorMessage: 'Ingrese un nombre' } }}
+                />
+                <AvField name="descripcion" label="Descripcion" type="textarea" rows="3" />
+              </AvGroup>
+            </ModalBody>
+            <ModalFooter>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                <Button type="submit" color="primary">
+                  Modificar Marca
+                </Button>
+
                 <Button
-                  onClick={() =>
-                    Confirm.open({
-                      title: 'Eliminar Marca',
-                      message: '¿Esta seguro de que quiere eliminar marca?',
-                      onok: () => {
-                        onDelete(i);
-                      },
-                    })
-                  }
+                  style={{ marginLeft: '1em' }}
                   color="danger"
+                  onClick={() => setModal(false)}
                 >
-                  Eliminar
-                </Button>{' '}
-              </td>
+                  Cancelar
+                </Button>
+              </div>
+            </ModalFooter>
+          </AvForm>
+        </Modal>
+        <div style={{ justifyContent: '90%' }}>
+          <h1>Marcas</h1>
+        </div>
+        <div style={{ display: 'flex', paddingBottom: '1em' }}>
+          <div style={{ flex: '1 0 auto' }}>
+            <Input
+              placeholder="Buscar Proveedor"
+              onChange={handleChange}
+              style={{
+                'background-image': `url('${imagePath}')`,
+                'background-position': '10px 10px',
+                'background-repeat': 'no-repeat',
+                'font-size': '16px',
+                border: '1px solid #ddd',
+                padding: '12px 20px 12px 40px',
+              }}
+            />
+          </div>
+          <div style={{ flex: '1 1 auto' }} />
+          <div>
+            <Button color="primary" onClick={() => setModalAddMarca(!modalAddMarca)}>
+              Agregar Marca
+            </Button>
+          </div>
+        </div>
+
+        <Table responsive hover align="center" bordered id="myTable" style={{ width: '500px' }}>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th scope="row">Nombre</th>
+              <th scope="row">Decripción</th>
+              <th scope="row">Acción</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data.map((elemento, i) => (
+              <tr>
+                <td>{i + 1}</td>
+                <td>{elemento.nombre}</td>
+                <td style={{ whiteSpace: 'unset' }}>
+                  {elemento.descripcion}
+                </td>
+                <td>
+                  <Button onClick={() => modificarModal(i)} color="success">
+                    Modificar
+                  </Button>{' '}
+                  <Button
+                    onClick={() =>
+                      Confirm.open({
+                        title: 'Eliminar Marca',
+                        message: '¿Esta seguro de que quiere eliminar marca?',
+                        onok: () => {
+                          onDelete(i);
+                        },
+                      })
+                    }
+                    color="danger"
+                  >
+                    Eliminar
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
 };

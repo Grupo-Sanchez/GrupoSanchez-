@@ -46,6 +46,11 @@ export const rutasPropietario = [
     to: '/EnConstruccion',
     icon: faClipboardList,
   },
+  {
+    name: 'Notificaciones',
+    to: '/Propietario/Notificaciones',
+    icon: faClipboardList,
+  },
 ];
 
 export const rutasJefeTienda = [
