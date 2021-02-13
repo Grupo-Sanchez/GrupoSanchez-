@@ -1074,6 +1074,7 @@ export default function EliminarProducto(props) {
   };
   const mostrarCodigoBarra = (elemento) => {
     setSeleccionado(elemento);
+
     setModalVerCodigoBarra(true);
   };
   const manejarCambio = (e) => {
@@ -2622,7 +2623,7 @@ export default function EliminarProducto(props) {
         </ModalHeader>
         <ModalBody>
           <div align="center">
-            <Barcode value={codigo1} />
+            <Barcode value={seleccionado.codigos[0]} />
           </div>
         </ModalBody>
         <ModalFooter>
