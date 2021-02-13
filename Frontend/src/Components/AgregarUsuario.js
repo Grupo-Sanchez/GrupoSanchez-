@@ -386,6 +386,7 @@ export default function AgregarUsuario(props) {
           <div>
             <AvForm>
               <AvField
+                label="contraseña"
                 errorMessage="Constraseña debe tener mas de 4 caracteres"
                 validate={{
                   required: { value: true },
