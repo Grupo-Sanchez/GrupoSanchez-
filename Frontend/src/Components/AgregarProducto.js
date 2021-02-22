@@ -243,7 +243,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     seleccionado.nombre = '';
     seleccionado.area = '';
@@ -470,7 +470,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -495,7 +495,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -533,7 +533,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -552,7 +552,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       if (precioprovedor1 !== '') {
@@ -725,30 +725,23 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
-  const ValidacionesCodigo = () => {
-    alert('hola mundo');
-    if (isAlphanumeric(tags[1])) {
-      alert('uno entra');
-    }
-  };
-
   const addTags = (event) => {
     if (event.key === 'Enter' && event.target.value !== '' && !isAlphanumeric(event.target.value)) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -817,7 +810,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (entra) {
         Confirm.open({
@@ -875,18 +868,19 @@ export default function AgregarProducto(props) {
       seleccionado.proveedores.push(document.getElementById('prov1').value);
     }
   };
+
   function paddingclose() {
     return {
       display: 'block',
-      width: '16px',
-      height: '16px',
+      width: '20px',
+      height: '20px',
       'line-height': '16px',
       'text-align': 'center',
-      'font-size': '14px',
-      'margin-left': '8px',
-      color: '#0052cc',
+      'font-size': '20px',
+      'margin-left': '60px',
+      color: 'white',
       'border-radius': '50%',
-      background: '#fff',
+      background: '#f60000',
       cursor: 'pointer',
     };
   }
@@ -897,13 +891,14 @@ export default function AgregarProducto(props) {
       display: 'flex',
       'align-items': 'center',
       'justify-content': 'center',
-      color: '#fff',
+      color: '#282c34',
       padding: '0 8px',
-      'font-size': '14px',
+      'font-size': '20px',
       'list-style': 'none',
-      'border-radius': '6px',
       margin: '0 8px 8px 0',
-      background: '#0052cc',
+      'border-radius': '25px',
+      'margin-top': '7px',
+      background: '#e9e3e3',
     };
   }
   function paddingdiv() {
@@ -912,21 +907,30 @@ export default function AgregarProducto(props) {
       'align-items': 'flex-start',
       'flex-wrap': 'wrap',
       'min-height': '48px',
-      width: '480px',
-      border: '1px solid #0052cc',
-      'border-radius': '6px',
+      width: '400px',
+      border: 'none',
+      'border-radius': '10px',
       padding: '0 8px',
+      'margin-left': '200px',
     };
   }
   function paddingInput() {
     return {
-      flex: '1',
-      border: 'none',
-      height: '46px',
-      'font-size': '14px',
-      padding: '4px 0 0 0',
-      '&': 'focus',
-      outline: 'transparent',
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '1px solid #0052cc',
+      'border-radius': '26px',
+      padding: '0 8px',
+      'margin-left': '200px',
+    };
+  }
+  function paddingAvInput() {
+    return {
+      'border-radius': '26px',
+      width: '320px',
     };
   }
   function paddingtitle() {
@@ -936,7 +940,6 @@ export default function AgregarProducto(props) {
   }
   function paddingul() {
     return {
-      display: 'flex',
       'flex-wrap': 'wrap',
       padding: '0',
       margin: '8px 0 0 0',
@@ -1029,9 +1032,6 @@ export default function AgregarProducto(props) {
                 }}
                 md={{ size: 5 }}
               >
-                <Button onClick={() => insertarCodigos()} color="primary">
-                  Insertar Codigo
-                </Button>{' '}
               </Col>
               <Col
                 style={{
@@ -1058,63 +1058,6 @@ export default function AgregarProducto(props) {
             </Row>
           </div>
           <br />
-          <Modal
-            style={{
-              height: '95vh',
-              'overflow-y': 'auto',
-              top: '20px',
-              maxWidth: '550px',
-              paddingTop: '300px',
-            }}
-            isOpen={modalInsertarCodigo}
-          >
-            <ModalHeader>
-              <div className="text-center">
-                <h3>Agregar Códigos</h3>
-              </div>
-            </ModalHeader>
-            <ModalBody>
-              <div style={paddingdiv()}>
-                <ul style={paddingul()}>
-                  {tags.map((tag, index) => (
-                    <li style={paddingmain()} key={index}>
-                      <span style={paddingtitle()}>{tag}</span>
-                      <i style={paddingclose()} onClick={() => removeTags(index)}>
-                        x
-                      </i>
-                    </li>
-                  ))}
-                </ul>
-                <input
-                  style={paddingInput()}
-                  updatable={true}
-                  type="text"
-                  onKeyUp={(event) => addTags(event)}
-                  placeholder="Press enter to add tags"
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                onClick={() =>
-                  Confirm.open({
-                    title: 'Insertar Codigos',
-                    message: '¿Esta seguro de que quiere insertar estos codigos?',
-                    onok: () => {
-                      GuardarCodigos();
-                    },
-                  })
-                }
-                color="primary"
-              >
-                Insertar
-              </Button>
-              <Button onClick={() => cerrarModalAgregarCodigos()} color="danger">
-                Cancelar
-              </Button>
-            </ModalFooter>
-          </Modal>
           <Modal
             style={{
               height: '95vh',
@@ -1341,6 +1284,7 @@ export default function AgregarProducto(props) {
                 <br />
                 <label>Proveedor 7</label>
                 <SelectSearch
+                  style={paddingAvInput()}
                   search
                   onChange={setSize7}
                   disabled={precioprov6}
@@ -1401,7 +1345,7 @@ export default function AgregarProducto(props) {
               <Row>
                 <Col
                   style={{
-                    maxWidth: '700px',
+                    maxWidth: '1000px',
                     'margin-left': '200px',
                     paddingRight: '50px',
                   }}
@@ -1409,6 +1353,7 @@ export default function AgregarProducto(props) {
                 >
                   <h3>Nombre</h3>
                   <AvField
+                    style={paddingAvInput()}
                     className="form-control"
                     type="text"
                     name="nombre"
@@ -1432,6 +1377,7 @@ export default function AgregarProducto(props) {
                 >
                   <h3>Área</h3>
                   <AvField
+                    style={paddingAvInput()}
                     className="form-control"
                     type="text"
                     name="area"
@@ -1454,19 +1400,57 @@ export default function AgregarProducto(props) {
               <Col
                 style={{
                   maxWidth: '700px',
-                  'margin-left': '200px',
-                  paddingRight: '50px',
-                }}
-                md={{ size: 5 }}
-              >
-                <h3>Ubicación</h3>
+                  paddingRight: '90px',
+                }}>
                 <input
-                  className="form-control"
+                  style={paddingInput()}
+                  updatable={true}
                   type="text"
-                  name="ubicacion"
-                  value={seleccionado ? seleccionado.ubicacion : ''}
-                  onChange={manejarCambio}
+                  onKeyUp={(event) => addTags(event)}
+                  placeholder="Ingrese un codigo de referencia"
+                  onKeyDown={handleKeyDown}
                 />
+                <div style={paddingdiv()}>
+                  <ul style={paddingul()}>
+                    {tags.map((tag, index) => (
+                      <li style={paddingmain()} key={index}>
+                        <span style={paddingtitle()}>{tag}</span>
+                        <i style={paddingclose()} onClick={() => removeTags(index)}>
+                          x
+                      </i>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: '1px',
+                    'margin-left': '525px',
+                  }}>
+                  <Button
+                    style={{
+                      'font-size': '20px',
+                      'border-radius': '50%',
+                      width: '40px',
+                      height: '40px',
+                      'line-height': '2px',
+                    }}
+                    onClick={() =>
+                      Confirm.open({
+                        title: 'Insertar Codigos',
+                        message: '¿Está seguro de que quiere insertar estos codigos?',
+                        onok: () => {
+                          GuardarCodigos();
+                        },
+                      })
+                    }
+                    color="primary"
+
+                  >
+                    +
+              </Button>
+                </div>
               </Col>
               <Col
                 style={{
@@ -1476,6 +1460,7 @@ export default function AgregarProducto(props) {
               >
                 <h3>Marca</h3>
                 <SelectSearch
+                  style={paddingAvInput()}
                   printOptions="on-focus"
                   search
                   placeholder="Encuentre la Marca del Producto"
@@ -1521,6 +1506,7 @@ export default function AgregarProducto(props) {
               >
                 <h3>Cantidad Mínima</h3>
                 <input
+                  style={paddingAvInput()}
                   className="form-control"
                   type="number"
                   id="cantidad_minima"
@@ -1548,6 +1534,7 @@ export default function AgregarProducto(props) {
                   <FormGroup class="style">
                     <Label for="exampleText"></Label>
                     <AvField
+                      style={paddingAvInput()}
                       type="textarea"
                       name="text"
                       id="descripcion1"
@@ -1571,6 +1558,7 @@ export default function AgregarProducto(props) {
                 <h3>Bodega</h3>
                 <br />
                 <SelectSearch
+                  style={paddingAvInput()}
                   printOptions="on-focus"
                   search
                   placeholder="Encuentre la Bodega del Producto"
@@ -1679,8 +1667,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1694,8 +1682,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
             </AvForm>
           </div>
