@@ -50,6 +50,7 @@ const baseStyle = {
   'margin-right': '-50px',
   paddingRight: '50px',
   transition: 'border .24s ease-in-out',
+  'border-radius': '26px',
 };
 const thumb = {
   display: 'inline-flex',
@@ -1484,7 +1485,6 @@ export default function AgregarProducto(props) {
               >
                 <h5 style={{ 'margin-left': '-420x' }}>Marca</h5>
                 <SelectSearch
-                  style={paddingAvInput()}
                   printOptions="on-focus"
                   search
                   placeholder="Encuentre la Marca del Producto"
@@ -1583,7 +1583,6 @@ export default function AgregarProducto(props) {
                 <h5>Bodega</h5>
                 <br />
                 <SelectSearch
-                  style={paddingAvInput()}
                   printOptions="on-focus"
                   search
                   placeholder="Encuentre la Bodega del Producto"
