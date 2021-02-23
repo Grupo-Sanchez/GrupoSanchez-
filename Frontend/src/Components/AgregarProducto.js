@@ -10,6 +10,8 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+import DatePicker from 'react-date-picker';
+import '../Styles/DatePicker.css';
 import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';
 import React, { useState, useEffect } from 'react';
@@ -84,6 +86,7 @@ export default function AgregarProducto(props) {
   const [cod4, setcod4] = useState('');
   const [cod5, setcod5] = useState('');
   const [cod6, setcod6] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
   const [marca, setMarca] = useState('');
   const [bodega, setBodega] = useState('');
   const [modalAgregarBodega, setModalAgregarBodega] = useState(false);
@@ -137,6 +140,7 @@ export default function AgregarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: 1,
     fecha_creacion: '',
+    fecha_vencimiento: new Date(),
   });
   const [cantsel, setCantsel] = useState(1);
   const [cantminsel, setCantminsel] = useState(1);
@@ -237,13 +241,14 @@ export default function AgregarProducto(props) {
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: cantminsel,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
+      fecha_vencimiento: seleccionado.fecha_vencimiento,
     };
     const res = await axios.post('http://Localhost:3001/api/productos', campos);
     console.log(res);
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => { },
+      onok: () => {},
     });
     seleccionado.nombre = '';
     seleccionado.area = '';
@@ -258,6 +263,7 @@ export default function AgregarProducto(props) {
     seleccionado.precio = [];
     seleccionado.proveedores = [];
     seleccionado.fecha_creacion = '';
+    seleccionado.fecha_vencimiento = '';
     setcod2('');
     setcod3('');
     setcod4('');
@@ -322,7 +328,11 @@ export default function AgregarProducto(props) {
   const handleChange3 = (e) => {
     agregarBodega(e);
   };
-
+  const handleChangeDate = (date) => {
+    setStartDate(date);
+    seleccionado.fecha_vencimiento = date;
+    alert(JSON.stringify(seleccionado.fecha_vencimiento));
+  };
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
@@ -417,6 +427,7 @@ export default function AgregarProducto(props) {
     seleccionado.codigos = [];
     seleccionado.precio = [];
     seleccionado.proveedores = [];
+    seleccionado.fecha_vencimiento = '';
     setSize('');
     setSize2('');
     setSize3('');
@@ -470,7 +481,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -495,7 +506,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -533,7 +544,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => { },
+          onok: () => {},
         });
       } else {
         setModalInsertarPrecio(false);
@@ -552,7 +563,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       if (precioprovedor1 !== '') {
@@ -725,14 +736,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -741,7 +752,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
+        onok: () => {},
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -810,7 +821,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => { },
+          onok: () => {},
         });
       } else if (entra) {
         Confirm.open({
@@ -933,6 +944,18 @@ export default function AgregarProducto(props) {
       width: '320px',
     };
   }
+  function paddingDescripciones() {
+    return {
+      'border-radius': '26px',
+      width: '380px',
+      height: '100px',
+    };
+  }
+  function paddingHeader() {
+    return {
+      'margin-left': '-350px',
+    };
+  }
   function paddingtitle() {
     return {
       'margin-top': '3px',
@@ -1031,8 +1054,7 @@ export default function AgregarProducto(props) {
                   paddingRight: '50px',
                 }}
                 md={{ size: 5 }}
-              >
-              </Col>
+              ></Col>
               <Col
                 style={{
                   maxWidth: '10px',
@@ -1351,7 +1373,7 @@ export default function AgregarProducto(props) {
                   }}
                   md={{ size: 5 }}
                 >
-                  <h3>Nombre</h3>
+                  <h5 style={paddingHeader()}>Nombre</h5>
                   <AvField
                     style={paddingAvInput()}
                     className="form-control"
@@ -1375,7 +1397,7 @@ export default function AgregarProducto(props) {
                     paddingRight: '50px',
                   }}
                 >
-                  <h3>Área</h3>
+                  <h5 style={{ 'margin-left': '-390px' }}>Área</h5>
                   <AvField
                     style={paddingAvInput()}
                     className="form-control"
@@ -1396,18 +1418,20 @@ export default function AgregarProducto(props) {
             </AvForm>
           </div>
           <div>
+            <h5 style={{ 'margin-left': '-630px' }}>Codigos Auxiliares</h5>
             <Row>
               <Col
                 style={{
                   maxWidth: '700px',
                   paddingRight: '90px',
-                }}>
+                }}
+              >
                 <input
                   style={paddingInput()}
                   updatable={true}
                   type="text"
                   onKeyUp={(event) => addTags(event)}
-                  placeholder="Ingrese un codigo de referencia"
+                  placeholder="Presione Enter para insertar códigos"
                   onKeyDown={handleKeyDown}
                 />
                 <div style={paddingdiv()}>
@@ -1417,7 +1441,7 @@ export default function AgregarProducto(props) {
                         <span style={paddingtitle()}>{tag}</span>
                         <i style={paddingclose()} onClick={() => removeTags(index)}>
                           x
-                      </i>
+                        </i>
                       </li>
                     ))}
                   </ul>
@@ -1427,7 +1451,8 @@ export default function AgregarProducto(props) {
                     position: 'absolute',
                     top: '1px',
                     'margin-left': '525px',
-                  }}>
+                  }}
+                >
                   <Button
                     style={{
                       'font-size': '20px',
@@ -1446,10 +1471,9 @@ export default function AgregarProducto(props) {
                       })
                     }
                     color="primary"
-
                   >
                     +
-              </Button>
+                  </Button>
                 </div>
               </Col>
               <Col
@@ -1458,7 +1482,7 @@ export default function AgregarProducto(props) {
                   paddingRight: '50px',
                 }}
               >
-                <h3>Marca</h3>
+                <h5 style={{ 'margin-left': '-420x' }}>Marca</h5>
                 <SelectSearch
                   style={paddingAvInput()}
                   printOptions="on-focus"
@@ -1484,8 +1508,9 @@ export default function AgregarProducto(props) {
                 }}
                 md={{ size: 5 }}
               >
-                <h3>Cantidad</h3>
+                <h5 style={paddingHeader()}>Cantidad</h5>
                 <input
+                  style={paddingAvInput()}
                   className="form-control"
                   type="number"
                   id="cantidad"
@@ -1504,7 +1529,7 @@ export default function AgregarProducto(props) {
                   paddingRight: '50px',
                 }}
               >
-                <h3>Cantidad Mínima</h3>
+                <h5 style={{ 'margin-left': '-290px' }}>Cantidad Mínima</h5>
                 <input
                   style={paddingAvInput()}
                   className="form-control"
@@ -1529,12 +1554,12 @@ export default function AgregarProducto(props) {
                 }}
                 md={{ size: 5 }}
               >
-                <h3>Descripción corta</h3>
                 <AvForm>
                   <FormGroup class="style">
+                    <h5 style={{ 'margin-left': '-280px' }}>Descripción Corta</h5>
                     <Label for="exampleText"></Label>
                     <AvField
-                      style={paddingAvInput()}
+                      style={paddingDescripciones()}
                       type="textarea"
                       name="text"
                       id="descripcion1"
@@ -1555,7 +1580,7 @@ export default function AgregarProducto(props) {
                   paddingRight: '50px',
                 }}
               >
-                <h3>Bodega</h3>
+                <h5>Bodega</h5>
                 <br />
                 <SelectSearch
                   style={paddingAvInput()}
@@ -1568,9 +1593,17 @@ export default function AgregarProducto(props) {
                   value={bodega}
                   onChange={(e) => handleChange3(e)}
                 />
+                <h5 style={{ 'margin-left': '-15px' }}>Fecha de Vencimiento</h5>
+                <DatePicker
+                  selected={startDate}
+                  value={startDate}
+                  onChange={(date) => handleChangeDate(date)}
+                  id="fecha_vencimiento"
+                />
               </Col>
             </Row>
           </div>
+
           <Row>
             <Col
               style={{
@@ -1580,11 +1613,20 @@ export default function AgregarProducto(props) {
               }}
               md={{ size: 5 }}
             >
-              <h3>Descripción larga </h3>
-              <div className="form-group">
-                <label htmlFor="exampleFormControlTextarea1"></label>
-                <textarea className="form-control" id="descripcion2" rows="5" />
-              </div>
+              <h5 style={{ 'margin-left': '-280px' }}>Descripción Larga</h5>
+              <AvForm>
+                <FormGroup class="style">
+                  <Label for="exampleText"></Label>
+                  <AvField
+                    style={paddingDescripciones()}
+                    type="textarea"
+                    name="text"
+                    id="descripcion2"
+                    value={seleccionado ? seleccionado.descripcion_larga : ''}
+                    onChange={manejarCambio}
+                  />
+                </FormGroup>
+              </AvForm>
             </Col>
             <Col
               style={{
@@ -1593,7 +1635,7 @@ export default function AgregarProducto(props) {
                 'margin-right': '30px',
               }}
             >
-              <h3>Imagen del Producto</h3>
+              <h5>Imagen del Producto</h5>
               <br />
               <section className="container">
                 <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
@@ -1667,8 +1709,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                // onChange={manejarCambio}
               />
               <br />
               <label>Precio 3</label>
@@ -1682,8 +1724,8 @@ export default function AgregarProducto(props) {
                   required: { value: false },
                 }}
                 value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                // onChange={manejarCambio}
               />
             </AvForm>
           </div>

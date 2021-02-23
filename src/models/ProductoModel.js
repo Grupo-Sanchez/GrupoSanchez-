@@ -49,6 +49,9 @@ precio: '',*/
   fecha_creacion: {
     type: Date,
   },
+  fecha_vencimiento: {
+    type: Date,
+  },
 });
 
 module.exports = model('producto', ProductoSchema);
