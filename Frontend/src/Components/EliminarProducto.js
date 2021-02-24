@@ -12,8 +12,8 @@ import {
   ModalHeader,
   ModalFooter,
 } from 'reactstrap';
-import '../Styles/InterfazProducto.css';
 import SelectSearch from 'react-select-search';
+import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';

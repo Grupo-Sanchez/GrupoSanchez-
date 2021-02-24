@@ -61,6 +61,7 @@ exports.create_producto = async (req, res) => {
     cantidad_minima,
     fecha_creacion,
     bodega,
+    fecha_vencimiento,
   } = req.body;
   try {
     const new_producto = new producto({
@@ -77,6 +78,7 @@ exports.create_producto = async (req, res) => {
       cantidad_minima,
       fecha_creacion,
       bodega,
+      fecha_vencimiento,
     });
     ret = await new_producto.save();
     res.json(ret);

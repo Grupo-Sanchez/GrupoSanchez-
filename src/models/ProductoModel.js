@@ -1,3 +1,4 @@
+
 const { text } = require('body-parser');
 const { Schema, model } = require('mongoose');
 const ProductoSchema = new Schema({
@@ -47,6 +48,9 @@ precio: '',*/
     type: Number,
   },
   fecha_creacion: {
+    type: Date,
+  },
+  fecha_vencimiento: {
     type: Date,
   },
 });

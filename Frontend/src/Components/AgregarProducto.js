@@ -10,6 +10,8 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+import DatePicker from 'react-date-picker';
+import '../Styles/DatePicker.css';
 import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';
 import React, { useState, useEffect } from 'react';
@@ -44,10 +46,11 @@ const baseStyle = {
   backgroundColor: '#fafafa',
   color: '#bdbdbd',
   outline: 'none',
-  maxWidth: '800px',
+  maxWidth: '300px',
   'margin-right': '-50px',
   paddingRight: '50px',
   transition: 'border .24s ease-in-out',
+  'border-radius': '26px',
 };
 const thumb = {
   display: 'inline-flex',
@@ -84,6 +87,7 @@ export default function AgregarProducto(props) {
   const [cod4, setcod4] = useState('');
   const [cod5, setcod5] = useState('');
   const [cod6, setcod6] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
   const [marca, setMarca] = useState('');
   const [bodega, setBodega] = useState('');
   const [modalAgregarBodega, setModalAgregarBodega] = useState(false);
@@ -137,6 +141,7 @@ export default function AgregarProducto(props) {
     descripcion_larga: '',
     cantidad_minima: 1,
     fecha_creacion: '',
+    fecha_vencimiento: new Date(),
   });
   const [cantsel, setCantsel] = useState(1);
   const [cantminsel, setCantminsel] = useState(1);
@@ -237,13 +242,14 @@ export default function AgregarProducto(props) {
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: cantminsel,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
+      fecha_vencimiento: seleccionado.fecha_vencimiento,
     };
     const res = await axios.post('http://178.128.67.247:3001/api/productos', campos);
     console.log(res);
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     seleccionado.nombre = '';
     seleccionado.area = '';
@@ -258,6 +264,7 @@ export default function AgregarProducto(props) {
     seleccionado.precio = [];
     seleccionado.proveedores = [];
     seleccionado.fecha_creacion = '';
+    seleccionado.fecha_vencimiento = '';
     setcod2('');
     setcod3('');
     setcod4('');
@@ -322,7 +329,11 @@ export default function AgregarProducto(props) {
   const handleChange3 = (e) => {
     agregarBodega(e);
   };
-
+  const handleChangeDate = (date) => {
+    setStartDate(date);
+    seleccionado.fecha_vencimiento = date;
+    alert(JSON.stringify(seleccionado.fecha_vencimiento));
+  };
   const handleOnChange = (value) => {
     for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
@@ -417,6 +428,7 @@ export default function AgregarProducto(props) {
     seleccionado.codigos = [];
     seleccionado.precio = [];
     seleccionado.proveedores = [];
+    seleccionado.fecha_vencimiento = '';
     setSize('');
     setSize2('');
     setSize3('');
@@ -470,7 +482,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -495,7 +507,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -533,7 +545,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -552,7 +564,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       if (precioprovedor1 !== '') {
@@ -724,30 +736,23 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
-  const ValidacionesCodigo = () => {
-    alert('hola mundo');
-    if (isAlphanumeric(tags[1])) {
-      alert('uno entra');
-    }
-  };
-
   const addTags = (event) => {
     if (event.key === 'Enter' && event.target.value !== '' && !isAlphanumeric(event.target.value)) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -816,7 +821,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (entra) {
         Confirm.open({
@@ -874,18 +879,19 @@ export default function AgregarProducto(props) {
       seleccionado.proveedores.push(document.getElementById('prov1').value);
     }
   };
+
   function paddingclose() {
     return {
       display: 'block',
-      width: '16px',
-      height: '16px',
+      width: '20px',
+      height: '20px',
       'line-height': '16px',
       'text-align': 'center',
-      'font-size': '14px',
-      'margin-left': '8px',
-      color: '#0052cc',
+      'font-size': '20px',
+      'margin-left': '60px',
+      color: 'white',
       'border-radius': '50%',
-      background: '#fff',
+      background: '#f60000',
       cursor: 'pointer',
     };
   }
@@ -896,13 +902,14 @@ export default function AgregarProducto(props) {
       display: 'flex',
       'align-items': 'center',
       'justify-content': 'center',
-      color: '#fff',
+      color: '#282c34',
       padding: '0 8px',
-      'font-size': '14px',
+      'font-size': '20px',
       'list-style': 'none',
-      'border-radius': '6px',
       margin: '0 8px 8px 0',
-      background: '#0052cc',
+      'border-radius': '25px',
+      'margin-top': '7px',
+      background: '#e9e3e3',
     };
   }
   function paddingdiv() {
@@ -911,21 +918,48 @@ export default function AgregarProducto(props) {
       'align-items': 'flex-start',
       'flex-wrap': 'wrap',
       'min-height': '48px',
-      width: '480px',
-      border: '1px solid #0052cc',
-      'border-radius': '6px',
+      width: '400px',
+      border: 'none',
+      'border-radius': '10px',
       padding: '0 8px',
+      'margin-left': '200px',
     };
   }
   function paddingInput() {
     return {
-      flex: '1',
-      border: 'none',
-      height: '46px',
-      'font-size': '14px',
-      padding: '4px 0 0 0',
-      '&': 'focus',
-      outline: 'transparent',
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '1px solid #0052cc',
+      'border-radius': '26px',
+      padding: '0 8px',
+    };
+  }
+  function paddingAvInput() {
+    return {
+      'border-radius': '26px',
+      width: '320px',
+    };
+  }
+  function paddingAvInputCantidades() {
+    return {
+      'border-radius': '26px',
+      width: '150px',
+    };
+  }
+
+  function paddingDescripciones() {
+    return {
+      'border-radius': '26px',
+      width: '380px',
+      height: '100px',
+    };
+  }
+  function paddingHeader() {
+    return {
+      'margin-left': '-350px',
     };
   }
   function paddingtitle() {
@@ -935,7 +969,6 @@ export default function AgregarProducto(props) {
   }
   function paddingul() {
     return {
-      display: 'flex',
       'flex-wrap': 'wrap',
       padding: '0',
       margin: '8px 0 0 0',
@@ -990,6 +1023,7 @@ export default function AgregarProducto(props) {
         <ModalBody
           style={{
             'margin-right': '200px',
+            paddingRight: '200px',
           }}
         >
           <Row>
@@ -1027,22 +1061,14 @@ export default function AgregarProducto(props) {
                   paddingRight: '50px',
                 }}
                 md={{ size: 5 }}
-              >
-                <Button onClick={() => insertarCodigos()} color="primary">
-                  Insertar Codigo
-                </Button>{' '}
-              </Col>
+              ></Col>
               <Col
                 style={{
                   maxWidth: '10px',
                   paddingLeft: '50px',
                   'margin-right': '10px',
                 }}
-              >
-                <Button onClick={() => setModalInsertarPrecio(true)} color="primary">
-                  Precios
-                </Button>
-              </Col>
+              ></Col>
               <Col
                 style={{
                   maxWidth: '200px',
@@ -1057,63 +1083,6 @@ export default function AgregarProducto(props) {
             </Row>
           </div>
           <br />
-          <Modal
-            style={{
-              height: '95vh',
-              'overflow-y': 'auto',
-              top: '20px',
-              maxWidth: '550px',
-              paddingTop: '300px',
-            }}
-            isOpen={modalInsertarCodigo}
-          >
-            <ModalHeader>
-              <div className="text-center">
-                <h3>Agregar Códigos</h3>
-              </div>
-            </ModalHeader>
-            <ModalBody>
-              <div style={paddingdiv()}>
-                <ul style={paddingul()}>
-                  {tags.map((tag, index) => (
-                    <li style={paddingmain()} key={index}>
-                      <span style={paddingtitle()}>{tag}</span>
-                      <i style={paddingclose()} onClick={() => removeTags(index)}>
-                        x
-                      </i>
-                    </li>
-                  ))}
-                </ul>
-                <input
-                  style={paddingInput()}
-                  updatable={true}
-                  type="text"
-                  onKeyUp={(event) => addTags(event)}
-                  placeholder="Press enter to add tags"
-                  onKeyDown={handleKeyDown}
-                />
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                onClick={() =>
-                  Confirm.open({
-                    title: 'Insertar Codigos',
-                    message: '¿Esta seguro de que quiere insertar estos codigos?',
-                    onok: () => {
-                      GuardarCodigos();
-                    },
-                  })
-                }
-                color="primary"
-              >
-                Insertar
-              </Button>
-              <Button onClick={() => cerrarModalAgregarCodigos()} color="danger">
-                Cancelar
-              </Button>
-            </ModalFooter>
-          </Modal>
           <Modal
             style={{
               height: '95vh',
@@ -1340,6 +1309,7 @@ export default function AgregarProducto(props) {
                 <br />
                 <label>Proveedor 7</label>
                 <SelectSearch
+                  style={paddingAvInput()}
                   search
                   onChange={setSize7}
                   disabled={precioprov6}
@@ -1398,16 +1368,10 @@ export default function AgregarProducto(props) {
           <div>
             <AvForm>
               <Row>
-                <Col
-                  style={{
-                    maxWidth: '700px',
-                    'margin-left': '200px',
-                    paddingRight: '50px',
-                  }}
-                  md={{ size: 5 }}
-                >
-                  <h3>Nombre</h3>
+                <Col sm={{ size: 5 }}>
+                  <h style={paddingHeader()}>Nombre</h>
                   <AvField
+                    style={paddingAvInput()}
                     className="form-control"
                     type="text"
                     name="nombre"
@@ -1423,57 +1387,79 @@ export default function AgregarProducto(props) {
                     onChange={(e) => manejarCambio(e)}
                   />
                 </Col>
-                <Col
-                  style={{
-                    maxWidth: '700px',
-                    paddingRight: '50px',
-                  }}
-                >
-                  <h3>Área</h3>
-                  <AvField
-                    className="form-control"
-                    type="text"
-                    name="area"
-                    id="area_agregar"
-                    errorMessage="Campo Obligatorio"
-                    validate={{
-                      required: { value: true },
-                      pattern: { value: regex },
-                      minLength: { value: 1 },
-                    }}
-                    value={seleccionado ? seleccionado.area : ''}
-                    onChange={(e) => manejarCambio(e)}
-                  />
+                <Col sm={{ size: 5 }}>
+                  <FormGroup>
+                    <h style={{ 'margin-left': '-480px' }}>Descripción especifica</h>
+                    <Label for="exampleText"></Label>
+                    <AvField
+                      style={paddingDescripciones()}
+                      type="textarea"
+                      name="text"
+                      id="descripcion2"
+                      value={seleccionado ? seleccionado.descripcion_larga : ''}
+                      onChange={manejarCambio}
+                    />
+                  </FormGroup>
                 </Col>
               </Row>
             </AvForm>
-          </div>
-          <div>
             <Row>
-              <Col
-                style={{
-                  maxWidth: '700px',
-                  'margin-left': '200px',
-                  paddingRight: '50px',
-                }}
-                md={{ size: 5 }}
-              >
-                <h3>Ubicación</h3>
-                <input
-                  className="form-control"
-                  type="text"
-                  name="ubicacion"
-                  value={seleccionado ? seleccionado.ubicacion : ''}
-                  onChange={manejarCambio}
-                />
-              </Col>
-              <Col
-                style={{
-                  maxWidth: '700px',
-                  paddingRight: '50px',
-                }}
-              >
-                <h3>Marca</h3>
+              <div>
+                <h style={{ 'margin-left': '-900px' }}>Códigos Auxiliares</h>
+                <Row>
+                  <Col>
+                    <input
+                      style={paddingInput()}
+                      updatable={true}
+                      type="text"
+                      onKeyUp={(event) => addTags(event)}
+                      placeholder="O presione Enter para insertar códigos"
+                      onKeyDown={handleKeyDown}
+                    />
+                    <div style={paddingdiv()}>
+                      <ul style={paddingul()}>
+                        {tags.map((tag, index) => (
+                          <li style={paddingmain()} key={index}>
+                            <span style={paddingtitle()}>{tag}</span>
+                            <i style={paddingclose()} onClick={() => removeTags(index)}>
+                              x
+                        </i>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '1px',
+                        'margin-left': '525px',
+                      }}
+                    >
+                      <Button
+                        style={{
+                          'font-size': '20px',
+                          'border-radius': '50%',
+                          width: '40px',
+                          height: '40px',
+                          'line-height': '2px',
+                          'margin-left': '-350px',
+                        }}
+                        onClick={() =>
+                          Confirm.open({
+                            title: 'Insertar Codigos',
+                            message: '¿Está seguro de que quiere insertar estos codigos?',
+                            onok: () => {
+                              GuardarCodigos();
+                            },
+                          })
+                        }
+                        color="primary"
+                      >
+                        +
+                  </Button>
+                    </div>
+                  </Col>
+                  {/*<h style={{ 'margin-left': '-580px' }}>Marca</h>
                 <SelectSearch
                   printOptions="on-focus"
                   search
@@ -1484,22 +1470,91 @@ export default function AgregarProducto(props) {
                   value={marca}
                   onChange={(e) => handleChange2(e)}
                 />
-              </Col>
+              */}
+                </Row>
+                <br />
+              </div>
             </Row>
-            <br />
+            <AvForm>
+              <Row>
+                <Col sm={{ size: 5 }}>
+                  <h style={{ 'margin-left': '-350px' }}>Marca</h>
+                  <SelectSearch
+                    printOptions="on-focus"
+                    search
+                    placeholder="Encuentre la Marca del Producto"
+                    required
+                    autoComplete
+                    options={marcas}
+                    value={marca}
+                    onChange={(e) => handleChange2(e)}
+                  />
+                </Col>
+                <br />
+                <Col >
+                  <div
+                    style={{
+                      top: '-5px',
+                      'margin-left': '70px',
+                    }}
+                  ><label>Precio 1</label>
+                    <AvField
+                      style={paddingAvInputCantidades()}
+                      className="form-control"
+                      type="Number"
+                      name="precio1"
+                      id="precio1"
+                      errorMessage="Este Campo es Obligatorio"
+                      validate={{
+                        required: { value: true },
+                      }}
+                      value={seleccionado.precio[0] ? seleccionado.precio[0] : 0}
+                    />
+                  </div>
+                </Col>
+                <Col sm={{ size: 'auto' }}>
+                  <label>Precio 2</label>
+                  <AvField
+                    style={paddingAvInputCantidades()}
+                    className="form-control"
+                    type="Number"
+                    name="Fecha"
+                    name="precio2"
+                    id="precio2"
+                    validate={{
+                      required: { value: false },
+                    }}
+                    value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  // onChange={manejarCambio}
+                  />
+                </Col>
+                <Col sm={{ size: 'auto' }}>
+                  <label>Precio 3</label>
+                  <AvField
+                    style={paddingAvInputCantidades()}
+                    className="form-control"
+                    type="Number"
+                    name="Etiqueta"
+                    name="precio3"
+                    id="precio3"
+                    validate={{
+                      required: { value: false },
+                    }}
+                    value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
+                  />
+                </Col>
+              </Row>
+            </AvForm>
           </div>
           <div>
             <Row>
-              <Col
-                style={{
-                  maxWidth: '700px',
-                  'margin-left': '200px',
-                  paddingRight: '50px',
-                }}
-                md={{ size: 5 }}
-              >
-                <h3>Cantidad</h3>
+              <Col sm={{ size: 'auto' }}>
+                <h style={{ 'margin-left': '-70px' }}>Cantidad</h>
                 <input
+                  style={paddingAvInputCantidades()}
                   className="form-control"
                   type="number"
                   id="cantidad"
@@ -1512,14 +1567,10 @@ export default function AgregarProducto(props) {
                   onChange={(e) => manejarCambiocant(e, 0)}
                 />
               </Col>
-              <Col
-                style={{
-                  maxWidth: '700px',
-                  paddingRight: '50px',
-                }}
-              >
-                <h3>Cantidad Mínima</h3>
+              <Col sm={{ size: 'auto' }}>
+                <h style={{ 'margin-left': '-15px' }}>Cantidad Mínima</h>
                 <input
+                  style={paddingAvInputCantidades()}
                   className="form-control"
                   type="number"
                   id="cantidad_minima"
@@ -1534,19 +1585,13 @@ export default function AgregarProducto(props) {
           <br />
           <div>
             <Row>
-              <Col
-                style={{
-                  maxWidth: '700px',
-                  'margin-left': '200px',
-                  paddingRight: '50px',
-                }}
-                md={{ size: 5 }}
-              >
-                <h3>Descripción corta</h3>
+              <Col sm={{ size: 'auto' }}>
                 <AvForm>
                   <FormGroup class="style">
+                    <h style={{ 'margin-left': '-220px' }}>Descripción Corta</h>
                     <Label for="exampleText"></Label>
                     <AvField
+                      style={paddingDescripciones()}
                       type="textarea"
                       name="text"
                       id="descripcion1"
@@ -1561,52 +1606,58 @@ export default function AgregarProducto(props) {
                   </FormGroup>
                 </AvForm>
               </Col>
-              <Col
-                style={{
-                  maxWidth: '700px',
-                  paddingRight: '50px',
-                }}
-              >
-                <h3>Bodega</h3>
+              <Col>
+                <AvForm>
+                  <h style={{ 'margin-left': '-350px' }}>Área</h>
+                  <AvField
+                    style={paddingAvInput()}
+                    className="form-control"
+                    type="text"
+                    name="area"
+                    id="area_agregar"
+                    errorMessage="Campo Obligatorio"
+                    validate={{
+                      required: { value: true },
+                      pattern: { value: regex },
+                      minLength: { value: 1 },
+                    }}
+                    value={seleccionado ? seleccionado.area : ''}
+                    onChange={(e) => manejarCambio(e)}
+                  />
+                </AvForm>
+              </Col>
+            </Row>
+            <Row>
+              <Col sm={{ size: 'auto' }}>
+                <h style={{ 'margin-left': '-25px' }}>Fecha de Vencimiento</h>
                 <br />
-                <SelectSearch
-                  printOptions="on-focus"
-                  search
-                  placeholder="Encuentre la Bodega del Producto"
-                  required
-                  autoComplete
-                  options={bodegas}
-                  value={bodega}
-                  onChange={(e) => handleChange3(e)}
+                <DatePicker
+                  selected={startDate}
+                  value={startDate}
+                  onChange={(date) => handleChangeDate(date)}
+                  id="fecha_vencimiento"
                 />
               </Col>
             </Row>
           </div>
           <Row>
-            <Col
-              style={{
-                maxWidth: '700px',
-                'margin-left': '200px',
-                paddingRight: '50px',
-              }}
-              md={{ size: 5 }}
-            >
-              <h3>Descripción larga </h3>
-              <div className="form-group">
-                <label htmlFor="exampleFormControlTextarea1"></label>
-                <textarea className="form-control" id="descripcion2" rows="5" />
-              </div>
-            </Col>
-            <Col
-              style={{
-                maxWidth: '800px',
-                paddingRight: '60px',
-                'margin-right': '30px',
-              }}
-            >
-              <h3>Imagen del Producto</h3>
+            <Col sm={{ size: 'auto' }}>
+              <h style={{ 'margin-left': '-25px' }}>Bodega</h>
               <br />
-              <section className="container">
+              <SelectSearch
+                printOptions="on-focus"
+                search
+                placeholder="Encuentre la Bodega del Producto"
+                required
+                autoComplete
+                options={bodegas}
+                value={bodega}
+                onChange={(e) => handleChange3(e)}
+              />
+            </Col>
+            <Col>
+              <h style={{ 'margin-left': '-250px' }}>Imagen del Producto</h>
+              <section style={{ paddingLeft: '80px' }} className="container">
                 <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
                   <input {...getInputProps()} />
                   <p>Arrastre la imagen aqui o de clic para seleccionar</p>
@@ -1632,89 +1683,6 @@ export default function AgregarProducto(props) {
             Agregar Producto
           </button>
           <button className="btn btn-danger" onClick={(e) => descartarcambios()}>
-            Cancelar
-          </button>
-        </ModalFooter>
-      </Modal>
-      <Modal
-        style={{
-          height: '95vh',
-          'overflow-y': 'auto',
-          top: '20px',
-          maxWidth: '550px',
-        }}
-        isOpen={modalInsertarPrecio}
-      >
-        <ModalHeader>
-          <div className="text-center">
-            <h3>Agregar Precios</h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div className="form-group">
-            <label>Precio 1</label>
-            <AvForm>
-              <AvField
-                className="form-control"
-                type="Number"
-                name="precio1"
-                id="precio1"
-                errorMessage="Este Campo es Obligatorio"
-                validate={{
-                  required: { value: true },
-                }}
-                value={seleccionado.precio[0] ? seleccionado.precio[0] : 0}
-              />
-
-              <br />
-              <label>Precio 2</label>
-              <AvField
-                className="form-control"
-                type="Number"
-                name="Fecha"
-                name="precio2"
-                id="precio2"
-                validate={{
-                  required: { value: false },
-                }}
-                value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
-              />
-              <br />
-              <label>Precio 3</label>
-              <AvField
-                className="form-control"
-                type="Number"
-                name="Etiqueta"
-                name="precio3"
-                id="precio3"
-                validate={{
-                  required: { value: false },
-                }}
-                value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
-              />
-            </AvForm>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button
-            className="btn btn-primary"
-            onClick={() =>
-              Confirm.open({
-                title: 'Insertar Precios',
-                message: '¿Esta seguro de que quiere insertar estos precios?',
-                onok: () => {
-                  GuardarPrecio();
-                },
-              })
-            }
-          >
-            Agregar Precio
-          </button>
-          <button className="btn btn-danger" onClick={() => setModalInsertarPrecio(false)}>
             Cancelar
           </button>
         </ModalFooter>

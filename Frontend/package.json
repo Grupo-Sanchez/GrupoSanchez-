@@ -1,3 +1,4 @@
+
 {
   "name": "gruposanchez",
   "version": "0.1.0",
@@ -19,6 +20,8 @@
     "react": "^17.0.1",
     "react-barcode": "^1.4.0",
     "react-barcodes": "^1.0.3",
+    "react-date-picker": "^8.0.7",
+    "react-datepicker": "^3.6.0",
     "react-dom": "^17.0.1",
     "react-dropzone": "^11.3.1",
     "react-router-dom": "^5.2.0",
@@ -26,6 +29,7 @@
     "react-select-search": "^2.2.3",
     "react-toastify": "^7.0.3",
     "reactstrap": "^8.7.1",
+    "reactstrap-date-picker": "0.0.11",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
@@ -61,3 +65,4 @@
     "pretty-quick": "^3.1.0"
   }
 }
+
