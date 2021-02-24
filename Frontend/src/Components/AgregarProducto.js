@@ -249,7 +249,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     seleccionado.nombre = '';
     seleccionado.area = '';
@@ -482,7 +482,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -507,7 +507,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -545,7 +545,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -564,7 +564,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       if (precioprovedor1 !== '') {
@@ -737,14 +737,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -753,7 +753,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -822,7 +822,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (entra) {
         Confirm.open({
@@ -1389,26 +1389,93 @@ export default function AgregarProducto(props) {
                   />
                 </Col>
                 <Col sm={{ size: 5 }}>
-                  <h style={{ 'margin-left': '-350px' }}>Área</h>
-                  <AvField
-                    style={paddingAvInput()}
-                    className="form-control"
-                    type="text"
-                    name="area"
-                    id="area_agregar"
-                    errorMessage="Campo Obligatorio"
-                    validate={{
-                      required: { value: true },
-                      pattern: { value: regex },
-                      minLength: { value: 1 },
-                    }}
-                    value={seleccionado ? seleccionado.area : ''}
-                    onChange={(e) => manejarCambio(e)}
-                  />
-                  <br />
+                  <FormGroup>
+                    <h style={{ 'margin-left': '-480px' }}>Descripción especifica</h>
+                    <Label for="exampleText"></Label>
+                    <AvField
+                      style={paddingDescripciones()}
+                      type="textarea"
+                      name="text"
+                      id="descripcion2"
+                      value={seleccionado ? seleccionado.descripcion_larga : ''}
+                      onChange={manejarCambio}
+                    />
+                  </FormGroup>
                 </Col>
               </Row>
             </AvForm>
+            <Row>
+              <div>
+                <h style={{ 'margin-left': '-900px' }}>Códigos Auxiliares</h>
+                <Row>
+                  <Col>
+                    <input
+                      style={paddingInput()}
+                      updatable={true}
+                      type="text"
+                      onKeyUp={(event) => addTags(event)}
+                      placeholder="O presione Enter para insertar códigos"
+                      onKeyDown={handleKeyDown}
+                    />
+                    <div style={paddingdiv()}>
+                      <ul style={paddingul()}>
+                        {tags.map((tag, index) => (
+                          <li style={paddingmain()} key={index}>
+                            <span style={paddingtitle()}>{tag}</span>
+                            <i style={paddingclose()} onClick={() => removeTags(index)}>
+                              x
+                        </i>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '1px',
+                        'margin-left': '525px',
+                      }}
+                    >
+                      <Button
+                        style={{
+                          'font-size': '20px',
+                          'border-radius': '50%',
+                          width: '40px',
+                          height: '40px',
+                          'line-height': '2px',
+                          'margin-left': '-350px',
+                        }}
+                        onClick={() =>
+                          Confirm.open({
+                            title: 'Insertar Codigos',
+                            message: '¿Está seguro de que quiere insertar estos codigos?',
+                            onok: () => {
+                              GuardarCodigos();
+                            },
+                          })
+                        }
+                        color="primary"
+                      >
+                        +
+                  </Button>
+                    </div>
+                  </Col>
+                  {/*<h style={{ 'margin-left': '-580px' }}>Marca</h>
+                <SelectSearch
+                  printOptions="on-focus"
+                  search
+                  placeholder="Encuentre la Marca del Producto"
+                  required
+                  autoComplete
+                  options={marcas}
+                  value={marca}
+                  onChange={(e) => handleChange2(e)}
+                />
+              */}
+                </Row>
+                <br />
+              </div>
+            </Row>
             <AvForm>
               <Row>
                 <Col sm={{ size: 5 }}>
@@ -1425,16 +1492,15 @@ export default function AgregarProducto(props) {
                   />
                 </Col>
                 <br />
-                <div
-                  style={{
-                    'border-radius': '26px',
-                    width: '150px',
-                    top: '50px',
-                    'margin-left': '525px',
-                  }}
-                >
-                  <Col sm={{ size: 'auto' }}>
+                <Col >
+                  <div
+                    style={{
+                      top: '-5px',
+                      'margin-left': '70px',
+                    }}
+                  ><label>Precio 1</label>
                     <AvField
+                      style={paddingAvInputCantidades()}
                       className="form-control"
                       type="Number"
                       name="precio1"
@@ -1445,8 +1511,8 @@ export default function AgregarProducto(props) {
                       }}
                       value={seleccionado.precio[0] ? seleccionado.precio[0] : 0}
                     />
-                  </Col>
-                </div>
+                  </div>
+                </Col>
                 <Col sm={{ size: 'auto' }}>
                   <label>Precio 2</label>
                   <AvField
@@ -1460,8 +1526,8 @@ export default function AgregarProducto(props) {
                       required: { value: false },
                     }}
                     value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                    // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                  // onChange={manejarCambio}
                   />
                 </Col>
                 <Col sm={{ size: 'auto' }}>
@@ -1477,82 +1543,12 @@ export default function AgregarProducto(props) {
                       required: { value: false },
                     }}
                     value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                    // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                    // onChange={manejarCambio}
+                  // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                  // onChange={manejarCambio}
                   />
                 </Col>
               </Row>
             </AvForm>
-          </div>
-          <div>
-            <h style={{ 'margin-left': '-900px' }}>Códigos Auxiliares</h>
-            <Row>
-              <Col>
-                <input
-                  style={paddingInput()}
-                  updatable={true}
-                  type="text"
-                  onKeyUp={(event) => addTags(event)}
-                  placeholder="O presione Enter para insertar códigos"
-                  onKeyDown={handleKeyDown}
-                />
-                <div style={paddingdiv()}>
-                  <ul style={paddingul()}>
-                    {tags.map((tag, index) => (
-                      <li style={paddingmain()} key={index}>
-                        <span style={paddingtitle()}>{tag}</span>
-                        <i style={paddingclose()} onClick={() => removeTags(index)}>
-                          x
-                        </i>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '1px',
-                    'margin-left': '525px',
-                  }}
-                >
-                  <Button
-                    style={{
-                      'font-size': '20px',
-                      'border-radius': '50%',
-                      width: '40px',
-                      height: '40px',
-                      'line-height': '2px',
-                      'margin-left': '-350px',
-                    }}
-                    onClick={() =>
-                      Confirm.open({
-                        title: 'Insertar Codigos',
-                        message: '¿Está seguro de que quiere insertar estos codigos?',
-                        onok: () => {
-                          GuardarCodigos();
-                        },
-                      })
-                    }
-                    color="primary"
-                  >
-                    +
-                  </Button>
-                </div>
-              </Col>
-              {/*<h style={{ 'margin-left': '-580px' }}>Marca</h>
-                <SelectSearch
-                  printOptions="on-focus"
-                  search
-                  placeholder="Encuentre la Marca del Producto"
-                  required
-                  autoComplete
-                  options={marcas}
-                  value={marca}
-                  onChange={(e) => handleChange2(e)}
-                />
-              */}
-            </Row>
-            <br />
           </div>
           <div>
             <Row>
@@ -1613,18 +1609,22 @@ export default function AgregarProducto(props) {
               </Col>
               <Col>
                 <AvForm>
-                  <FormGroup>
-                    <h style={{ 'margin-left': '-480px' }}>Descripción Larga</h>
-                    <Label for="exampleText"></Label>
-                    <AvField
-                      style={paddingDescripciones()}
-                      type="textarea"
-                      name="text"
-                      id="descripcion2"
-                      value={seleccionado ? seleccionado.descripcion_larga : ''}
-                      onChange={manejarCambio}
-                    />
-                  </FormGroup>
+                  <h style={{ 'margin-left': '-350px' }}>Área</h>
+                  <AvField
+                    style={paddingAvInput()}
+                    className="form-control"
+                    type="text"
+                    name="area"
+                    id="area_agregar"
+                    errorMessage="Campo Obligatorio"
+                    validate={{
+                      required: { value: true },
+                      pattern: { value: regex },
+                      minLength: { value: 1 },
+                    }}
+                    value={seleccionado ? seleccionado.area : ''}
+                    onChange={(e) => manejarCambio(e)}
+                  />
                 </AvForm>
               </Col>
             </Row>
