@@ -36,7 +36,7 @@ export default function AgregarUsuario(props) {
   const options = [
     { value: 'propietario', name: 'Propietario' },
     { value: 'administrador', name: 'Administrador' },
-    { value: 'jefe', name: 'Jefe de tienda' },
+    { value: 'jefetienda', name: 'Jefe de tienda' },
     { value: 'ejecutivo', name: 'Ejecutivo de ventas' },
   ];
 
@@ -71,8 +71,8 @@ export default function AgregarUsuario(props) {
 
       console.log('Mandando: ', typeof seleccionado.rol.value);
       console.log('Mandando: ', jsonString);
-      //     fetch('http://Localhost:3001/api/login', {
-      fetch('http://Localhost:3001/api/signup', {
+      //     fetch('http://178.128.67.247:3001/api/login', {
+      fetch('http://178.128.67.247:3001/api/signup', {
         method: 'post',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(jsonString),
@@ -130,8 +130,6 @@ export default function AgregarUsuario(props) {
   };
 
   const escribirUsuario = async () => {
-    alert(JSON.stringify(seleccionado.rol));
-    alert(marca);
     if (
       seleccionado.rol !== '' &&
       regexSoloNumeros.test(document.getElementById('identidad').value) &&
@@ -160,8 +158,9 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://Localhost:3001/api/Users', campos).then(signUpMethod());
-      console.log(res);
+      const res = await axios
+        .post('http://178.128.67.247:3001/api/Users', campos)
+        .then(signUpMethod());
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',
@@ -383,24 +382,20 @@ export default function AgregarUsuario(props) {
 
           <div>
             <AvForm>
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <AvField
-                    label="Contraseña"
-                    errorMessage="Constraseña debe tener mas de 4 caracteres"
-                    validate={{
-                      required: { value: true },
-                      minLength: { value: 4 },
-                    }}
-                    className="form-control"
-                    type="text"
-                    name="password"
-                    id="password"
-                    value={seleccionado ? seleccionado.password : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-              </Row>
+              <AvField
+                label="contraseña"
+                errorMessage="Constraseña debe tener mas de 4 caracteres"
+                validate={{
+                  required: { value: true },
+                  minLength: { value: 4 },
+                }}
+                className="form-control"
+                type="password"
+                name="password"
+                id="password"
+                value={seleccionado ? seleccionado.password : ''}
+                onChange={manejarCambio}
+              />
             </AvForm>
           </div>
           <div>

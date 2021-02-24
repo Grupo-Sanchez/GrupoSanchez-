@@ -22,6 +22,10 @@ CantPasillos: "",',*/
     type: String,
     required: 'area requerido',
   },
+  CantProductos: {
+    type: String,
+    required: 'area requerido',
+  },
 });
 
 module.exports = model('Bodegas', BodegaSchema);

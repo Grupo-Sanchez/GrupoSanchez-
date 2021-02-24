@@ -154,7 +154,7 @@ export default function EliminarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthProveedores = async () => {
-    await axios.get('http://Localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
       for (let index = 0; index < proveedoresDB.length; index++) {
@@ -183,7 +183,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthBodegas = async () => {
-    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
@@ -198,7 +198,7 @@ export default function EliminarProducto(props) {
   };
   let cont = 1;
   const fecthMarcas = async () => {
-    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -213,7 +213,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthData = () => {
-    axios.get('http://Localhost:3001/api/productos').then((response) => {
+    axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
       setData(response.data);
     });
     fecthBodegas();
@@ -580,7 +580,7 @@ export default function EliminarProducto(props) {
     }
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/productos/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     /*Confirm.open({
@@ -643,7 +643,7 @@ export default function EliminarProducto(props) {
       ) {
         setModalModificar(false);
         axios
-          .put(`http://Localhost:3001/api/productos/${Id}`, {
+          .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
             nombre: document.getElementById('modnombre').value,
             area: document.getElementById('modarea').value,
             codigos: codes,
@@ -1074,6 +1074,7 @@ export default function EliminarProducto(props) {
   };
   const mostrarCodigoBarra = (elemento) => {
     setSeleccionado(elemento);
+
     setModalVerCodigoBarra(true);
   };
   const manejarCambio = (e) => {
@@ -2622,7 +2623,7 @@ export default function EliminarProducto(props) {
         </ModalHeader>
         <ModalBody>
           <div align="center">
-            <Barcode value={codigo1} />
+            <Barcode value={seleccionado.codigos[0]} />
           </div>
         </ModalBody>
         <ModalFooter>

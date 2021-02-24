@@ -57,7 +57,7 @@ export default function ModificarUsuario(props) {
   };
 
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/users/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001/api/users/${memberId}`);
   };
 
   const [data, setData] = useState([]);
@@ -66,7 +66,7 @@ export default function ModificarUsuario(props) {
 
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://Localhost:3001/api/users').then((response) => {
+      await axios.get('http://178.128.67.247:3001/api/users').then((response) => {
         setData(response.data);
       });
     };
@@ -115,13 +115,13 @@ export default function ModificarUsuario(props) {
       (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
       regexSoloNumeros.test(document.getElementById('telefono').value) &&
       regEmail.test(document.getElementById('correo').value) &&
-      seleccionado.rol[0] !== undefined &&
+      seleccionado.rol !== '' &&
       seleccionado.identidad.length === 13 &&
       seleccionado.rtn.length === 14
     ) {
       setModalModificarUsuario(false);
       axios
-        .put(`http://Localhost:3001/api/users/${seleccionado._id}`, {
+        .put(`http://178.128.67.247:3001/api/users/${seleccionado._id}`, {
           identidad: seleccionado.identidad,
           nombre: seleccionado.nombre,
           segundo_nombre: seleccionado.segundo_nombre,
@@ -217,7 +217,6 @@ export default function ModificarUsuario(props) {
           striped
           bordered
           hover
-          dark
           align="center"
           size="sm"
           id="myTable"
@@ -235,6 +234,7 @@ export default function ModificarUsuario(props) {
               <th>Telefono</th>
               <th>Correo</th>
               <th>Rol</th>
+              <th>Accion</th>
             </tr>
           </thead>
           <tbody>
@@ -253,6 +253,20 @@ export default function ModificarUsuario(props) {
                 <td>
                   <Button onClick={() => modificar(elemento)} color="primary">
                     Modificar
+                  </Button>
+                  <Button
+                    color="danger"
+                    onClick={() =>
+                      Confirm.open({
+                        title: '¡Advertencia!',
+                        message: '¿Esta seguro que desea eliminar el usuario?.',
+                        onok: () => {
+                          onDelete(elemento._id);
+                        },
+                      })
+                    }
+                  >
+                    Eliminar
                   </Button>
                 </td>
               </tr>
@@ -438,6 +452,7 @@ export default function ModificarUsuario(props) {
                 onChange={(e) => handleChange2(e)}
               />
             </div>
+
           </ModalBody>
           <ModalFooter>
             <button className="btn btn-primary" onClick={() => modificarUsuario()}>
