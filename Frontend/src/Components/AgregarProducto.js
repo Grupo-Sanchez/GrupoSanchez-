@@ -939,6 +939,7 @@ export default function AgregarProducto(props) {
   }
   function paddingAvInput() {
     return {
+      'margin-left': '65px',
       'border-radius': '26px',
       width: '320px',
     };
@@ -946,15 +947,16 @@ export default function AgregarProducto(props) {
   function paddingAvInputCantidades() {
     return {
       'border-radius': '26px',
-      width: '150px',
+      width: '120px',
     };
   }
 
   function paddingDescripciones() {
     return {
       'border-radius': '26px',
-      width: '380px',
+      width: '330px',
       height: '100px',
+      'margin-left': '-75px',
     };
   }
   function paddingHeader() {
@@ -1022,8 +1024,8 @@ export default function AgregarProducto(props) {
         </ModalHeader>
         <ModalBody
           style={{
-            'margin-right': '200px',
-            paddingRight: '200px',
+            'margin-right': '50px',
+            paddingRight: '50px',
           }}
         >
           <Row>
@@ -1387,10 +1389,11 @@ export default function AgregarProducto(props) {
                     onChange={(e) => manejarCambio(e)}
                   />
                 </Col>
-                <Col sm={{ size: 5 }}>
+                <Col style={{ 'margin-right': '40px' }}>
+                  <label >Descripción especifica</label>
+                </Col>
+                <Col >
                   <FormGroup>
-                    <h style={{ 'margin-left': '-480px' }}>Descripción especifica</h>
-                    <Label for="exampleText"></Label>
                     <AvField
                       style={paddingDescripciones()}
                       type="textarea"
@@ -1476,8 +1479,8 @@ export default function AgregarProducto(props) {
               </div>
             </Row>
             <AvForm>
-              <Row>
-                <Col sm={{ size: 5 }}>
+              <Row >
+                <Col>
                   <h style={{ 'margin-left': '-350px' }}>Marca</h>
                   <SelectSearch
                     printOptions="on-focus"
@@ -1491,13 +1494,12 @@ export default function AgregarProducto(props) {
                   />
                 </Col>
                 <br />
-                <Col >
+                <Col>
+                  <label style={{ 'margin-right': '100px' }} >Precios de venta</label>
+                </Col>
+                <Col style={{ 'margin-right': '-30px' }}>
                   <div
-                    style={{
-                      top: '-5px',
-                      'margin-left': '70px',
-                    }}
-                  ><label>Precio 1</label>
+                  ><label >Precio 1</label>
                     <AvField
                       style={paddingAvInputCantidades()}
                       className="form-control"
@@ -1512,8 +1514,8 @@ export default function AgregarProducto(props) {
                     />
                   </div>
                 </Col>
-                <Col sm={{ size: 'auto' }}>
-                  <label>Precio 2</label>
+                <Col style={{ 'margin-right': '-30px' }}>
+                  <label style={{ 'margin-left': '-45px' }}>Precio 2</label>
                   <AvField
                     style={paddingAvInputCantidades()}
                     className="form-control"
@@ -1529,8 +1531,8 @@ export default function AgregarProducto(props) {
                   // onChange={manejarCambio}
                   />
                 </Col>
-                <Col sm={{ size: 'auto' }}>
-                  <label>Precio 3</label>
+                <Col style={{ 'margin-right': '50px' }}>
+                  <label style={{ 'margin-left': '-45px' }}>Precio 3</label>
                   <AvField
                     style={paddingAvInputCantidades()}
                     className="form-control"
@@ -1607,8 +1609,10 @@ export default function AgregarProducto(props) {
                 </AvForm>
               </Col>
               <Col>
+                <label style={{ 'margin-left': '250px' }}>Departamento</label>
+              </Col>
+              <Col>
                 <AvForm>
-                  <h style={{ 'margin-left': '-350px' }}>Área</h>
                   <AvField
                     style={paddingAvInput()}
                     className="form-control"
