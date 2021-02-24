@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useEffect } from 'react';
 import { Table, Container, Col, Row, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import SelectSearch from 'react-select-search';
 import axios from 'axios';
@@ -8,6 +8,7 @@ import '../Styles/SearchBar.css';
 import Devolucion from '../Icons/Devolucion.svg';
 
 export default function Devoluciones() {
+  const [data, setData] = useState([]);
   /*constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
@@ -60,7 +61,7 @@ export default function Devoluciones() {
       LugarDevolucion: this.state.LugarDevolucion,
       productosDevueltos: this.state.productosDevolucion,
     };
-    await axios.post('http://178.128.67.247:3001/api/devoluciones', campos);
+    await axios.post('http://localhost:3001/api/devoluciones', campos);
     window.location.reload();
   };
   componentDidMount = async () => {
@@ -69,7 +70,7 @@ export default function Devoluciones() {
 
   getProductos = async () => {
     await axios
-      .get('http://178.128.67.247:3001/api/productos')
+      .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         const productosagregados = [];
@@ -108,7 +109,7 @@ export default function Devoluciones() {
         break;
       }
     }
-    axios.put(`http://178.128.67.247:3001/api/productos/${id}`, { cantidad: cantidad2 });
+    axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
   };
   eliminarProducto = async (i, cantidad) => {
     this.state.indice = 1;
@@ -121,7 +122,7 @@ export default function Devoluciones() {
         break;
       }
     }
-    axios.put(`http://178.128.67.247:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items2 = this.state.productosDevolucion.filter((item) => item.value !== i);
     const nextState = this.state;
     nextState.productosDevolucion = items2;
@@ -151,6 +152,31 @@ export default function Devoluciones() {
     nextState.quantity = 1;
     this.setState(nextState);
   }*/
+  const [facturas, setfacturas] = useState([]);
+  const fecthData = () => {
+    axios.get('http://localhost:3001/api/facturas').then((response) => {
+      const info = response.data;
+      let facturastemp = [];
+      for (let index = 0; index < info.length; index++) {
+        const element = info[index];
+        facturastemp.push({
+          subtotal: element.subtotal,
+          impuesto: element.impuesto,
+          total: element.total,
+          productosSeleccionado: element.productosSeleccionado,
+          nombreCliente: element.nombreCliente,
+          identificacion: element.identificacion,
+          value: element._id,
+          fecha: element.fecha,
+          name: element.invoiceNumber,
+        });
+      }
+      setfacturas(facturastemp);
+    });
+  };
+  useEffect(() => {
+    fecthData();
+  }, []);
   return (
     <div align="center">
       <h1 align="center">DEVOLUCIONES</h1>
@@ -161,7 +187,7 @@ export default function Devoluciones() {
           <Col>
             <div align="center">
               <SelectSearch
-                //options={this.state.productosEnBodega}
+                options={facturas}
                 search
                 placeholder="Encuentre la Factura"
                 //onChange={this.handleChange.bind(this)}

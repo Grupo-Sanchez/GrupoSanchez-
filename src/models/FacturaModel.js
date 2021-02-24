@@ -7,17 +7,7 @@ const facturaSchema = new Schema({
   identificacion: {
     type: String,
     required: 'identificacion requerido',
-  } /*
-  razonfactura: {
-    type: String,
   },
-  Estado: {
-    type: String,
-  },
-  Lugarfactura: {
-    type: String,
-  },*/,
-
   productosSeleccionado: {
     type: Array,
   },
@@ -29,6 +19,12 @@ const facturaSchema = new Schema({
   },
   total: {
     type: Number,
+  },
+  invoiceNumber: {
+    type: String,
+  },
+  fecha: {
+    type: Date,
   },
 });
 

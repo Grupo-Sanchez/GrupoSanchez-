@@ -5,7 +5,6 @@ import { Table, Container, Row, Col } from 'reactstrap';
 import Header from '../Components/Header.jsx';
 import Facturar from '../Icons/Facturar.svg';
 
-
 import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarVendedor.css';
 import axios from 'axios';
@@ -18,7 +17,6 @@ const items = [
   },
 ];
 export default class Facturas extends Component {
-  
   constructor(props) {
     super(props);
     this.addRow = this.addRow.bind(this);
@@ -74,7 +72,7 @@ export default class Facturas extends Component {
   };
   getProductos = async () => {
     await axios
-      .get('http://178.128.67.247:3001/api/productos')
+      .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         var productosagregados = [];
@@ -118,7 +116,7 @@ export default class Facturas extends Component {
       total: this.state.total,
       productosSeleccionado: this.state.productosSeleccionado,
     };
-    await axios.post('http://178.128.67.247:3001/api/facturas', campos);
+    await axios.post('http://localhost:3001/api/facturas', campos);
     window.location.reload();
   };
   updateTool = async (id) => {
@@ -131,7 +129,7 @@ export default class Facturas extends Component {
       }
     }
     axios
-      .put(`http://178.128.67.247:3001/api/productos/${id}`, { cantidad: cantidad2 })
+      .put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 })
       .then(function (response) {})
       .catch(function (error) {
         console.log(error);
@@ -156,7 +154,7 @@ export default class Facturas extends Component {
     }
 
     axios
-      .put(`http://178.128.67.247:3001/api/productos/${i}`, { cantidad: cantidad2 })
+      .put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 })
       .then(function (response) {})
       .catch(function (error) {
         console.log(error);
@@ -197,20 +195,17 @@ export default class Facturas extends Component {
       this.state.total = this.state.result + this.state.impuesto;
     }
     return (
-      
       <div>
         <div>
-    <Container fluid style={{ padding: '0' }}>
-      <Row noGutters>
-        <Col>
-          <Header items={items} />
-        </Col>
-      </Row>
-      <Row noGutters>
-
-      </Row>
-    </Container>
-  </div>
+          <Container fluid style={{ padding: '0' }}>
+            <Row noGutters>
+              <Col>
+                <Header items={items} />
+              </Col>
+            </Row>
+            <Row noGutters></Row>
+          </Container>
+        </div>
         <h1 align="center">FACTURA</h1>
         <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
           <div align="center">

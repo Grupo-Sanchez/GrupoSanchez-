@@ -17,6 +17,8 @@ exports.create_factura = async (req, res) => {
     total,
     nombreCliente,
     identificacion,
+    invoiceNumber,
+    fecha,
   } = req.body;
   try {
     const new_factura = new factura({
@@ -26,6 +28,8 @@ exports.create_factura = async (req, res) => {
       total,
       nombreCliente,
       identificacion,
+      invoiceNumber,
+      fecha,
     });
     ret = await new_factura.save();
     res.json(ret);

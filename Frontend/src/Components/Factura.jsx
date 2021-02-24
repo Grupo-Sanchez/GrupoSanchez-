@@ -1,5 +1,17 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Button, Table, Row, Col, Label, FormGroup } from 'reactstrap';
+import {
+  Button,
+  Table,
+  Row,
+  Col,
+  Label,
+  FormGroup,
+  Input,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from 'reactstrap';
 import axios from 'axios';
 import {
   AvForm,
@@ -13,7 +25,9 @@ import {
   AvCheckbox,
 } from 'availity-reactstrap-validation';
 import SelectSearch from 'react-select-search';
+import FacturaImprimir from './FacturaImprimir.jsx';
 import '../Styles/SearchBarVendedor.css';
+import { Confirm } from './Confirm';
 
 const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
 
@@ -28,7 +42,10 @@ export default function Facturas() {
   const [nombre, setnombre] = useState('');
   const [rtn, setrtn] = useState('');
   const [formatopago, setformatopago] = useState('');
+  let invNum = require('invoice-number');
+  const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
   const [productosDevolucion, setproductosDevolucion] = useState([]);
+  const [recibo, setrecibo] = useState([]);
   const [productosEnBodega, setproductosEnBodega] = useState([
     {
       indice: 0,
@@ -40,11 +57,17 @@ export default function Facturas() {
       precioSumado: 0,
     },
   ]);
+  const [facturas, setfacturas] = useState([]);
+  const fecthFacturas = () => {
+    axios.get('http://localhost:3001/api/facturas').then((response) => {
+      setfacturas(response.data);
+    });
+  };
   const [productoSeleccionado, setproductoSeleccionado] = useState([]);
   const [productosSeleccionado, setproductosSeleccionado] = useState([]);
   const getProductos = async () => {
     await axios
-      .get('http://178.128.67.247:3001/api/productos')
+      .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         const productosagregados = [];
@@ -80,14 +103,6 @@ export default function Facturas() {
   const [totalfinal, setTotalFinal] = useState(0);
   const addRow = (producto) => {
     setproductosSeleccionado([...productosSeleccionado, producto]);
-    result += producto.precioSumado;
-    impuesto += Number(result * 0.15);
-    total += result + impuesto;
-    setSumaTotal(result + sumatotal);
-    setImpuestoTotal(impuesto + impuestototal);
-    setTotalFinal(total + totalfinal);
-    setindice(1);
-    setquantity(1);
   };
 
   const b = (idToSearch) => {
@@ -108,6 +123,7 @@ export default function Facturas() {
   };
   useEffect(() => {
     getProductos();
+    fecthFacturas();
   }, []);
 
   const handleChange = (e) => {
@@ -115,31 +131,62 @@ export default function Facturas() {
     b(e);
     setquantity(1);
   };
-
+  let campos = {};
   const handleValidSubmit = async () => {
-    const campos = {
-      subtotal: sumatotal,
-      impuesto: impuestototal,
-      total: totalfinal,
-      productosSeleccionado: productosSeleccionado,
-      nombreCliente: nombre,
-      rtn: rtn,
-    };
-    alert(JSON.stringify(campos));
-    // await axios.post('http://178.128.67.247:3001/api/facturas', campos);
-    setproductosSeleccionado([]);
-    setresult(0);
-    setindice(1);
-    setimpuesto(0);
-    settotal(0);
-    setImpuestoTotal(0);
-    setSumaTotal(0);
-    setTotalFinal(0);
-    setnombre('');
-    setrtn('');
-    setquantity(1);
-    setproductoSeleccionado({});
+    if (rtn.length !== 14 && rtn !== '') {
+      Confirm.open({
+        title: 'Error',
+        message: 'Campo de RTN invalido',
+        onok: () => {},
+      });
+    } else {
+      if (productosSeleccionado.length !== 0) {
+        let nombretemp = nombre;
+        let rtntemp = rtn;
+        if (nombre === '') {
+          nombretemp = '----------';
+        }
+        if (rtn === '') {
+          rtntemp = '----------';
+        }
+        //let numeroFactura = invNum.next('10000000');
+        //alert(numeroFactura);
+        campos = {
+          subtotal: sumatotal,
+          impuesto: impuestototal,
+          total: totalfinal,
+          productosSeleccionado: productosSeleccionado,
+          nombreCliente: nombretemp,
+          identificacion: rtntemp,
+          invoiceNumber: Number(facturas[facturas.length - 1].invoiceNumber) + 1,
+          fecha: new Date(),
+        };
+        setrecibo(campos);
+        await axios.post('http://localhost:3001/api/facturas', campos);
+        fecthFacturas();
+        setModalModificarPrecios(true);
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: 'Debe tener productos seleccionados para poder facturar',
+          onok: () => {},
+        });
+      }
+      setproductosSeleccionado([]);
+      setresult(0);
+      setindice(1);
+      setimpuesto(0);
+      settotal(0);
+      setImpuestoTotal(0);
+      setSumaTotal(0);
+      setTotalFinal(0);
+      setnombre('');
+      setrtn('');
+      setquantity(1);
+      setproductoSeleccionado({});
+    }
   };
+
   const segundoPrecio = (codigo) => {
     setindice(1);
     for (let index = 0; index < productosSeleccionado.length; index++) {
@@ -157,10 +204,18 @@ export default function Facturas() {
               setTotalFinal(total + totalfinal);
               element.precioUnitario = element2.precios[1];
               element.precioSumado = element.cantidad * element.precioUnitario;
-              alert('Segundo Precio Aplicado');
+              Confirm.open({
+                title: 'Descuento',
+                message: '¡Segundo Precio Aplicado!',
+                onok: () => {},
+              });
               break;
             } else {
-              alert('El segundo precio ya fue aplicado');
+              Confirm.open({
+                title: 'Error',
+                message: 'El segundo precio ya fue aplicado!',
+                onok: () => {},
+              });
               break;
             }
           }
@@ -177,7 +232,7 @@ export default function Facturas() {
         break;
       }
     }
-    //axios.put(`http://178.128.67.247:3001/api/productos/${id}`, { cantidad: cantidad2 }).then().catch();
+    //axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 }).then().catch();
     setproductoSeleccionado([]);
     setCantidadmax(1);
     await getProductos();
@@ -194,7 +249,7 @@ export default function Facturas() {
       }
     }
     // alert(cantidad2);
-    //axios.put(`http://178.128.67.247:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    //axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items = productosSeleccionado.filter((item) => item.value !== i);
     setproductosSeleccionado(items);
     setresult(0);
@@ -215,14 +270,34 @@ export default function Facturas() {
     setrtn(event.target.value);
   };
   const agregarProductoaTabla = async () => {
-    addRow({
-      name: productoSeleccionado.name,
-      value: productoSeleccionado.value,
-      codigo: productoSeleccionado.codigo,
-      cantidad: quantity,
-      precioUnitario: Number(productoSeleccionado.precioUnitario),
-      precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
-    });
+    let sumar = false;
+    for (let index = 0; index < productosSeleccionado.length; index++) {
+      const element = productosSeleccionado[index];
+      if (element.codigo === productoSeleccionado.codigo) {
+        element.cantidad = Number(Number(quantity) + Number(element.cantidad));
+        element.precioSumado = Number(element.precioUnitario) * element.cantidad;
+        sumar = true;
+        break;
+      }
+    }
+    if (!sumar) {
+      addRow({
+        name: productoSeleccionado.name,
+        value: productoSeleccionado.value,
+        codigo: productoSeleccionado.codigo,
+        cantidad: quantity,
+        precioUnitario: Number(productoSeleccionado.precioUnitario),
+        precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
+      });
+    }
+    result += quantity * Number(productoSeleccionado.precioUnitario);
+    impuesto += Number(result * 0.15);
+    total += result + impuesto;
+    setSumaTotal(result + sumatotal);
+    setImpuestoTotal(impuesto + impuestototal);
+    setTotalFinal(total + totalfinal);
+    setindice(1);
+    setquantity(1);
     updateTool(productoSeleccionado.value);
   };
   function limit() {
@@ -243,7 +318,15 @@ export default function Facturas() {
   const manejarCambiocantmin = (e, n) => {};
   const regexSoloNumeros = /^[0-9]+$/;
   return (
-    <div>
+    <div class="hide-on-print">
+      <Modal isOpen={ModalModificarPrecios}>
+        <ModalBody>
+          <FacturaImprimir
+            productos={recibo}
+            change={() => setModalModificarPrecios(!ModalModificarPrecios)}
+          />
+        </ModalBody>
+      </Modal>
       <h1 align="center">FACTURA</h1>
       <br />
       <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
@@ -385,15 +468,27 @@ export default function Facturas() {
                 value={rtn}
                 onChange={(e) => handleChangertn(e)}
               />
-              <Button style={{ marginLeft: '10px' }} color="primary" onClick={handleValidSubmit}>
+              <Button
+                style={{ marginLeft: '10px' }}
+                color="primary"
+                onClick={() =>
+                  Confirm.open({
+                    title: '!Advertencia!',
+                    message: '¿Esta seguro de que tiene todos los productos en la factura?',
+                    onok: () => {
+                      handleValidSubmit();
+                    },
+                  })
+                }
+              >
                 Facturar
               </Button>
             </AvForm>
           </div>
           <div style={{ paddingTop: '100px' }}>
-            <h2>Subtotal : {sumatotal.toLocaleString()} Lps.</h2>
-            <h2>Impuesto 15% : {impuestototal.toLocaleString()} Lps.</h2>
-            <h1>Total: {totalfinal.toLocaleString()} Lps.</h1>
+            <h2>Subtotal : L. {sumatotal.toLocaleString()}</h2>
+            <h2>Impuesto 15% : L. {impuestototal.toLocaleString()}</h2>
+            <h1>Total: L. {totalfinal.toLocaleString()}</h1>
           </div>
         </Col>
       </Row>
