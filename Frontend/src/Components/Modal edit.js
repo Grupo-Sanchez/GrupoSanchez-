@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import AddEditForm from './FormCliente modificar';
+import { ReactComponent as EditLogo } from '../Icons/edit.svg';
 
 class ModalForm extends Component {
   constructor(props) {
@@ -31,14 +32,17 @@ class ModalForm extends Component {
     if (label === 'Edit') {
       button = (
         <Button
-          color="warning"
           onClick={this.toggle}
-          style={{ float: 'left', marginRight: '10px' }}
+          //style={{ float: 'left', marginRight: '10px' }}
+          style={{
+            'background-color': 'transparent',
+            borderColor: 'transparent',
+          }}
         >
-          {label}
+          <EditLogo width="30px" height="30px" />
         </Button>
       );
-      title = 'Editar cliente';
+      title = 'GESTIONAR CLIENTE';
     } else {
       button = (
         <Button

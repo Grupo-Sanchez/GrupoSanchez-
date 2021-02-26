@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import AddEditForm from './FormCliente copy';
+import { ReactComponent as PlusIcon } from '../Icons/plus.svg';
 
 class ModalForm extends Component {
   constructor(props) {
@@ -42,11 +43,15 @@ class ModalForm extends Component {
     } else {
       button = (
         <Button
-          color="success"
           onClick={this.toggle}
-          style={{ float: 'left', marginRight: '10px' }}
+          style={{
+            'background-color': 'transparent',
+            borderColor: 'transparent',
+
+            'border-radius': '26px',
+          }}
         >
-          {label}
+          <PlusIcon width="50px" height="50px" />
         </Button>
       );
       title = 'agregar nuevo cliente';
