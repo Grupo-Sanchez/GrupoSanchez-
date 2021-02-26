@@ -132,6 +132,8 @@ export default function AgregarProducto(props) {
   const [tags, setTags] = useState([]);
   const [tagsProveedores, settagsProveedores] = useState([]);
   let [tempProv, settempProv] = useState([]);
+  const [tagsBodegas, settagsBodegas] = useState([]);
+  let [tempBod, settempBod] = useState([]);
   const [tagstemp, setTagsTemp] = useState([]);
   const [seleccionado, setSeleccionado] = useState({
     nombre: '',
@@ -200,8 +202,8 @@ export default function AgregarProducto(props) {
   const [precioprovedor3, setPrecioProvedor3] = useState('');
   const [precioprovedor4, setPrecioProvedor4] = useState('');
   const [precioprovedor5, setPrecioProvedor5] = useState('');
-  const [precioprovedor6, setPrecioProvedor6] = useState('');
-  const [precioprovedor7, setPrecioProvedor7] = useState('');
+  const [precioprovedor6, setPrecioProvedor6] = useState(0);
+  const [precioprovedor7, setPrecioProvedor7] = useState(0);
   const fecthBodegas = async () => {
     await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
@@ -210,7 +212,7 @@ export default function AgregarProducto(props) {
         const element = bodegasobtenidas[index];
         bodegasAgregar.push({
           value: element._id,
-          name: element.numBodega,
+          name: `Bodega ${element.numBodega}`,
         });
       }
       setBodegas(bodegasAgregar);
@@ -278,7 +280,6 @@ export default function AgregarProducto(props) {
       descripcion_larga: seleccionado.descripcion_larga,
       cantidad_minima: cantminsel,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
-      fecha_vencimiento: seleccionado.fecha_vencimiento,
     };
     const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
@@ -377,7 +378,10 @@ export default function AgregarProducto(props) {
     tempProv.push(proveedores.filter((item) => item.value === value)[0]);
     proveedores = proveedores.filter((item) => item.value !== value);
   };
-
+  const handleOnChangeBodega = (value) => {
+    tempBod.push(bodegas.filter((item) => item.value === value)[0]);
+    bodegas = bodegas.filter((item) => item.value !== value);
+  };
   function limit() {
     const temp = document.getElementById('cantidad_minima');
     const maxValue = document.getElementById('cantidad').value;
@@ -417,22 +421,11 @@ export default function AgregarProducto(props) {
   const manejarCambioPrecioRapida = (e, n) => {
     setprecioRapida(e.target.value);
   };
-  const manejarCambioPrecioProveedor = (e, value) => {
-    if (value === 1) {
-      setPrecioProvedor1(e.target.value);
-    } else if (value === 2) {
-      setPrecioProvedor2(e.target.value);
-    } else if (value === 3) {
-      setPrecioProvedor3(e.target.value);
-    } else if (value === 4) {
-      setPrecioProvedor4(e.target.value);
-    } else if (value === 5) {
-      setPrecioProvedor5(e.target.value);
-    } else if (value === 6) {
-      setPrecioProvedor6(e.target.value);
-    } else if (value === 7) {
-      setPrecioProvedor7(e.target.value);
-    }
+  const manejarCambioPrecioProveedor = (e) => {
+    setPrecioProvedor7(e.target.value);
+  };
+  const manejarCambioPrecioBodega = (e) => {
+    setPrecioProvedor6(e.target.value);
   };
   const cerrarModalAgregarProducto = () => {
     props.change();
@@ -949,18 +942,85 @@ export default function AgregarProducto(props) {
     }
   };
   const onChangeProv = () => {
-    tempProv = tempProv.filter((x) => x != null);
-    const uniqueData = [...new Set(tempProv)];
-    alert(JSON.stringify(tempProv));
-    //settagsProveedores([...tagsProveedores, tempProv]);
-    tagsProveedores.push(uniqueData[0]);
-    alert(JSON.stringify(tagsProveedores));
-    //setTagsTempProveedor([...tagstempProveedor, tempProv]);
-    setSize6('6');
-    settempProv([]);
-    setProveedores(proveedores.filter(({ item }) => !tagsProveedores.includes(item)));
+    if (precioprovedor7 !== 0) {
+      tempProv = tempProv.filter((x) => x != null);
+      const uniqueData = [...new Set(tempProv)];
+      alert(JSON.stringify(uniqueData[0].name));
+
+      //settagsProveedores([...tagsProveedores, tempProv]);
+      tagsProveedores.push({
+        name: uniqueData[0].name,
+        value: uniqueData[0]._id,
+        agencia: uniqueData[0].agencia,
+        representante: uniqueData[0].nombre,
+        apellidos: uniqueData[0].apellidos,
+        genero: uniqueData[0].genero,
+        email: uniqueData[0].email,
+        telefono: uniqueData[0].telefono,
+        direccion1: uniqueData[0].direccion1,
+        direccion2: uniqueData[0].direccion2,
+        ciudad: uniqueData[0].ciudad,
+        departamento: uniqueData[0].departamento,
+        codigoPostal: uniqueData[0].codigoPostal,
+        pais: uniqueData[0].pais,
+        comentario: uniqueData[0].comentario,
+        precio: precioprovedor7,
+        _v: uniqueData[0]._v,
+      });
+      //setTagsTempProveedor([...tagstempProveedor, tempProv]);
+      setSize6('6');
+      settempProv([]);
+      setPrecioProvedor7(0);
+      setProveedores(proveedores.filter(({ item }) => !tagsProveedores.includes(item)));
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar el precio del proveedor',
+        onok: () => {},
+      });
+    }
+  };
+  const onChangeBodega = () => {
+    if (precioprovedor6 !== 0) {
+      tempBod = tempBod.filter((x) => x != null);
+      const uniqueData = [...new Set(tempBod)];
+      alert(JSON.stringify(uniqueData[0].name));
+
+      //settagsProveedores([...tagsProveedores, tempProv]);
+      tagsBodegas.push({
+        name: uniqueData[0].name,
+        value: uniqueData[0]._id,
+        numPasillo: precioprovedor6,
+      });
+      //setTagsTempProveedor([...tagstempProveedor, tempProv]);
+      setSize7('6');
+      settempBod([]);
+      setPrecioProvedor6(0);
+      setBodegas(bodegas.filter(({ item }) => !tagsBodegas.includes(item)));
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe ingresar el pasillo en el que esta el producto',
+        onok: () => {},
+      });
+    }
   };
   function paddingclose() {
+    return {
+      display: 'block',
+      width: '20px',
+      height: '20px',
+      'line-height': '16px',
+      'text-align': 'center',
+      'font-size': '20px',
+      'margin-left': '60px',
+      color: 'white',
+      'border-radius': '50%',
+      background: '#f60000',
+      cursor: 'pointer',
+    };
+  }
+  function paddingclosebodega() {
     return {
       display: 'block',
       width: '20px',
@@ -988,7 +1048,24 @@ export default function AgregarProducto(props) {
       'list-style': 'none',
       margin: '0 8px 8px 0',
       'border-radius': '25px',
-      'margin-top': '7px',
+      'margin-top': '8px',
+      background: '#e9e3e3',
+    };
+  }
+  function paddingmainbodegas() {
+    return {
+      width: 'auto',
+      height: '32px',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      color: '#282c34',
+      padding: '0 8px',
+      'font-size': '20px',
+      'list-style': 'none',
+      margin: '0 8px 8px 0',
+      'border-radius': '25px',
+      'margin-top': '8px',
       background: '#e9e3e3',
     };
   }
@@ -1003,6 +1080,23 @@ export default function AgregarProducto(props) {
       'border-radius': '10px',
       padding: '0 8px',
       'margin-left': '80px',
+      overflow: 'auto',
+      maxHeight: '100px',
+    };
+  }
+  function paddingdivbodegas() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '400px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '-300px',
+      overflow: 'auto',
+      maxHeight: '100px',
     };
   }
   function paddingInput() {
@@ -1017,6 +1111,7 @@ export default function AgregarProducto(props) {
       padding: '0 8px',
     };
   }
+
   function paddingAvInput() {
     return {
       'margin-left': '-20px',
@@ -1060,7 +1155,20 @@ export default function AgregarProducto(props) {
       'margin-top': '3px',
     };
   }
+  function paddingtitlebodega() {
+    return {
+      'margin-top': '3px',
+    };
+  }
   function paddingul() {
+    return {
+      'flex-wrap': 'wrap',
+      padding: '0',
+      paddingLeft: '45px',
+      margin: '8px 0 0 0',
+    };
+  }
+  function paddingulbodegas() {
     return {
       'flex-wrap': 'wrap',
       padding: '0',
@@ -1138,9 +1246,12 @@ export default function AgregarProducto(props) {
             className="text-center"
             style={{
               'overflow-y': 'auto',
-              top: '20px',
               maxWidth: '1000px',
               'border-radius': '36px',
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
             isOpen={modalCreacionRapida}
           >
@@ -1148,9 +1259,10 @@ export default function AgregarProducto(props) {
               <h3>CREACIÓN RÁPIDA DE PRODUCTO NUEVO</h3>
             </div>
             <ModalBody>
+              <br />
               <Row>
+                <h style={{ marginLeft: '40px' }}>Código Principal</h>
                 <Col>
-                  <h>Código Principal</h>
                   <input
                     style={paddingInput()}
                     updatable={true}
@@ -1160,8 +1272,9 @@ export default function AgregarProducto(props) {
                     onChange={manejarCambioRapida}
                   />
                 </Col>
-                <Col style={{ marginLeft: '60px' }}>
-                  <h>Cantidad</h>
+                <h style={{ marginLeft: '25px' }}>Inventario</h>
+                <Col style={{ marginLeft: '60px', top: '-25px' }}>
+                  <h style={{ marginLeft: '-50px' }}>Cantidad</h>
                   <input
                     style={paddingAvInputCantidadesCreacionRapida()}
                     className="form-control"
@@ -1173,26 +1286,64 @@ export default function AgregarProducto(props) {
                   />
                 </Col>
               </Row>
+              <br />
               <Row>
-                <Col>
-                  <h>Descripción especifica</h>
-                  <Label for="exampleText"></Label>
+                <h style={{ marginLeft: '70px' }}>Descripción </h>
+                <Col style={{ marginLeft: '25px' }}>
                   <AvForm>
                     <AvField
-                      style={paddingDescripcionesCreacionRapida()}
-                      type="textarea"
-                      name="descripcion_larga"
-                      id="descripcion2"
-                      value={seleccionadorapido ? seleccionadorapido.descripcion_larga : ''}
-                      onChange={manejarCambioRapidaDecripcion}
+                      style={paddingAvInput()}
+                      className="form-control"
+                      type="text"
+                      name="nombre"
+                      id="nombre_agregar"
+                      errorMessage="Nombre Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regex },
+
+                        minLength: { value: 1 },
+                      }}
+                      value={seleccionado ? seleccionado.nombre : ''}
+                      onChange={(e) => manejarCambio(e)}
                     />
                   </AvForm>
+                  <Row>
+                    <AvForm>
+                      <AvRadioGroup id="exento" inline name="producto_exento" required>
+                        <AvRadio
+                          onClick={() => setProductoExento(true)}
+                          label="Producto Exento"
+                          value="exento"
+                        />
+                        <AvRadio
+                          onClick={() => setProductoExento(false)}
+                          label="Producto No Exento"
+                          value="noexento"
+                        />
+                      </AvRadioGroup>
+                    </AvForm>
+                  </Row>
+                  <Row>
+                    <h style={{ marginLeft: '-135px' }}>Código de Barra</h>
+                    <Col>
+                      <input
+                        style={paddingInput()}
+                        updatable={true}
+                        type="text"
+                        value={codigobarra}
+                        placeholder="Inserte codigo de barra"
+                        onChange={manejarCambioRapidaBarra}
+                      />
+                    </Col>
+                  </Row>
                 </Col>
-                <Col style={{ marginLeft: '20px' }}>
-                  <label>Precio de Venta</label>
+                <label>Precio de Venta</label>
+                <Col style={{ marginLeft: '20px', top: '-40px' }}>
+                  <label style={{ marginLeft: '-50px' }}>Precio 1</label>
                   <AvForm>
                     <AvField
-                      style={paddingAvInputCantidades()}
+                      style={paddingAvInputCantidadesCreacionRapida()}
                       className="form-control"
                       type="Number"
                       name="precio1"
@@ -1208,46 +1359,22 @@ export default function AgregarProducto(props) {
                   </AvForm>
                 </Col>
               </Row>
-              <br />
-              <Row>
-                <Col>
-                  <AvForm>
-                    <AvRadioGroup id="exento" inline name="producto_exento" required>
-                      <AvRadio
-                        onClick={() => setProductoExento(true)}
-                        label="Producto Exento"
-                        value="exento"
-                      />
-                      <AvRadio
-                        onClick={() => setProductoExento(false)}
-                        label="Producto No Exento"
-                        value="noexento"
-                      />
-                    </AvRadioGroup>
-                  </AvForm>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h>Código de Barra</h>
-                  <input
-                    style={paddingInput()}
-                    updatable={true}
-                    type="text"
-                    value={codigobarra}
-                    placeholder="Inserte codigo de barra"
-                    onChange={manejarCambioRapidaBarra}
-                  />
-                </Col>
-              </Row>
-              <br />
-              <div style={{ paddingLeft: '100px' }}>
+              <div style={{ marginLeft: '-250px' }}>
                 <Barcode value={codigobarra} />
               </div>
             </ModalBody>
             <ModalFooter>
               <button
                 className="btn btn-primary"
+                style={{
+                  'border-radius': '26px',
+                  'border-color': '#ff9800',
+                  color: 'green',
+                  border: '2px solid green',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
                 onClick={() =>
                   Confirm.open({
                     title: 'Insertar Producto',
@@ -1260,7 +1387,19 @@ export default function AgregarProducto(props) {
               >
                 Agregar Producto
               </button>
-              <button className="btn btn-danger" onClick={(e) => descartarcambiosCreacionRapida()}>
+              <button
+                style={{
+                  'border-radius': '26px',
+                  'border-color': '#ff9800',
+                  color: 'red',
+                  border: '2px solid red',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+                className="btn btn-danger"
+                onClick={(e) => descartarcambiosCreacionRapida()}
+              >
                 Cancelar
               </button>
             </ModalFooter>
@@ -1402,12 +1541,13 @@ export default function AgregarProducto(props) {
                         required
                         autoComplete
                         options={bodegas}
-                        value={bodega}
-                        onChange={(e) => handleChange3(e)}
+                        value={size7}
+                        onClick={handleOnChangeBodega(size7)}
+                        onChange={setSize7}
                       />
                     </Col>
                     <AvForm>
-                      <AvField
+                      <input
                         style={{
                           width: '90px',
                           'margin-left': '50px',
@@ -1415,10 +1555,49 @@ export default function AgregarProducto(props) {
                         }}
                         className="form-control"
                         type="Number"
-                        name="precio1"
-                        id="precio1"
-                        value={seleccionado.precio[0] ? seleccionado.precio[0] : 0}
+                        onChange={(e) => manejarCambioPrecioBodega(e)}
+                        value={precioprovedor6}
+                        min={1}
                       />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          top: '1px',
+                          'margin-left': '525px',
+                        }}
+                      >
+                        <Button
+                          style={{
+                            'font-size': '20px',
+                            'border-radius': '50%',
+                            width: '40px',
+                            height: '40px',
+                            'line-height': '2px',
+                            'margin-left': '-720px',
+                            marginTop: '90px',
+                          }}
+                          onClick={() => onChangeBodega()}
+                          color="primary"
+                        >
+                          +
+                        </Button>
+                      </div>
+                      <div style={paddingdivbodegas()}>
+                        <ul style={paddingulbodegas()}>
+                          {tagsBodegas.map((tag, index) => (
+                            <li style={paddingmainbodegas()} key={index}>
+                              <span style={paddingtitlebodega()}>
+                                {tag.name}, # {tag.numPasillo}
+                              </span>
+                              <i style={paddingclosebodega()} onClick={() => removeTagsProv(index)}>
+                                x
+                              </i>
+                            </li>
+                          ))}
+
+                          <br />
+                        </ul>
+                      </div>
                     </AvForm>
                   </Row>
                   <br />
@@ -1508,7 +1687,7 @@ export default function AgregarProducto(props) {
                 />
               </AvForm>
               <Row style={{ marginLeft: '-120px' }}>
-                <label>Proveedor</label>
+                <label style={{ marginTop: '25px' }}>Proveedor</label>
                 <SelectSearch
                   search
                   onChange={setSize6}
@@ -1526,12 +1705,9 @@ export default function AgregarProducto(props) {
                     className="form-control"
                     type="number"
                     id="precioprov3"
-                    onChange={(e) => manejarCambioPrecioProveedor(e, 7)}
-                    value={
-                      seleccionado.proveedores[0] !== undefined
-                        ? seleccionado.proveedores[0].precio
-                        : ''
-                    }
+                    onChange={(e) => manejarCambioPrecioProveedor(e)}
+                    value={precioprovedor7}
+                    min={1}
                   />
                   <div
                     style={{
@@ -1560,26 +1736,29 @@ export default function AgregarProducto(props) {
                   <ul style={paddingul()}>
                     {tagsProveedores.map((tag, index) => (
                       <li style={paddingmain()} key={index}>
-                        <span style={paddingtitle()}>{tag.name}</span>
+                        <span style={paddingtitle()}>
+                          {tag.name}, L. {tag.precio}
+                        </span>
                         <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
                           x
                         </i>
                       </li>
                     ))}
+
+                    <br />
                   </ul>
                 </div>
                 <div />
-
-                <br />
-                <br />
-                <br />
-                <br />
-                <AvForm>
+                <AvForm
+                  style={{
+                    marginTop: '50px',
+                  }}
+                >
                   <Row>
                     <label style={{ 'margin-left': '10px' }}>Precios de Venta</label>
-                    <Col sm={{ size: 'auto' }} style={{ top: '-35px' }}>
+                    <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
                       <div>
-                        <label style={{ paddingRight: '-300px' }}>Precio 1</label>
+                        <h style={{ paddingRight: '-300px' }}>Precio 1</h>
                         <AvField
                           style={paddingAvInputCantidades()}
                           className="form-control"
@@ -1631,7 +1810,7 @@ export default function AgregarProducto(props) {
                   </Row>
                 </AvForm>
               </Row>
-              <Row>
+              <Row style={{ marginTop: '-25px' }}>
                 <Col style={{ 'margin-left': '-50px' }}>
                   <Button
                     style={{
@@ -1666,6 +1845,15 @@ export default function AgregarProducto(props) {
         </ModalBody>
         <ModalFooter>
           <button
+            style={{
+              'border-radius': '26px',
+              'border-color': '#ff9800',
+              color: 'green',
+              border: '2px solid green',
+              'background-color': 'white',
+              'font-size': '16px',
+              cursor: 'pointer',
+            }}
             className="btn btn-primary"
             onClick={() =>
               Confirm.open({
@@ -1679,7 +1867,19 @@ export default function AgregarProducto(props) {
           >
             Agregar Producto
           </button>
-          <button className="btn btn-danger" onClick={(e) => descartarcambios()}>
+          <button
+            style={{
+              'border-radius': '26px',
+              'border-color': '#ff9800',
+              color: 'red',
+              border: '2px solid red',
+              'background-color': 'white',
+              'font-size': '16px',
+              cursor: 'pointer',
+            }}
+            className="btn btn-danger"
+            onClick={(e) => descartarcambios()}
+          >
             Cancelar
           </button>
         </ModalFooter>
