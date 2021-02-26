@@ -154,7 +154,7 @@ export default function EliminarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthProveedores = async () => {
-    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
       for (let index = 0; index < proveedoresDB.length; index++) {
@@ -183,7 +183,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthBodegas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
@@ -198,7 +198,7 @@ export default function EliminarProducto(props) {
   };
   let cont = 1;
   const fecthMarcas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -213,7 +213,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthData = () => {
-    axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    axios.get('http://localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
     fecthBodegas();
@@ -302,7 +302,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -371,7 +371,7 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (entra) {
         Confirm.open({
@@ -533,7 +533,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       Confirm.open({
@@ -573,14 +573,14 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       setModalModificarPrecios(false);
     }
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
+    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     /*Confirm.open({
@@ -643,7 +643,7 @@ export default function EliminarProducto(props) {
       ) {
         setModalModificar(false);
         axios
-          .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
+          .put(`http://localhost:3001/api/productos/${Id}`, {
             nombre: document.getElementById('modnombre').value,
             area: document.getElementById('modarea').value,
             codigos: codes,
@@ -673,14 +673,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -966,7 +966,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => {},
+            onok: () => { },
           });
           entra = false;
         } else if (yaesta) {
@@ -991,14 +991,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1194,11 +1194,10 @@ export default function EliminarProducto(props) {
           'background-image': `url('${imagePath}')`,
           'background-position': '10px 10px',
           'background-repeat': 'no-repeat',
-          width: '60%',
+          width: '30%',
           'font-size': '16px',
           padding: '12px 20px 12px 40px',
-          border: '1px solid #ddd',
-          'margin-bottom': '12px',
+          'border-radius': '26px',
         }}
       ></input>
       <Button
@@ -1223,10 +1222,10 @@ export default function EliminarProducto(props) {
           align="center"
           size="sm"
           id="myTable"
-          style={{ width: '500px' }}
+          style={{ width: '500px', 'border-radius': '26px', border: '2px solid black' }}
         >
           <thead>
-            <tr>
+            <tr style={{ 'border-radius': '26px', border: '2px' }}>
               <th>#</th>
               <th>Nombre</th>
               <th>Area</th>
@@ -1441,7 +1440,7 @@ export default function EliminarProducto(props) {
                       onKeyDown={handleKeyDown}
                       // onClick={verificarCodigo()}
                       onChange={(event) => setCodigo1(event.target.value)}
-                      //onChange={(e) => handleChange(e, 2)}
+                    //onChange={(e) => handleChange(e, 2)}
                     />
                   </AvForm>
                   <br />
@@ -1459,8 +1458,8 @@ export default function EliminarProducto(props) {
                       }}
                       onChange={(event) => setCodigo2(event.target.value)}
                       onKeyDown={handleKeyDown}
-                      // disabled={!inputcod2}
-                      // onChange={(e) => handleChange(e, 3)}
+                    // disabled={!inputcod2}
+                    // onChange={(e) => handleChange(e, 3)}
                     />
                   </AvForm>
                   <br />
@@ -1478,8 +1477,8 @@ export default function EliminarProducto(props) {
                       }}
                       onChange={(event) => setCodigo3(event.target.value)}
                       onKeyDown={handleKeyDown}
-                      // disabled={!inputcod3}
-                      // onChange={(e) => handleChange(e, 4)}
+                    // disabled={!inputcod3}
+                    // onChange={(e) => handleChange(e, 4)}
                     />
                   </AvForm>
                   <br />
@@ -1497,8 +1496,8 @@ export default function EliminarProducto(props) {
                       }}
                       onChange={(event) => setCodigo4(event.target.value)}
                       onKeyDown={handleKeyDown}
-                      // disabled={!inputcod4}
-                      // onChange={(e) => handleChange(e, 5)}
+                    // disabled={!inputcod4}
+                    // onChange={(e) => handleChange(e, 5)}
                     />
                   </AvForm>
                   <br />
@@ -1516,8 +1515,8 @@ export default function EliminarProducto(props) {
                       }}
                       onChange={(event) => setCodigo5(event.target.value)}
                       onKeyDown={handleKeyDown}
-                      // disabled={!inputcod5}
-                      // onChange={(e) => handleChange(e, 6)}
+                    // disabled={!inputcod5}
+                    // onChange={(e) => handleChange(e, 6)}
                     />
                   </AvForm>
                   <br />
@@ -1535,8 +1534,8 @@ export default function EliminarProducto(props) {
                       }}
                       onChange={(event) => setCodigo6(event.target.value)}
                       onKeyDown={handleKeyDown}
-                      // disabled={!inputcod6}
-                      // onChange={(e) => handleChange(e, 7)}
+                    // disabled={!inputcod6}
+                    // onChange={(e) => handleChange(e, 7)}
                     />
                   </AvForm>
                   <br />
@@ -1554,7 +1553,7 @@ export default function EliminarProducto(props) {
                       }}
                       onKeyDown={handleKeyDown}
                       onChange={(event) => setCodigo7(event.target.value)}
-                      // disabled={!inputcod7}
+                    // disabled={!inputcod7}
                     />
                   </AvForm>
                   <br />
@@ -2190,8 +2189,8 @@ export default function EliminarProducto(props) {
               name="nombre"
               value={seleccionado.codigos[0]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Codigo 2</label>
@@ -2201,8 +2200,8 @@ export default function EliminarProducto(props) {
               name="Fecha"
               value={seleccionado.codigos[1]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Codigo 3</label>
@@ -2212,8 +2211,8 @@ export default function EliminarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[2]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Codigo 4</label>
@@ -2223,8 +2222,8 @@ export default function EliminarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[3]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Codigo 5</label>
@@ -2234,8 +2233,8 @@ export default function EliminarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[4]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Codigo 6</label>
@@ -2245,8 +2244,8 @@ export default function EliminarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[5]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
             <br />
             <label>Codigo 7</label>
@@ -2256,8 +2255,8 @@ export default function EliminarProducto(props) {
               name="Etiqueta"
               value={seleccionado.codigos[6]}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
             <br />
           </div>
@@ -2299,7 +2298,7 @@ export default function EliminarProducto(props) {
                 name="Apunte"
                 value={seleccionado.proveedores[0] ? seleccionado.proveedores[0].name : ''}
                 readOnly
-                // onChange={manejarCambio}
+              // onChange={manejarCambio}
               />
               <label>Precio Proveedor 1</label>
               <input
@@ -2327,8 +2326,8 @@ export default function EliminarProducto(props) {
                 name="Fecha"
                 readOnly
                 value={seleccionado.proveedores[1] ? seleccionado.proveedores[1].name : ''}
-                // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+              // onChange={manejarCambio}
               />
               <label>Precio Proveedor 2</label>
               <input
@@ -2360,8 +2359,8 @@ export default function EliminarProducto(props) {
                 name="Etiqueta"
                 value={seleccionado.proveedores[2] ? seleccionado.proveedores[2].name : ''}
                 readOnly
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
               <label>Precio Proveedor 3</label>
               <input
@@ -2389,8 +2388,8 @@ export default function EliminarProducto(props) {
                 name="Etiqueta"
                 value={seleccionado.proveedores[3] ? seleccionado.proveedores[3].name : ''}
                 readOnly
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
               <label>Precio Proveedor 4</label>
               <input
@@ -2422,8 +2421,8 @@ export default function EliminarProducto(props) {
                 name="Etiqueta"
                 value={seleccionado.proveedores[4] ? seleccionado.proveedores[4].name : ''}
                 readOnly
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
               <label>Precio Proveedor 5</label>
               <input
@@ -2451,8 +2450,8 @@ export default function EliminarProducto(props) {
                 name="Etiqueta"
                 value={seleccionado.proveedores[5] ? seleccionado.proveedores[5].name : ''}
                 readOnly
-                // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                // onChange={manejarCambio}
+              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+              // onChange={manejarCambio}
               />
               <label>Precio Proveedor 6</label>
               <input
@@ -2482,8 +2481,8 @@ export default function EliminarProducto(props) {
               name="Etiqueta"
               value={seleccionado.proveedores[6] ? seleccionado.proveedores[6].name : ''}
               readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
+            // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+            // onChange={manejarCambio}
             />
             <label>Precio Proveedor 7</label>
             <input
