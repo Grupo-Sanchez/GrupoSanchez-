@@ -12,8 +12,8 @@ import {
   ModalHeader,
   ModalFooter,
 } from 'reactstrap';
-import '../Styles/InterfazProducto.css';
 import SelectSearch from 'react-select-search';
+import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';
@@ -22,6 +22,8 @@ import AgregarProveedor from './AgregarProveedor.jsx';
 import AgregarBodega from './CrearBodega.jsx';
 import Agregar from './AgregarMarca.jsx';
 import AgregarProducto from './AgregarProducto';
+import { ReactComponent as Logo } from '../Icons/edit.svg';
+import { ReactComponent as Plus } from '../Icons/plus.svg';
 import { Confirm } from './Confirm';
 
 const thumbsContainer = {
@@ -154,7 +156,7 @@ export default function EliminarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthProveedores = async () => {
-    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
       for (let index = 0; index < proveedoresDB.length; index++) {
@@ -183,7 +185,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthBodegas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
@@ -198,7 +200,7 @@ export default function EliminarProducto(props) {
   };
   let cont = 1;
   const fecthMarcas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -213,7 +215,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthData = () => {
-    axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    axios.get('http://localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
     fecthBodegas();
@@ -580,7 +582,7 @@ export default function EliminarProducto(props) {
     }
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
+    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     /*Confirm.open({
@@ -643,7 +645,7 @@ export default function EliminarProducto(props) {
       ) {
         setModalModificar(false);
         axios
-          .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
+          .put(`http://localhost:3001/api/productos/${Id}`, {
             nombre: document.getElementById('modnombre').value,
             area: document.getElementById('modarea').value,
             codigos: codes,
@@ -1184,30 +1186,41 @@ export default function EliminarProducto(props) {
     <div align="center">
       <br />
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
-      <input
-        type="text"
-        id="myInput"
-        onChange={() => myFunction()}
-        placeholder="Search for names.."
-        title="Type in a name"
-        style={{
-          'background-image': `url('${imagePath}')`,
-          'background-position': '10px 10px',
-          'background-repeat': 'no-repeat',
-          width: '60%',
-          'font-size': '16px',
-          padding: '12px 20px 12px 40px',
-          border: '1px solid #ddd',
-          'margin-bottom': '12px',
-        }}
-      ></input>
-      <Button
-        style={{ 'margin-left': '25px' }}
-        onClick={() => mostrarModalProducto()}
-        color="primary"
-      >
-        Agregar Producto
-      </Button>
+      <br />
+      <br />
+      <Row>
+        <Col style={{ paddingLeft: '100px' }}>
+          <Button
+            style={{
+              'background-color': 'transparent',
+              borderColor: 'transparent',
+              'margin-left': '20px',
+              'border-radius': '26px',
+            }}
+            onClick={() => mostrarModalProducto()}
+          >
+            <Plus width="50px" height="50px" />
+          </Button>
+        </Col>
+        <Col style={{ paddingRight: '650px' }}>
+          <input
+            type="text"
+            id="myInput"
+            onChange={() => myFunction()}
+            placeholder="Encuentre Productos.."
+            title="Type in a name"
+            style={{
+              'background-image': `url('${imagePath}')`,
+              'background-position': '10px 10px',
+              'background-repeat': 'no-repeat',
+              width: '90%',
+              'font-size': '16px',
+              padding: '12px 20px 12px 40px',
+              'border-radius': '26px',
+            }}
+          ></input>
+        </Col>
+      </Row>
       <div
         style={{
           maxHeight: '600px',
@@ -1218,27 +1231,30 @@ export default function EliminarProducto(props) {
         <Table
           responsive
           striped
-          bordered
           hover
           align="center"
           size="sm"
           id="myTable"
-          style={{ width: '500px' }}
+          style={{
+            width: '1200px',
+            'border-collapse': 'separate',
+            border: 'solid #ccc 2px',
+            '-moz-border-radius': '26px',
+            '-webkit-border-radius': '26px',
+            'border-radius': '26px',
+            '-webkit-box-shadow': '0 1px 1px #ccc',
+            '-moz-box-shadow': '0 1px 1px #ccc',
+            'box-shadow': '0 1px 1px #ccc',
+          }}
         >
           <thead>
-            <tr>
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Area</th>
-              <th>Ubicación</th>
-              <th>Marca</th>
-              <th>Cantidad</th>
-              <th>Cantidad Mínima</th>
-              <th>Códigos</th>
-              <th>Proveedores </th>
-              <th>Descripciones </th>
-              <th>Precios</th>
+            <tr style={{ textAlign: 'center' }}>
               <th>Código de Barra</th>
+              <th>Codigo Principal</th>
+              <th style={{ width: '300px' }}>Descripcion</th>
+              <th>Marca</th>
+              <th>Inventario</th>
+              <th>Precio</th>
               <th class="text-center"> Acción</th>
             </tr>
           </thead>
@@ -1247,54 +1263,20 @@ export default function EliminarProducto(props) {
               <tr>
                 <td>{(index += 1)}</td>
                 <td>{elemento.nombre}</td>
-                <td style={{ whiteSpace: 'unset' }}>{elemento.area}</td>
-                <td style={{ whiteSpace: 'unset' }}>{elemento.ubicacion}</td>
-                <td>{elemento.marca[0].name}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.nombre}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
                 <td>{elemento.cantidad}</td>
-                <td>{elemento.cantidad_minima}</td>
-                <td>
-                  <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
-                    Ver
-                  </Button>
-                </td>
-                <td>
-                  <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
-                    Ver
-                  </Button>
-                </td>
-                <td>
-                  <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
-                    Ver
-                  </Button>
-                </td>
-                <td>
-                  <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
-                    Ver
-                  </Button>
-                </td>
-                <td>
-                  <Button color="primary" onClick={() => mostrarCodigoBarra(elemento)}>
-                    Ver
-                  </Button>
-                </td>
-                <td>
-                  <Button onClick={() => Modificar(elemento)} color="success">
-                    Modificar
-                  </Button>{' '}
+                <td>{elemento.precios[0]}</td>
+                <td align="center">
                   <Button
-                    onClick={() =>
-                      Confirm.open({
-                        title: 'Eliminar Producto',
-                        message: `Esta seguro de que quiere eliminar el Producto ${elemento.nombre}?`,
-                        onok: () => {
-                          eliminar(elemento._id);
-                        },
-                      })
-                    }
-                    color="danger"
+                    style={{
+                      'background-color': 'transparent',
+                      borderColor: 'transparent',
+                    }}
+                    onClick={() => Modificar(elemento)}
                   >
-                    Eliminar
-                  </Button>{' '}
+                    <Logo width="30px" height="30px" />
+                  </Button>
                 </td>
               </tr>
             ))}

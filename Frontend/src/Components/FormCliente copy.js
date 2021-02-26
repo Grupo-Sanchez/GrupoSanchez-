@@ -44,7 +44,7 @@ const formClienteCopy = (props) => {
       email: values.email,
     };
     await axios
-      .post('http://178.128.67.247:3001/api/clientes', campos)
+      .post('http://localhost:3001/api/clientes', campos)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({
