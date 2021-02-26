@@ -241,9 +241,7 @@ const ModificarEliminarProveedor = () => {
               <tr>
                 <td>{i + 1}</td>
                 <td>{elemento.nombre}</td>
-                <td style={{ whiteSpace: 'unset' }}>
-                  {elemento.descripcion}
-                </td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
                 <td>
                   <Button onClick={() => modificarModal(i)} color="success">
                     Modificar

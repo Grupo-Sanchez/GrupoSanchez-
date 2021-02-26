@@ -158,9 +158,7 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios
-        .post('http://localhost:3001/api/Users', campos)
-        .then(signUpMethod());
+      const res = await axios.post('http://localhost:3001/api/Users', campos).then(signUpMethod());
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',

@@ -452,7 +452,6 @@ export default function ModificarUsuario(props) {
                 onChange={(e) => handleChange2(e)}
               />
             </div>
-
           </ModalBody>
           <ModalFooter>
             <button className="btn btn-primary" onClick={() => modificarUsuario()}>
