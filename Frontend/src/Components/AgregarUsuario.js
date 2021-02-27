@@ -31,6 +31,115 @@ import SelectSearch from 'react-select-search';
 import { Confirm } from './Confirm';
 
 export default function AgregarUsuario(props) {
+  function paddingclose() {
+    return {
+      display: 'block',
+      width: '20px',
+      height: '20px',
+      'line-height': '16px',
+      'text-align': 'center',
+      'font-size': '20px',
+      'margin-left': '60px',
+      color: 'white',
+      'border-radius': '50%',
+      background: '#f60000',
+      cursor: 'pointer',
+    };
+  }
+  function paddingmain() {
+    return {
+      width: 'auto',
+      height: '32px',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      color: '#282c34',
+      padding: '0 8px',
+      'font-size': '20px',
+      'list-style': 'none',
+      margin: '0 8px 8px 0',
+      'border-radius': '25px',
+      'margin-top': '7px',
+      background: '#e9e3e3',
+    };
+  }
+  function paddingdiv() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '400px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '80px',
+    };
+  }
+  function paddingInput() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '1px solid #0052cc',
+      'border-radius': '26px',
+      padding: '0 8px',
+    };
+  }
+  function paddingAvInput() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      width: '320px',
+    };
+  }
+  function paddingAvInputCantidades() {
+    return {
+      'border-radius': '26px',
+      width: '100px',
+    };
+  }
+  function paddingAvInputCantidadesCreacionRapida() {
+    return {
+      'border-radius': '26px',
+      width: '200px',
+    };
+  }
+  function paddingDescripciones() {
+    return {
+      'border-radius': '26px',
+      width: '320px',
+      height: '100px',
+    };
+  }
+  function paddingDescripcionesCreacionRapida() {
+    return {
+      'border-radius': '26px',
+      width: '380px',
+      height: '100px',
+    };
+  }
+  function paddingHeader() {
+    return {
+      'margin-left': '-350px',
+    };
+  }
+  function paddingtitle() {
+    return {
+      'margin-top': '3px',
+    };
+  }
+  function paddingul() {
+    return {
+      'flex-wrap': 'wrap',
+      padding: '0',
+      paddingLeft: '45px',
+      margin: '8px 0 0 0',
+    };
+  }
+
   const isAlphanumeric = require('is-alphanumeric');
 
   const options = [
@@ -128,7 +237,6 @@ export default function AgregarUsuario(props) {
       },
     });
   };
-
   const escribirUsuario = async () => {
     if (
       seleccionado.rol !== '' &&
@@ -144,7 +252,7 @@ export default function AgregarUsuario(props) {
       regEmail.test(document.getElementById('correo').value) &&
       seleccionado.identidad.length === 13 &&
       seleccionado.rtn.length === 14 &&
-      seleccionado.password.length > 4
+      seleccionado.password.length >= 4
     ) {
       const campos = {
         identidad: seleccionado.identidad,
@@ -158,7 +266,7 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://localhost:3001/api/Users', campos).then(signUpMethod());
+      const res = await axios.post('http://Localhost:3001/api/Users', campos);
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',
@@ -174,12 +282,6 @@ export default function AgregarUsuario(props) {
       });
     }
   };
-  /*
-    HandleChange(event){
-        this.state.codigos.push();
-        this.setState({some:'val',arr:this.state.arr})
-    }
-    */
 
   const manejarCambio = (e) => {
     const { name, value } = e.target;
@@ -188,11 +290,6 @@ export default function AgregarUsuario(props) {
       [name]: value,
     }));
   };
-
-  // handleChange(e) {
-  //   this.state.indice = 1;
-  //   this.b(e);
-  // };
 
   const insertar = () => {};
 
@@ -205,22 +302,29 @@ export default function AgregarUsuario(props) {
           height: '95vh',
           'overflow-y': 'auto',
           top: '20px',
-          maxWidth: '1000px',
+          maxWidth: '1200px',
         }}
       >
-        <ModalHeader>
-          <div>
-            <h3>AGREGAR NUEVO USUARIO</h3>
-          </div>
-        </ModalHeader>
+        <div>
+          <h3
+            style={{
+              top: '50px',
+            }}
+          >
+            AGREGAR NUEVO USUARIO
+          </h3>
+        </div>
         <ModalBody>
           <div>
             <AvForm>
               <Row>
-                <Col xs="6">
+                <Col>
+                  <label>Identidad</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="Identidad"
-                    errorMessage="Numero de identidad Inválido"
+                    style={paddingAvInput()}
+                    errorMessage="Numero de identidad inválido"
                     validate={{
                       required: { value: true },
                       pattern: { value: regexSoloNumeros },
@@ -235,9 +339,12 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-                <Col xs="6">
+                <Col>
+                  <label>Primer nombre</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="primer Nombre"
+                    style={paddingAvInput()}
                     errorMessage="Nombre Inválido"
                     validate={{
                       required: { value: true },
@@ -259,9 +366,12 @@ export default function AgregarUsuario(props) {
           <div>
             <AvForm>
               <Row>
-                <Col xs="6">
+                <Col>
+                  <label>Segundo nombre</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="Segundo Nombre"
+                    style={paddingAvInput()}
                     errorMessage="Nombre Inválido"
                     validate={{
                       required: { value: false },
@@ -276,9 +386,12 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-                <Col xs="6">
+                <Col>
+                  <label>Primer apellido</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="Primer apellido"
+                    style={paddingAvInput()}
                     errorMessage="Apellido Inválido"
                     validate={{
                       required: { value: true },
@@ -300,9 +413,12 @@ export default function AgregarUsuario(props) {
           <div>
             <AvForm>
               <Row>
-                <Col xs="6">
+                <Col>
+                  <label>Segundo Apellido</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="Segundo Apellido"
+                    style={paddingAvInput()}
                     errorMessage="Apellido Inválido"
                     validate={{
                       required: { value: false },
@@ -317,9 +433,12 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-                <Col xs="6">
+                <Col>
+                  <label>RTN</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="RTN"
+                    style={paddingAvInput()}
                     errorMessage="RTN Inválido"
                     validate={{
                       required: { value: true },
@@ -341,9 +460,12 @@ export default function AgregarUsuario(props) {
           <div>
             <AvForm>
               <Row>
-                <Col xs="6">
+                <Col>
+                  <label>Telefono</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="Telefono"
+                    style={paddingAvInput()}
                     errorMessage="Telefono Inválido"
                     validate={{
                       required: { value: false },
@@ -358,9 +480,12 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-                <Col xs="6">
+                <Col>
+                  <label>Correo</label>
+                </Col>
+                <Col>
                   <AvField
-                    label="Correo"
+                    style={paddingAvInput()}
                     errorMessage="Revise el formato"
                     validate={{
                       email: true,
@@ -380,36 +505,63 @@ export default function AgregarUsuario(props) {
 
           <div>
             <AvForm>
-              <AvField
-                label="contraseña"
-                errorMessage="Constraseña debe tener mas de 4 caracteres"
-                validate={{
-                  required: { value: true },
-                  minLength: { value: 4 },
-                }}
-                className="form-control"
-                type="password"
-                name="password"
-                id="password"
-                value={seleccionado ? seleccionado.password : ''}
-                onChange={manejarCambio}
-              />
+              <Row>
+                <Col>
+                  <label>Constraseña</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInput()}
+                    errorMessage="Constraseña debe tener mas de 4 caracteres"
+                    validate={{
+                      required: { value: true },
+                      minLength: { value: 4 },
+                    }}
+                    className="form-control"
+                    type="password"
+                    name="password"
+                    id="password"
+                    value={seleccionado ? seleccionado.password : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
+                <Col>
+                  <label>Confirmar Constraseña</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInput()}
+                    errorMessage="Constraseña no coincide"
+                    validate={{
+                      required: { value: true },
+                      minLength: { value: 4 },
+                    }}
+                    className="form-control"
+                    type="password"
+                    name="password"
+                    id="password"
+                  />
+                </Col>
+              </Row>
             </AvForm>
           </div>
           <div>
-            <h4>Rol</h4>
+            <label>Tipo de usuario</label>
             <Row>
               <Col sm="12" md={{ size: 6, offset: 3 }}>
                 {' '}
-                <SelectSearch
-                  search
-                  placeholder="Seleccione el rol del usuario"
-                  required
-                  autoComplete
-                  options={options}
-                  value={marca}
-                  onChange={(e) => handleChange2(e)}
-                />
+                <div style={{ marginLeft: '35px' }}>
+                  <SelectSearch
+                    style={paddingAvInput()}
+                    search
+                    placeholder="Seleccione el rol del usuario"
+                    required
+                    autoComplete
+                    options={options}
+                    value={marca}
+                    onChange={(e) => handleChange2(e)}
+                  />
+                </div>
               </Col>
             </Row>
           </div>
@@ -419,10 +571,35 @@ export default function AgregarUsuario(props) {
             <Row>
               <Col sm="12" md={{ size: 6, offset: 3 }}>
                 {' '}
-                <button className="btn btn-primary" onClick={() => escribirUsuario()}>
-                  Agregar Usuario
+                <button
+                  style={{
+                    'border-radius': '26px',
+                    'border-color': '#98ff98',
+                    color: 'green',
+                    border: '1px solid green',
+                    'background-color': 'white',
+                    'font-size': '16px',
+                    cursor: 'pointer',
+                  }}
+                  className="btn btn-primary"
+                  onClick={() => escribirUsuario()}
+                >
+                  Agregar
                 </button>
-                <button className="btn btn-danger" onClick={() => descartarCambios()}>
+                <button
+                  style={{
+                    margin: '10px',
+                    'border-radius': '26px',
+                    'border-color': '#ff9800',
+                    color: 'red',
+                    border: '1px solid red',
+                    'background-color': 'white',
+                    'font-size': '16px',
+                    cursor: 'pointer',
+                  }}
+                  className="btn btn-danger"
+                  onClick={() => descartarCambios()}
+                >
                   Cancelar
                 </button>
               </Col>
