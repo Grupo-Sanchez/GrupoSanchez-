@@ -23,6 +23,7 @@ import AgregarProveedor from './AgregarProveedor.jsx';
 import AgregarBodega from './CrearBodega.jsx';
 import Agregar from './AgregarMarca.jsx';
 import { ReactComponent as Remove } from '../Icons/remove.svg';
+import { ReactComponent as Plus } from '../Icons/plus.svg';
 import { Confirm } from './Confirm';
 
 const thumbsContainer = {
@@ -90,6 +91,10 @@ export default function AgregarProducto(props) {
   const [cod4, setcod4] = useState('');
   const [cod5, setcod5] = useState('');
   const [cod6, setcod6] = useState('');
+  const [descripcionRapida, setdescripcionrapida] = useState('');
+  const [preciouno, setprecio1] = useState(0);
+  const [preciodos, setprecio2] = useState(0);
+  const [preciotres, setprecio3] = useState(0);
   const [startDate, setStartDate] = useState(new Date());
   const [marca, setMarca] = useState('');
   const [bodega, setBodega] = useState('');
@@ -136,43 +141,39 @@ export default function AgregarProducto(props) {
   let [tempBod, settempBod] = useState([]);
   const [tagstemp, setTagsTemp] = useState([]);
   const [seleccionado, setSeleccionado] = useState({
-    nombre: '',
+    descripcion: '',
     area: '',
     codigos: [],
     proveedores: [],
-    ubicacion: '',
+    codigoPrincipal: '',
     marca: [],
     precio: [],
     cantidad: 1,
     bodega: [],
-    descripcion_corta: '',
+    codigoBarra: '',
     descripcion_larga: '',
     cantidad_minima: 1,
-    fecha_creacion: '',
-    fecha_vencimiento: new Date(),
+    productoExento: false,
   });
   const [seleccionadorapido, setSeleccionadorapido] = useState({
-    nombre: '',
+    descripcion: '',
     area: '',
     codigos: [],
     proveedores: [],
-    ubicacion: '',
+    codigoPrincipal: '',
     marca: [],
-    precio: [1],
+    precio: [],
     cantidad: 1,
     bodega: [],
-    descripcion_corta: '',
-    descripcion_larga: '',
-    exento: false,
-    cantidad_minima: 1,
-    fecha_creacion: '',
     codigoBarra: '',
-    fecha_vencimiento: new Date(),
+    descripcion_larga: '',
+    cantidad_minima: 1,
+    productoExento: false,
   });
   const [codigoprincipal, setcodigoprincipal] = useState('');
   const [cantidadRapida, setcantidadRapida] = useState(1);
   const [descripcion, setdescripcion] = useState('');
-  const [precioRapida, setprecioRapida] = useState(1);
+  const [precioRapida, setprecioRapida] = useState(0);
   const [codigobarra, setCodigobarra] = useState('');
   const [productoExento, setProductoExento] = useState(false);
   const [cantsel, setCantsel] = useState(1);
@@ -267,18 +268,19 @@ export default function AgregarProducto(props) {
   let hoy = new Date();
   const prueba = async () => {
     const campos = {
-      nombre: seleccionado.nombre,
+      descripcion: seleccionado.descripcion,
       area: seleccionado.area,
       codigos: seleccionado.codigos,
       proveedores: seleccionado.proveedores,
-      ubicacion: seleccionado.ubicacion,
+      codigoPrincipal: seleccionado.codigoPrincipal,
       marca: seleccionado.marca,
       bodega: seleccionado.bodega,
       precios: seleccionado.precio,
-      cantidad: cantsel,
-      descripcion_corta: seleccionado.descripcion_corta,
+      cantidad: seleccionado.cantidad,
+      codigoBarra: seleccionado.codigoBarra,
       descripcion_larga: seleccionado.descripcion_larga,
-      cantidad_minima: cantminsel,
+      cantidad_minima: seleccionado.cantidad_minima,
+      productoExento: seleccionado.productoExento,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
     };
     const res = await axios.post('http://localhost:3001/api/productos', campos);
@@ -288,10 +290,10 @@ export default function AgregarProducto(props) {
       message: '¡Producto Agregado!',
       onok: () => {},
     });
-    seleccionado.nombre = '';
+    seleccionado.descripcion = '';
     seleccionado.area = '';
-    seleccionado.ubicacion = '';
-    seleccionado.descripcion_corta = '';
+    seleccionado.codigoPrincipal = '';
+    seleccionado.codigoBarra = '';
     seleccionado.descripcion_larga = '';
     seleccionado.cantidad = '';
     seleccionado.bodega = [];
@@ -301,7 +303,17 @@ export default function AgregarProducto(props) {
     seleccionado.precio = [];
     seleccionado.proveedores = [];
     seleccionado.fecha_creacion = '';
-    seleccionado.fecha_vencimiento = '';
+    setTagsTemp([]);
+    settagsBodegas([]);
+    settagsProveedores([]);
+    setTags([]);
+    settempBod([]);
+    settempProv([]);
+    setprecio1(0);
+    setprecio2(0);
+    setprecio3(0);
+    setCantsel(0);
+    setCantminsel(0);
     setcod2('');
     setcod3('');
     setcod4('');
@@ -369,7 +381,6 @@ export default function AgregarProducto(props) {
   const handleChangeDate = (date) => {
     setStartDate(date);
     seleccionado.fecha_vencimiento = date;
-    alert(JSON.stringify(seleccionado.fecha_vencimiento));
   };
   const handleOnChange = (value) => {
     if (tempProv.length > 0) {
@@ -398,6 +409,9 @@ export default function AgregarProducto(props) {
   const manejarCambioRapida = (e) => {
     setcodigoprincipal(e.target.value);
   };
+  const manejarCambiodescripcionRapida = (e) => {
+    setdescripcionrapida(e.target.value);
+  };
   const manejarCambioRapidaDecripcion = (e) => {
     const { name, value } = e.target;
     setSeleccionadorapido((prevState) => ({
@@ -421,6 +435,15 @@ export default function AgregarProducto(props) {
   const manejarCambioPrecioRapida = (e, n) => {
     setprecioRapida(e.target.value);
   };
+  const manejarCambioPrecio1 = (e, n) => {
+    setprecio1(e.target.value);
+  };
+  const manejarCambioPrecio2 = (e, n) => {
+    setprecio2(e.target.value);
+  };
+  const manejarCambioPrecio3 = (e, n) => {
+    setprecio3(e.target.value);
+  };
   const manejarCambioPrecioProveedor = (e) => {
     setPrecioProvedor7(e.target.value);
   };
@@ -429,34 +452,42 @@ export default function AgregarProducto(props) {
   };
   const cerrarModalAgregarProducto = () => {
     props.change();
-    setCantsel(1);
-    setCantminsel(1);
-    seleccionado.nombre = '';
+    seleccionado.descripcion = '';
     seleccionado.area = '';
-    seleccionado.ubicacion = '';
-    seleccionado.descripcion_corta = '';
+    seleccionado.codigoPrincipal = '';
+    seleccionado.codigoBarra = '';
     seleccionado.descripcion_larga = '';
     seleccionado.cantidad = '';
+    seleccionado.bodega = [];
     seleccionado.cantidad_minima = '';
-    seleccionado.marca = '';
+    seleccionado.marca = [];
     seleccionado.codigos = [];
     seleccionado.precio = [];
     seleccionado.proveedores = [];
-    seleccionado.fecha_vencimiento = '';
-    setSize('');
-    setSize2('');
-    setSize3('');
-    setSize4('');
-    setSize5('');
-    setSize6('');
-    setSize7('');
-    setPrecioProv1(true);
-    setPrecioProv2(true);
-    setPrecioProv3(true);
-    setPrecioProv4(true);
-    setPrecioProv5(true);
-    setPrecioProv6(true);
-    setPrecioProv7(true);
+    seleccionado.fecha_creacion = '';
+    setTagsTemp([]);
+    settagsBodegas([]);
+    settagsProveedores([]);
+    setTags([]);
+    settempBod([]);
+    settempProv([]);
+    setprecio1(0);
+    setprecio2(0);
+    setprecio3(0);
+    setCantsel(0);
+    setCantminsel(0);
+    setcod2('');
+    setcod3('');
+    setcod4('');
+    setcod5('');
+    setcod6('');
+    setcod7('');
+    setinputcod2(false);
+    setinputcod3(false);
+    setinputcod4(false);
+    setinputcod5(false);
+    setinputcod6(false);
+    setinputcod7(false);
   };
   const GuardarProveedores = () => {
     if (tagsProveedores.length === 0) {
@@ -476,19 +507,19 @@ export default function AgregarProducto(props) {
     seleccionadorapido.exento = productoExento;
     seleccionadorapido.cantidad = cantidadRapida;
     seleccionadorapido.precio[0] = precioRapida;
-    alert(JSON.stringify(seleccionadorapido));
-    alert(productoExento);
     setCantsel(1);
     setCantminsel(1);
     setCodigobarra('');
     setcodigoprincipal('');
     setProductoExento(false);
     setcantidadRapida(1);
-    setprecioRapida(0);
+    setdescripcionrapida('');
+    setprecioRapida(1);
     seleccionado.area = '';
-    seleccionado.ubicacion = '';
-    seleccionado.descripcion_corta = '';
+    seleccionado.codigoPrincipal = '';
+    seleccionado.codigoBarra = '';
     seleccionado.descripcion_larga = '';
+    seleccionado.descripcion = '';
     seleccionado.cantidad = '';
     seleccionado.cantidad_minima = '';
     seleccionado.marca = '';
@@ -613,186 +644,37 @@ export default function AgregarProducto(props) {
         setModalInsertarPrecio(false);
       }
     }
-    /*
-    seleccionado.precio.push(document.getElementById('precio1').value);
-    seleccionado.precio.push(document.getElementById('precio2').value);
-    seleccionado.precio.push(document.getElementById('precio3').value);
-    setModalInsertarPrecio(false);
-    alert(seleccionado.precio[0]);
-    */
   };
-  /*const GuardarProveedores = () => {
-    if (size === '1') {
-      Confirm.open({
-        title: 'Error',
-        message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
-      });
-    } else {
-      if (precioprovedor1 !== '') {
-        proveedoresSeleccionados[0].precio = precioprovedor1;
-      }
-      if (precioprovedor2 !== '') {
-        proveedoresSeleccionados[1].precio = precioprovedor2;
-      }
-      if (
-        proveedoresSeleccionados[2] !== undefined &&
-        proveedoresSeleccionados[2].precio !== undefined
-      ) {
-        proveedoresSeleccionados[2].precio = precioprovedor3;
-      }
-      if (
-        proveedoresSeleccionados[3] !== undefined &&
-        proveedoresSeleccionados[3].precio !== undefined
-      ) {
-        proveedoresSeleccionados[3].precio = precioprovedor4;
-      }
-      if (
-        proveedoresSeleccionados[4] !== undefined &&
-        proveedoresSeleccionados[4].precio !== undefined
-      ) {
-        proveedoresSeleccionados[4].precio = precioprovedor5;
-      }
-      if (
-        proveedoresSeleccionados[5] !== undefined &&
-        proveedoresSeleccionados[5].precio !== undefined
-      ) {
-        proveedoresSeleccionados[5].precio = precioprovedor6;
-      }
-      if (
-        proveedoresSeleccionados[6] !== undefined &&
-        proveedoresSeleccionados[6].precio !== undefined
-      ) {
-        proveedoresSeleccionados[6].precio = precioprovedor7;
-      }
-      seleccionado.proveedores = proveedoresSeleccionados;
-      setModalInsertarProveedor(false);
+  const insertarRapido = () => {
+    seleccionado.cantidad = cantidadRapida;
+    seleccionado.cantidad_minima = 1;
+    if (productoExento) {
+      seleccionado.productoExento = true;
     }
-  };*/
-  const maxLengthCheck = (object) => {
-    if (object.target.value.length > object.target.maxLength) {
-      object.target.value = object.target.value.slice(0, object.target.maxLength);
+    if (precioRapida !== 0) {
+      seleccionado.precio.push(precioRapida);
     }
-  };
-  const handleChange = (e, num) => {
-    if (num === 2) {
-      if (e.target.value === '') {
-        setcod2(' ');
-        setcod3(' ');
-        setcod4(' ');
-        setcod5(' ');
-        setcod6(' ');
-        setcod7(' ');
-        setinputcod2(false);
-        setinputcod3(false);
-        setinputcod5(false);
-        setinputcod6(false);
-        setinputcod7(false);
-        setinputcod4(false);
-      }
-      setinputcod2(e.target.value);
-    } else if (num === 3) {
-      if (e.target.value === '') {
-        setcod3(' ');
-        setcod4(' ');
-        setcod5(' ');
-        setcod6(' ');
-        setcod7(' ');
-        setinputcod3(false);
-        setinputcod5(false);
-        setinputcod6(false);
-        setinputcod7(false);
-        setinputcod4(false);
-      }
-      setinputcod3(e.target.value);
-      setinputcod4(false);
-    } else if (num === 4) {
-      if (e.target.value === '') {
-        setcod4(' ');
-        setcod5(' ');
-        setcod6(' ');
-        setcod7(' ');
-        setinputcod5(false);
-        setinputcod6(false);
-        setinputcod7(false);
-        setinputcod4(false);
-      }
-      setinputcod4(e.target.value);
-      setinputcod5(false);
-    } else if (num === 5) {
-      if (e.target.value === '') {
-        setcod5(' ');
-        setcod6(' ');
-        setcod7(' ');
-        setinputcod5(false);
-        setinputcod6(false);
-        setinputcod7(false);
-      }
-      setinputcod5(e.target.value);
-      setinputcod6(false);
-    } else if (num === 6) {
-      if (e.target.value === '') {
-        setcod6(' ');
-        setcod7(' ');
-        setinputcod6(false);
-        setinputcod7(false);
-      }
-      setinputcod6(e.target.value);
-      setinputcod7(false);
-    } else if (num === 7) {
-      if (e.target.value === '') {
-        setcod7(' ');
-      }
-      setinputcod7(e.target.value);
-    }
-  };
-  const handleChangeProv = (e, num) => {
-    if (num === 2) {
-      setinputprov2(e.target.value);
-      setinputprov3(false);
-      setinputprov4(false);
-      setinputprov5(false);
-      setinputprov6(false);
-      setinputprov7(false);
-    } else if (num === 3) {
-      setinputprov3(e.target.value);
-      setinputprov4(false);
-    } else if (num === 4) {
-      setinputprov4(e.target.value);
-      setinputprov5(false);
-    } else if (num === 5) {
-      setinputprov5(e.target.value);
-      setinputprov6(false);
-    } else if (num === 6) {
-      setinputprov6(e.target.value);
-      setinputprov7(false);
-    } else if (num === 7) {
-      setinputprov7(e.target.value);
-    }
-  };
-  const insertar = () => {
     const valorInsertar = seleccionado;
     const dataNueva = data;
     dataNueva.push(valorInsertar);
     setData(dataNueva);
-    seleccionado.descripcion_corta = document.getElementById('descripcion1').value;
-    seleccionado.descripcion_larga = document.getElementById('descripcion2').value;
     if (
-      seleccionado.codigos.length > 0 &&
-      seleccionado.proveedores.length > 0 &&
+      seleccionado.codigoPrincipal !== '' &&
+      isAlphanumeric(seleccionado.codigoPrincipal) &&
       seleccionado.precio.length > 0 &&
-      seleccionado.nombre.toString().trim() !== '' &&
-      seleccionado.area.toString().trim() !== '' &&
-      seleccionado.descripcion_corta.toString().trim() !== '' &&
-      document.getElementById('cantidad').value > 0 &&
-      document.getElementById('cantidad_minima').value > 0 &&
-      seleccionado.marca[0] !== undefined
+      seleccionado.descripcion.toString().trim() !== '' &&
+      isAlphanumeric(seleccionado.codigoBarra) &&
+      seleccionado.codigoBarra.toString().trim() !== '' &&
+      cantidadRapida > 0
     ) {
-      if (
-        regex.test(document.getElementById('nombre_agregar').value) &&
-        regex.test(document.getElementById('area_agregar').value)
-      ) {
+      if (regex.test(seleccionado.descripcion)) {
         prueba();
+        setprecioRapida(0);
+        setProductoExento(false);
+        setcantidadRapida(1);
+        setcodigoprincipal('');
+        setdescripcionrapida('');
+        setCodigobarra('');
         props.change();
       } else {
         Confirm.open({
@@ -805,6 +687,77 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
+        onok: () => {},
+      });
+    }
+  };
+  const insertar = () => {
+    let codigoPrincipalRepetido = false;
+    for (let index = 0; index < productos.length; index++) {
+      const element = productos[index];
+      if (element.codigoPrincipal === seleccionado.codigoPrincipal) {
+        codigoPrincipalRepetido = true;
+        break;
+      }
+    }
+    if (!codigoPrincipalRepetido) {
+      seleccionado.cantidad = cantsel;
+      seleccionado.cantidad_minima = cantminsel;
+      seleccionado.bodega = tagsBodegas;
+      seleccionado.codigos = tags;
+      seleccionado.proveedores = tagsProveedores;
+
+      if (productoExento) {
+        seleccionado.productoExento = true;
+      }
+      if (preciouno !== 0) {
+        seleccionado.precio.push(preciouno);
+      }
+      if (preciodos !== 0) {
+        seleccionado.precio.push(preciodos);
+      }
+      if (preciotres !== 0) {
+        seleccionado.precio.push(preciotres);
+      }
+      const valorInsertar = seleccionado;
+      const dataNueva = data;
+      dataNueva.push(valorInsertar);
+      setData(dataNueva);
+      if (
+        seleccionado.codigoPrincipal !== '' &&
+        isAlphanumeric(seleccionado.codigoPrincipal) &&
+        seleccionado.codigos.length > 0 &&
+        seleccionado.proveedores.length > 0 &&
+        seleccionado.precio.length > 0 &&
+        seleccionado.descripcion.toString().trim() !== '' &&
+        seleccionado.area.toString().trim() !== '' &&
+        isAlphanumeric(seleccionado.codigoBarra) &&
+        seleccionado.codigoBarra.toString().trim() !== '' &&
+        document.getElementById('cantidad').value > 0 &&
+        document.getElementById('cantidad_minima').value > 0 &&
+        seleccionado.marca[0] !== undefined
+      ) {
+        if (regex.test(seleccionado.descripcion) && regex.test(seleccionado.area)) {
+          prueba();
+          props.change();
+        } else {
+          Confirm.open({
+            title: 'Error',
+            message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
+            onok: () => {},
+          });
+        }
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
+          onok: () => {},
+        });
+      }
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'El codigo principal esta repetido.',
         onok: () => {},
       });
     }
@@ -904,49 +857,16 @@ export default function AgregarProducto(props) {
       setCodigoBarra(event.target.value);
     }
   };
-  const cerrarModalAgregarCodigos = (n) => {
-    setTags(tagstemp);
-    setCodigoBarra(tagstemp[0]);
-    setModalInsertarCodigo(false);
-  };
-  const evaluarespacio = (e) => {
-    if (cod2 === ' ') {
-      setcod2('');
-    }
-    if (cod3 === ' ') {
-      setcod3('');
-    }
-    if (cod4 === ' ') {
-      setcod4('');
-    }
-    if (cod5 === ' ') {
-      setcod5('');
-    }
-    if (cod6 === ' ') {
-      setcod6('');
-    }
-    if (cod7 === ' ') {
-      setcod7('');
-    }
-  };
+
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
-    }
-  };
-  const provseleccionados = [];
-  const proveedorSeleccionado = (provSel) => {
-    if (document.getElementById('prov1').value !== '') {
-      //alert(document.getElementById('prov1').value);
-      seleccionado.proveedores.push(document.getElementById('prov1').value);
     }
   };
   const onChangeProv = () => {
     if (precioprovedor7 !== 0) {
       tempProv = tempProv.filter((x) => x != null);
       const uniqueData = [...new Set(tempProv)];
-      alert(JSON.stringify(uniqueData[0].name));
-
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsProveedores.push({
         name: uniqueData[0].name,
@@ -984,8 +904,6 @@ export default function AgregarProducto(props) {
     if (precioprovedor6 !== 0) {
       tempBod = tempBod.filter((x) => x != null);
       const uniqueData = [...new Set(tempBod)];
-      alert(JSON.stringify(uniqueData[0].name));
-
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsBodegas.push({
         name: uniqueData[0].name,
@@ -1080,6 +998,21 @@ export default function AgregarProducto(props) {
       'border-radius': '10px',
       padding: '0 8px',
       'margin-left': '80px',
+      overflow: 'auto',
+      maxHeight: '100px',
+    };
+  }
+  function paddingdivcodigosRef() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '300px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '50px',
       overflow: 'auto',
       maxHeight: '100px',
     };
@@ -1216,6 +1149,7 @@ export default function AgregarProducto(props) {
           top: '20px',
           maxWidth: '1500px',
           'border-radius': '36px',
+          'overflow-x': 'hidden',
         }}
       >
         <Button
@@ -1230,7 +1164,7 @@ export default function AgregarProducto(props) {
           }}
           onClick={() => setmodalCreacionRapida(true)}
         >
-          <Remove width="50px" height="50px" />
+          <Plus width="50px" height="50px" />
         </Button>
         <div>
           <h3>AGREGAR PRODUCTOS</h3>
@@ -1295,8 +1229,8 @@ export default function AgregarProducto(props) {
                       style={paddingAvInput()}
                       className="form-control"
                       type="text"
-                      name="nombre"
-                      id="nombre_agregar"
+                      name="descripcion"
+                      id="descripcion"
                       errorMessage="Nombre Inválido"
                       validate={{
                         required: { value: true },
@@ -1304,8 +1238,8 @@ export default function AgregarProducto(props) {
 
                         minLength: { value: 1 },
                       }}
-                      value={seleccionado ? seleccionado.nombre : ''}
-                      onChange={(e) => manejarCambio(e)}
+                      value={descripcionRapida}
+                      onChange={(e) => manejarCambiodescripcionRapida(e)}
                     />
                   </AvForm>
                   <Row>
@@ -1334,6 +1268,7 @@ export default function AgregarProducto(props) {
                         value={codigobarra}
                         placeholder="Inserte codigo de barra"
                         onChange={manejarCambioRapidaBarra}
+                        onKeyDown={handleKeyDown}
                       />
                     </Col>
                   </Row>
@@ -1380,7 +1315,7 @@ export default function AgregarProducto(props) {
                     title: 'Insertar Producto',
                     message: '¿Esta seguro de que quiere insertar este producto?',
                     onok: () => {
-                      insertar();
+                      insertarRapido();
                     },
                   })
                 }
@@ -1412,16 +1347,16 @@ export default function AgregarProducto(props) {
                   style={paddingAvInput()}
                   className="form-control"
                   type="text"
-                  name="nombre"
-                  id="nombre_agregar"
-                  errorMessage="Nombre Inválido"
+                  name="descripcion"
+                  id="descripcion"
+                  errorMessage="Descripcion Inválida"
                   validate={{
                     required: { value: true },
                     pattern: { value: regex },
 
                     minLength: { value: 1 },
                   }}
-                  value={seleccionado ? seleccionado.nombre : ''}
+                  value={seleccionado ? seleccionado.descripcion : ''}
                   onChange={(e) => manejarCambio(e)}
                 />
                 <Row>
@@ -1431,16 +1366,17 @@ export default function AgregarProducto(props) {
                       style={paddingAvInput()}
                       className="form-control"
                       type="text"
-                      name="nombre"
-                      id="nombre_agregar"
-                      errorMessage="Nombre Inválido"
+                      name="codigoPrincipal"
+                      id="codigoPrincipal"
+                      errorMessage="Codigo Inválido"
                       validate={{
                         required: { value: true },
                         pattern: { value: regex },
                         minLength: { value: 1 },
                       }}
-                      value={seleccionado ? seleccionado.nombre : ''}
+                      value={seleccionado ? seleccionado.codigoPrincipal : ''}
                       onChange={(e) => manejarCambio(e)}
+                      onKeyDown={handleKeyDown}
                     />
                   </Col>
                 </Row>
@@ -1451,8 +1387,8 @@ export default function AgregarProducto(props) {
                   <AvField
                     style={paddingDescripciones()}
                     type="textarea"
-                    name="text"
-                    id="descripcion2"
+                    name="descripcion_larga"
+                    id="descripcion_larga"
                     value={seleccionado ? seleccionado.descripcion_larga : ''}
                     onChange={manejarCambio}
                   />
@@ -1471,7 +1407,7 @@ export default function AgregarProducto(props) {
                 placeholder="O presione Enter para insertar códigos"
                 onKeyDown={handleKeyDown}
               />
-              <div style={paddingdiv()}>
+              <div style={paddingdivcodigosRef()}>
                 <ul style={paddingul()}>
                   {tags.map((tag, index) => (
                     <li style={paddingmain()} key={index}>
@@ -1513,6 +1449,22 @@ export default function AgregarProducto(props) {
                   +
                 </Button>
               </div>
+              <Row>
+                <AvForm>
+                  <AvRadioGroup id="exento" inline name="producto_exento" required>
+                    <AvRadio
+                      onClick={() => setProductoExento(true)}
+                      label="Producto Exento"
+                      value="exento"
+                    />
+                    <AvRadio
+                      onClick={() => setProductoExento(false)}
+                      label="Producto No Exento"
+                      value="noexento"
+                    />
+                  </AvRadioGroup>
+                </AvForm>
+              </Row>
               <Row style={{ marginRight: '-150px', marginLeft: '-100px' }}>
                 <h>Marca</h>
                 <Col sm={{ size: 'auto' }}>
@@ -1642,20 +1594,21 @@ export default function AgregarProducto(props) {
                           style={paddingAvInput()}
                           className="form-control"
                           type="text"
-                          name="nombre"
+                          name="codigoBarra"
                           id="nombre_agregar"
-                          errorMessage="Nombre Inválido"
+                          errorMessage="Codigo de Barra Inválido"
                           validate={{
                             required: { value: true },
                             pattern: { value: regex },
                             minLength: { value: 1 },
                           }}
-                          value={seleccionado ? seleccionado.nombre : ''}
+                          value={seleccionado ? seleccionado.codigoBarra : ''}
                           onChange={(e) => manejarCambio(e)}
+                          onKeyDown={handleKeyDown}
                         />
                         <Row>
                           <Col sm={{ size: 'auto' }}>
-                            <Barcode value={seleccionado.nombre} />
+                            <Barcode value={seleccionado.codigoBarra} />
                           </Col>
                         </Row>
                       </Col>
@@ -1675,7 +1628,7 @@ export default function AgregarProducto(props) {
                   className="form-control"
                   type="text"
                   name="area"
-                  id="area_agregar"
+                  id="area"
                   errorMessage="Campo Obligatorio"
                   validate={{
                     required: { value: true },
@@ -1755,7 +1708,10 @@ export default function AgregarProducto(props) {
                   }}
                 >
                   <Row>
-                    <label style={{ 'margin-left': '10px' }}>Precios de Venta</label>
+                    <label style={{ 'margin-left': '40px', marginTop: '-20px' }}>
+                      Precios de
+                      <br /> Venta
+                    </label>
                     <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
                       <div>
                         <h style={{ paddingRight: '-300px' }}>Precio 1</h>
@@ -1769,7 +1725,9 @@ export default function AgregarProducto(props) {
                           validate={{
                             required: { value: true },
                           }}
-                          value={seleccionado.precio[0] ? seleccionado.precio[0] : 0}
+                          min={1}
+                          onChange={(e) => manejarCambioPrecio1(e)}
+                          value={preciouno}
                         />
                       </div>
                     </Col>
@@ -1785,9 +1743,8 @@ export default function AgregarProducto(props) {
                         validate={{
                           required: { value: false },
                         }}
-                        value={seleccionado.precio[1] ? seleccionado.precio[1] : ''}
-                        // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                        // onChange={manejarCambio}
+                        onChange={(e) => manejarCambioPrecio2(e)}
+                        value={preciodos}
                       />
                     </Col>
                     <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
@@ -1802,9 +1759,8 @@ export default function AgregarProducto(props) {
                         validate={{
                           required: { value: false },
                         }}
-                        value={seleccionado.precio[2] ? seleccionado.precio[2] : ''}
-                        // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                        // onChange={manejarCambio}
+                        onChange={(e) => manejarCambioPrecio3(e)}
+                        value={preciotres}
                       />
                     </Col>
                   </Row>
