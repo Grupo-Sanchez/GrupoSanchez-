@@ -1,6 +1,12 @@
 import React, { Component } from 'react';
-import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, Row, Col } from 'reactstrap';
+import axios from 'axios';
 import AddEditForm from './FormCliente modificar';
+import { ReactComponent as EditLogo } from '../Icons/edit.svg';
+import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
+import { Confirm } from './Confirm';
+import '../Styles/ConfirmStyle.css';
+import '../Styles/modalEddas.css';
 
 class ModalForm extends Component {
   constructor(props) {
@@ -14,6 +20,30 @@ class ModalForm extends Component {
     this.setState((prevState) => ({
       modal: !prevState.modal,
     }));
+  };
+
+  deleteItem = async (id) => {
+    await axios.delete(`http://localhost:3001/api/clientes/${id}`);
+    Confirm.open({
+      title: 'Aviso',
+      message: 'cliente eliminado',
+      onok: () => {},
+    });
+    setTimeout(() => {
+      window.location.reload();
+    }, 1500);
+
+    // this.props.deleteItemFromState(id)
+  };
+
+  checkElimination = () => {
+    Confirm.open({
+      title: 'Aviso',
+      message: 'se eliminara el cliente permanentemente',
+      onok: () => {
+        this.deleteItem(this.props.item._id);
+      },
+    });
   };
 
   render() {
@@ -31,14 +61,17 @@ class ModalForm extends Component {
     if (label === 'Edit') {
       button = (
         <Button
-          color="warning"
           onClick={this.toggle}
-          style={{ float: 'left', marginRight: '10px' }}
+          //style={{ float: 'left', marginRight: '10px' }}
+          style={{
+            'background-color': 'transparent',
+            borderColor: 'transparent',
+          }}
         >
-          {label}
+          <EditLogo width="30px" height="30px" />
         </Button>
       );
-      title = 'Editar cliente';
+      title = 'GESTIONAR CLIENTE';
     } else {
       button = (
         <Button
@@ -56,6 +89,7 @@ class ModalForm extends Component {
       <div>
         {button}
         <Modal
+          className="estiloModal "
           style={{
             height: '95vh',
             'overflow-y': 'auto',
@@ -63,13 +97,29 @@ class ModalForm extends Component {
             maxWidth: '1000px',
           }}
           isOpen={this.state.modal}
-          toggle={this.toggle}
-          className={this.props.className}
         >
-          <ModalHeader toggle={this.toggle} close={closeBtn}>
-            {title}
-          </ModalHeader>
           <ModalBody>
+            <Row>
+              <Col sm="12" md={{ size: 6, offset: 3 }}>
+                <h3>GESTIONAR CLIENTE</h3>
+              </Col>
+              <Col>
+                <Button
+                  onClick={() => this.checkElimination()}
+                  style={{
+                    'background-color': 'transparent',
+                    borderColor: 'transparent',
+
+                    'border-radius': '26px',
+                  }}
+                  className="boton-basurero"
+                >
+                  <BasureroLogo fill="#dc0000" width="50px" height="50px" />
+                </Button>
+              </Col>
+            </Row>
+
+            <br></br>
             <AddEditForm
               cerrar={this.state.modal}
               id={this.props.id}

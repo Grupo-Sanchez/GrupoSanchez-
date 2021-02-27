@@ -38,5 +38,6 @@ module.exports = {
     'no-nested-ternary': 0,
     'function-paren-newline': 0,
     'arrow-body-style': 0,
+    'no-unused-expressions': 0,
   },
 };

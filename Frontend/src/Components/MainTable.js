@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'reactstrap';
 import axios from 'axios';
 import ModalForm from './Modal';
 import DataTable from './DataTable';
+import LupaIcon from '../Icons/lupa1.jpeg';
 
 class MainTable extends Component {
   state = {
@@ -10,7 +11,7 @@ class MainTable extends Component {
   };
 
   getItems = async () => {
-    const res = await axios.get('http://178.128.67.247:3001/api/clientes');
+    const res = await axios.get('http://localhost:3001/api/clientes');
     this.setState({ items: res.data });
   };
 
@@ -45,11 +46,32 @@ class MainTable extends Component {
   render() {
     return (
       <Container className="MainTable">
+        <br></br>
+        <br></br>
+        <br></br>
         <Row>
-          <Col>
-            <h1 style={{ margin: '20px 0' }}>Clientes</h1>
+          <Col sm="3">
+            <ModalForm buttonLabel="add" addItemToState={this.addItemToState} />
+          </Col>
+          <Col sm={{ size: 6, order: 2, offset: 0 }}>
+            <input
+              type="text"
+              id="myInput"
+              placeholder="Encuentre clientes .."
+              title="Type in a name"
+              style={{
+                'background-image': `url('${LupaIcon}')`,
+                'background-position': '10px 10px',
+                'background-repeat': 'no-repeat',
+                width: '90%',
+                'font-size': '16px',
+                padding: '12px 20px 12px 40px',
+                'border-radius': '26px',
+              }}
+            ></input>
           </Col>
         </Row>
+        <br></br>
         <Row>
           <Col>
             <DataTable
@@ -59,11 +81,7 @@ class MainTable extends Component {
             />
           </Col>
         </Row>
-        <Row>
-          <Col>
-            <ModalForm buttonLabel="add" addItemToState={this.addItemToState} />
-          </Col>
-        </Row>
+        <Row></Row>
       </Container>
     );
   }
