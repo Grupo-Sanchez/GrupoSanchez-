@@ -10,7 +10,7 @@ class DataTable extends Component {
   deleteItem = async (id) => {
     const confirmDelete = window.confirm('borrar el cliente para siempre?');
     if (confirmDelete) {
-      await axios.delete(`http://178.128.67.247:3001/api/clientes/${id}`);
+      await axios.delete(`http://localhost:3001/api/clientes/${id}`);
       Confirm.open({
         title: 'Aviso',
         message: 'cliente eliminado',
@@ -27,7 +27,7 @@ class DataTable extends Component {
   modificarCliente = async (id) => {
     const confirmModificar = window.confirm('seguro que quiere modificar el cliente?');
     if (confirmModificar) {
-      await axios.put(`http://178.128.67.247:3001/api/clientes/${id}`);
+      await axios.put(`http://localhost:3001/api/clientes/${id}`);
       window.confirm('cliente modificado exitosamente');
       window.location.reload();
 
@@ -48,7 +48,7 @@ class DataTable extends Component {
         <td>{item.tel}</td>
         <td>{item.email}</td>
         <td>
-          <div style={{ width: '110px' }}>
+          <div style={{ width: 'auto' }}>
             <ModalForm
               id={item._id}
               buttonLabel="Edit"
@@ -82,11 +82,11 @@ class DataTable extends Component {
         <thead>
           <tr>
             <th>Numero de identidad</th>
-            <th>primer nombre</th>
-            <th>primer apellido</th>
-            <th>telefono</th>
-            <th>correo electronico</th>
-            <th>accion</th>
+            <th>Primer nombre</th>
+            <th>Primer apellido</th>
+            <th>Telefono</th>
+            <th>Correo electronico</th>
+            <th>Accion</th>
           </tr>
         </thead>
         <tbody>{items}</tbody>
