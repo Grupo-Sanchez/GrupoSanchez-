@@ -834,8 +834,8 @@ export default function EliminarProducto(props) {
     setCodes(element.codigos);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
-    setMarcaSel(element.marca[0].value);
-    setBodegaSel(element.bodega[0].value);
+    // setMarcaSel(element.marca[0].value);
+    //setBodegaSel(element.bodega[0].value);
     setNombre(element.nombre);
     setTagsTemp(element.codigos);
     settempProv(element.proveedores);
@@ -1644,7 +1644,7 @@ export default function EliminarProducto(props) {
                     </Col>
                   </Row>
                 </Col>
-                <h style={{ 'margin-left': '30px' }}>Descripción especifica</h>
+                <h style={{ 'margin-left': '5px' }}>Descripción especifica</h>
                 <Col sm={{ size: 5 }}>
                   <FormGroup>
                     <AvField
@@ -1706,8 +1706,8 @@ export default function EliminarProducto(props) {
                     +
                   </Button>
                 </div>
-                <Row style={{ marginRight: '-150px', marginLeft: '-100px' }}>
-                  <h>Marca</h>
+                <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
+                  <h style={{ marginLeft: '-50px' }}>Marca</h>
                   <Col sm={{ size: 'auto' }}>
                     <div style={{ marginLeft: '-15px' }}>
                       <SelectSearch
@@ -1722,7 +1722,7 @@ export default function EliminarProducto(props) {
                       />
                     </div>
                     <br />
-                    <label style={{ 'margin-left': '-50px', paddingTop: '-10px' }}># Pasillo</label>
+                    <label style={{ 'margin-left': '-15px', paddingTop: '-10px' }}># Pasillo</label>
                     <Row>
                       <h style={{ 'margin-left': '-45px' }}>Bodega</h>
                       <Col sm={{ size: 'auto' }} style={{ 'margin-left': '-25px' }}>
@@ -1743,7 +1743,7 @@ export default function EliminarProducto(props) {
                         <input
                           style={{
                             width: '90px',
-                            'margin-left': '50px',
+                            'margin-left': '20px',
                             'border-radius': '26px',
                           }}
                           className="form-control"
@@ -1766,7 +1766,7 @@ export default function EliminarProducto(props) {
                               width: '40px',
                               height: '40px',
                               'line-height': '2px',
-                              'margin-left': '-720px',
+                              'margin-left': '-780px',
                               marginTop: '90px',
                             }}
                             onClick={() => onChangeBodega()}
@@ -1860,13 +1860,14 @@ export default function EliminarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <h style={{ marginLeft: '10px' }}>Área</h>
-              <Col style={{ marginLeft: '40px' }}>
+              <h style={{ marginLeft: '-5px' }}>Área</h>
+              <Col>
                 <AvForm>
                   <AvField
                     style={{
                       'border-radius': '26px',
                       width: '320px',
+                      marginLeft: '-10px',
                     }}
                     className="form-control"
                     type="text"

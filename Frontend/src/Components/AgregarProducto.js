@@ -1334,8 +1334,8 @@ export default function AgregarProducto(props) {
                     onChange={manejarCambioRapida}
                   />
                 </Col>
-                <h style={{ marginLeft: '25px' }}>Inventario</h>
-                <Col style={{ marginLeft: '60px', top: '-25px' }}>
+                <h style={{ marginLeft: '55px' }}>Inventario</h>
+                <Col style={{ marginLeft: '20px', top: '-25px' }}>
                   <h style={{ marginLeft: '-50px' }}>Cantidad</h>
                   <input
                     style={paddingAvInputCantidadesCreacionRapida()}
@@ -1350,7 +1350,7 @@ export default function AgregarProducto(props) {
               </Row>
               <br />
               <Row>
-                <h style={{ marginLeft: '70px' }}>Descripción </h>
+                <h style={{ marginLeft: '50px' }}>Descripción </h>
                 <Col style={{ marginLeft: '25px' }}>
                   <AvForm>
                     <AvField
@@ -1387,7 +1387,7 @@ export default function AgregarProducto(props) {
                     </AvForm>
                   </Row>
                   <Row>
-                    <h style={{ marginLeft: '-135px' }}>Código de Barra</h>
+                    <h style={{ marginLeft: '-115px' }}>Código de Barra</h>
                     <Col>
                       <input
                         style={paddingInput()}
@@ -1401,9 +1401,9 @@ export default function AgregarProducto(props) {
                     </Col>
                   </Row>
                 </Col>
-                <label>Precio de Venta</label>
-                <Col style={{ marginLeft: '20px', top: '-40px' }}>
-                  <label style={{ marginLeft: '-50px' }}>Precio 1</label>
+                <label style={{ marginLeft: '30px' }}>Precio de Venta</label>
+                <Col style={{ marginLeft: '-30px', top: '-40px' }}>
+                  <label style={{ marginLeft: '-30px' }}>Precio 1</label>
                   <AvForm>
                     <AvField
                       style={paddingAvInputCantidadesCreacionRapida()}
@@ -1509,7 +1509,7 @@ export default function AgregarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <h style={{ 'margin-left': '30px' }}>Descripción especifica</h>
+              <h style={{ 'margin-left': '5px' }}>Descripción especifica</h>
               <Col sm={{ size: 5 }}>
                 <FormGroup>
                   <AvField
@@ -1626,7 +1626,7 @@ export default function AgregarProducto(props) {
                       <input
                         style={{
                           width: '90px',
-                          'margin-left': '50px',
+                          'margin-left': '20px',
                           'border-radius': '26px',
                         }}
                         className="form-control"
@@ -1740,13 +1740,14 @@ export default function AgregarProducto(props) {
                 </Col>
               </Row>
             </Col>
-            <h style={{ marginLeft: '10px' }}>Área</h>
-            <Col style={{ marginLeft: '40px' }}>
+            <h style={{ marginLeft: '-5px' }}>Área</h>
+            <Col>
               <AvForm>
                 <AvField
                   style={{
                     'border-radius': '26px',
                     width: '320px',
+                    marginLeft: '-5px',
                   }}
                   className="form-control"
                   type="text"
@@ -1762,7 +1763,7 @@ export default function AgregarProducto(props) {
                   onChange={(e) => manejarCambio(e)}
                 />
               </AvForm>
-              <Row style={{ marginLeft: '-120px' }}>
+              <Row style={{ marginLeft: '-110px' }}>
                 <label style={{ marginTop: '25px' }}>Proveedor</label>
                 <SelectSearch
                   search
