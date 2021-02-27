@@ -1,12 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AvForm, AvField, AvGroup } from 'availity-reactstrap-validation';
 import axios from 'axios';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Row, Col } from 'reactstrap';
+import { Confirm } from './Confirm';
 
 const AgregarProveedor = (props) => {
+  const [data, setData] = useState([]);
+
   const cerrarModal = () => {
     props.change();
   };
+
+  const fetchData = async () => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+      setData(response.data);
+    });
+  };
+
+  const isAvailable = (value) => {
+    fetchData();
+    for (let i = 0; i < data.length; i++) {
+      if (value.nombre.toUpperCase() === data[i].nombre.toUpperCase()) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   async function handleValidSubmit(event, values) {
     try {
@@ -14,10 +37,19 @@ const AgregarProveedor = (props) => {
         nombre: values.nombre,
         descripcion: values.descripcion,
       };
-      console.log(payload);
-      const response = await axios.post('http://localhost:3001/api/marcas', payload);
-      console.log(response);
-      cerrarModal();
+      if (isAvailable(payload)) {
+        console.log(payload);
+        const response = await axios.post('http://localhost:3001/api/marcas', payload);
+        console.log(response);
+        cerrarModal();
+      } else {
+        Confirm.open({
+          title: 'Nombre de Marca duplicado',
+          message: 'Valor ingresado de Marca ya se encuentra registrado',
+          onok: () => {},
+        });
+      }
+
     } catch (err) {
       console.err(err.response.payload);
     }
