@@ -127,6 +127,7 @@ const ModificarEliminarProveedor = () => {
               .put(`http://localhost:3001/api/productos/${product[i]._id}`, {
                 proveedores: list,
               })
+
               .then((response) => {
                 console.log(response);
               })

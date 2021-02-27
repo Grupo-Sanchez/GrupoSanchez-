@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/SearchBar.css';
+import '../Styles/estilosLuisTablaUsuarios.css';
 import {
   Button,
   Table,
@@ -10,6 +11,9 @@ import {
   ModalBody,
   ModalHeader,
   ModalFooter,
+  Row,
+  Col,
+  Container,
 } from 'reactstrap';
 import {
   AvForm,
@@ -26,6 +30,10 @@ import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import SelectSearch from 'react-select-search';
 import imagePath from '../Icons/lupa1.jpeg';
+import Agregar from './AgregarUsuario';
+import { ReactComponent as EditLogo } from '../Icons/edit.svg';
+import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
+import { ReactComponent as AgregarLogo } from '../Icons/plus.svg';
 import { Confirm } from './Confirm';
 
 export default function ModificarUsuario(props) {
@@ -51,25 +59,34 @@ export default function ModificarUsuario(props) {
       return 0;
     });
   };
+  function paddingAvInput() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      width: '320px',
+    };
+  }
 
   const handleChange2 = (e) => {
     agregarMarca(e);
   };
 
+  const [modalModificar, setModalModificarUsuario] = useState(false);
+
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/users/${memberId}`);
+    axios.delete(`http://Localhost:3001/api/users/${memberId}`);
+    setModalModificarUsuario(false);
   };
 
   const [data, setData] = useState([]);
 
-  const [modalModificar, setModalModificarUsuario] = useState(false);
+  const fecthData = async () => {
+    await axios.get('http://Localhost:3001/api/users').then((response) => {
+      setData(response.data);
+    });
+  };
 
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://178.128.67.247:3001/api/users').then((response) => {
-        setData(response.data);
-      });
-    };
     fecthData();
   }, [data]);
 
@@ -121,7 +138,7 @@ export default function ModificarUsuario(props) {
     ) {
       setModalModificarUsuario(false);
       axios
-        .put(`http://178.128.67.247:3001/api/users/${seleccionado._id}`, {
+        .put(`http://localhost:3001/api/users/${seleccionado._id}`, {
           identidad: seleccionado.identidad,
           nombre: seleccionado.nombre,
           segundo_nombre: seleccionado.segundo_nombre,
@@ -186,9 +203,30 @@ export default function ModificarUsuario(props) {
     }));
   };
 
+  const [modalAgregar, setModalAgregar] = useState(false);
+
+  const cerraroAbrirModal = () => {
+    setModalAgregar(!modalAgregar);
+    fecthData();
+  };
+
+  const mostrarModal = () => {
+    setModalAgregar(true);
+  };
+
   return (
     <div align="center">
       <h1 class="text-center">USUARIOS</h1>
+      <Button
+        style=
+        {{
+          'background-color': 'transparent',
+          borderColor: 'transparent',
+        }}
+        onClick={() => mostrarModal()}
+        >
+        <AgregarLogo width="30px" height="30px" />
+      </Button>
       <input
         type="text"
         id="myInput"
@@ -213,60 +251,54 @@ export default function ModificarUsuario(props) {
         }}
       >
         <Table
-          responsive
+          responsive="sm"
           striped
-          bordered
           hover
           align="center"
           size="sm"
           id="myTable"
-          style={{ width: '500px' }}
+          style={{
+            'max-width': '360px',
+            'border-collapse': 'separate',
+            border: 'solid #ccc 2px',
+            '-moz-border-radius': '26px',
+            '-webkit-border-radius': '26px',
+            'border-radius': '26px',
+            '-webkit-box-shadow': '0 1px 1px #ccc',
+            '-moz-box-shadow': '0 1px 1px #ccc',
+            'box-shadow': '0 1px 1px #ccc',
+          }}
         >
           <thead>
             <tr>
-              <th>#</th>
               <th>Identidad</th>
               <th>Primer Nombre</th>
-              <th>Segundo Nombre</th>
               <th>Primer Apellido</th>
-              <th>Segundo Apellido</th>
-              <th>RTN</th>
+              <th>Tipo de usuario</th>
               <th>Telefono</th>
               <th>Correo</th>
-              <th>Rol</th>
               <th>Accion</th>
             </tr>
           </thead>
           <tbody>
             {data.map((elemento, index) => (
               <tr>
-                <td>{(index += 1)}</td>
                 <td>{elemento.identidad}</td>
                 <td>{elemento.nombre}</td>
-                <td>{elemento.segundo_nombre}</td>
                 <td>{elemento.primer_apellido}</td>
-                <td>{elemento.segundo_apellido}</td>
-                <td>{elemento.rtn}</td>
+                <td>{elemento.rol[0].name}</td>
                 <td>{elemento.telefono}</td>
                 <td>{elemento.correo}</td>
-                <td>{elemento.rol[0].name}</td>
                 <td>
-                  <Button onClick={() => modificar(elemento)} color="primary">
-                    Modificar
-                  </Button>
                   <Button
-                    color="danger"
-                    onClick={() =>
-                      Confirm.open({
-                        title: '¡Advertencia!',
-                        message: '¿Esta seguro que desea eliminar el usuario?.',
-                        onok: () => {
-                          onDelete(elemento._id);
-                        },
-                      })
-                    }
+                    style={{
+                      'background-color': 'transparent',
+                      borderColor: 'transparent',
+                    }}
+                    onClick={() => modificar(elemento)}
+                    color="primary"
                   >
-                    Eliminar
+                    <EditLogo width="30px" height="30px" />
                   </Button>
                 </td>
               </tr>
@@ -280,190 +312,257 @@ export default function ModificarUsuario(props) {
             height: '95vh',
             'overflow-y': 'auto',
             top: '20px',
-            maxWidth: '550px',
+            maxWidth: '1200px',
           }}
         >
-          <ModalHeader>
-            <div>
-              <h3>MODIFICAR USUARIO</h3>
-            </div>
-          </ModalHeader>
+          <Row>
+            <Col>
+              <div>
+                <h3>MODIFICAR USUARIO</h3>
+              </div>
+            </Col>
+            <Col>
+              <Button
+                style={{
+                  'background-color': 'transparent',
+                  borderColor: 'transparent',
+                }}
+                color="danger"
+                onClick={() =>
+                  Confirm.open({
+                    title: '¡Advertencia!',
+                    message: '¿Esta seguro que desea eliminar el usuario?.',
+                    onok: () => {
+                      onDelete(seleccionado._id);
+                    },
+                  })
+                }
+              >
+                <BasureroLogo fill="#dc0000" width="30px" height="30px" />
+              </Button>
+            </Col>
+          </Row>
           <ModalBody>
             <div>
-              <h3>Identidad</h3>
               <AvForm>
-                <AvField
-                  errorMessage="Numero de identidad Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regexSoloNumeros },
-                    minLength: { value: 13 },
-                  }}
-                  maxLength="13"
-                  className="form-control"
-                  type="text"
-                  name="identidad"
-                  id="identidad"
-                  value={seleccionado ? seleccionado.identidad : ''}
-                  onChange={manejarCambio}
-                />
+                <Row>
+                  <Col>Identidad</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Numero de identidad Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regexSoloNumeros },
+                        minLength: { value: 13 },
+                      }}
+                      maxLength="13"
+                      className="form-control"
+                      type="text"
+                      name="identidad"
+                      id="identidad"
+                      value={seleccionado ? seleccionado.identidad : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>Primer Nombre</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Nombre Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regex },
+                        minLength: { value: 1 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="nombre"
+                      id="nombre"
+                      value={seleccionado ? seleccionado.nombre : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                </Row>
               </AvForm>
             </div>
             <div>
-              <h3>Primer Nombre</h3>
               <AvForm>
-                <AvField
-                  errorMessage="Nombre Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regex },
-                    minLength: { value: 1 },
-                  }}
-                  className="form-control"
-                  type="text"
-                  name="nombre"
-                  id="nombre"
-                  value={seleccionado ? seleccionado.nombre : ''}
-                  onChange={manejarCambio}
-                />
+                <Row>
+                  <Col>Segundo nombre</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Nombre Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regex },
+                        minLength: { value: 1 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="segundo_nombre"
+                      id="segundo_nombre"
+                      value={seleccionado ? seleccionado.segundo_nombre : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>Primer apellido</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Apellido Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regex },
+                        minLength: { value: 1 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="primer_apellido"
+                      id="primer_apellido"
+                      value={seleccionado ? seleccionado.primer_apellido : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                </Row>
               </AvForm>
             </div>
             <div>
-              <h3>Segundo Nombre</h3>
               <AvForm>
-                <AvField
-                  errorMessage="Nombre Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regex },
-                    minLength: { value: 1 },
-                  }}
-                  className="form-control"
-                  type="text"
-                  name="segundo_nombre"
-                  id="segundo_nombre"
-                  value={seleccionado ? seleccionado.segundo_nombre : ''}
-                  onChange={manejarCambio}
-                />
+                <Row>
+                  <Col>Segundo apellido</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Apellido Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regex },
+                        minLength: { value: 1 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="segundo_apellido"
+                      id="segundo_apellido"
+                      value={seleccionado ? seleccionado.segundo_apellido : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>RTN</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="RTN Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regexSoloNumeros },
+                        minLength: { value: 14 },
+                      }}
+                      maxLength="14"
+                      className="form-control"
+                      type="text"
+                      name="rtn"
+                      id="rtn"
+                      value={seleccionado ? seleccionado.rtn : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                </Row>
               </AvForm>
             </div>
             <div>
-              <h3>Primer Apellido</h3>
               <AvForm>
-                <AvField
-                  errorMessage="Apellido Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regex },
-                    minLength: { value: 1 },
-                  }}
-                  className="form-control"
-                  type="text"
-                  name="primer_apellido"
-                  id="primer_apellido"
-                  value={seleccionado ? seleccionado.primer_apellido : ''}
-                  onChange={manejarCambio}
-                />
+                <Row>
+                  <Col>Telefono</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Telefono Inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regexSoloNumeros },
+                        minLength: { value: 1 },
+                      }}
+                      maxLength="8"
+                      className="form-control"
+                      type="text"
+                      name="telefono"
+                      id="telefono"
+                      value={seleccionado ? seleccionado.telefono : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>Correo</Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Revise el formato"
+                      validate={{
+                        email: true,
+                        minLength: { value: 5 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="correo"
+                      id="correo"
+                      value={seleccionado ? seleccionado.correo : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                </Row>
               </AvForm>
             </div>
             <div>
-              <h3>Segundo Apellido</h3>
-              <AvForm>
-                <AvField
-                  errorMessage="Apellido Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regex },
-                    minLength: { value: 1 },
-                  }}
-                  className="form-control"
-                  type="text"
-                  name="segundo_apellido"
-                  id="segundo_apellido"
-                  value={seleccionado ? seleccionado.segundo_apellido : ''}
-                  onChange={manejarCambio}
-                />
-              </AvForm>
+              <label>Tipo de usuario</label>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <SelectSearch
+                    search
+                    options={options}
+                    value={marcaSel}
+                    onChange={(e) => handleChange2(e)}
+                  />
+                </Col>
+              </Row>
             </div>
-            <div>
-              <h3>RTN</h3>
-              <AvForm>
-                <AvField
-                  errorMessage="RTN Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regexSoloNumeros },
-                    minLength: { value: 14 },
-                  }}
-                  maxLength="14"
-                  className="form-control"
-                  type="text"
-                  name="rtn"
-                  id="rtn"
-                  value={seleccionado ? seleccionado.rtn : ''}
-                  onChange={manejarCambio}
-                />
-              </AvForm>
-            </div>
-            <div>
-              <h3>Telefono</h3>
-              <AvForm>
-                <AvField
-                  errorMessage="Telefono Inválido"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regexSoloNumeros },
-                    minLength: { value: 1 },
-                  }}
-                  maxLength="8"
-                  className="form-control"
-                  type="text"
-                  name="telefono"
-                  id="telefono"
-                  value={seleccionado ? seleccionado.telefono : ''}
-                  onChange={manejarCambio}
-                />
-              </AvForm>
-            </div>
-            <div>
-              <h3>Correo</h3>
-              <AvForm>
-                <AvField
-                  errorMessage="Revise el formato"
-                  validate={{
-                    email: true,
-                    minLength: { value: 5 },
-                  }}
-                  className="form-control"
-                  type="text"
-                  name="correo"
-                  id="correo"
-                  value={seleccionado ? seleccionado.correo : ''}
-                  onChange={manejarCambio}
-                />
-              </AvForm>
-            </div>
-            <div>
-              <h3>Rol</h3>
-              <SelectSearch
-                search
-                options={options}
-                value={marcaSel}
-                onChange={(e) => handleChange2(e)}
-              />
-            </div>
-
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={() => modificarUsuario()}>
-              Modificar Usuario
+            <button
+              style={{
+                'border-radius': '26px',
+                'border-color': '#98ff98',
+                color: 'green',
+                border: '1px solid green',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-primary"
+              onClick={() => modificarUsuario()}
+            >
+              Modificar
             </button>
-            <button className="btn btn-danger" onClick={() => setModalModificarUsuario(false)}>
+            <button
+              style={{
+                margin: '10px',
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'red',
+                border: '1px solid red',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-danger"
+              onClick={() => setModalModificarUsuario(false)}
+            >
               Cancelar
             </button>
           </ModalFooter>
         </Modal>
       </div>
+      <Agregar isOpen={modalAgregar} change={() => cerraroAbrirModal()} />
     </div>
   );
 }
