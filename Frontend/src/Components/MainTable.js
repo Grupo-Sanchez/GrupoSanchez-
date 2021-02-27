@@ -47,7 +47,8 @@ class MainTable extends Component {
     return (
       <Container className="MainTable">
         <br></br>
-        <br></br>
+        <h3>CLIENTES</h3>
+
         <br></br>
         <Row>
           <Col sm="3">
