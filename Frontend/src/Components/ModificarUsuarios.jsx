@@ -30,8 +30,10 @@ import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import SelectSearch from 'react-select-search';
 import imagePath from '../Icons/lupa1.jpeg';
+import Agregar from './AgregarUsuario';
 import { ReactComponent as EditLogo } from '../Icons/edit.svg';
 import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
+import { ReactComponent as AgregarLogo } from '../Icons/plus.svg';
 import { Confirm } from './Confirm';
 
 export default function ModificarUsuario(props) {
@@ -69,20 +71,22 @@ export default function ModificarUsuario(props) {
     agregarMarca(e);
   };
 
+  const [modalModificar, setModalModificarUsuario] = useState(false);
+
   const onDelete = (memberId) => {
     axios.delete(`http://Localhost:3001/api/users/${memberId}`);
+    setModalModificarUsuario(false);
   };
 
   const [data, setData] = useState([]);
 
-  const [modalModificar, setModalModificarUsuario] = useState(false);
+  const fecthData = async () => {
+    await axios.get('http://Localhost:3001/api/users').then((response) => {
+      setData(response.data);
+    });
+  };
 
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://Localhost:3001/api/users').then((response) => {
-        setData(response.data);
-      });
-    };
     fecthData();
   }, [data]);
 
@@ -199,9 +203,30 @@ export default function ModificarUsuario(props) {
     }));
   };
 
+  const [modalAgregar, setModalAgregar] = useState(false);
+
+  const cerraroAbrirModal = () => {
+    setModalAgregar(!modalAgregar);
+    fecthData();
+  };
+
+  const mostrarModal = () => {
+    setModalAgregar(true);
+  };
+
   return (
     <div align="center">
       <h1 class="text-center">USUARIOS</h1>
+      <Button
+        style=
+        {{
+          'background-color': 'transparent',
+          borderColor: 'transparent',
+        }}
+        onClick={() => mostrarModal()}
+        >
+        <AgregarLogo width="30px" height="30px" />
+      </Button>
       <input
         type="text"
         id="myInput"
@@ -275,24 +300,6 @@ export default function ModificarUsuario(props) {
                   >
                     <EditLogo width="30px" height="30px" />
                   </Button>
-                  <Button
-                    style={{
-                      'background-color': 'transparent',
-                      borderColor: 'transparent',
-                    }}
-                    color="danger"
-                    onClick={() =>
-                      Confirm.open({
-                        title: '¡Advertencia!',
-                        message: '¿Esta seguro que desea eliminar el usuario?.',
-                        onok: () => {
-                          onDelete(elemento._id);
-                        },
-                      })
-                    }
-                  >
-                    <BasureroLogo width="30px" height="30px" />
-                  </Button>
                 </td>
               </tr>
             ))}
@@ -313,6 +320,26 @@ export default function ModificarUsuario(props) {
               <div>
                 <h3>MODIFICAR USUARIO</h3>
               </div>
+            </Col>
+            <Col>
+              <Button
+                style={{
+                  'background-color': 'transparent',
+                  borderColor: 'transparent',
+                }}
+                color="danger"
+                onClick={() =>
+                  Confirm.open({
+                    title: '¡Advertencia!',
+                    message: '¿Esta seguro que desea eliminar el usuario?.',
+                    onok: () => {
+                      onDelete(seleccionado._id);
+                    },
+                  })
+                }
+              >
+                <BasureroLogo fill="#dc0000" width="30px" height="30px" />
+              </Button>
             </Col>
           </Row>
           <ModalBody>
@@ -535,6 +562,7 @@ export default function ModificarUsuario(props) {
           </ModalFooter>
         </Modal>
       </div>
+      <Agregar isOpen={modalAgregar} change={() => cerraroAbrirModal()} />
     </div>
   );
 }

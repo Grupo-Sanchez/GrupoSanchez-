@@ -252,7 +252,7 @@ export default function AgregarUsuario(props) {
       regEmail.test(document.getElementById('correo').value) &&
       seleccionado.identidad.length === 13 &&
       seleccionado.rtn.length === 14 &&
-      seleccionado.password.length > 4
+      seleccionado.password.length >= 4
     ) {
       const campos = {
         identidad: seleccionado.identidad,
