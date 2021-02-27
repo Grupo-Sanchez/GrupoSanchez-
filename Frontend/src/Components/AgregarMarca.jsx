@@ -49,7 +49,6 @@ const AgregarProveedor = (props) => {
           onok: () => {},
         });
       }
-
     } catch (err) {
       console.err(err.response.payload);
     }

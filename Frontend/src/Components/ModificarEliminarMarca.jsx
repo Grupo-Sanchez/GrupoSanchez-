@@ -91,7 +91,6 @@ const ModificarEliminarProveedor = () => {
                 console.log(error);
               });
           }
-
         }
 
         setModal(false);
