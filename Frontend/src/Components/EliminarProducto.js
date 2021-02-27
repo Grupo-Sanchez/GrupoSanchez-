@@ -275,8 +275,7 @@ export default function EliminarProducto(props) {
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsProveedores.push({
         name: uniqueData[0].name,
-        value: uniqueData[0]._id,
-        agencia: uniqueData[0].agencia,
+        value: uniqueData[0].value,
         representante: uniqueData[0].nombre,
         apellidos: uniqueData[0].apellidos,
         genero: uniqueData[0].genero,
@@ -313,7 +312,7 @@ export default function EliminarProducto(props) {
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsBodegas.push({
         name: uniqueData[0].name,
-        value: uniqueData[0]._id,
+        value: uniqueData[0].value,
         numPasillo: precioprovedor6,
       });
       //setTagsTempProveedor([...tagstempProveedor, tempProv]);
@@ -1784,7 +1783,10 @@ export default function EliminarProducto(props) {
                               <span style={paddingtitle()}>
                                 {tag.name}, L. {tag.precio}
                               </span>
-                              <i style={paddingclosebodega()} onClick={() => removeTagsBodega(index)}>
+                              <i
+                                style={paddingclosebodega()}
+                                onClick={() => removeTagsBodega(index)}
+                              >
                                 x
                               </i>
                             </li>
