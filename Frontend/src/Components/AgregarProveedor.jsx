@@ -32,7 +32,7 @@ const AgregarProveedor = (props) => {
   };
 
   const fetchData = async () => {
-    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
       setData(response.data);
     });
   };
@@ -68,7 +68,7 @@ const AgregarProveedor = (props) => {
       };
 
       if (isAvailable(payload)) {
-        const response = await axios.post('http://localhost:3001/api/proveedor', payload);
+        const response = await axios.post('http://178.128.67.247:3001/api/proveedor', payload);
         Confirm.open({
           title: 'Proveedor Agregado',
           message: 'El proveedor ha sido agregado exitosamente',
