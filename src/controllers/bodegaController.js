@@ -10,13 +10,14 @@ exports.read_bodega = async (req, res) => {
 };
 
 exports.create_bodega = async (req, res) => {
-  const { numBodega, descripcion, encargado, cantPasillos } = req.body;
+  const { numBodega, descripcion, encargado, cantPasillos, CantProductos } = req.body;
   try {
     const new_bodega = new bodega({
       numBodega,
       descripcion,
       encargado,
       cantPasillos,
+      CantProductos,
     });
     ret = await new_bodega.save();
     res.json(ret);

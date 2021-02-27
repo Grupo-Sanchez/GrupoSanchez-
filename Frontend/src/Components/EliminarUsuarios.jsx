@@ -18,14 +18,14 @@ import { Confirm } from './Confirm';
 
 export default function EliminarUsuario(props) {
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/login/${memberId}`);
+    axios.delete(`http://localhost:3001/api/login/${memberId}`);
   };
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://Localhost:3001/api/users').then((response) => {
+      await axios.get('http://localhost:3001/api/users').then((response) => {
         setData(response.data);
       });
     };

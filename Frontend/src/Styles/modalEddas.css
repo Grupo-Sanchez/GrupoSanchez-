@@ -1,0 +1,16 @@
+h3 {
+  text-align: center;
+}
+
+.modal-content {
+  border-radius: 36px;
+}
+
+form {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.boton-basurero {
+  margin-left: 45px;
+}

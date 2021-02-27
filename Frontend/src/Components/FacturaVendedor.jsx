@@ -44,7 +44,7 @@ export default function Facturas() {
   const [productosSeleccionado, setproductosSeleccionado] = useState([]);
   const getProductos = async () => {
     await axios
-      .get('http://Localhost:3001/api/productos')
+      .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         const productosagregados = [];
@@ -119,8 +119,8 @@ export default function Facturas() {
       nombreCliente: nombre,
       rtn: rtn,
     };
-    alert(JSON.stringify(campos));
-    // await axios.post('http://Localhost:3001/api/facturas', campos);
+    //alert(JSON.stringify(campos));
+    // await axios.post('http://localhost:3001/api/facturas', campos);
     setproductosSeleccionado([]);
     setresult(0);
     setindice(1);
@@ -143,7 +143,7 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
+    axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
   };
   const handleQuantityChange = (e) => {
     setindice(1);
@@ -160,7 +160,7 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items = productosSeleccionado.filter((item) => item.value !== i);
     setproductosSeleccionado(items);
     setresult(0);

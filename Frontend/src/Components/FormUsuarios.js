@@ -19,11 +19,9 @@ import {
   ButtonGroup,
 } from 'reactstrap';
 
-
 import '../Styles/FormularioCliente.css';
 
 const FormUsuario = () => {
-
   // States cliente
   const [primerNombre, setPrimerNombre] = useState('');
   const [segundoNombre, setSegundoNombre] = useState('');
@@ -33,7 +31,7 @@ const FormUsuario = () => {
   const [id, setId] = useState('');
   const [telefono, setTelefono] = useState('');
   const [correo, setCorreo] = useState('');
-  
+
   // State para validaciones
   const [validNom, setValidNom] = useState(false);
   const [invalidNom, setInvalidNom] = useState(false);
@@ -257,7 +255,7 @@ const FormUsuario = () => {
                     />
                   </Col>
                 </FormGroup>
-                
+
                 <FormGroup row>
                   <div
                     style={{

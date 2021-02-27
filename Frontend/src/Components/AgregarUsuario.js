@@ -145,7 +145,7 @@ export default function AgregarUsuario(props) {
   const options = [
     { value: 'propietario', name: 'Propietario' },
     { value: 'administrador', name: 'Administrador' },
-    { value: 'jefe', name: 'Jefe de tienda' },
+    { value: 'jefetienda', name: 'Jefe de tienda' },
     { value: 'ejecutivo', name: 'Ejecutivo de ventas' },
   ];
 
@@ -180,8 +180,8 @@ export default function AgregarUsuario(props) {
 
       console.log('Mandando: ', typeof seleccionado.rol.value);
       console.log('Mandando: ', jsonString);
-      //     fetch('http://Localhost:3001/api/login', {
-      fetch('http://Localhost:3001/api/signup', {
+      //     fetch('http://localhost:3001/api/login', {
+      fetch('http://localhost:3001/api/signup', {
         method: 'post',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(jsonString),
@@ -266,6 +266,7 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
+
       const res = await axios.post('http://Localhost:3001/api/Users', campos);
       Confirm.open({
         title: 'Exito',

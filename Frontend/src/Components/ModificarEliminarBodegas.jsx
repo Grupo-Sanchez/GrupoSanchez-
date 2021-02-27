@@ -27,14 +27,17 @@ import '../Styles/ConfirmStyle.css';
 import { Confirm } from './Confirm';
 
 const ModificarEliminarBodegas = (props) => {
+  const dataApuntes = [];
+  const [data, setData] = useState(dataApuntes);
   const [Seleccionado, setSeleccionado] = useState({
     _id: '',
     numBodega: '',
     descripcion: '',
     encargado: '',
     cantPasillos: '',
+    CantProductos: '',
   });
-
+  const [product, setProduct] = useState('');
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
 
   const [form, setForm] = useState({
@@ -42,6 +45,7 @@ const ModificarEliminarBodegas = (props) => {
     Description: '',
     Encargado: '',
     CantPasillos: '',
+    CantProductos: '',
   });
 
   const cerrarModal = () => {
@@ -51,39 +55,22 @@ const ModificarEliminarBodegas = (props) => {
     form.Encargado = '';
     form.cantPasillos = 0;
   };
+  const fetchProducts = async () => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
+      setProduct(response.data);
+    });
+  };
 
   function handleInvalidSubmit(event, errors, values) {
     console.log('invalid submit', { event, errors, values });
   }
 
-  // async function handleValidSubmit(event, values) {
-  //   const Id = Seleccionado._id;
-  //   axios
-  //     .put(`http://Localhost:3001/api/bodegas/${Id}`, {
-  //       numBodega: values.numBodega,
-  //       descripcion: values.Description,
-  //       encargado: values.Encargado,
-  //       cantPasillos: values.CantPasillos,
-  //     })
-  //     .then(alert('Modificado con exito'))
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  //   window.location.reload(false);
-  //   setModalModificarBodega(false);
-  // }
-
-  // const handleChange = (e) => {
-  //   setForm({
-  //     ...form,
-  //     [e.target.name]: e.target.value,
-  //   });
-  // };
-
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
+    const payload = { value: Seleccionado._id, name: values.numBodega };
+    fetchProducts();
     axios
-      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
+      .put(`http://localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -104,7 +91,38 @@ const ModificarEliminarBodegas = (props) => {
           });
           setTimeout(() => {
             window.location.reload();
-          }, 1500);
+          }, 2000);
+          for (let i = 0; i < product.length; i++) {
+            if (
+              product[i].bodega[0].value === Seleccionado._id &&
+              product[i].bodega[0].name !== payload.name
+            ) {
+              product[i].bodega[0] = payload;
+              axios
+                .put(`http://localhost:3001/api/productos/${product[i]._id}`, {
+                  nombre: product[i].nombre,
+                  area: product[i].area,
+                  codigos: product[i].codigos,
+                  proveedores: product[i].proveedores,
+                  ubicacion: product[i].ubicacion,
+                  marca: product[i].marca,
+                  bodega: payload,
+                  precios: product[i].precios,
+                  cantidad: product[i].cantidad,
+                  descripcion_corta: product[i].descripcion_corta,
+                  descripcion_larga: product[i].descripcion_larga,
+                  cantidad_minima: product[i].cantidad_minima,
+                  fecha_creacion: product[i].fecha_creacion,
+                })
+                .then((response) => {
+                  console.log(response);
+                })
+                .catch((error) => {
+                  console.log(error);
+                });
+            }
+          }
+          setModalModificarBodega(false);
         }
       })
       .catch((error) => {
@@ -124,25 +142,65 @@ const ModificarEliminarBodegas = (props) => {
     });
   };
 
-  const dataApuntes = [];
-  const [data, setData] = useState(dataApuntes);
-
+  const fecthData = async () => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
+      setData(response.data);
+    });
+  };
   useEffect(() => {
-    const fecthData = async () => {
-      await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
-        setData(response.data);
-      });
-    };
     fecthData();
+    fetchProducts();
   }, []);
 
+  useEffect(() => {
+    fecthData();
+    fetchProducts();
+  }, [data, product]);
+
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
-  const eliminar = (i) => {
-    setData(data.filter((elemento) => elemento._id !== i));
-    onDelete(i);
+  const eliminar = (bodega) => {
+    // if (i.CantProductos === '0') {
+    //   setData(data.filter((elemento) => elemento._id !== i));
+    //   onDelete(i._id);
+    //   Confirm.open({
+    //     title: '!exito!',
+    //     message: 'bodega Eliminada correctamente',
+    //     onok: () => {},
+    //   });
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 2000);
+    // } else {
+    //   Confirm.open({
+    //     title: 'error',
+    //     message: 'La bodega no debe contener productos para poder eliminarla',
+    //     onok: () => {},
+    //   });
+    // }
+    let booleano = 0;
+    for (let i = 0; i < product.length; i++) {
+      if (product[i].bodega[0].value === bodega._id) {
+        booleano = 1;
+        fecthData();
+        Confirm.open({
+          title: 'error',
+          message: 'La bodega no debe contener productos para poder eliminarla',
+          onok: () => {},
+        });
+      }
+    }
+    if (booleano === 0) {
+      onDelete(bodega._id);
+      Confirm.open({
+        title: '!exito!',
+        message: 'bodega modificada correctamente',
+        onok: () => {},
+      });
+      fecthData();
+    }
   };
 
   const llenar = (i) => {
@@ -151,7 +209,6 @@ const ModificarEliminarBodegas = (props) => {
   };
 
   const recargar = () => {
-    // props.change;
     window.location.reload(false);
   };
 
@@ -174,7 +231,6 @@ const ModificarEliminarBodegas = (props) => {
               striped
               bordered
               hover
-              dark
               align="center"
               size="sm"
               id="myTable"
@@ -182,29 +238,33 @@ const ModificarEliminarBodegas = (props) => {
             >
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>BODEGA</th>
+                  <th scope="col">#</th>
+                  <th>NUMERO DE BODEGA</th>
                   <th>DESCRIPCION</th>
                   <th>ENCARGADO</th>
                   <th>CANTIDAD DE PASILLOS</th>
+                  {/* <th>PRODUCTOS EN BODEGA</th> */}
+                  <th class="text-center"> Acción</th>
                   <th class="text-center"> Acción</th>
                 </tr>
               </thead>
               <tbody>
                 {data.map((elemento, index) => (
                   <tr>
-                    <td>{(index += 1)}</td>
+                    <td></td>
                     <td>{elemento.numBodega}</td>
                     <td>{elemento.descripcion}</td>
                     <td>{elemento.encargado}</td>
                     <td>{elemento.cantPasillos}</td>
+                    {/* <td>{elemento.CantProductos}</td> */}
                     <td>
                       <Button onClick={() => llenar(elemento)} color="success">
                         Modificar
                       </Button>
                     </td>
                     <td>
-                      <Button onClick={() => eliminar(elemento._id)} color="danger">
+                      {/* <Button onClick={() => eliminar(elemento._id)} color="danger"> */}
+                      <Button onClick={() => eliminar(elemento)} color="danger">
                         Eliminar
                       </Button>
                     </td>

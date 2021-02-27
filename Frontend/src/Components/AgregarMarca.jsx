@@ -15,7 +15,7 @@ const AgregarProveedor = (props) => {
         descripcion: values.descripcion,
       };
       console.log(payload);
-      const response = await axios.post('http://Localhost:3001/api/marcas', payload);
+      const response = await axios.post('http://localhost:3001/api/marcas', payload);
       console.log(response);
       cerrarModal();
     } catch (err) {

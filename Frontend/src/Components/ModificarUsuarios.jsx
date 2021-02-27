@@ -138,7 +138,7 @@ export default function ModificarUsuario(props) {
     ) {
       setModalModificarUsuario(false);
       axios
-        .put(`http://Localhost:3001/api/users/${seleccionado._id}`, {
+        .put(`http://localhost:3001/api/users/${seleccionado._id}`, {
           identidad: seleccionado.identidad,
           nombre: seleccionado.nombre,
           segundo_nombre: seleccionado.segundo_nombre,
