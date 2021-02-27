@@ -44,9 +44,9 @@ const Header = (props) => {
         <span>Grupo Sanchez</span>
       </div>
 
-      <div>
+      {/* <div>
         <img src={Notificacion} style={{ width: '1.4em', height: '1.4em', color: 'white' }} />
-      </div>
+      </div> */}
 
       {isOpen && (
         <div onClick={() => setOpen(false)} className="sidenav-background">
@@ -81,17 +81,19 @@ const Header = (props) => {
         <div className="sidenav-content" style={{ zIndex: '11' }}>
           {items.map(({ name, to, icon }, i) => (
             <div key={i} className="sidenav-item" onClick={handleItemClick.bind(this, to)}>
-              <div
-                style={{
-                  width: '2em',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  marginRight: '0.5em',
-                }}
-              >
-                <FontAwesomeIcon icon={icon} />
+              <div className="sidenav-inner-item">
+                <div
+                  style={{
+                    width: '2em',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginRight: '0.5em',
+                  }}
+                >
+                  <FontAwesomeIcon icon={icon} />
+                </div>
+                <span>{name}</span>
               </div>
-              <span>{name}</span>
             </div>
           ))}
         </div>
