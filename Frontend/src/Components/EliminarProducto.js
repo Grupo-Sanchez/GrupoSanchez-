@@ -126,19 +126,19 @@ export default function EliminarProducto(props) {
   const [inputcod7, setinputcod7] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const [seleccionado, setSeleccionado] = useState({
-    nombre: '',
+    descripcion: '',
     area: '',
     codigos: [],
     proveedores: [],
-    ubicacion: '',
-    bodega: [],
+    codigoPrincipal: '',
     marca: [],
-    precios: [],
-    cantidad: '',
-    descripcion_corta: '',
+    precio: [],
+    cantidad: 1,
+    bodega: [],
+    codigoBarra: '',
     descripcion_larga: '',
-    cantidad_minima: '',
-    fecha_creacion: '',
+    cantidad_minima: 1,
+    productoExento: false,
   });
   const [seleccionadorapido, setSeleccionadorapido] = useState({
     nombre: '',
@@ -187,10 +187,10 @@ export default function EliminarProducto(props) {
       for (let index = 0; index < proveedoresDB.length; index++) {
         const element = proveedoresDB[index];
         proveedoresagregados.push({
-          company: element.company,
+          name: element.company,
           value: element._id,
           agencia: element.agencia,
-          name: element.nombre,
+          representante: element.nombre,
           apellidos: element.apellidos,
           genero: element.genero,
           email: element.email,
@@ -292,7 +292,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -317,7 +317,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -503,7 +503,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
+        onok: () => {},
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -572,7 +572,7 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: mansajenot,
-          onok: () => { },
+          onok: () => {},
         });
       } else if (entra) {
         Confirm.open({
@@ -740,7 +740,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       Confirm.open({
@@ -780,7 +780,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       setModalModificarPrecios(false);
@@ -863,6 +863,7 @@ export default function EliminarProducto(props) {
             descripcion_corta: document.getElementById('descripcion1').value,
             descripcion_larga: document.getElementById('descripcion2').value,
             cantidad_minima: document.getElementById('modcantidad_minima').value,
+            codigoPrincipal: document.getElementById('codigo_principal').value,
           })
           .then(
             Confirm.open({
@@ -880,14 +881,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -994,11 +995,16 @@ export default function EliminarProducto(props) {
     setBodegaSel(element.bodega[0].value);
     setNombre(element.nombre);
     setTagsTemp(element.codigos);
-    setCodigoBarra(element.codigos[0]);
+    settempProv(element.proveedores);
+    settagsBodegas(element.bodega);
+    settempBod(tagsBodegas);
+    alert(JSON.stringify(tagsBodegas));
+    setCodigoBarra(element.codigoBarra);
     setprecio1(element.precios[0]);
     setprecio2(element.precios[1]);
     setprecio3(element.precios[2]);
     settagsProveedores(element.proveedores);
+    setTags(element.codigos);
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -1177,7 +1183,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => { },
+            onok: () => {},
           });
           entra = false;
         } else if (yaesta) {
@@ -1202,14 +1208,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1457,6 +1463,7 @@ export default function EliminarProducto(props) {
         >
           <thead>
             <tr style={{ textAlign: 'center' }}>
+              <th>#</th>
               <th>Código de Barra</th>
               <th>Codigo Principal</th>
               <th style={{ width: '300px' }}>Descripcion</th>
@@ -1470,8 +1477,9 @@ export default function EliminarProducto(props) {
             {data.map((elemento, index) => (
               <tr>
                 <td>{(index += 1)}</td>
-                <td>{elemento.nombre}</td>
-                <td style={{ whiteSpace: 'unset' }}>{elemento.nombre}</td>
+                <td>{`${elemento.codigoBarra}`}</td>
+                <td>{elemento.codigoPrincipal}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
                 <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
                 <td>{elemento.cantidad}</td>
                 <td>{elemento.precios[0]}</td>
@@ -1501,13 +1509,10 @@ export default function EliminarProducto(props) {
             top: '20px',
             maxWidth: '1500px',
             'border-radius': '36px',
+            'overflow-x': 'hidden',
           }}
         >
-          <ModalHeader>
-            <div>
-              <h3 className="text-center">MODIFICAR PRODUCTOS</h3>
-            </div>
-          </ModalHeader>
+          <h3>EDITAR PRODUCTO</h3>
           <ModalBody
             style={{
               'margin-right': '-80px',
@@ -1517,12 +1522,13 @@ export default function EliminarProducto(props) {
             <br />
             <AvForm>
               <Row style={{ marginRight: '200px' }}>
-                <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripcion</h>
+                <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripción</h>
                 <Col sm={{ size: 'auto' }}>
                   <AvField
                     style={paddingAvInput()}
                     className="form-control"
                     type="text"
+                    value={seleccionado.descripcion ? seleccionado.descripcion : ''}
                     name="nombre"
                     id="nombre_agregar"
                     errorMessage="Nombre Inválido"
@@ -1532,7 +1538,6 @@ export default function EliminarProducto(props) {
 
                       minLength: { value: 1 },
                     }}
-                    value={seleccionado ? seleccionado.nombre : ''}
                     onChange={(e) => manejarCambio(e)}
                   />
                   <Row>
@@ -1543,14 +1548,14 @@ export default function EliminarProducto(props) {
                         className="form-control"
                         type="text"
                         name="nombre"
-                        id="nombre_agregar"
+                        id="codigo_principal"
                         errorMessage="Nombre Inválido"
                         validate={{
                           required: { value: true },
                           pattern: { value: regex },
                           minLength: { value: 1 },
                         }}
-                        value={seleccionado ? seleccionado.nombre : ''}
+                        value={seleccionado ? seleccionado.codigoPrincipal : ''}
                         onChange={(e) => manejarCambio(e)}
                       />
                     </Col>
@@ -1696,11 +1701,11 @@ export default function EliminarProducto(props) {
                         <div style={paddingdivbodegas()}>
                           <ul style={paddingulbodegas()}>
                             {tagsBodegas.map((tag, index) => (
-                              <li style={paddingmainbodegas()} key={index}>
-                                <span style={paddingtitlebodega()}>
-                                  {tag.name}, # {tag.numPasillo}
+                              <li style={paddingmain()} key={index}>
+                                <span style={paddingtitle()}>
+                                  {tag.name}, L. {tag.precio}
                                 </span>
-                                <i style={paddingclosebodega()} onClick={() => removeTagsProv(index)}>
+                                <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
                                   x
                                 </i>
                               </li>
@@ -1746,7 +1751,7 @@ export default function EliminarProducto(props) {
                       </Col>
                     </Row>
                     <Row>
-                      <h style={{ marginLeft: '-90px' }}>Codigo de Barra</h>
+                      <h style={{ marginLeft: '-90px' }}>Código de Barra</h>
                       <AvForm>
                         <Col style={{ paddingRight: '-25px', marginLeft: '40px' }}>
                           <AvField
@@ -1761,12 +1766,12 @@ export default function EliminarProducto(props) {
                               pattern: { value: regex },
                               minLength: { value: 1 },
                             }}
-                            value={seleccionado ? seleccionado.nombre : ''}
+                            value={seleccionado ? seleccionado.codigoBarra : ''}
                             onChange={(e) => manejarCambio(e)}
                           />
                           <Row>
                             <Col sm={{ size: 'auto' }}>
-                              <Barcode value={seleccionado.nombre} />
+                              <Barcode value={seleccionado.codigoBarra} />
                             </Col>
                           </Row>
                         </Col>
@@ -1866,7 +1871,10 @@ export default function EliminarProducto(props) {
                     }}
                   >
                     <Row>
-                      <label style={{ 'margin-left': '10px' }}>Precios de Venta</label>
+                      <label style={{ 'margin-left': '40px', marginTop: '-20px' }}>
+                        Precios de
+                        <br /> Venta
+                      </label>
                       <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
                         <div>
                           <h style={{ paddingRight: '-300px' }}>Precio 1</h>
@@ -1878,8 +1886,7 @@ export default function EliminarProducto(props) {
                             id="modprecio1"
                             value={precio1}
                             onChange={(event) => setprecio1(event.target.value)}
-                            validate={{
-                            }}
+                            validate={{}}
                           />
                         </div>
                       </Col>
@@ -1896,8 +1903,8 @@ export default function EliminarProducto(props) {
                             required: { value: false },
                           }}
                           value={precio2}
-                        // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                        // onChange={manejarCambio}
+                          // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                          // onChange={manejarCambio}
                         />
                       </Col>
                       <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
@@ -1913,8 +1920,8 @@ export default function EliminarProducto(props) {
                             required: { value: false },
                           }}
                           value={precio3}
-                        // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                        // onChange={manejarCambio}
+                          // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                          // onChange={manejarCambio}
                         />
                       </Col>
                     </Row>
@@ -1956,7 +1963,7 @@ export default function EliminarProducto(props) {
           <ModalFooter>
             <button className="btn btn-primary" onClick={() => setModalVerCodigoBarra(false)}>
               OK
-          </button>
+            </button>
           </ModalFooter>
         </Modal>
       </div>
