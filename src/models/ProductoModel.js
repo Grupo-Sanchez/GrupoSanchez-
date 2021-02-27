@@ -1,4 +1,3 @@
-
 const { text } = require('body-parser');
 const { Schema, model } = require('mongoose');
 const ProductoSchema = new Schema({
@@ -8,7 +7,7 @@ codigo: ['123'],
 ubicacion: '',
 marca: '',
 precio: '',*/
-  nombre: {
+  descripcion: {
     type: String,
     required: 'se requiere nombre',
   },
@@ -22,7 +21,7 @@ precio: '',*/
   proveedores: {
     type: Array,
   },
-  ubicacion: {
+  codigoPrincipal: {
     type: String,
   },
   bodega: {
@@ -38,7 +37,7 @@ precio: '',*/
     type: Number,
     required: 'cantidad requerido',
   },
-  descripcion_corta: {
+  codigoBarra: {
     type: String,
   },
   descripcion_larga: {
@@ -50,8 +49,8 @@ precio: '',*/
   fecha_creacion: {
     type: Date,
   },
-  fecha_vencimiento: {
-    type: Date,
+  productoExento: {
+    type: Boolean,
   },
 });
 
