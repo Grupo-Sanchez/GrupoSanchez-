@@ -266,7 +266,6 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-
       const res = await axios.post('http://Localhost:3001/api/Users', campos);
       Confirm.open({
         title: 'Exito',

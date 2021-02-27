@@ -7,7 +7,7 @@ codigo: ['123'],
 ubicacion: '',
 marca: '',
 precio: '',*/
-  nombre: {
+  descripcion: {
     type: String,
     required: 'se requiere nombre',
   },
@@ -21,7 +21,7 @@ precio: '',*/
   proveedores: {
     type: Array,
   },
-  ubicacion: {
+  codigoPrincipal: {
     type: String,
   },
   bodega: {
@@ -37,7 +37,7 @@ precio: '',*/
     type: Number,
     required: 'cantidad requerido',
   },
-  descripcion_corta: {
+  codigoBarra: {
     type: String,
   },
   descripcion_larga: {
@@ -48,6 +48,9 @@ precio: '',*/
   },
   fecha_creacion: {
     type: Date,
+  },
+  productoExento: {
+    type: Boolean,
   },
 });
 
