@@ -140,6 +140,7 @@ export default function AgregarProducto(props) {
   const [tagsBodegas, settagsBodegas] = useState([]);
   let [tempBod, settempBod] = useState([]);
   const [tagstemp, setTagsTemp] = useState([]);
+  const [codRef, setCodRef] = useState('');
   const [seleccionado, setSeleccionado] = useState({
     descripcion: '',
     area: '',
@@ -229,17 +230,13 @@ export default function AgregarProducto(props) {
         proveedoresagregados.push({
           name: element.company,
           value: element._id,
-          agencia: element.agencia,
           representante: element.nombre,
           apellidos: element.apellidos,
-          genero: element.genero,
           email: element.email,
           telefono: element.telefono,
           direccion1: element.direccion1,
-          direccion2: element.direccion2,
           ciudad: element.ciudad,
           departamento: element.departamento,
-          codigoPostal: element.codigoPostal,
           pais: element.pais,
           comentario: element.comentario,
           _v: element._v,
@@ -249,10 +246,17 @@ export default function AgregarProducto(props) {
     });
   };
   const removeTagsProv = (index) => {
-    setProveedores([...proveedores, tagsProveedores[index]]);
     settagsProveedores([
       ...tagsProveedores.filter((tag) => tagsProveedores.indexOf(tag) !== index),
     ]);
+    fecthProveedores();
+    setProveedores(proveedores.filter(({ item }) => !tagsProveedores.includes(item)));
+  };
+  const removeTagsBodega = (index) => {
+    //setBodegas([...bodegas, tagsBodegas[index]]);
+    settagsBodegas([...tagsBodegas.filter((tag) => tagsBodegas.indexOf(tag) !== index)]);
+    fecthBodegas();
+    setBodegas(bodegas.filter(({ item }) => !tagsBodegas.includes(item)));
   };
   const fecthProductos = async () => {
     await axios.get('http://localhost:3001/api/productos').then((response) => {
@@ -290,6 +294,7 @@ export default function AgregarProducto(props) {
       message: '¡Producto Agregado!',
       onok: () => {},
     });
+    fecthProductos();
     seleccionado.descripcion = '';
     seleccionado.area = '';
     seleccionado.codigoPrincipal = '';
@@ -405,6 +410,9 @@ export default function AgregarProducto(props) {
       ...prevState,
       [name]: value,
     }));
+  };
+  const manejarCambioCodRef = (e) => {
+    setCodRef(e.target.value);
   };
   const manejarCambioRapida = (e) => {
     setcodigoprincipal(e.target.value);
@@ -763,6 +771,14 @@ export default function AgregarProducto(props) {
     }
   };
   const addTags = (event) => {
+    let duplicadoPrincipal = false;
+    if (event.key === 'Enter') {
+      for (let index = 0; index < productos.length; index++) {
+        if (productos[index].codigoPrincipal === event.target.value) {
+          duplicadoPrincipal = true;
+        }
+      }
+    }
     if (event.key === 'Enter' && event.target.value !== '' && !isAlphanumeric(event.target.value)) {
       Confirm.open({
         title: 'Error',
@@ -786,7 +802,7 @@ export default function AgregarProducto(props) {
         for (let p = 0; p < element.codigos.length; p++) {
           const element2 = element.codigos[p];
           if (element2 === event.target.value) {
-            mensaje.push(element.nombre);
+            mensaje.push(element.descripcion);
             codigos2.push(element2);
             yaesta = true;
           }
@@ -832,23 +848,32 @@ export default function AgregarProducto(props) {
           break;
         }
       }
-      if (yaesta) {
-        Confirm.open({
-          title: 'Error',
-          message: mansajenot,
-          onok: () => {},
-        });
-      } else if (entra) {
-        Confirm.open({
-          title: 'Error',
-          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-        });
-        entra = false;
+      if (!duplicadoPrincipal) {
+        if (yaesta) {
+          Confirm.open({
+            title: 'Error',
+            message: mansajenot,
+            onok: () => {},
+          });
+        } else if (entra) {
+          Confirm.open({
+            title: 'Error',
+            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          });
+          entra = false;
+        } else {
+          setTags([...tags, event.target.value]);
+          setTagsTemp([...tagstemp, event.target.value]);
+          setCodRef('');
+        }
+        event.target.value = '';
       } else {
-        setTags([...tags, event.target.value]);
-        setTagsTemp([...tagstemp, event.target.value]);
+        Confirm.open({
+          title: 'Error',
+          message:
+            'Existen códigos duplicados en códigos primarios, verifique e intente nuevamente.',
+        });
       }
-      event.target.value = '';
     } else if (
       isAlphanumeric(event.target.value) &&
       event.target.value !== '' &&
@@ -857,7 +882,110 @@ export default function AgregarProducto(props) {
       setCodigoBarra(event.target.value);
     }
   };
-
+  const addTagsClick = (event) => {
+    let duplicadoPrincipal = false;
+    for (let index = 0; index < productos.length; index++) {
+      if (productos[index].codigoPrincipal === event) {
+        duplicadoPrincipal = true;
+      }
+    }
+    if (!duplicadoPrincipal) {
+      if (event !== '' && !isAlphanumeric(event)) {
+        Confirm.open({
+          title: 'Error',
+          message: `El código tiene caracteres inválidos:${' '}`,
+          onok: () => {},
+        });
+      } else if (event !== '') {
+        seleccionado.codigos = [];
+        const duplicates = [];
+        for (let index = 0; index < tags.length; index++) {
+          const tag = tags[index];
+          seleccionado.codigos.push(tag);
+          duplicates.push(tag);
+        }
+        let yaesta = false;
+        let mensaje = [];
+        let codigos2 = [];
+        let mansajenot = '';
+        for (let index = 0; index < productos.length; index++) {
+          const element = productos[index];
+          for (let p = 0; p < element.codigos.length; p++) {
+            const element2 = element.codigos[p];
+            if (element2 === event) {
+              mensaje.push(element.descripcion);
+              codigos2.push(element2);
+              yaesta = true;
+            }
+          }
+        }
+        let codigosUnicos = codigos2.filter(
+          (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+        );
+        let productosUnicos = mensaje.filter(
+          (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+        );
+        let codString = '';
+        let prodString = '';
+        for (let k = 0; k < codigosUnicos.length; k++) {
+          const element = codigosUnicos[k];
+          codString += ` ${element},`;
+        }
+        for (let k = 0; k < productosUnicos.length; k++) {
+          const element = productosUnicos[k];
+          prodString += ` ${element},`;
+        }
+        if (codigosUnicos.length !== 1) {
+          mansajenot = `Los codigos ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresados ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        } else {
+          mansajenot = `El codigo ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresado ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        }
+        let entra = false;
+        for (let i = 0; i < duplicates.length; i++) {
+          if (duplicates[i] === event) {
+            entra = true;
+            break;
+          }
+        }
+        if (yaesta) {
+          Confirm.open({
+            title: 'Error',
+            message: mansajenot,
+            onok: () => {},
+          });
+        } else if (entra) {
+          Confirm.open({
+            title: 'Error',
+            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          });
+          entra = false;
+        } else {
+          setTags([...tags, event]);
+          setTagsTemp([...tagstemp, event]);
+          setCodRef('');
+        }
+      } else if (isAlphanumeric(event) && event !== '' && tags.length - 1 < 0) {
+        setCodigoBarra(event);
+      }
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Existen códigos principales con este código, verifique e intente nuevamente.',
+      });
+    }
+  };
   const handleKeyDown = (e) => {
     if (e.key === ' ') {
       e.preventDefault();
@@ -870,8 +998,7 @@ export default function AgregarProducto(props) {
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsProveedores.push({
         name: uniqueData[0].name,
-        value: uniqueData[0]._id,
-        agencia: uniqueData[0].agencia,
+        value: uniqueData[0].value,
         representante: uniqueData[0].nombre,
         apellidos: uniqueData[0].apellidos,
         genero: uniqueData[0].genero,
@@ -887,7 +1014,6 @@ export default function AgregarProducto(props) {
         precio: precioprovedor7,
         _v: uniqueData[0]._v,
       });
-      //setTagsTempProveedor([...tagstempProveedor, tempProv]);
       setSize6('6');
       settempProv([]);
       setPrecioProvedor7(0);
@@ -907,7 +1033,7 @@ export default function AgregarProducto(props) {
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsBodegas.push({
         name: uniqueData[0].name,
-        value: uniqueData[0]._id,
+        value: uniqueData[0].value,
         numPasillo: precioprovedor6,
       });
       //setTagsTempProveedor([...tagstempProveedor, tempProv]);
@@ -1012,9 +1138,10 @@ export default function AgregarProducto(props) {
       border: 'none',
       'border-radius': '10px',
       padding: '0 8px',
-      'margin-left': '50px',
+      'margin-left': '30px',
       overflow: 'auto',
       maxHeight: '100px',
+      top: '20px',
     };
   }
   function paddingdivbodegas() {
@@ -1027,7 +1154,8 @@ export default function AgregarProducto(props) {
       border: 'none',
       'border-radius': '10px',
       padding: '0 8px',
-      'margin-left': '-300px',
+      'margin-left': '50px',
+      paddingRight: '-250px',
       overflow: 'auto',
       maxHeight: '100px',
     };
@@ -1406,14 +1534,17 @@ export default function AgregarProducto(props) {
                 onKeyUp={(event) => addTags(event)}
                 placeholder="O presione Enter para insertar códigos"
                 onKeyDown={handleKeyDown}
+                value={codRef}
+                onChange={(e) => manejarCambioCodRef(e)}
               />
+              <br />
               <div style={paddingdivcodigosRef()}>
                 <ul style={paddingul()}>
                   {tags.map((tag, index) => (
                     <li style={paddingmain()} key={index}>
                       <span style={paddingtitle()}>{tag}</span>
                       <i style={paddingclose()} onClick={() => removeTags(index)}>
-                        x
+                        <Remove width="20px" height="20px" />
                       </i>
                     </li>
                   ))}
@@ -1434,16 +1565,9 @@ export default function AgregarProducto(props) {
                     height: '40px',
                     'line-height': '2px',
                     'margin-left': '-350px',
+                    top: '-75px',
                   }}
-                  onClick={() =>
-                    Confirm.open({
-                      title: 'Insertar Codigos',
-                      message: '¿Está seguro de que quiere insertar estos codigos?',
-                      onok: () => {
-                        GuardarCodigos();
-                      },
-                    })
-                  }
+                  onClick={() => addTagsClick(codRef)}
                   color="primary"
                 >
                   +
@@ -1465,8 +1589,8 @@ export default function AgregarProducto(props) {
                   </AvRadioGroup>
                 </AvForm>
               </Row>
-              <Row style={{ marginRight: '-150px', marginLeft: '-100px' }}>
-                <h>Marca</h>
+              <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
+                <h style={{ marginLeft: '-50px' }}>Marca</h>
                 <Col sm={{ size: 'auto' }}>
                   <div style={{ marginLeft: '-15px' }}>
                     <SelectSearch
@@ -1481,7 +1605,7 @@ export default function AgregarProducto(props) {
                     />
                   </div>
                   <br />
-                  <label style={{ 'margin-left': '380px', paddingTop: '-10px' }}># Pasillo</label>
+                  <label style={{ 'margin-left': '15px', paddingTop: '-10px' }}># Pasillo</label>
                   <Row>
                     <h style={{ 'margin-left': '-45px' }}>Bodega</h>
                     <Col sm={{ size: 'auto' }} style={{ 'margin-left': '-25px' }}>
@@ -1511,46 +1635,45 @@ export default function AgregarProducto(props) {
                         value={precioprovedor6}
                         min={1}
                       />
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '1px',
-                          'margin-left': '525px',
-                        }}
-                      >
-                        <Button
-                          style={{
-                            'font-size': '20px',
-                            'border-radius': '50%',
-                            width: '40px',
-                            height: '40px',
-                            'line-height': '2px',
-                            'margin-left': '-720px',
-                            marginTop: '90px',
-                          }}
-                          onClick={() => onChangeBodega()}
-                          color="primary"
-                        >
-                          +
-                        </Button>
-                      </div>
-                      <div style={paddingdivbodegas()}>
-                        <ul style={paddingulbodegas()}>
-                          {tagsBodegas.map((tag, index) => (
-                            <li style={paddingmainbodegas()} key={index}>
-                              <span style={paddingtitlebodega()}>
-                                {tag.name}, # {tag.numPasillo}
-                              </span>
-                              <i style={paddingclosebodega()} onClick={() => removeTagsProv(index)}>
-                                x
-                              </i>
-                            </li>
-                          ))}
-
-                          <br />
-                        </ul>
-                      </div>
                     </AvForm>
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '1px',
+                        'margin-left': '525px',
+                      }}
+                    >
+                      <Button
+                        style={{
+                          'font-size': '20px',
+                          'border-radius': '50%',
+                          width: '40px',
+                          height: '40px',
+                          'line-height': '2px',
+                          'margin-left': '-50px',
+                          marginTop: '90px',
+                        }}
+                        onClick={() => onChangeBodega()}
+                        color="primary"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    <div style={paddingdivbodegas()}>
+                      <ul style={paddingulbodegas()}>
+                        {tagsBodegas.map((tag, index) => (
+                          <li style={paddingmainbodegas()} key={index}>
+                            <span style={paddingtitlebodega()}>
+                              {tag.name}, # {tag.numPasillo}
+                            </span>
+                            <i style={paddingclosebodega()} onClick={() => removeTagsBodega(index)}>
+                              <Remove width="20px" height="20px" />
+                            </i>
+                          </li>
+                        ))}
+                        <br />
+                      </ul>
+                    </div>
                   </Row>
                   <br />
                   <br />
@@ -1693,7 +1816,7 @@ export default function AgregarProducto(props) {
                           {tag.name}, L. {tag.precio}
                         </span>
                         <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
-                          x
+                          <Remove width="20px" height="20px" />
                         </i>
                       </li>
                     ))}
