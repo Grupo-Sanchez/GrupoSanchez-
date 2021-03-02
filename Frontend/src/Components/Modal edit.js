@@ -89,7 +89,6 @@ class ModalForm extends Component {
       <div>
         {button}
         <Modal
-          className="estiloModal "
           style={{
             height: '95vh',
             'overflow-y': 'auto',

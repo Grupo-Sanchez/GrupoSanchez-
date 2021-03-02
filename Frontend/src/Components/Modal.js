@@ -64,7 +64,6 @@ class ModalForm extends Component {
         <Modal
           isOpen={this.state.modal}
           //className={this.props.className}
-          className="estiloModal"
           style={{
             height: '95vh',
             'overflow-y': 'auto',
