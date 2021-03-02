@@ -836,11 +836,11 @@ export default function EliminarProducto(props) {
     setCantsel(element.cantidad);
     // setMarcaSel(element.marca[0].value);
     //setBodegaSel(element.bodega[0].value);
-    setNombre(element.nombre);
+    //setNombre(element.nombre);
     setTagsTemp(element.codigos);
     settempProv(element.proveedores);
-    settagsBodegas(element.bodega);
-    settempBod(tagsBodegas);
+    settagsBodegas(seleccionado.bodega);
+    //settempBod(tagsBodegas);
     setCodigoBarra(element.codigoBarra);
     setprecio1(element.precios[0]);
     setprecio2(element.precios[1]);
