@@ -14,6 +14,7 @@ import DatePicker from 'react-date-picker';
 import '../Styles/DatePicker.css';
 import { AvForm, AvField, AvInput, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import React, { useState, useEffect } from 'react';
 import SelectSearch from 'react-select-search';
 import '../Styles/ConfirmStyle.css';
@@ -185,7 +186,7 @@ export default function AgregarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthMarcas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -207,7 +208,7 @@ export default function AgregarProducto(props) {
   const [precioprovedor6, setPrecioProvedor6] = useState(0);
   const [precioprovedor7, setPrecioProvedor7] = useState(0);
   const fecthBodegas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
@@ -221,7 +222,7 @@ export default function AgregarProducto(props) {
     });
   };
   const fecthProveedores = async () => {
-    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       // setData(response.data);
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
@@ -283,16 +284,11 @@ export default function AgregarProducto(props) {
     tagsBodegas.splice(index, 1);
   };
   const fecthProductos = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
       setProductos(response.data);
     });
   };
-  useEffect(() => {
-    fecthProveedores();
-    fecthProductos();
-    fecthMarcas();
-    fecthBodegas();
-  }, []);
+
   let hoy = new Date();
   const prueba = async () => {
     const campos = {
@@ -311,7 +307,7 @@ export default function AgregarProducto(props) {
       productoExento: seleccionado.productoExento,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
     };
-    const res = await axios.post('http://178.128.67.247:3001/api/productos', campos);
+    const res = await axios.post('http://localhost:3001/api/productos', campos);
     console.log(res);
     Confirm.open({
       title: '',
@@ -1290,6 +1286,79 @@ export default function AgregarProducto(props) {
     setModalAgregarBodega(!modalAgregarBodega);
     fecthBodegas();
   };
+  const [singleFile, setSingleFile] = useState('');
+  let [singleFiles, setSingleFiles] = useState([]);
+  const [fotos1, setfotos1] = useState([]);
+  const [singleProgress, setSingleProgress] = useState(0);
+  const singleFileUpload = async (data1, options1) => {
+    try {
+      await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
+    } catch (error) {
+      alert(`ACA: , ${error}`);
+    }
+    return null;
+  };
+  const getSingleFiles = async () => {
+    try {
+      await axios.get('http://localhost:3001/api/getSingleFiles').then((response) => {
+        const fotos = response.data;
+        let tempfotos = [];
+        for (let index = 0; index < fotos.length; index++) {
+          const element = fotos[index];
+          tempfotos.push(element);
+        }
+        singleFiles = tempfotos;
+      });
+      setfotos1(singleFiles);
+    } catch (error) {
+      //alert('ACA DOS: ', error);
+    }
+    return null;
+  };
+  const singleFileOptions = {
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
+      setSingleProgress(percentage);
+    },
+  };
+  const uploadSingleFile = async () => {
+    const formData = new FormData();
+    formData.append('file', singleFile);
+    //alert(JSON.stringify(formData));
+    await singleFileUpload(formData, singleFileOptions);
+    //props.getsingle();
+  };
+  const SingleFileChange = (e) => {
+    setSingleFile(e.target.files[0]);
+    setSingleProgress(0);
+  };
+  const getSingleFileslist = async () => {
+    try {
+      await getSingleFiles();
+      alert(`http://localhost:3000/${singleFiles[0].filePath.replace('/public', '')}`);
+      alert(
+        `http://localhost:3000/${singleFiles[1].filePath
+          .replace('\\', '')
+          .replace('Frontend', '')
+          .replace('\\', '')
+          .replace('\\', '/')
+          .split('public')
+          .join('')
+          .replace('//uploads/', '/uploads/')}`,
+      );
+      alert(`fotos: ${JSON.stringify(singleFiles)}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fecthProveedores();
+    fecthProductos();
+    fecthMarcas();
+    fecthBodegas();
+    getSingleFileslist();
+  }, []);
   return (
     <div id="target">
       <Modal
@@ -1304,689 +1373,51 @@ export default function AgregarProducto(props) {
           'overflow-x': 'hidden',
         }}
       >
-        <Button
-          style={{
-            'background-color': 'transparent',
-            borderColor: 'transparent',
-            position: 'absolute',
-            top: '8px',
-            left: '16px',
-            'font-size': '18px',
-            'border-radius': '26px',
-          }}
-          onClick={() => setmodalCreacionRapida(true)}
-        >
-          <Plus width="50px" height="50px" />
-        </Button>
-        <div>
-          <h3>AGREGAR PRODUCTOS</h3>
-        </div>
-        <ModalBody
-          style={{
-            'margin-right': '-50px',
-            paddingLeft: '200px',
-          }}
-        >
-          <br />
-          <Modal
-            className="text-center"
-            style={{
-              'overflow-y': 'auto',
-              maxWidth: '1000px',
-              'border-radius': '36px',
-              position: 'absolute',
-              left: '50%',
-              top: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            isOpen={modalCreacionRapida}
-          >
-            <div>
-              <h3>CREACIÓN RÁPIDA DE PRODUCTO NUEVO</h3>
+        <div className="row mt-3">
+          <div className="col-6">
+            <div className="form-group">
+              <label>Select Single File</label>
+              <input type="file" className="form-control" onChange={(e) => SingleFileChange(e)} />
             </div>
-            <ModalBody>
-              <br />
-              <Row>
-                <h style={{ marginLeft: '40px' }}>Código Principal</h>
-                <Col>
-                  <input
-                    style={paddingInput()}
-                    updatable={true}
-                    type="text"
-                    value={codigoprincipal}
-                    placeholder="Inserte codigo principal"
-                    onChange={manejarCambioRapida}
-                  />
-                </Col>
-                <h style={{ marginLeft: '55px' }}>Inventario</h>
-                <Col style={{ marginLeft: '20px', top: '-25px' }}>
-                  <h style={{ marginLeft: '-50px' }}>Cantidad</h>
-                  <input
-                    style={paddingAvInputCantidadesCreacionRapida()}
-                    className="form-control"
-                    type="number"
-                    id="cantidad"
-                    value={cantidadRapida}
-                    min={1}
-                    onChange={(e) => manejarCambiocantRapida(e, 0)}
-                  />
-                </Col>
-              </Row>
-              <br />
-              <Row>
-                <h style={{ marginLeft: '50px' }}>Descripción </h>
-                <Col style={{ marginLeft: '25px' }}>
-                  <AvForm>
-                    <AvField
-                      style={paddingAvInput()}
-                      className="form-control"
-                      type="text"
-                      name="descripcion"
-                      id="descripcion"
-                      errorMessage="Nombre Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regex },
-
-                        minLength: { value: 1 },
-                      }}
-                      value={descripcionRapida}
-                      onChange={(e) => manejarCambiodescripcionRapida(e)}
-                    />
-                  </AvForm>
-                  <Row>
-                    <AvForm>
-                      <AvRadioGroup id="exento" inline name="producto_exento" required>
-                        <AvRadio
-                          onClick={() => setProductoExento(true)}
-                          label="Producto Exento"
-                          value="exento"
-                        />
-                        <AvRadio
-                          onClick={() => setProductoExento(false)}
-                          label="Producto No Exento"
-                          value="noexento"
-                        />
-                      </AvRadioGroup>
-                    </AvForm>
-                  </Row>
-                  <Row>
-                    <h style={{ marginLeft: '-115px' }}>Código de Barra</h>
-                    <Col>
-                      <input
-                        style={paddingInput()}
-                        updatable={true}
-                        type="text"
-                        value={codigobarra}
-                        placeholder="Inserte codigo de barra"
-                        onChange={manejarCambioRapidaBarra}
-                        onKeyDown={handleKeyDown}
+            <div className="row">
+              <div className="col-10">
+                <button type="button" className="btn btn-danger" onClick={() => uploadSingleFile()}>
+                  Upload
+                </button>
+              </div>
+              <div className="col-2">
+                <CircularProgressbar value={singleProgress} text={`${singleProgress}%`} />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="container-fluid mt-5">
+          <div className="row">
+            <div className="col-6">
+              <h4 className="text-success font-weight-bold">Single Files List</h4>
+              <div className="row">
+                {fotos1.map((file, index) => (
+                  <div className="col-6">
+                    <div className="card mb-2 border-0 p-0">
+                      <img
+                        src={`http://localhost:3000/${file.filePath
+                          .replace('\\', '')
+                          .replace('Frontend', '')
+                          .replace('\\', '')
+                          .replace('\\', '/')
+                          .split('public')
+                          .join('')
+                          .replace('//uploads/', '/uploads/')}`}
+                        height="200"
+                        className="card-img-top img-responsive"
                       />
-                    </Col>
-                  </Row>
-                </Col>
-                <label style={{ marginLeft: '30px' }}>Precio de Venta</label>
-                <Col style={{ marginLeft: '-30px', top: '-40px' }}>
-                  <label style={{ marginLeft: '-30px' }}>Precio 1</label>
-                  <AvForm>
-                    <AvField
-                      style={paddingAvInputCantidadesCreacionRapida()}
-                      className="form-control"
-                      type="Number"
-                      name="precio1"
-                      id="precio1"
-                      errorMessage="Este Campo es Obligatorio"
-                      validate={{
-                        required: { value: true },
-                      }}
-                      min={1}
-                      value={precioRapida}
-                      onChange={manejarCambioPrecioRapida}
-                    />
-                  </AvForm>
-                </Col>
-              </Row>
-              <div style={{ marginLeft: '-250px' }}>
-                <Barcode value={codigobarra} />
-              </div>
-            </ModalBody>
-            <ModalFooter>
-              <button
-                className="btn btn-primary"
-                style={{
-                  'border-radius': '26px',
-                  'border-color': '#ff9800',
-                  color: 'green',
-                  border: '2px solid green',
-                  'background-color': 'white',
-                  'font-size': '16px',
-                  cursor: 'pointer',
-                }}
-                onClick={() =>
-                  Confirm.open({
-                    title: 'Insertar Producto',
-                    message: '¿Esta seguro de que quiere insertar este producto?',
-                    onok: () => {
-                      insertarRapido();
-                    },
-                  })
-                }
-              >
-                Agregar Producto
-              </button>
-              <button
-                style={{
-                  'border-radius': '26px',
-                  'border-color': '#ff9800',
-                  color: 'red',
-                  border: '2px solid red',
-                  'background-color': 'white',
-                  'font-size': '16px',
-                  cursor: 'pointer',
-                }}
-                className="btn btn-danger"
-                onClick={(e) => descartarcambiosCreacionRapida()}
-              >
-                Cancelar
-              </button>
-            </ModalFooter>
-          </Modal>
-          <AvForm>
-            <Row style={{ marginRight: '200px' }}>
-              <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripcion</h>
-              <Col sm={{ size: 'auto' }}>
-                <AvField
-                  style={paddingAvInput()}
-                  className="form-control"
-                  type="text"
-                  name="descripcion"
-                  id="descripcion"
-                  errorMessage="Descripcion Inválida"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regex },
-
-                    minLength: { value: 1 },
-                  }}
-                  value={seleccionado ? seleccionado.descripcion : ''}
-                  onChange={(e) => manejarCambio(e)}
-                />
-                <Row>
-                  <h style={{ paddingRight: '-25px', marginLeft: '-150px' }}>Codigo Principal</h>
-                  <Col style={{ paddingRight: '-25px', marginLeft: '30px' }}>
-                    <AvField
-                      style={paddingAvInput()}
-                      className="form-control"
-                      type="text"
-                      name="codigoPrincipal"
-                      id="codigoPrincipal"
-                      errorMessage="Codigo Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regex },
-                        minLength: { value: 1 },
-                      }}
-                      value={seleccionado ? seleccionado.codigoPrincipal : ''}
-                      onChange={(e) => manejarCambio(e)}
-                      onKeyDown={handleKeyDown}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <h style={{ 'margin-left': '5px' }}>Descripción especifica</h>
-              <Col sm={{ size: 5 }}>
-                <FormGroup>
-                  <AvField
-                    style={paddingDescripciones()}
-                    type="textarea"
-                    name="descripcion_larga"
-                    id="descripcion_larga"
-                    value={seleccionado ? seleccionado.descripcion_larga : ''}
-                    onChange={manejarCambio}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-          </AvForm>
-          <Row>
-            <h style={{ marginLeft: '-70px' }}>Códigos de Referencia</h>
-            <Col style={{ marginRight: '-200px' }}>
-              <input
-                style={paddingInput()}
-                updatable={true}
-                type="text"
-                onKeyUp={(event) => addTags(event)}
-                placeholder="O presione Enter para insertar códigos"
-                onKeyDown={handleKeyDown}
-                value={codRef}
-                onChange={(e) => manejarCambioCodRef(e)}
-              />
-              <br />
-              <div style={paddingdivcodigosRef()}>
-                <ul style={paddingul()}>
-                  {tags.map((tag, index) => (
-                    <li style={paddingmain()} key={index}>
-                      <span style={paddingtitle()}>{tag}</span>
-                      <i style={paddingclose()} onClick={() => removeTags(index)}>
-                        <Remove width="20px" height="20px" />
-                      </i>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '1px',
-                  'margin-left': '525px',
-                }}
-              >
-                <Button
-                  style={{
-                    'font-size': '20px',
-                    'border-radius': '50%',
-                    width: '40px',
-                    height: '40px',
-                    'line-height': '2px',
-                    'margin-left': '-350px',
-                    top: '-75px',
-                  }}
-                  onClick={() => addTagsClick(codRef)}
-                  color="primary"
-                >
-                  +
-                </Button>
-              </div>
-              <Row>
-                <AvForm>
-                  <AvRadioGroup id="exento" inline name="producto_exento" required>
-                    <AvRadio
-                      onClick={() => setProductoExento(true)}
-                      label="Producto Exento"
-                      value="exento"
-                    />
-                    <AvRadio
-                      onClick={() => setProductoExento(false)}
-                      label="Producto No Exento"
-                      value="noexento"
-                    />
-                  </AvRadioGroup>
-                </AvForm>
-              </Row>
-              <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
-                <h style={{ marginLeft: '-50px' }}>Marca</h>
-                <Col sm={{ size: 'auto' }}>
-                  <div style={{ marginLeft: '-15px' }}>
-                    <SelectSearch
-                      printOptions="on-focus"
-                      search
-                      placeholder="Encuentre la Marca del Producto"
-                      required
-                      autoComplete
-                      options={marcas}
-                      value={marca}
-                      onChange={(e) => handleChange2(e)}
-                    />
+                    </div>
                   </div>
-                  <br />
-                  <label style={{ 'margin-left': '15px', paddingTop: '-10px' }}># Pasillo</label>
-                  <Row>
-                    <h style={{ 'margin-left': '-45px' }}>Bodega</h>
-                    <Col sm={{ size: 'auto' }} style={{ 'margin-left': '-25px' }}>
-                      <SelectSearch
-                        class="selectsearch2"
-                        printOptions="on-focus"
-                        search
-                        placeholder="Encuentre la Bodega del Producto"
-                        required
-                        autoComplete
-                        options={bodegas}
-                        value={size7}
-                        onClick={handleOnChangeBodega(size7)}
-                        onChange={setSize7}
-                      />
-                    </Col>
-                    <AvForm>
-                      <input
-                        style={{
-                          width: '90px',
-                          'margin-left': '20px',
-                          'border-radius': '26px',
-                        }}
-                        className="form-control"
-                        type="Number"
-                        onChange={(e) => manejarCambioPrecioBodega(e)}
-                        value={precioprovedor6}
-                        min={1}
-                      />
-                    </AvForm>
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '1px',
-                        'margin-left': '525px',
-                      }}
-                    >
-                      <Button
-                        style={{
-                          'font-size': '20px',
-                          'border-radius': '50%',
-                          width: '40px',
-                          height: '40px',
-                          'line-height': '2px',
-                          'margin-left': '-50px',
-                          marginTop: '90px',
-                        }}
-                        onClick={() => onChangeBodega()}
-                        color="primary"
-                      >
-                        +
-                      </Button>
-                    </div>
-                    <div style={paddingdivbodegas()}>
-                      <ul style={paddingulbodegas()}>
-                        {tagsBodegas.map((tag, index) => (
-                          <li style={paddingmainbodegas()} key={index}>
-                            <span style={paddingtitlebodega()}>
-                              {tag.name}, # {tag.numPasillo}
-                            </span>
-                            <i style={paddingclosebodega()} onClick={() => removeTagsBodega(index)}>
-                              <Remove width="20px" height="20px" />
-                            </i>
-                          </li>
-                        ))}
-                        <br />
-                      </ul>
-                    </div>
-                  </Row>
-                  <br />
-                  <br />
-                  <Row style={{ marginLeft: '-60px' }}>
-                    <h>Inventario</h>
-                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '50px', top: '-20px' }}>
-                      <h style={{ 'margin-left': '5px' }}>Cantidad</h>
-                      <input
-                        style={paddingAvInputCantidades()}
-                        className="form-control"
-                        type="number"
-                        id="cantidad"
-                        value={cantsel}
-                        min={
-                          document.getElementById('cantidad_minima')
-                            ? document.getElementById('cantidad_minima').value
-                            : 0
-                        }
-                        onChange={(e) => manejarCambiocant(e, 0)}
-                      />
-                    </Col>
-                    <Col sm={{ size: 'auto' }} style={{ top: '-20px' }}>
-                      <h style={{ 'margin-left': '-15px' }}>Cantidad Mínima</h>
-                      <input
-                        style={paddingAvInputCantidades()}
-                        className="form-control"
-                        type="number"
-                        id="cantidad_minima"
-                        min={1}
-                        max={cantsel}
-                        value={cantminsel}
-                        onChange={(e) => manejarCambiocantmin(e, 1)}
-                      />
-                    </Col>
-                  </Row>
-                  <Row>
-                    <h style={{ marginLeft: '-90px' }}>Codigo de Barra</h>
-                    <AvForm>
-                      <Col style={{ paddingRight: '-25px', marginLeft: '40px' }}>
-                        <AvField
-                          style={paddingAvInput()}
-                          className="form-control"
-                          type="text"
-                          name="codigoBarra"
-                          id="nombre_agregar"
-                          errorMessage="Codigo de Barra Inválido"
-                          validate={{
-                            required: { value: true },
-                            pattern: { value: regex },
-                            minLength: { value: 1 },
-                          }}
-                          value={seleccionado ? seleccionado.codigoBarra : ''}
-                          onChange={(e) => manejarCambio(e)}
-                          onKeyDown={handleKeyDown}
-                        />
-                        <Row>
-                          <Col sm={{ size: 'auto' }}>
-                            <Barcode value={seleccionado.codigoBarra} />
-                          </Col>
-                        </Row>
-                      </Col>
-                    </AvForm>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-            <h style={{ marginLeft: '-5px' }}>Área</h>
-            <Col>
-              <AvForm>
-                <AvField
-                  style={{
-                    'border-radius': '26px',
-                    width: '320px',
-                    marginLeft: '-5px',
-                  }}
-                  className="form-control"
-                  type="text"
-                  name="area"
-                  id="area"
-                  errorMessage="Campo Obligatorio"
-                  validate={{
-                    required: { value: true },
-                    pattern: { value: regex },
-                    minLength: { value: 1 },
-                  }}
-                  value={seleccionado ? seleccionado.area : ''}
-                  onChange={(e) => manejarCambio(e)}
-                />
-              </AvForm>
-              <Row style={{ marginLeft: '-110px' }}>
-                <label style={{ marginTop: '25px' }}>Proveedor</label>
-                <SelectSearch
-                  search
-                  onChange={setSize6}
-                  placeholder="Encuentre el Proveedor del Producto"
-                  required
-                  autoComplete
-                  options={proveedores}
-                  onClick={handleOnChange(size6)}
-                  value={size6}
-                />
-                <Col sm={{ size: 'auto' }} style={{ top: '-15px', marginLeft: '60px' }}>
-                  <label style={{ top: '-200px' }}>Precio Proveedor</label>
-                  <input
-                    style={paddingAvInputCantidades()}
-                    className="form-control"
-                    type="number"
-                    id="precioprov3"
-                    onChange={(e) => manejarCambioPrecioProveedor(e)}
-                    value={precioprovedor7}
-                    min={1}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      top: '28px',
-                      'margin-left': '320px',
-                    }}
-                  >
-                    <Button
-                      style={{
-                        'font-size': '20px',
-                        'border-radius': '50%',
-                        width: '40px',
-                        height: '40px',
-                        'line-height': '2px',
-                        'margin-left': '-350px',
-                      }}
-                      color="primary"
-                      onClick={() => onChangeProv()}
-                    >
-                      +
-                    </Button>
-                  </div>
-                </Col>
-                <div style={paddingdiv()}>
-                  <ul style={paddingul()}>
-                    {tagsProveedores.map((tag, index) => (
-                      <li style={paddingmain()} key={index}>
-                        <span style={paddingtitle()}>
-                          {tag.name}, L. {tag.precio}
-                        </span>
-                        <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
-                          <Remove width="20px" height="20px" />
-                        </i>
-                      </li>
-                    ))}
-
-                    <br />
-                  </ul>
-                </div>
-                <div />
-                <AvForm
-                  style={{
-                    marginTop: '50px',
-                  }}
-                >
-                  <Row>
-                    <label style={{ 'margin-left': '40px', marginTop: '-20px' }}>
-                      Precios de
-                      <br /> Venta
-                    </label>
-                    <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
-                      <div>
-                        <h style={{ paddingRight: '-300px' }}>Precio 1</h>
-                        <AvField
-                          style={paddingAvInputCantidades()}
-                          className="form-control"
-                          type="Number"
-                          name="precio1"
-                          id="precio1"
-                          errorMessage="Obligatorio"
-                          validate={{
-                            required: { value: true },
-                          }}
-                          min={1}
-                          onChange={(e) => manejarCambioPrecio1(e)}
-                          value={preciouno}
-                        />
-                      </div>
-                    </Col>
-                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
-                      <label style={{ 'margin-right': '5px' }}>Precio 2</label>
-                      <AvField
-                        style={paddingAvInputCantidades()}
-                        className="form-control"
-                        type="Number"
-                        name="Fecha"
-                        name="precio2"
-                        id="precio2"
-                        validate={{
-                          required: { value: false },
-                        }}
-                        onChange={(e) => manejarCambioPrecio2(e)}
-                        value={preciodos}
-                      />
-                    </Col>
-                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
-                      <label style={{ 'margin-left': '10px' }}>Precio 3</label>
-                      <AvField
-                        style={paddingAvInputCantidades()}
-                        className="form-control"
-                        type="Number"
-                        name="Etiqueta"
-                        name="precio3"
-                        id="precio3"
-                        validate={{
-                          required: { value: false },
-                        }}
-                        onChange={(e) => manejarCambioPrecio3(e)}
-                        value={preciotres}
-                      />
-                    </Col>
-                  </Row>
-                </AvForm>
-              </Row>
-              <Row style={{ marginTop: '-25px' }}>
-                <Col style={{ 'margin-left': '-50px' }}>
-                  <Button
-                    style={{
-                      'background-color': 'transparent',
-                      borderColor: 'transparent',
-                      'margin-left': '-20px',
-                      'border-radius': '26px',
-                    }}
-                    onClick={() => setFiles([])}
-                  >
-                    <Remove width="25px" height="25px" />
-                  </Button>
-                  <h style={{ 'margin-left': '-240px' }}>Imagen del Producto</h>
-                  <section style={{ paddingLeft: '40px' }} className="container">
-                    <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
-                      <input {...getInputProps()} />
-                      <br />
-                      <br />
-                      <p>Arrastre la imagen aqui o de clic para seleccionar</p>
-                    </div>
-                  </section>
-                  <Col>
-                    <div style={{ marginTop: -170, marginRight: '350px' }}>
-                      <aside style={thumbsContainer}>{thumbs}</aside>
-                    </div>
-                  </Col>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-          <br />
-        </ModalBody>
-        <ModalFooter>
-          <button
-            style={{
-              'border-radius': '26px',
-              'border-color': '#ff9800',
-              color: 'green',
-              border: '2px solid green',
-              'background-color': 'white',
-              'font-size': '16px',
-              cursor: 'pointer',
-            }}
-            className="btn btn-primary"
-            onClick={() =>
-              Confirm.open({
-                title: 'Insertar Producto',
-                message: '¿Esta seguro de que quiere insertar este producto?',
-                onok: () => {
-                  insertar();
-                },
-              })
-            }
-          >
-            Agregar Producto
-          </button>
-          <button
-            style={{
-              'border-radius': '26px',
-              'border-color': '#ff9800',
-              color: 'red',
-              border: '2px solid red',
-              'background-color': 'white',
-              'font-size': '16px',
-              cursor: 'pointer',
-            }}
-            className="btn btn-danger"
-            onClick={(e) => descartarcambios()}
-          >
-            Cancelar
-          </button>
-        </ModalFooter>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
       </Modal>
       <Agregar isOpen={modalAgregar} change={() => cerraroAbrirModalMarca()} />
       <AgregarProveedor isOpen={modalInsertar} change={() => cerraroAbrirModal()} />

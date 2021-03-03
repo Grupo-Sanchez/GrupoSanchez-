@@ -180,8 +180,8 @@ export default function AgregarUsuario(props) {
 
       console.log('Mandando: ', typeof seleccionado.rol.value);
       console.log('Mandando: ', jsonString);
-      //     fetch('http://178.128.67.247:3001/api/login', {
-      fetch('http://178.128.67.247:3001/api/signup', {
+      //     fetch('http://localhost:3001/api/login', {
+      fetch('http://localhost:3001/api/signup', {
         method: 'post',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify(jsonString),
@@ -266,7 +266,7 @@ export default function AgregarUsuario(props) {
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://178.128.67.247:3001/api/Users', campos);
+      const res = await axios.post('http://localhost:3001/api/Users', campos);
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',
