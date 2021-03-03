@@ -14,9 +14,11 @@ import {
 } from 'availity-reactstrap-validation';
 import SelectSearch from 'react-select-search';
 import '../Styles/SearchBarVendedor.css';
+import { ReactComponent as Plus } from '../Icons/plus.svg';
+import { ReactComponent as Delete } from '../Icons/delete.svg';
+import { ReactComponent as SegundoPrecio } from '../Icons/SegundoPrecio.svg';
 
 const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
-
 export default function Facturas() {
   let [subtotal, setSubtotal] = useState(0);
   let [total, settotal] = useState(0);
@@ -32,9 +34,9 @@ export default function Facturas() {
   const [productosEnBodega, setproductosEnBodega] = useState([
     {
       indice: 0,
-      name: '',
+      descripcion: '',
       value: '',
-      codigo: '',
+      codigoPrincipal: '',
       cantidad: 0,
       precioUnitario: 0,
       precioSumado: 0,
@@ -53,13 +55,12 @@ export default function Facturas() {
           if (element.cantidad > 0) {
             productosagregados.push({
               indice: 0,
-              name: element.nombre,
-              value: element._id,
-              codigos: element.codigos,
+              descripcion: element.descripcion,
+              value: element.value,
+              codigoPrincipal: element.codigoPrincipal,
               proveedores: element.proveedores,
               precios: element.precios,
               area: element.area,
-              ubicacion: element.ubicacion,
               marca: element.marca,
               _v: element._v,
               cantidad: element.cantidad,
@@ -94,9 +95,9 @@ export default function Facturas() {
     productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
         setproductoSeleccionado({
-          name: item.name,
+          descripcion: item.descripcion,
           value: item.value,
-          codigo: item.codigos[0],
+          codigoPrincipal: item.codigoPrincipal,
           cantidad: 1,
           precioUnitario: item.precios[0],
           precioSumado: 0,
@@ -140,14 +141,28 @@ export default function Facturas() {
     setquantity(1);
     setproductoSeleccionado({});
   };
+  function paddingAvInput() {
+    return {
+      'margin-left': '15px',
+      'border-radius': '26px',
+      width: '250px',
+    };
+  }
+  function paddingAvInputCantidadDisponible() {
+    return {
+      'margin-left': '25px',
+      'border-radius': '26px',
+      width: '80px',
+    };
+  }
   const segundoPrecio = (codigo) => {
     setindice(1);
     for (let index = 0; index < productosSeleccionado.length; index++) {
       const element = productosSeleccionado[index];
-      if (element.codigo === codigo) {
+      if (element.codigoPrincipal === codigo) {
         for (let i = 0; i < productosEnBodega.length; i++) {
           const element2 = productosEnBodega[i];
-          if (element.codigo === element2.codigos[0]) {
+          if (element.codigoPrincipal === element2.codigoPrincipal) {
             if (element.precioUnitario !== element2.precios[1]) {
               result -= (element.precioUnitario - element2.precios[1]) * element.cantidad;
               impuesto += Number(result * 0.15);
@@ -218,7 +233,7 @@ export default function Facturas() {
     addRow({
       name: productoSeleccionado.name,
       value: productoSeleccionado.value,
-      codigo: productoSeleccionado.codigo,
+      codigoPrincipal: productoSeleccionado.codigoPrincipal,
       cantidad: quantity,
       precioUnitario: Number(productoSeleccionado.precioUnitario),
       precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
@@ -250,7 +265,7 @@ export default function Facturas() {
         <Row>
           <h4 style={{ paddingLeft: '200px' }}>Producto:</h4>
           <Col>
-            <div align="center">
+            <div style={{ 'margin-left': '-25px' }}>
               <SelectSearch
                 search
                 placeholder="Encuentre el Producto a Facturar"
@@ -261,43 +276,55 @@ export default function Facturas() {
             </div>
           </Col>
           <br />
-          <Col style={{ paddingRight: '100px' }}>
-            <div align="center">
+          <label style={{ marginLeft: '380px', marginTop: '5px' }}>Cantidad</label>
+          <Col style={{ paddingRight: '-100px' }}>
+            <div>
               <Row>
-                <h4 style={{ display: 'inline', float: 'center' }}>Cantidad:</h4>
-                <input
-                  style={{ float: 'center', marginLeft: '5px', width: '200px' }}
-                  type="number"
-                  id="cantidad"
-                  max={cantidadmax}
-                  min={1}
-                  value={quantity}
-                  onChange={(e) => handleQuantityChange(e)}
-                />
-                <Button
-                  color="primary"
-                  style={{ marginLeft: '10px' }}
-                  onClick={agregarProductoaTabla}
-                >
-                  Agregar
-                </Button>
+                <AvForm>
+                  <AvField
+                    style={paddingAvInput()}
+                    type="number"
+                    name="name1"
+                    id="cantidad"
+                    max={cantidadmax}
+                    min={1}
+                    value={quantity}
+                    onChange={(e) => handleQuantityChange(e)}
+                  />
+                  <Button
+                    style={{
+                      'background-color': 'transparent',
+                      border: 'none',
+                      position: 'absolute',
+                      top: '-13px',
+                      left: '290px',
+                      outline: 'none',
+                      'outline-offset': 'none',
+                    }}
+                    onClick={() => agregarProductoaTabla()}
+                  >
+                    <Plus width="40px" height="50px" />
+                  </Button>
+                </AvForm>
               </Row>
-              <Row style={{ paddingTop: '10px' }}>
-                <h5 style={{ display: 'inline', float: 'center' }}>Cantidad Disponible:</h5>
-                <input
-                  style={{ float: 'center', marginLeft: '5px', width: '150px' }}
-                  type="number"
-                  id="cantidadDisp"
-                  disabled={true}
-                  value={cantidadmax}
-                />
-              </Row>
+              <label style={{ marginLeft: '-80px' }}>
+                Cantidad <br />
+                Disponible
+              </label>
+              <input
+                style={paddingAvInputCantidadDisponible()}
+                type="number"
+                id="cantidadDisp"
+                disabled={true}
+                value={cantidadmax}
+              />
             </div>
           </Col>
         </Row>
         <br />
       </div>
       <br />
+      <h3 style={{ 'margin-left': '862px' }}>Formulario Cliente</h3>
       <Row>
         <Col>
           <div
@@ -307,37 +334,70 @@ export default function Facturas() {
               paddingLeft: '100px',
             }}
           >
-            <Table height="50" responsive="sm" striped bordered hover align="center" size="lg">
+            <Table
+              responsive
+              striped
+              hover
+              align="center"
+              size="sm"
+              id="myTable"
+              style={{
+                width: '1000px',
+                'border-collapse': 'separate',
+                border: 'solid #ccc 2px',
+                '-moz-border-radius': '26px',
+                '-webkit-border-radius': '26px',
+                'border-radius': '26px',
+                '-webkit-box-shadow': '0 1px 1px #ccc',
+                '-moz-box-shadow': '0 1px 1px #ccc',
+                'box-shadow': '0 1px 1px #ccc',
+              }}
+            >
               <thead>
                 <tr>
-                  <th>#</th>
-                  <th>Nombre Producto</th>
-                  <th>Codigo</th>
                   <th>Cantidad</th>
-                  <th>Precio Unitario</th>
-                  <th>Precio Sumado</th>
+                  <th>Descripcion</th>
+                  <th>Precio</th>
+                  <th>Total</th>
                   <th>Accion</th>
                 </tr>
               </thead>
               <tbody>
                 {productosSeleccionado.map((row, i) => (
                   <tr key={i}>
-                    <th>{indice++}</th>
-                    <th>{row.name}</th>
-                    <th>{row.codigo}</th>
                     <th>{row.cantidad}</th>
+                    <th>{row.descripcion}</th>
                     <th>{row.precioUnitario}</th>
                     <th>{row.precioSumado}</th>
-                    <th>
-                      <Button color="primary" onClick={() => segundoPrecio(row.codigo)}>
-                        Autorizar 2do Precio
+                    <th style={{ width: '200px' }}>
+                      <Button
+                        style={{
+                          'background-color': 'transparent',
+                          borderColor: 'transparent',
+                          position: 'absolute',
+                          top: '35px',
+                          marginLeft: '-40px',
+                          'font-size': '18px',
+                          'border-radius': '26px',
+                        }}
+                        onClick={() => segundoPrecio(row.codigoPrincipal)}
+                      >
+                        <SegundoPrecio width="31px" height="31px" />
                       </Button>
                       <Button
-                        style={{ marginLeft: '10px' }}
-                        className="btn btn-danger"
+                        style={{
+                          'background-color': 'transparent',
+                          borderColor: 'transparent',
+                          position: 'absolute',
+                          top: '35px',
+                          marginLeft: '-15px',
+                          'font-size': '18px',
+                          'border-radius': '26px',
+                          outline: 'none',
+                        }}
                         onClick={() => eliminarProducto(row.value, row.cantidad)}
                       >
-                        Eliminar
+                        <Delete fill="#dc0000" width="30px" height="30px" />
                       </Button>
                     </th>
                   </tr>
@@ -347,11 +407,21 @@ export default function Facturas() {
           </div>
         </Col>
         <Col>
-          <h2 align="center">Formulario Factura</h2>
+          <label style={{ marginLeft: '120px', marginTop: '30px' }}>Nombre</label>
+          <div>
+            <label style={{ marginLeft: '120px', marginTop: '25px' }}>RTN</label>
+          </div>
+        </Col>
+        <Col style={{ marginLeft: '-380px' }}>
+          <br />
           <div>
             <AvForm>
-              <h3>Nombre</h3>
               <AvField
+                style={{
+                  'margin-left': '-15px',
+                  'border-radius': '26px',
+                  width: '250px',
+                }}
                 className="form-control"
                 type="text"
                 name="nombre"
@@ -361,13 +431,9 @@ export default function Facturas() {
                   pattern: { value: regex },
                   minLength: { value: 1 },
                 }}
-                style={{
-                  maxWidth: '600px',
-                }}
                 value={nombre}
                 onChange={(e) => handleChangeNombe(e)}
               />
-              <h3>RTN</h3>
               <AvField
                 errorMessage="RTN Inválido"
                 validate={{
@@ -375,7 +441,9 @@ export default function Facturas() {
                   minLength: { value: 14 },
                 }}
                 style={{
-                  maxWidth: '600px',
+                  'margin-left': '-15px',
+                  'border-radius': '26px',
+                  width: '250px',
                 }}
                 maxLength="14"
                 className="form-control"
@@ -385,12 +453,16 @@ export default function Facturas() {
                 value={rtn}
                 onChange={(e) => handleChangertn(e)}
               />
-              <Button style={{ marginLeft: '10px' }} color="primary" onClick={handleValidSubmit}>
+              <Button
+                style={{ marginLeft: '70px', borderRadius: '25px' }}
+                color="primary"
+                onClick={handleValidSubmit}
+              >
                 Facturar
               </Button>
             </AvForm>
           </div>
-          <div style={{ paddingTop: '100px' }}>
+          <div style={{ paddingTop: '80px', marginLeft: '-81px' }}>
             <h2>Subtotal : {sumatotal.toLocaleString()} Lps.</h2>
             <h2>Impuesto 15% : {impuestototal.toLocaleString()} Lps.</h2>
             <h1>Total: {totalfinal.toLocaleString()} Lps.</h1>
