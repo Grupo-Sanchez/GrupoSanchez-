@@ -1,4 +1,6 @@
 import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
+import '../Styles/formAgregarCliente.css';
+
 import axios from 'axios';
 import {
   Input,
@@ -12,6 +14,7 @@ import {
   Row,
   Col,
 } from 'reactstrap';
+
 import AvGroup from 'availity-reactstrap-validation/lib/AvGroup';
 import AvRadioGroup from 'availity-reactstrap-validation/lib/AvRadioGroup';
 import AvRadio from 'availity-reactstrap-validation/lib/AvRadio';
@@ -44,7 +47,7 @@ const formClienteCopy = (props) => {
       email: values.email,
     };
     await axios
-      .post('http://localhost:3001/api/clientes', campos)
+      .post('http://178.128.67.247:3001/api/clientes', campos)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({
@@ -55,7 +58,7 @@ const formClienteCopy = (props) => {
         } else {
           Confirm.open({
             title: '!exito!',
-            message: 'usuario agregado correctamente',
+            message: 'Cliente agregado correctamente',
             onok: () => {},
           });
           setTimeout(() => {
@@ -80,139 +83,228 @@ const formClienteCopy = (props) => {
     console.log('invalid submit', { event, errors, values });
   }
 
+  function paddingAvInput() {
+    return {
+      'border-radius': '26px',
+      width: '240px',
+      height: '41px',
+    };
+  }
+
   return (
     <AvForm onValidSubmit={handleValidSubmit} onInvalidSubmit={handleInvalidSubmit}>
-      <AvGroup>
-        <Row>
-          <Col xs="6">
-            <AvField
-              name="cedula"
-              label="Identidad"
-              type="text"
-              validate={{
-                required: { value: true, errorMessage: 'campo requerido' },
-                minLength: { value: 13, errorMessage: 'el campo debe constar de 13 caracteres' },
-                maxLength: { value: 13 },
-                number: { value: true, errorMessage: 'solo se aceptan numeros' },
-              }}
-            />
-          </Col>
-          <Col xs="6">
-            {' '}
-            <AvField
-              name="nombre"
-              label="Primer nombre"
-              type="text"
-              validate={{
-                required: {
-                  value: true,
-                  errorMessage: 'campo requerido',
-                },
-                pattern: {
-                  value: '^[A-Za-z]+$',
-                  errorMessage: 'espacios/numeros o acentos no son validos',
-                },
-              }}
-            />
-          </Col>
-        </Row>
+      <Row>
+        <Col xs="6">
+          {' '}
+          <Row>
+            <Col>
+              <label class="verde">Primer nombre</label>
+            </Col>
+            <Col>
+              <AvField
+                style={paddingAvInput()}
+                name="nombre"
+                type="text"
+                validate={{
+                  required: {
+                    value: true,
+                    errorMessage: 'campo requerido',
+                  },
+                  pattern: {
+                    value: '^[A-Za-z]+$',
+                    errorMessage: 'espacios/numeros o acentos no son validos',
+                  },
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label class="verde">Primer apellido</label>
+            </Col>
+            <Col>
+              <AvField
+                style={paddingAvInput()}
+                name="primer_apellido"
+                type="text"
+                validate={{
+                  required: { value: true, errorMessage: 'campo requerido' },
+                  pattern: {
+                    value: '^[A-Za-z]+$',
+                    errorMessage: 'espacios/numeros o acentos no son validos',
+                  },
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
 
-        <Row>
-          <Col xs="6">
-            <AvField
-              name="segundo_nombre"
-              label="segundo nombre"
-              type="text"
-              validate={{
-                pattern: {
-                  value: '^[A-Za-z]+$',
-                  errorMessage: 'espacios/numeros o acentos no son validos',
+      <br></br>
+
+      <Row>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label>segundo nombre</label>
+            </Col>
+            <Col>
+              <AvField
+                style={paddingAvInput()}
+                name="segundo_nombre"
+                type="text"
+                validate={{
+                  pattern: {
+                    value: '^[A-Za-z]+$',
+                    errorMessage: 'espacios/numeros o acentos no son validos',
+                  },
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label>Segundo apellido</label>
+            </Col>
+            <Col>
+              <AvField
+                style={paddingAvInput()}
+                name="segundo_apellido"
+                type="text"
+                validate={{
+                  pattern: {
+                    value: '^[A-Za-z]+$',
+                    errorMessage: 'espacios/numeros o acentos no son validos',
+                  },
+                }}
+              />
+            </Col>
+          </Row>{' '}
+        </Col>
+      </Row>
+      <br></br>
+      <Row>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label class="verde">No. Identidad</label>
+            </Col>
+            <Col>
+              <AvField
+                style={paddingAvInput()}
+                name="cedula"
+                type="text"
+                validate={{
+                  required: { value: true, errorMessage: 'campo requerido' },
+                  minLength: { value: 13, errorMessage: 'el No. debe constar de 13 caracteres' },
+                  maxLength: { value: 13 },
+                  number: { value: true, errorMessage: 'solo se aceptan numeros' },
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label>RTN</label>
+            </Col>
+            <Col>
+              {' '}
+              <AvField
+                style={paddingAvInput()}
+                name="RTN"
+                type="text"
+                validate={{
+                  minLength: {
+                    value: 14,
+                    errorMessage: 'el Rtn debe tener 14 digitos',
+                  },
+                  maxLength: {
+                    value: 14,
+                    errorMessage: 'el Rtn debe tener 14 digitos',
+                  },
+                  min: {
+                    value: 0,
+                    errorMessage: 'ingrese con formato solicitado 14 digitos',
+                  },
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <br></br>
+      <Row>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label>Telefono</label>
+            </Col>
+            <Col>
+              {' '}
+              <AvField
+                style={paddingAvInput()}
+                name="tel"
+                type="text"
+                validate={{
+                  minLength: {
+                    value: 8,
+                    errorMessage: 'el numero debe tener 8 caracteres',
+                  },
+                  maxLength: {
+                    value: 8,
+                    errorMessage: 'el numero debe tener 8 caracteres',
+                  },
+                  number: { value: true, errorMessage: 'solo se aceptan numeros' },
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+        <Col xs="6">
+          <Row>
+            <Col>
+              <label>Correo</label>
+            </Col>
+            <Col>
+              {' '}
+              <AvField style={paddingAvInput()} name="email" type="email" />
+            </Col>
+          </Row>{' '}
+        </Col>
+      </Row>
+      <br></br>
+      <br></br>
+
+      <Row>
+        <Col sm={{ size: 'auto', offset: 8 }}>
+          <Button className="botonesForm" outline color="success">
+            agregar
+          </Button>
+
+          <Button
+            onClick={() =>
+              Confirm.open({
+                title: 'aviso',
+                message: 'al salir perdera la informacion',
+                onok: () => {
+                  props.toggle();
                 },
-              }}
-            />
-          </Col>
-          <Col xs="6">
-            <AvField
-              name="primer_apellido"
-              label="Primer apellido"
-              type="text"
-              validate={{
-                required: { value: true, errorMessage: 'campo requerido' },
-                pattern: {
-                  value: '^[A-Za-z]+$',
-                  errorMessage: 'espacios/numeros o acentos no son validos',
-                },
-              }}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="6">
-            {' '}
-            <AvField
-              name="segundo_apellido"
-              label="Segundo apellido"
-              type="text"
-              validate={{
-                pattern: {
-                  value: '^[A-Za-z]+$',
-                  errorMessage: 'espacios/numeros o acentos no son validos',
-                },
-              }}
-            />
-          </Col>
-          <Col xs="6">
-            <AvField
-              name="RTN"
-              label="Rtn"
-              type="number"
-              validate={{
-                minLength: {
-                  value: 14,
-                  errorMessage: 'el Rtn debe tener 14 digitos',
-                },
-                maxLength: {
-                  value: 14,
-                  errorMessage: 'el Rtn debe tener 14 digitos',
-                },
-                min: {
-                  value: 0,
-                  errorMessage: 'ingrese con formato solicitado 14 digitos',
-                },
-              }}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="6">
-            <AvField
-              name="tel"
-              label="telefono"
-              type="number"
-              min="0"
-              validate={{
-                minLength: {
-                  value: 8,
-                  errorMessage: 'el numero debe tener 8 caracteres',
-                },
-                maxLength: {
-                  value: 8,
-                  errorMessage: 'el numero debe tener 8 caracteres',
-                },
-                min: {
-                  value: 0,
-                  errorMessage: 'no se aceptan numeros negativos',
-                },
-              }}
-            />
-          </Col>
-          <Col xs="6">
-            {' '}
-            <AvField name="email" label="correo electronico" type="email" />
-          </Col>
-        </Row>
-      </AvGroup>
-      <Button color="primary">guardar</Button>
+              })
+            }
+            className="botonesForm"
+            outline
+            color="danger"
+          >
+            cancelar
+          </Button>
+        </Col>
+      </Row>
     </AvForm>
   );
 };

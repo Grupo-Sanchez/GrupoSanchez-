@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button, Modal, ModalHeader, ModalBody } from 'reactstrap';
 import AddEditForm from './FormCliente copy';
+import { ReactComponent as PlusIcon } from '../Icons/plus.svg';
+import '../Styles/modalEddas.css';
 
 class ModalForm extends Component {
   constructor(props) {
@@ -42,11 +44,15 @@ class ModalForm extends Component {
     } else {
       button = (
         <Button
-          color="success"
           onClick={this.toggle}
-          style={{ float: 'left', marginRight: '10px' }}
+          style={{
+            'background-color': 'transparent',
+            borderColor: 'transparent',
+
+            'border-radius': '26px',
+          }}
         >
-          {label}
+          <PlusIcon fill="#ff7070" width="50px" height="50px" />
         </Button>
       );
       title = 'agregar nuevo cliente';
@@ -57,8 +63,7 @@ class ModalForm extends Component {
         {button}
         <Modal
           isOpen={this.state.modal}
-          toggle={this.toggle}
-          className={this.props.className}
+          //className={this.props.className}
           style={{
             height: '95vh',
             'overflow-y': 'auto',
@@ -66,10 +71,9 @@ class ModalForm extends Component {
             maxWidth: '1000px',
           }}
         >
-          <ModalHeader toggle={this.toggle} close={closeBtn}>
-            {title}
-          </ModalHeader>
           <ModalBody>
+            <h3>CREACIÓN DE CLIENTE NUEVO</h3>
+            <br></br>
             <AddEditForm
               addItemToState={this.props.addItemToState}
               updateState={this.props.updateState}

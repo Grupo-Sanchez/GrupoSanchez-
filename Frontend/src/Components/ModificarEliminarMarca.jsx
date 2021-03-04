@@ -27,13 +27,13 @@ const ModificarEliminarProveedor = () => {
   const [modalAddMarca, setModalAddMarca] = useState(false);
 
   const fetchData = async () => {
-    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
       setData(response.data);
     });
   };
 
   const fetchProducts = async () => {
-    await axios.get('http://localhost:3001/api/productos').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
@@ -43,44 +43,65 @@ const ModificarEliminarProveedor = () => {
     fetchProducts();
   }, []);
 
+  const isAvailable = (value) => {
+    fetchData();
+    for (let i = 0; i < data.length; i++) {
+      if (
+        value.nombre.toUpperCase() === data[i].nombre.toUpperCase() &&
+        modificar._id !== data[i]._id
+      ) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   const modifyMarca = async (values) => {
     try {
       fetchProducts();
-      const payload = {
-        nombre: values.nombre,
-        descripcion: values.descripcion,
-      };
-      setModal(false);
-      await axios
-        .put(`http://localhost:3001/api/marcas/${modificar._id}`, payload)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      for (let i = 0; i < product.length; i++) {
-        if (
-          product[i].marca[0].value === modificar._id &&
-          payload.nombre !== product[i].marca[0].name
-        ) {
-          const marcaNueva = {
-            value: modificar._id,
-            name: payload.nombre,
-          };
-          product[i].marca[0] = marcaNueva;
-          axios
-            .put(`http://localhost:3001/api/productos/${product[i]._id}`, product[i])
-            .then((response) => {
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
-            });
+      if (isAvailable(values)) {
+        const payload = {
+          nombre: values.nombre,
+          descripcion: values.descripcion,
+        };
+        await axios
+          .put(`http://178.128.67.247:3001/api/marcas/${modificar._id}`, payload)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        for (let i = 0; i < product.length; i++) {
+          if (
+            product[i].marca[0].value === modificar._id &&
+            payload.nombre !== product[i].marca[0].name
+          ) {
+            const marcaNueva = {
+              value: modificar._id,
+              name: payload.nombre,
+            };
+            product[i].marca[0] = marcaNueva;
+            axios
+              .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, product[i])
+              .then((response) => {
+                console.log(response);
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+          }
         }
+
+        setModal(false);
+        fetchData();
+      } else {
+        Confirm.open({
+          title: 'Nombre de marca duplicado',
+          message: 'Valor ingresado de marca ya se encuentra registrado',
+          onok: () => {},
+        });
       }
-      setModal(false);
-      fetchData();
     } catch (err) {
       console.err(err.response.payload);
     }
@@ -139,7 +160,7 @@ const ModificarEliminarProveedor = () => {
       }
     }
     if (isDeletable) {
-      await axios.delete(`http://localhost:3001/api/marcas/${data[i]._id}`);
+      await axios.delete(`http://178.128.67.247:3001/api/marcas/${data[i]._id}`);
       console.log('se puede borrar');
     } else {
       Confirm.open({

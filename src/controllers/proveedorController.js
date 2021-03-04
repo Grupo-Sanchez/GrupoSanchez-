@@ -43,34 +43,26 @@ exports.create_cliente = async (req, res) => {
 exports.create_proveedor = async (req, res) => {
   const {
     company,
-    agencia,
     nombre,
     apellidos,
-    genero,
     email,
     telefono,
-    direccion1,
-    direccion2,
+    direccion,
     ciudad,
     departamento,
-    codigoPostal,
     pais,
     comentario,
   } = req.body;
   try {
     const new_proveedor = new proveedor({
       company,
-      agencia,
       nombre,
       apellidos,
-      genero,
       email,
       telefono,
-      direccion1,
-      direccion2,
+      direccion,
       ciudad,
       departamento,
-      codigoPostal,
       pais,
       comentario,
     });

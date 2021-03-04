@@ -1,0 +1,31 @@
+.botonesForm {
+  float: right;
+  border-radius: 35px;
+  margin: 10px;
+}
+
+.verde {
+  color: #05dc83;
+}
+
+/*
+.text-danger {
+  color: #05dc83 !important;
+}
+
+.form-control.is-invalid {
+  color: #05dc83 !important;
+}
+
+.invalid-feedback {
+  color: #05dc83 !important;
+}
+
+.form-control.is-invalid:focus {
+  color: #05dc83 !important;
+}
+
+.was-validated .form-control:invalid {
+  color: #05dc83 !important;
+}
+*/

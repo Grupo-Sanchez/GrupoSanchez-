@@ -25,6 +25,7 @@ import AgregarProducto from './AgregarProducto';
 import { ReactComponent as Logo } from '../Icons/edit.svg';
 import { ReactComponent as Plus } from '../Icons/plus.svg';
 import { ReactComponent as Remove } from '../Icons/remove.svg';
+import { ReactComponent as Delete } from '../Icons/delete.svg';
 import { Confirm } from './Confirm';
 
 const thumbsContainer = {
@@ -124,21 +125,23 @@ export default function EliminarProducto(props) {
   const [inputcod5, setinputcod5] = useState(false);
   const [inputcod6, setinputcod6] = useState(false);
   const [inputcod7, setinputcod7] = useState(false);
+  const [banderaPrecios, setBanderaPrecios] = useState(false);
   const [data, setData] = useState(dataApuntes);
+  const [codRef, setCodRef] = useState('');
   const [seleccionado, setSeleccionado] = useState({
-    nombre: '',
+    descripcion: '',
     area: '',
     codigos: [],
     proveedores: [],
-    ubicacion: '',
-    bodega: [],
+    codigoPrincipal: '',
     marca: [],
-    precios: [],
-    cantidad: '',
-    descripcion_corta: '',
+    precio: [],
+    cantidad: 1,
+    bodega: [],
+    codigoBarra: '',
     descripcion_larga: '',
-    cantidad_minima: '',
-    fecha_creacion: '',
+    cantidad_minima: 1,
+    productoExento: false,
   });
   const [seleccionadorapido, setSeleccionadorapido] = useState({
     nombre: '',
@@ -181,16 +184,16 @@ export default function EliminarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthProveedores = async () => {
-    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
       for (let index = 0; index < proveedoresDB.length; index++) {
         const element = proveedoresDB[index];
         proveedoresagregados.push({
-          company: element.company,
+          name: element.company,
           value: element._id,
           agencia: element.agencia,
-          name: element.nombre,
+          representante: element.nombre,
           apellidos: element.apellidos,
           genero: element.genero,
           email: element.email,
@@ -210,14 +213,14 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthBodegas = async () => {
-    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
         const element = bodegasobtenidas[index];
         bodegasAgregar.push({
           value: element._id,
-          name: element.numBodega,
+          name: `Bodega ${element.numBodega}`,
         });
       }
       setBodegas(bodegasAgregar);
@@ -225,7 +228,7 @@ export default function EliminarProducto(props) {
   };
   let cont = 1;
   const fecthMarcas = async () => {
-    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -240,7 +243,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthData = () => {
-    axios.get('http://localhost:3001/api/productos').then((response) => {
+    axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
       setData(response.data);
     });
     fecthBodegas();
@@ -252,22 +255,27 @@ export default function EliminarProducto(props) {
     fecthData();
   }, []);
   const removeTagsProv = (index) => {
-    setProveedores([...proveedores, tagsProveedores[index]]);
     settagsProveedores([
       ...tagsProveedores.filter((tag) => tagsProveedores.indexOf(tag) !== index),
     ]);
+    fecthProveedores();
+    setProveedores(proveedores.filter(({ item }) => !tagsProveedores.includes(item)));
+  };
+
+  const removeTagsBodega = (index) => {
+    //setBodegas([...bodegas, tagsBodegas[index]]);
+    settagsBodegas([...tagsBodegas.filter((tag) => tagsBodegas.indexOf(tag) !== index)]);
+    fecthBodegas();
+    setBodegas(bodegas.filter(({ item }) => !tagsBodegas.includes(item)));
   };
   const onChangeProv = () => {
     if (precioprovedor7 !== 0) {
       tempProv = tempProv.filter((x) => x != null);
       const uniqueData = [...new Set(tempProv)];
-      alert(JSON.stringify(uniqueData[0].name));
-
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsProveedores.push({
         name: uniqueData[0].name,
-        value: uniqueData[0]._id,
-        agencia: uniqueData[0].agencia,
+        value: uniqueData[0].value,
         representante: uniqueData[0].nombre,
         apellidos: uniqueData[0].apellidos,
         genero: uniqueData[0].genero,
@@ -292,7 +300,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -300,12 +308,11 @@ export default function EliminarProducto(props) {
     if (precioprovedor6 !== 0) {
       tempBod = tempBod.filter((x) => x != null);
       const uniqueData = [...new Set(tempBod)];
-      alert(JSON.stringify(uniqueData[0].name));
 
       //settagsProveedores([...tagsProveedores, tempProv]);
       tagsBodegas.push({
         name: uniqueData[0].name,
-        value: uniqueData[0]._id,
+        value: uniqueData[0].value,
         numPasillo: precioprovedor6,
       });
       //setTagsTempProveedor([...tagstempProveedor, tempProv]);
@@ -317,7 +324,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -410,7 +417,8 @@ export default function EliminarProducto(props) {
       border: 'none',
       'border-radius': '10px',
       padding: '0 8px',
-      'margin-left': '-300px',
+      'margin-left': '50px',
+      paddingRight: '-250px',
       overflow: 'auto',
       maxHeight: '100px',
     };
@@ -498,120 +506,12 @@ export default function EliminarProducto(props) {
       setCodigoBarra(tags[1]);
     }
   };
-  const addTags = (event) => {
-    if (event.key === 'Enter' && event.target.value !== '' && !isAlphanumeric(event.target.value)) {
-      Confirm.open({
-        title: 'Error',
-        message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
-      });
-    } else if (event.key === 'Enter' && event.target.value !== '') {
-      seleccionado.codigos = [];
-      const duplicates = [];
-      for (let index = 0; index < tags.length; index++) {
-        const tag = tags[index];
-        seleccionado.codigos.push(tag);
-        duplicates.push(tag);
-      }
-      let yaesta = false;
-      let mensaje = [];
-      let codigos2 = [];
-      let mansajenot = '';
-      for (let index = 0; index < data.length; index++) {
-        const element = data[index];
-        for (let p = 0; p < element.codigos.length; p++) {
-          const element2 = element.codigos[p];
-          if (element2 === event.target.value) {
-            mensaje.push(element.nombre);
-            codigos2.push(element2);
-            yaesta = true;
-          }
-        }
-      }
-      let codigosUnicos = codigos2.filter(
-        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
-      );
-      let productosUnicos = mensaje.filter(
-        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
-      );
-      let codString = '';
-      let prodString = '';
-      for (let k = 0; k < codigosUnicos.length; k++) {
-        const element = codigosUnicos[k];
-        codString += ` ${element},`;
-      }
-      for (let k = 0; k < productosUnicos.length; k++) {
-        const element = productosUnicos[k];
-        prodString += ` ${element},`;
-      }
-      if (codigosUnicos.length !== 1) {
-        mansajenot = `Los codigos ${codString.substring(
-          0,
-          codString.length - 1,
-        )} ingresados ya se encuentra en los productos ${prodString.substring(
-          0,
-          prodString.length - 1,
-        )}.`;
-      } else {
-        mansajenot = `El codigo ${codString.substring(
-          0,
-          codString.length - 1,
-        )} ingresado ya se encuentra en los productos ${prodString.substring(
-          0,
-          prodString.length - 1,
-        )}.`;
-      }
-      let entra = false;
-      for (let i = 0; i < duplicates.length; i++) {
-        if (duplicates[i] === event.target.value) {
-          entra = true;
-          break;
-        }
-      }
-      if (yaesta) {
-        Confirm.open({
-          title: 'Error',
-          message: mansajenot,
-          onok: () => { },
-        });
-      } else if (entra) {
-        Confirm.open({
-          title: 'Error',
-          message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-        });
-        entra = false;
-      } else {
-        setTags([...tags, event.target.value]);
-      }
-      event.target.value = '';
-    } else if (
-      isAlphanumeric(event.target.value) &&
-      event.target.value !== '' &&
-      tags.length - 1 < 0
-    ) {
-      setCodigoBarra(event.target.value);
-    }
-  };
   let proveedoresSeleccionados = [];
   const manejarCambioPrecioBodega = (e) => {
     setPrecioProvedor6(e.target.value);
   };
-  const manejarCambioPrecioProveedor = (e, value) => {
-    if (value === 1) {
-      setPrecioProvedor1(e.target.value);
-    } else if (value === 2) {
-      setPrecioProvedor2(e.target.value);
-    } else if (value === 3) {
-      setPrecioProvedor3(e.target.value);
-    } else if (value === 4) {
-      setPrecioProvedor4(e.target.value);
-    } else if (value === 5) {
-      setPrecioProvedor5(e.target.value);
-    } else if (value === 6) {
-      setPrecioProvedor6(e.target.value);
-    } else if (value === 7) {
-      setPrecioProvedor7(e.target.value);
-    }
+  const manejarCambioPrecioProveedor = (e) => {
+    setPrecioProvedor7(e.target.value);
   };
   const handleOnChangeBodega = (value) => {
     tempBod.push(bodegas.filter((item) => item.value === value)[0]);
@@ -690,68 +590,6 @@ export default function EliminarProducto(props) {
       setinputcod7(e.target.value);
     }
   };
-
-  const GuardarProveedores = () => {
-    if (
-      proveedoresSeleccionados[0] !== undefined &&
-      proveedoresSeleccionados[0].precio !== undefined
-    ) {
-      proveedoresSeleccionados[0].precio = precioprovedor1;
-    }
-    if (
-      proveedoresSeleccionados[1] !== undefined &&
-      proveedoresSeleccionados[1].precio !== undefined
-    ) {
-      proveedoresSeleccionados[1].precio = precioprovedor2;
-    }
-    if (
-      proveedoresSeleccionados[2] !== undefined &&
-      proveedoresSeleccionados[2].precio !== undefined
-    ) {
-      proveedoresSeleccionados[2].precio = precioprovedor3;
-    }
-    if (
-      proveedoresSeleccionados[3] !== undefined &&
-      proveedoresSeleccionados[3].precio !== undefined
-    ) {
-      proveedoresSeleccionados[3].precio = precioprovedor4;
-    }
-    if (
-      proveedoresSeleccionados[4] !== undefined &&
-      proveedoresSeleccionados[4].precio !== undefined
-    ) {
-      proveedoresSeleccionados[4].precio = precioprovedor5;
-    }
-    if (
-      proveedoresSeleccionados[5] !== undefined &&
-      proveedoresSeleccionados[5].precio !== undefined
-    ) {
-      proveedoresSeleccionados[5].precio = precioprovedor6;
-    }
-    if (
-      proveedoresSeleccionados[6] !== undefined &&
-      proveedoresSeleccionados[6].precio !== undefined
-    ) {
-      proveedoresSeleccionados[6].precio = precioprovedor7;
-    }
-    seleccionado.proveedores = proveedoresSeleccionados;
-
-    if (seleccionado.proveedores[0] === null) {
-      Confirm.open({
-        title: 'Error',
-        message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
-      });
-    } else {
-      Confirm.open({
-        title: 'Modificar Proveedores',
-        message: '¿Está seguro que desea guardar estos cambios?',
-        onok: () => {
-          setModalModificarProveedores(false);
-        },
-      });
-    }
-  };
   const GuardarPrecio = () => {
     let menor = false;
     seleccionado.precios[0] = parseInt(document.getElementById('modprecio1').value, 10);
@@ -780,29 +618,33 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       setModalModificarPrecios(false);
+      setBanderaPrecios(true);
     }
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
+    axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
-    /*Confirm.open({
-      title: '',
-      message: 'Producto Eliminado Exitosamente',
-      onok: () => {},
-    });*/
     setData(data.filter((elemento) => elemento._id !== i));
     onDelete(i);
+    Confirm.open({
+      title: '',
+      message: 'Producto Eliminado Exitosamente',
+      onok: () => {
+        setModalModificar(false);
+      },
+    });
   };
 
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
   const [marcaSel, setMarcaSel] = useState([]);
   const [bodegaSel, setBodegaSel] = useState([]);
   const updateItem = async (Id) => {
+    GuardarPrecio();
     let marcaMod = [];
     let bodegaMod = [];
     for (let index = 0; index < marcas.length; index++) {
@@ -832,13 +674,12 @@ export default function EliminarProducto(props) {
       }
     }
     if (
-      seleccionado.bodega.length > 0 &&
-      codes.length > 0 &&
-      seleccionado.proveedores.length > 0 &&
+      tagsBodegas.length > 0 &&
+      tags.length > 0 &&
+      tagsProveedores.length > 0 &&
       seleccionado.precios.length > 0 &&
-      seleccionado.nombre.toString().trim() !== '' &&
+      seleccionado.descripcion.toString().trim() !== '' &&
       seleccionado.area.toString().trim() !== '' &&
-      seleccionado.descripcion_corta.toString().trim() !== '' &&
       document.getElementById('modcantidad').value > 0 &&
       document.getElementById('modcantidad_minima').value > 0
     ) {
@@ -848,46 +689,49 @@ export default function EliminarProducto(props) {
         //isAlphanumeric(document.getElementById('modnombre').value) &&
         // isAlphanumeric(document.getElementById('modarea').value)
       ) {
-        setModalModificar(false);
-        axios
-          .put(`http://localhost:3001/api/productos/${Id}`, {
-            nombre: document.getElementById('modnombre').value,
-            area: document.getElementById('modarea').value,
-            codigos: codes,
-            proveedores: seleccionado.proveedores,
-            ubicacion: document.getElementById('modubicacion').value,
-            marca: marcaMod,
-            bodega: bodegaMod,
-            precios: seleccionado.precios,
-            cantidad: document.getElementById('modcantidad').value,
-            descripcion_corta: document.getElementById('descripcion1').value,
-            descripcion_larga: document.getElementById('descripcion2').value,
-            cantidad_minima: document.getElementById('modcantidad_minima').value,
-          })
-          .then(
-            Confirm.open({
-              title: '',
-              message: `Producto ${seleccionado.nombre} modificado exitosamente`,
-              onok: () => {
-                fecthData();
-              },
-            }),
-          )
-          .catch((error) => {
-            console.log(error);
-          });
+        if (banderaPrecios) {
+          setModalModificar(false);
+          axios
+            .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
+              descripcion: document.getElementById('modnombre').value,
+              area: document.getElementById('modarea').value,
+              codigoPrincipal: seleccionado.codigoPrincipal,
+              codigos: tags,
+              proveedores: tagsProveedores,
+              marca: seleccionado.marca,
+              bodega: tagsBodegas,
+              precios: seleccionado.precios,
+              cantidad: document.getElementById('modcantidad').value,
+              codigoBarra: seleccionado.nombre,
+              descripcion_larga: document.getElementById('descripcion2').value,
+              cantidad_minima: document.getElementById('modcantidad_minima').value,
+              productoExento: seleccionado.productoExento,
+            })
+            .then(
+              Confirm.open({
+                title: '',
+                message: `Producto ${seleccionado.descripcion} modificado exitosamente`,
+                onok: () => {
+                  fecthData();
+                },
+              }),
+            )
+            .catch((error) => {
+              console.log(error);
+            });
+        }
       } else {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -990,15 +834,19 @@ export default function EliminarProducto(props) {
     setCodes(element.codigos);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
-    setMarcaSel(element.marca[0].value);
-    setBodegaSel(element.bodega[0].value);
-    setNombre(element.nombre);
+    // setMarcaSel(element.marca[0].value);
+    //setBodegaSel(element.bodega[0].value);
+    //setNombre(element.nombre);
     setTagsTemp(element.codigos);
-    setCodigoBarra(element.codigos[0]);
+    settempProv(element.proveedores);
+    settagsBodegas(seleccionado.bodega);
+    //settempBod(tagsBodegas);
+    setCodigoBarra(element.codigoBarra);
     setprecio1(element.precios[0]);
     setprecio2(element.precios[1]);
     setprecio3(element.precios[2]);
     settagsProveedores(element.proveedores);
+    setTags(element.codigos);
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -1009,7 +857,9 @@ export default function EliminarProducto(props) {
     setSeleccionado(elemento);
     setmodalVerDescripciones(true);
   };
-
+  const manejarCambioCodRef = (e) => {
+    setCodRef(e.target.value);
+  };
   const myFunction = () => {
     // alert("eentoroo");
     const input = document.getElementById('myInput');
@@ -1177,7 +1027,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => { },
+            onok: () => {},
           });
           entra = false;
         } else if (yaesta) {
@@ -1202,14 +1052,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1307,6 +1157,223 @@ export default function EliminarProducto(props) {
       setCantsel(e.target.value);
     }
   };
+  const addTags = (event) => {
+    let duplicadoPrincipal = false;
+    if (event.key === 'Enter') {
+      for (let index = 0; index < data.length; index++) {
+        if (data[index].codigoPrincipal === event.target.value) {
+          duplicadoPrincipal = true;
+        }
+      }
+    }
+    if (event.key === 'Enter' && event.target.value !== '' && !isAlphanumeric(event.target.value)) {
+      Confirm.open({
+        title: 'Error',
+        message: `El código tiene caracteres inválidos:${' '}`,
+        onok: () => {},
+      });
+    } else if (event.key === 'Enter' && event.target.value !== '') {
+      seleccionado.codigos = [];
+      const duplicates = [];
+      for (let index = 0; index < tags.length; index++) {
+        const tag = tags[index];
+        seleccionado.codigos.push(tag);
+        duplicates.push(tag);
+      }
+      let yaesta = false;
+      let mensaje = [];
+      let codigos2 = [];
+      let mansajenot = '';
+      for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        for (let p = 0; p < element.codigos.length; p++) {
+          const element2 = element.codigos[p];
+          if (element2 === event.target.value) {
+            mensaje.push(element.descripcion);
+            codigos2.push(element2);
+            yaesta = true;
+          }
+        }
+      }
+      let codigosUnicos = codigos2.filter(
+        (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+      );
+      let productosUnicos = mensaje.filter(
+        (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+      );
+      let codString = '';
+      let prodString = '';
+      for (let k = 0; k < codigosUnicos.length; k++) {
+        const element = codigosUnicos[k];
+        codString += ` ${element},`;
+      }
+      for (let k = 0; k < productosUnicos.length; k++) {
+        const element = productosUnicos[k];
+        prodString += ` ${element},`;
+      }
+      if (codigosUnicos.length !== 1) {
+        mansajenot = `Los codigos ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresados ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      } else {
+        mansajenot = `El codigo ${codString.substring(
+          0,
+          codString.length - 1,
+        )} ingresado ya se encuentra en los productos ${prodString.substring(
+          0,
+          prodString.length - 1,
+        )}.`;
+      }
+      let entra = false;
+      for (let i = 0; i < duplicates.length; i++) {
+        if (duplicates[i] === event.target.value) {
+          entra = true;
+          break;
+        }
+      }
+      if (!duplicadoPrincipal) {
+        if (yaesta) {
+          Confirm.open({
+            title: 'Error',
+            message: mansajenot,
+            onok: () => {},
+          });
+        } else if (entra) {
+          Confirm.open({
+            title: 'Error',
+            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          });
+          entra = false;
+        } else {
+          setTags([...tags, event.target.value]);
+          setTagsTemp([...tagstemp, event.target.value]);
+          setCodRef('');
+        }
+        event.target.value = '';
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message:
+            'Existen códigos duplicados en códigos primarios, verifique e intente nuevamente.',
+        });
+      }
+    } else if (
+      isAlphanumeric(event.target.value) &&
+      event.target.value !== '' &&
+      tags.length - 1 < 0
+    ) {
+      setCodigoBarra(event.target.value);
+    }
+  };
+  const addTagsClick = (event) => {
+    let duplicadoPrincipal = false;
+    for (let index = 0; index < data.length; index++) {
+      if (data[index].codigoPrincipal === event) {
+        duplicadoPrincipal = true;
+      }
+    }
+    if (!duplicadoPrincipal) {
+      if (event !== '' && !isAlphanumeric(event)) {
+        Confirm.open({
+          title: 'Error',
+          message: `El código tiene caracteres inválidos:${' '}`,
+          onok: () => {},
+        });
+      } else if (event !== '') {
+        seleccionado.codigos = [];
+        const duplicates = [];
+        for (let index = 0; index < tags.length; index++) {
+          const tag = tags[index];
+          seleccionado.codigos.push(tag);
+          duplicates.push(tag);
+        }
+        let yaesta = false;
+        let mensaje = [];
+        let codigos2 = [];
+        let mansajenot = '';
+        for (let index = 0; index < data.length; index++) {
+          const element = data[index];
+          for (let p = 0; p < element.codigos.length; p++) {
+            const element2 = element.codigos[p];
+            if (element2 === event) {
+              mensaje.push(element.descripcion);
+              codigos2.push(element2);
+              yaesta = true;
+            }
+          }
+        }
+        let codigosUnicos = codigos2.filter(
+          (ele, ind) => ind === codigos2.findIndex((elem) => elem === ele),
+        );
+        let productosUnicos = mensaje.filter(
+          (ele, ind) => ind === mensaje.findIndex((elem) => elem === ele),
+        );
+        let codString = '';
+        let prodString = '';
+        for (let k = 0; k < codigosUnicos.length; k++) {
+          const element = codigosUnicos[k];
+          codString += ` ${element},`;
+        }
+        for (let k = 0; k < productosUnicos.length; k++) {
+          const element = productosUnicos[k];
+          prodString += ` ${element},`;
+        }
+        if (codigosUnicos.length !== 1) {
+          mansajenot = `Los codigos ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresados ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        } else {
+          mansajenot = `El codigo ${codString.substring(
+            0,
+            codString.length - 1,
+          )} ingresado ya se encuentra en los productos ${prodString.substring(
+            0,
+            prodString.length - 1,
+          )}.`;
+        }
+        let entra = false;
+        for (let i = 0; i < duplicates.length; i++) {
+          if (duplicates[i] === event) {
+            entra = true;
+            break;
+          }
+        }
+        if (yaesta) {
+          Confirm.open({
+            title: 'Error',
+            message: mansajenot,
+            onok: () => {},
+          });
+        } else if (entra) {
+          Confirm.open({
+            title: 'Error',
+            message: 'Existen códigos duplicados, verifique e intente nuevamente.',
+          });
+          entra = false;
+        } else {
+          setTags([...tags, event]);
+          setTagsTemp([...tagstemp, event]);
+          setCodRef('');
+        }
+      } else if (isAlphanumeric(event) && event !== '' && tags.length - 1 < 0) {
+        setCodigoBarra(event);
+      }
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Existen códigos principales con este código, verifique e intente nuevamente.',
+      });
+    }
+  };
+
   const manejarCambiocantmin = (e, n) => {
     const num = document.getElementById('modcantidad_minima').value;
     const num2 = document.getElementById('modcantidad').value;
@@ -1457,6 +1524,7 @@ export default function EliminarProducto(props) {
         >
           <thead>
             <tr style={{ textAlign: 'center' }}>
+              <th>#</th>
               <th>Código de Barra</th>
               <th>Codigo Principal</th>
               <th style={{ width: '300px' }}>Descripcion</th>
@@ -1470,8 +1538,9 @@ export default function EliminarProducto(props) {
             {data.map((elemento, index) => (
               <tr>
                 <td>{(index += 1)}</td>
-                <td>{elemento.nombre}</td>
-                <td style={{ whiteSpace: 'unset' }}>{elemento.nombre}</td>
+                <td>{`${elemento.codigoBarra}`}</td>
+                <td>{elemento.codigoPrincipal}</td>
+                <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
                 <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
                 <td>{elemento.cantidad}</td>
                 <td>{elemento.precios[0]}</td>
@@ -1501,13 +1570,32 @@ export default function EliminarProducto(props) {
             top: '20px',
             maxWidth: '1500px',
             'border-radius': '36px',
+            'overflow-x': 'hidden',
           }}
         >
-          <ModalHeader>
-            <div>
-              <h3 className="text-center">MODIFICAR PRODUCTOS</h3>
-            </div>
-          </ModalHeader>
+          <h3>EDITAR PRODUCTO</h3>
+          <Button
+            style={{
+              'background-color': 'transparent',
+              borderColor: 'transparent',
+              position: 'absolute',
+              top: '8px',
+              right: '16px',
+              'font-size': '18px',
+              'border-radius': '26px',
+            }}
+            onClick={() =>
+              Confirm.open({
+                title: '',
+                message: `¿Desea Eliminar el producto ${seleccionado.descripcion}?`,
+                onok: () => {
+                  eliminar(seleccionado._id);
+                },
+              })
+            }
+          >
+            <Delete width="50px" height="50px" />
+          </Button>
           <ModalBody
             style={{
               'margin-right': '-80px',
@@ -1517,14 +1605,15 @@ export default function EliminarProducto(props) {
             <br />
             <AvForm>
               <Row style={{ marginRight: '200px' }}>
-                <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripcion</h>
+                <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripción</h>
                 <Col sm={{ size: 'auto' }}>
                   <AvField
                     style={paddingAvInput()}
                     className="form-control"
                     type="text"
+                    value={seleccionado.descripcion ? seleccionado.descripcion : ''}
                     name="nombre"
-                    id="nombre_agregar"
+                    id="modnombre"
                     errorMessage="Nombre Inválido"
                     validate={{
                       required: { value: true },
@@ -1532,7 +1621,6 @@ export default function EliminarProducto(props) {
 
                       minLength: { value: 1 },
                     }}
-                    value={seleccionado ? seleccionado.nombre : ''}
                     onChange={(e) => manejarCambio(e)}
                   />
                   <Row>
@@ -1543,20 +1631,20 @@ export default function EliminarProducto(props) {
                         className="form-control"
                         type="text"
                         name="nombre"
-                        id="nombre_agregar"
+                        id="codigo_principal"
                         errorMessage="Nombre Inválido"
                         validate={{
                           required: { value: true },
                           pattern: { value: regex },
                           minLength: { value: 1 },
                         }}
-                        value={seleccionado ? seleccionado.nombre : ''}
+                        value={seleccionado ? seleccionado.codigoPrincipal : ''}
                         onChange={(e) => manejarCambio(e)}
                       />
                     </Col>
                   </Row>
                 </Col>
-                <h style={{ 'margin-left': '30px' }}>Descripción especifica</h>
+                <h style={{ 'margin-left': '5px' }}>Descripción especifica</h>
                 <Col sm={{ size: 5 }}>
                   <FormGroup>
                     <AvField
@@ -1581,6 +1669,8 @@ export default function EliminarProducto(props) {
                   onKeyUp={(event) => addTags(event)}
                   placeholder="O presione Enter para insertar códigos"
                   onKeyDown={handleKeyDown}
+                  value={codRef}
+                  onChange={(e) => manejarCambioCodRef(e)}
                 />
                 <div style={paddingdiv()}>
                   <ul style={paddingul()}>
@@ -1610,22 +1700,14 @@ export default function EliminarProducto(props) {
                       'line-height': '2px',
                       'margin-left': '-350px',
                     }}
-                    onClick={() =>
-                      Confirm.open({
-                        title: 'Insertar Codigos',
-                        message: '¿Está seguro de que quiere insertar estos codigos?',
-                        onok: () => {
-                          GuardarCodigos();
-                        },
-                      })
-                    }
+                    onClick={() => addTagsClick(codRef)}
                     color="primary"
                   >
                     +
                   </Button>
                 </div>
-                <Row style={{ marginRight: '-150px', marginLeft: '-100px' }}>
-                  <h>Marca</h>
+                <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
+                  <h style={{ marginLeft: '-50px' }}>Marca</h>
                   <Col sm={{ size: 'auto' }}>
                     <div style={{ marginLeft: '-15px' }}>
                       <SelectSearch
@@ -1640,7 +1722,7 @@ export default function EliminarProducto(props) {
                       />
                     </div>
                     <br />
-                    <label style={{ 'margin-left': '380px', paddingTop: '-10px' }}># Pasillo</label>
+                    <label style={{ 'margin-left': '-15px', paddingTop: '-10px' }}># Pasillo</label>
                     <Row>
                       <h style={{ 'margin-left': '-45px' }}>Bodega</h>
                       <Col sm={{ size: 'auto' }} style={{ 'margin-left': '-25px' }}>
@@ -1661,7 +1743,7 @@ export default function EliminarProducto(props) {
                         <input
                           style={{
                             width: '90px',
-                            'margin-left': '50px',
+                            'margin-left': '20px',
                             'border-radius': '26px',
                           }}
                           className="form-control"
@@ -1684,7 +1766,7 @@ export default function EliminarProducto(props) {
                               width: '40px',
                               height: '40px',
                               'line-height': '2px',
-                              'margin-left': '-720px',
+                              'margin-left': '-780px',
                               marginTop: '90px',
                             }}
                             onClick={() => onChangeBodega()}
@@ -1693,23 +1775,26 @@ export default function EliminarProducto(props) {
                             +
                           </Button>
                         </div>
-                        <div style={paddingdivbodegas()}>
-                          <ul style={paddingulbodegas()}>
-                            {tagsBodegas.map((tag, index) => (
-                              <li style={paddingmainbodegas()} key={index}>
-                                <span style={paddingtitlebodega()}>
-                                  {tag.name}, # {tag.numPasillo}
-                                </span>
-                                <i style={paddingclosebodega()} onClick={() => removeTagsProv(index)}>
-                                  x
-                                </i>
-                              </li>
-                            ))}
-
-                            <br />
-                          </ul>
-                        </div>
                       </AvForm>
+                      <div style={paddingdivbodegas()}>
+                        <ul style={paddingulbodegas()}>
+                          {tagsBodegas.map((tag, index) => (
+                            <li style={paddingmain()} key={index}>
+                              <span style={paddingtitle()}>
+                                {tag.name}, L. {tag.precio}
+                              </span>
+                              <i
+                                style={paddingclosebodega()}
+                                onClick={() => removeTagsBodega(index)}
+                              >
+                                x
+                              </i>
+                            </li>
+                          ))}
+
+                          <br />
+                        </ul>
+                      </div>
                     </Row>
                     <br />
                     <br />
@@ -1721,7 +1806,7 @@ export default function EliminarProducto(props) {
                           style={paddingAvInputCantidades()}
                           className="form-control"
                           type="number"
-                          id="cantidad"
+                          id="modcantidad"
                           value={cantsel}
                           min={
                             document.getElementById('cantidad_minima')
@@ -1737,7 +1822,7 @@ export default function EliminarProducto(props) {
                           style={paddingAvInputCantidades()}
                           className="form-control"
                           type="number"
-                          id="cantidad_minima"
+                          id="modcantidad_minima"
                           min={1}
                           max={cantsel}
                           value={cantminsel}
@@ -1746,7 +1831,7 @@ export default function EliminarProducto(props) {
                       </Col>
                     </Row>
                     <Row>
-                      <h style={{ marginLeft: '-90px' }}>Codigo de Barra</h>
+                      <h style={{ marginLeft: '-90px' }}>Código de Barra</h>
                       <AvForm>
                         <Col style={{ paddingRight: '-25px', marginLeft: '40px' }}>
                           <AvField
@@ -1761,12 +1846,12 @@ export default function EliminarProducto(props) {
                               pattern: { value: regex },
                               minLength: { value: 1 },
                             }}
-                            value={seleccionado ? seleccionado.nombre : ''}
+                            value={seleccionado ? seleccionado.codigoBarra : ''}
                             onChange={(e) => manejarCambio(e)}
                           />
                           <Row>
                             <Col sm={{ size: 'auto' }}>
-                              <Barcode value={seleccionado.nombre} />
+                              <Barcode value={seleccionado.codigoBarra} />
                             </Col>
                           </Row>
                         </Col>
@@ -1775,18 +1860,19 @@ export default function EliminarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <h style={{ marginLeft: '10px' }}>Área</h>
-              <Col style={{ marginLeft: '40px' }}>
+              <h style={{ marginLeft: '-5px' }}>Área</h>
+              <Col>
                 <AvForm>
                   <AvField
                     style={{
                       'border-radius': '26px',
                       width: '320px',
+                      marginLeft: '-10px',
                     }}
                     className="form-control"
                     type="text"
                     name="area"
-                    id="area_agregar"
+                    id="modarea"
                     errorMessage="Campo Obligatorio"
                     validate={{
                       required: { value: true },
@@ -1817,7 +1903,6 @@ export default function EliminarProducto(props) {
                       type="number"
                       id="precioprov3"
                       onChange={(e) => manejarCambioPrecioProveedor(e)}
-                      value={precioprovedor7}
                       min={1}
                     />
                     <div
@@ -1866,7 +1951,10 @@ export default function EliminarProducto(props) {
                     }}
                   >
                     <Row>
-                      <label style={{ 'margin-left': '10px' }}>Precios de Venta</label>
+                      <label style={{ 'margin-left': '40px', marginTop: '-20px' }}>
+                        Precios de
+                        <br /> Venta
+                      </label>
                       <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
                         <div>
                           <h style={{ paddingRight: '-300px' }}>Precio 1</h>
@@ -1878,8 +1966,7 @@ export default function EliminarProducto(props) {
                             id="modprecio1"
                             value={precio1}
                             onChange={(event) => setprecio1(event.target.value)}
-                            validate={{
-                            }}
+                            validate={{}}
                           />
                         </div>
                       </Col>
@@ -1891,13 +1978,13 @@ export default function EliminarProducto(props) {
                           type="Number"
                           name="Fecha"
                           name="precio2"
-                          id="precio2"
+                          id="modprecio2"
                           validate={{
                             required: { value: false },
                           }}
                           value={precio2}
-                        // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                        // onChange={manejarCambio}
+                          // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
+                          // onChange={manejarCambio}
                         />
                       </Col>
                       <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
@@ -1908,13 +1995,13 @@ export default function EliminarProducto(props) {
                           type="Number"
                           name="Etiqueta"
                           name="precio3"
-                          id="precio3"
+                          id="modprecio3"
                           validate={{
                             required: { value: false },
                           }}
                           value={precio3}
-                        // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                        // onChange={manejarCambio}
+                          // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
+                          // onChange={manejarCambio}
                         />
                       </Col>
                     </Row>
@@ -1954,9 +2041,44 @@ export default function EliminarProducto(props) {
             <br />
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-primary" onClick={() => setModalVerCodigoBarra(false)}>
-              OK
-          </button>
+            <button
+              style={{
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'green',
+                border: '2px solid green',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-primary"
+              onClick={() =>
+                Confirm.open({
+                  title: 'Guardar Cambios',
+                  message: 'Está seguro de que quiere modificar este producto?',
+                  onok: () => {
+                    updateItem(seleccionado._id);
+                  },
+                })
+              }
+            >
+              Guardar Cambios
+            </button>
+            <button
+              style={{
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'red',
+                border: '2px solid red',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-danger"
+              onClick={() => setModalModificar(false)}
+            >
+              Cancelar
+            </button>
           </ModalFooter>
         </Modal>
       </div>

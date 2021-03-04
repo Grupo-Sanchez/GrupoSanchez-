@@ -45,15 +45,15 @@ const Login = (props) => {
     //   email: email,
     //   password: password,
     // };
-    // const response = axios.post('http://localhost:3001/api/login', auth);
+    // const response = axios.post('http://178.128.67.247:3001/api/login', auth);
     // console.log(response);
   };
 
   const authMethod = () => {
     const jsonString = { email: email, password: password };
     console.log('Mandando: ', jsonString);
-    //     fetch('http://localhost:3001/api/login', {
-    fetch('http://localhost:3001/api/login', {
+    //     fetch('http://178.128.67.247:3001/api/login', {
+    fetch('http://178.128.67.247:3001/api/login', {
       method: 'post',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(jsonString),
@@ -71,7 +71,7 @@ const Login = (props) => {
         if (json.message === 'Auth successful') {
           console.log('Correcto');
           axios
-            .get('http://localhost:3001/api/users')
+            .get('http://178.128.67.247:3001/api/users')
             .then((response) => console.log('Response: ', response));
           history.push(`/${json.ruta}`);
         } else {
