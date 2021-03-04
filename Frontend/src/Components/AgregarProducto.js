@@ -246,17 +246,41 @@ export default function AgregarProducto(props) {
     });
   };
   const removeTagsProv = (index) => {
-    settagsProveedores([
-      ...tagsProveedores.filter((tag) => tagsProveedores.indexOf(tag) !== index),
-    ]);
-    fecthProveedores();
-    setProveedores(proveedores.filter(({ item }) => !tagsProveedores.includes(item)));
+    let provAgregar = [];
+    for (let inde = 0; inde < tagsProveedores.length; inde++) {
+      const element2 = tagsProveedores[inde];
+      if (inde === index) {
+        provAgregar.push(element2);
+      }
+    }
+
+    //alert(JSON.stringify(provAgregar));
+    for (let index2 = 0; index2 < provAgregar.length; index2++) {
+      const element = provAgregar[index2];
+      proveedores.push(element);
+    }
+    setProveedores(proveedores);
+    //alert(JSON.stringify(proveedores));
+    tagsProveedores.splice(index, 1);
   };
   const removeTagsBodega = (index) => {
     //setBodegas([...bodegas, tagsBodegas[index]]);
-    settagsBodegas([...tagsBodegas.filter((tag) => tagsBodegas.indexOf(tag) !== index)]);
-    fecthBodegas();
-    setBodegas(bodegas.filter(({ item }) => !tagsBodegas.includes(item)));
+    let provAgregar = [];
+    for (let inde = 0; inde < tagsBodegas.length; inde++) {
+      const element2 = tagsBodegas[inde];
+      if (inde === index) {
+        provAgregar.push(element2);
+      }
+    }
+
+    //alert(JSON.stringify(provAgregar));
+    for (let index2 = 0; index2 < provAgregar.length; index2++) {
+      const element = provAgregar[index2];
+      bodegas.push(element);
+    }
+    setBodegas(bodegas);
+    //alert(JSON.stringify(proveedores));
+    tagsBodegas.splice(index, 1);
   };
   const fecthProductos = async () => {
     await axios.get('http://localhost:3001/api/productos').then((response) => {
