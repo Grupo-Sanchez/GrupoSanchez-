@@ -1583,18 +1583,17 @@ export default function AgregarProducto(props) {
               >
                 <Button
                   style={{
-                    'font-size': '20px',
-                    'border-radius': '50%',
-                    width: '40px',
-                    height: '40px',
-                    'line-height': '2px',
-                    'margin-left': '-350px',
-                    top: '-75px',
+                    'background-color': 'transparent',
+                    border: 'none',
+                    position: 'absolute',
+                    top: '-13px',
+                    left: '-203px',
+                    outline: 'none',
+                    'box-shadow': 'none',
                   }}
                   onClick={() => addTagsClick(codRef)}
-                  color="primary"
                 >
-                  +
+                  <Plus width="40px" height="50px" />
                 </Button>
               </div>
               <Row>
@@ -1645,6 +1644,20 @@ export default function AgregarProducto(props) {
                         onClick={handleOnChangeBodega(size7)}
                         onChange={setSize7}
                       />
+                      <Button
+                        style={{
+                          'background-color': 'transparent',
+                          border: 'none',
+                          position: 'absolute',
+                          top: '-13px',
+                          left: '485px',
+                          outline: 'none',
+                          'box-shadow': 'none',
+                        }}
+                        onClick={() => onChangeBodega()}
+                      >
+                        <Plus width="40px" height="50px" />
+                      </Button>
                     </Col>
                     <AvForm>
                       <input
@@ -1660,29 +1673,6 @@ export default function AgregarProducto(props) {
                         min={1}
                       />
                     </AvForm>
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '1px',
-                        'margin-left': '525px',
-                      }}
-                    >
-                      <Button
-                        style={{
-                          'font-size': '20px',
-                          'border-radius': '50%',
-                          width: '40px',
-                          height: '40px',
-                          'line-height': '2px',
-                          'margin-left': '-50px',
-                          marginTop: '90px',
-                        }}
-                        onClick={() => onChangeBodega()}
-                        color="primary"
-                      >
-                        +
-                      </Button>
-                    </div>
                     <div style={paddingdivbodegas()}>
                       <ul style={paddingulbodegas()}>
                         {tagsBodegas.map((tag, index) => (
@@ -1810,28 +1800,20 @@ export default function AgregarProducto(props) {
                     value={precioprovedor7}
                     min={1}
                   />
-                  <div
+                  <Button
                     style={{
+                      'background-color': 'transparent',
+                      border: 'none',
                       position: 'absolute',
-                      top: '28px',
-                      'margin-left': '320px',
+                      top: '20px',
+                      left: '120px',
+                      outline: 'none',
+                      'box-shadow': 'none',
                     }}
+                    onClick={(e) => onChangeProv(e)}
                   >
-                    <Button
-                      style={{
-                        'font-size': '20px',
-                        'border-radius': '50%',
-                        width: '40px',
-                        height: '40px',
-                        'line-height': '2px',
-                        'margin-left': '-350px',
-                      }}
-                      color="primary"
-                      onClick={() => onChangeProv()}
-                    >
-                      +
-                    </Button>
-                  </div>
+                    <Plus width="40px" height="50px" />
+                  </Button>
                 </Col>
                 <div style={paddingdiv()}>
                   <ul style={paddingul()}>

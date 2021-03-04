@@ -40,10 +40,11 @@ export default function Facturas() {
       cantidad: 0,
       precioUnitario: 0,
       precioSumado: 0,
+      exento: false,
     },
   ]);
   const [productoSeleccionado, setproductoSeleccionado] = useState([]);
-  const [productosSeleccionado, setproductosSeleccionado] = useState([]);
+  const [productosAfacturar, setproductosAfacturar] = useState([]);
   const getProductos = async () => {
     await axios
       .get('http://localhost:3001/api/productos')
@@ -55,8 +56,8 @@ export default function Facturas() {
           if (element.cantidad > 0) {
             productosagregados.push({
               indice: 0,
-              descripcion: element.descripcion,
-              value: element.value,
+              name: element.descripcion,
+              value: element._id,
               codigoPrincipal: element.codigoPrincipal,
               proveedores: element.proveedores,
               precios: element.precios,
@@ -66,6 +67,7 @@ export default function Facturas() {
               cantidad: element.cantidad,
               precioUnitario: element.precios,
               precioSumado: 0,
+              exento: element.productoExento,
             });
           }
         }
@@ -80,9 +82,13 @@ export default function Facturas() {
   const [impuestototal, setImpuestoTotal] = useState(0);
   const [totalfinal, setTotalFinal] = useState(0);
   const addRow = (producto) => {
-    setproductosSeleccionado([...productosSeleccionado, producto]);
     result += producto.precioSumado;
-    impuesto += Number(result * 0.15);
+    if (productoSeleccionado.exento) {
+      impuesto += 0;
+    } else {
+      impuesto += Number(result * 0.15);
+    }
+    setproductosAfacturar([...productosAfacturar, producto]);
     total += result + impuesto;
     setSumaTotal(result + sumatotal);
     setImpuestoTotal(impuesto + impuestototal);
@@ -95,12 +101,13 @@ export default function Facturas() {
     productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
         setproductoSeleccionado({
-          descripcion: item.descripcion,
+          name: item.name,
           value: item.value,
           codigoPrincipal: item.codigoPrincipal,
           cantidad: 1,
           precioUnitario: item.precios[0],
           precioSumado: 0,
+          exento: item.exento,
         });
         setCantidadmax(item.cantidad);
       }
@@ -122,13 +129,12 @@ export default function Facturas() {
       subtotal: sumatotal,
       impuesto: impuestototal,
       total: totalfinal,
-      productosSeleccionado: productosSeleccionado,
+      productosAfacturar: productosAfacturar,
       nombreCliente: nombre,
       rtn: rtn,
     };
-    alert(JSON.stringify(campos));
     // await axios.post('http://localhost:3001/api/facturas', campos);
-    setproductosSeleccionado([]);
+    setproductosAfacturar([]);
     setresult(0);
     setindice(1);
     setimpuesto(0);
@@ -157,8 +163,8 @@ export default function Facturas() {
   }
   const segundoPrecio = (codigo) => {
     setindice(1);
-    for (let index = 0; index < productosSeleccionado.length; index++) {
-      const element = productosSeleccionado[index];
+    for (let index = 0; index < productosAfacturar.length; index++) {
+      const element = productosAfacturar[index];
       if (element.codigoPrincipal === codigo) {
         for (let i = 0; i < productosEnBodega.length; i++) {
           const element2 = productosEnBodega[i];
@@ -208,10 +214,32 @@ export default function Facturas() {
         break;
       }
     }
-    // alert(cantidad2);
-    //axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
-    const items = productosSeleccionado.filter((item) => item.value !== i);
-    setproductosSeleccionado(items);
+    function styleButtonSegundoPrecio() {
+      return {
+        'background-color': 'transparent',
+        border: 'none',
+        position: 'absolute',
+        top: '35px',
+        marginLeft: '-40px',
+        'font-size': '18px',
+        'border-radius': '26px',
+        'box-shadow': 'none',
+      };
+    }
+    function styleButtonEliminar() {
+      return {
+        'background-color': 'transparent',
+        border: 'none',
+        position: 'absolute',
+        top: '35px',
+        marginLeft: '-15px',
+        'font-size': '18px',
+        'border-radius': '26px',
+        'box-shadow': 'none',
+      };
+    }
+    const items = productosAfacturar.filter((item) => item.value !== i);
+    setproductosAfacturar(items);
     setresult(0);
     setindice(1);
     setimpuesto(0);
@@ -297,9 +325,9 @@ export default function Facturas() {
                       border: 'none',
                       position: 'absolute',
                       top: '-13px',
-                      left: '290px',
+                      left: '285px',
                       outline: 'none',
-                      'outline-offset': 'none',
+                      'box-shadow': 'none',
                     }}
                     onClick={() => agregarProductoaTabla()}
                   >
@@ -363,37 +391,30 @@ export default function Facturas() {
                 </tr>
               </thead>
               <tbody>
-                {productosSeleccionado.map((row, i) => (
+                {productosAfacturar.map((row, i) => (
                   <tr key={i}>
                     <th>{row.cantidad}</th>
-                    <th>{row.descripcion}</th>
+                    <th>{row.name}</th>
                     <th>{row.precioUnitario}</th>
                     <th>{row.precioSumado}</th>
                     <th style={{ width: '200px' }}>
                       <Button
                         style={{
                           'background-color': 'transparent',
-                          borderColor: 'transparent',
-                          position: 'absolute',
-                          top: '35px',
-                          marginLeft: '-40px',
-                          'font-size': '18px',
-                          'border-radius': '26px',
+                          border: 'none',
+                          marginLeft: '0px',
+                          'box-shadow': 'none',
                         }}
                         onClick={() => segundoPrecio(row.codigoPrincipal)}
                       >
-                        <SegundoPrecio width="31px" height="31px" />
+                        <SegundoPrecio width="30px" height="30px" />
                       </Button>
                       <Button
                         style={{
                           'background-color': 'transparent',
-                          borderColor: 'transparent',
-                          position: 'absolute',
-                          top: '35px',
-                          marginLeft: '-15px',
-                          'font-size': '18px',
-                          'border-radius': '26px',
-                          outline: 'none',
+                          border: 'none',
+                          marginLeft: '-5px',
+                          'box-shadow': 'none',
                         }}
                         onClick={() => eliminarProducto(row.value, row.cantidad)}
                       >
