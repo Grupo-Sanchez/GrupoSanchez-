@@ -57,7 +57,7 @@ export default function ModificarUsuario(props) {
   };
 
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/users/${memberId}`);
+    axios.delete(`http://Localhost:3001/api/users/${memberId}`);
   };
 
   const [data, setData] = useState([]);
@@ -66,7 +66,7 @@ export default function ModificarUsuario(props) {
 
   useEffect(() => {
     const fecthData = async () => {
-      await axios.get('http://178.128.67.247:3001/api/users').then((response) => {
+      await axios.get('http://Localhost:3001/api/users').then((response) => {
         setData(response.data);
       });
     };
@@ -121,7 +121,7 @@ export default function ModificarUsuario(props) {
     ) {
       setModalModificarUsuario(false);
       axios
-        .put(`http://178.128.67.247:3001/api/users/${seleccionado._id}`, {
+        .put(`http://Localhost:3001/api/users/${seleccionado._id}`, {
           identidad: seleccionado.identidad,
           nombre: seleccionado.nombre,
           segundo_nombre: seleccionado.segundo_nombre,
@@ -452,7 +452,6 @@ export default function ModificarUsuario(props) {
                 onChange={(e) => handleChange2(e)}
               />
             </div>
-
           </ModalBody>
           <ModalFooter>
             <button className="btn btn-primary" onClick={() => modificarUsuario()}>

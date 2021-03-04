@@ -1,13 +1,14 @@
 .card-bodegas {
   border: none;
   border-radius: 8px;
-  background: linear-gradient(to right, #808080, #2f4f4f);
+  background: linear-gradient(to right, #fff5f2, #fff5f2);
+  border-radius: 10%;
 }
 
 .Fitness-User-Info {
   margin-top: 50px;
   margin-bottom: 50px;
-  margin-left: 200px;
+  margin-left: 650px;
 }
 .Fitness-Card {
   max-height: 200px;
@@ -17,15 +18,15 @@
 .Fitness-Card-Info {
   padding-left: 0;
   padding-bottom: 45px;
-  padding-right: 75px;
+  padding-right: 745px;
 }
 .Fitness-Card-Info h1 {
   font-size: 23px;
-  color: white;
+  color: black;
 }
 .Fitness-Card-Info p {
   font-size: 11px;
-  color: white;
+  color: black;
 }
 .Fitness-Add {
   display: block;
@@ -39,5 +40,5 @@
 .Bodega-User-Info {
   margin-top: 50px;
   margin-bottom: 50px;
-  margin-left: 200px;
+  margin-left: 300px;
 }

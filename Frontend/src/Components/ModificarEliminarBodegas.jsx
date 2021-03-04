@@ -38,6 +38,7 @@ const ModificarEliminarBodegas = (props) => {
     CantProductos: '',
   });
   const [product, setProduct] = useState('');
+  const [productdelete, setProductDelete] = useState([]);
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
 
   const [form, setForm] = useState({
@@ -56,9 +57,18 @@ const ModificarEliminarBodegas = (props) => {
     form.cantPasillos = 0;
   };
   const fetchProducts = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
+  };
+  const fecthDataProductos = async (BodSelect) => {
+    const bodega1 = Seleccionado;
+    await axios
+      .get(`http://Localhost:3001/api/bodegas/filter/Bodega ${BodSelect}`)
+      .then((response) => {
+        setProductDelete(response.data);
+        // alert(dataproductos[0]);
+      });
   };
 
   function handleInvalidSubmit(event, errors, values) {
@@ -70,7 +80,7 @@ const ModificarEliminarBodegas = (props) => {
     const payload = { value: Seleccionado._id, name: values.numBodega };
     fetchProducts();
     axios
-      .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
+      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -99,7 +109,7 @@ const ModificarEliminarBodegas = (props) => {
             ) {
               product[i].bodega[0] = payload;
               axios
-                .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, {
+                .put(`http://Localhost:3001/api/productos/${product[i]._id}`, {
                   nombre: product[i].nombre,
                   area: product[i].area,
                   codigos: product[i].codigos,
@@ -143,7 +153,7 @@ const ModificarEliminarBodegas = (props) => {
   };
 
   const fecthData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
       setData(response.data);
     });
   };
@@ -158,31 +168,15 @@ const ModificarEliminarBodegas = (props) => {
   }, [data, product]);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://Localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const eliminar = (bodega) => {
-    // if (i.CantProductos === '0') {
-    //   setData(data.filter((elemento) => elemento._id !== i));
-    //   onDelete(i._id);
-    //   Confirm.open({
-    //     title: '!exito!',
-    //     message: 'bodega Eliminada correctamente',
-    //     onok: () => {},
-    //   });
-    //   setTimeout(() => {
-    //     window.location.reload();
-    //   }, 2000);
-    // } else {
-    //   Confirm.open({
-    //     title: 'error',
-    //     message: 'La bodega no debe contener productos para poder eliminarla',
-    //     onok: () => {},
-    //   });
-    // }
+    fecthDataProductos(bodega.numBodega);
+    // onDelete(bodega._id);
     let booleano = 0;
-    for (let i = 0; i < product.length; i++) {
-      if (product[i].bodega[0].value === bodega._id) {
+    for (let i = 0; i < productdelete.length; i++) {
+      if (productdelete[i].bodega[0].value === bodega._id) {
         booleano = 1;
         fecthData();
         Confirm.open({
@@ -208,10 +202,6 @@ const ModificarEliminarBodegas = (props) => {
     setModalModificarBodega(true);
   };
 
-  const recargar = () => {
-    window.location.reload(false);
-  };
-
   return (
     <div>
       <Modal
@@ -227,14 +217,22 @@ const ModificarEliminarBodegas = (props) => {
         <ModalBody>
           <div>
             <Table
-              responsive
+              responsive="sm"
               striped
-              bordered
               hover
               align="center"
               size="sm"
               id="myTable"
-              style={{ width: '500px' }}
+              style={{
+                'border-collapse': 'separate',
+                border: 'solid #ccc 2px',
+                '-moz-border-radius': '26px',
+                '-webkit-border-radius': '26px',
+                'border-radius': '26px',
+                '-webkit-box-shadow': '0 1px 1px #ccc',
+                '-moz-box-shadow': '0 1px 1px #ccc',
+                'box-shadow': '0 1px 1px #ccc',
+              }}
             >
               <thead>
                 <tr>
@@ -275,7 +273,7 @@ const ModificarEliminarBodegas = (props) => {
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-danger" onClick={() => recargar()}>
+          <button className="btn btn-danger" onClick={() => props.change()}>
             CANCELAR
           </button>
         </ModalFooter>

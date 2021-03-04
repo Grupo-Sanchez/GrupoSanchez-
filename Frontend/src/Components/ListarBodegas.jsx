@@ -64,7 +64,7 @@ const ListarBodegas = (props) => {
   });
 
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://Localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
@@ -120,26 +120,30 @@ const ListarBodegas = (props) => {
   });
 
   const fecthData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
       setData(response.data);
       // alert(data[0]);
     });
   };
-  const fecthDataProductos = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
-      setDataproductos(response.data);
-      // alert(dataproductos[0]);
-    });
+  const fecthDataProductos = async (BodSelect) => {
+    const bodega1 = Seleccionado;
+    await axios
+      .get(`http://Localhost:3001/api/bodegas/filter/Bodega ${BodSelect}`)
+      .then((response) => {
+        setDataproductos(response.data);
+        // alert(dataproductos[0]);
+      });
   };
-  useEffect(() => {
-    fecthData();
-    fecthDataProductos();
-  }, []);
 
   useEffect(() => {
     fecthData();
-    fecthDataProductos();
-  }, [dataproductos, data]);
+  }, []);
+
+  // useEffect(() => {
+  //   fecthData();
+  //   fecthDataProductos();
+  // }, [dataproductos, data]);
+
   function handleInvalidSubmit(event, errors, values) {
     console.log('invalid submit', { event, errors, values });
   }
@@ -153,7 +157,7 @@ const ListarBodegas = (props) => {
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
     axios
-      .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
+      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -188,10 +192,11 @@ const ListarBodegas = (props) => {
   }
 
   const llenar = (i) => {
-    setSeleccionado(i); //Bodega seleccionada
+    setSeleccionado(i.numBodega); //Bodega seleccionada
     setAbrir(true); //abrir el modal de los productos de la bodega seleccionada
     props.change();
     setBodega(i.numBodega); //Numero de bodega seleccionada
+    fecthDataProductos(i.numBodega);
   };
 
   const migrarBodega = () => {
@@ -209,7 +214,7 @@ const ListarBodegas = (props) => {
       if (dataproductos[i].bodega[0].value === Id) {
         dataproductos[i].bodega[0] = payload;
         axios
-          .put(`http://178.128.67.247:3001/api/productos/${dataproductos[i]._id}`, {
+          .put(`http://Localhost:3001/api/productos/${dataproductos[i]._id}`, {
             nombre: dataproductos[i].nombre,
             area: dataproductos[i].area,
             codigos: dataproductos[i].codigos,
@@ -256,11 +261,13 @@ const ListarBodegas = (props) => {
           </div>
         </ModalHeader>
         <ModalBody>
-          <div>
+          {console.log('DATA')}
+          {console.log(data)}
+          {console.log('DATA FIN')}
+          <div className="row ml-3 ">
             {data.map((Bodegas) => {
-              console.log(Bodegas);
               return (
-                <div onClick={() => llenar(Bodegas)}>
+                <div className="row mr-3 mt-3" onClick={() => llenar(Bodegas)}>
                   <CardBodega
                     numBodega={Bodegas.numBodega}
                     Description={Bodegas.descripcion}
@@ -296,18 +303,25 @@ const ListarBodegas = (props) => {
         <ModalBody>
           <div>
             <Table
-              responsive
+              responsive="sm"
               striped
-              bordered
               hover
               align="center"
               size="sm"
               id="myTable"
-              style={{ width: '500px' }}
+              style={{
+                'border-collapse': 'separate',
+                border: 'solid #ccc 2px',
+                '-moz-border-radius': '26px',
+                '-webkit-border-radius': '26px',
+                'border-radius': '26px',
+                '-webkit-box-shadow': '0 1px 1px #ccc',
+                '-moz-box-shadow': '0 1px 1px #ccc',
+                'box-shadow': '0 1px 1px #ccc',
+              }}
             >
               <thead>
                 <tr>
-                  <th>#</th>
                   <th>Nombre</th>
                   <th>Area</th>
                   <th>Ubicación</th>
@@ -320,7 +334,7 @@ const ListarBodegas = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {dataproductos
+                {/* {dataproductos
                   .filter((dataPro) => dataPro.bodega[0].name.includes(bodega))
                   .map((elemento, index) => (
                     <tr>
@@ -351,7 +365,36 @@ const ListarBodegas = (props) => {
                         </Button>
                       </td>
                     </tr>
-                  ))}
+                  ))} */}
+                {dataproductos.map((elemento, index) => (
+                  <tr>
+                    <td>{elemento.nombre}</td>
+                    <td>{elemento.area}</td>
+                    <td>{elemento.ubicacion}</td>
+                    <td>{elemento.marca[0].name}</td>
+                    <td>{elemento.cantidad_minima}</td>
+                    <td>
+                      <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
+                        Ver
+                      </Button>
+                    </td>
+                    <td>
+                      <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
+                        Ver
+                      </Button>
+                    </td>
+                    <td>
+                      <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
+                        Ver
+                      </Button>
+                    </td>
+                    <td>
+                      <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
+                        Ver
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>
@@ -629,41 +672,6 @@ const ListarBodegas = (props) => {
         <ModalFooter>
           <button className="btn btn-primary" onClick={() => setModalVerPrecios(false)}>
             OK
-          </button>
-        </ModalFooter>
-      </Modal>
-      {/* Modal para seleccionar a bodega que se migraran productos */}
-      <Modal
-        isOpen={modalmigrar}
-        className="text-center"
-        style={{ maxWidth: '1700px', width: '60%' }}
-      >
-        <ModalHeader>
-          <div>
-            <h3>ELIJA BODEGA A DONDE MIGRAR PRODUCTOS </h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div>
-            {data.map((Bodegass) => {
-              console.log(Bodegass);
-              return (
-                <div onClick={() => seleccionarAMigrar(Bodegass)}>
-                  <CardBodega
-                    numBodega={Bodegass.numBodega}
-                    Description={Bodegass.descripcion}
-                    Encargado={Bodegass.encargado}
-                    CantPasillos={Bodegass.cantPasillos}
-                  />
-                  <span>‎ ‏‏‎</span>
-                </div>
-              );
-            })}
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-danger" onClick={props.change}>
-            CANCELAR
           </button>
         </ModalFooter>
       </Modal>

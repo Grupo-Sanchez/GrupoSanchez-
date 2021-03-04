@@ -286,7 +286,7 @@
                             cantidad_minima: L.cantidad_minima,
                           }),
                           (e.next = 3),
-                          D.a.post('http://178.128.67.247:3001/api/productos', t)
+                          D.a.post('http://Localhost:3001/api/productos', t)
                         );
                       case 3:
                         (c = e.sent), console.log(c), alert('\xa1Producto Agregado!');
@@ -834,7 +834,7 @@
                       case 0:
                         return (
                           (e.next = 2),
-                          D.a.get('http://178.128.67.247:3001/api/productos').then(function (e) {
+                          D.a.get('http://Localhost:3001/api/productos').then(function (e) {
                             $(e.data);
                           })
                         );
@@ -858,7 +858,7 @@
               }),
             ),
               (t = e),
-              D.a.delete('http://178.128.67.247:3001/api/productos/'.concat(t));
+              D.a.delete('http://Localhost:3001/api/productos/'.concat(t));
           },
           re = Object(n.useState)(''),
           ie = Object(l.a)(re, 2),
@@ -1583,7 +1583,7 @@
                               (e = ce._id),
                               N(!1),
                               void D.a
-                                .put('http://178.128.67.247:3001/api/productos/'.concat(e), {
+                                .put('http://Localhost:3001/api/productos/'.concat(e), {
                                   nombre: document.getElementById('modnombre').value,
                                   area: document.getElementById('modarea').value,
                                   codigos: ce.codigos,
@@ -2982,7 +2982,7 @@
                                 email: P,
                               }),
                               (e.next = 3),
-                              D.a.post('http://178.128.67.247:3001/api/clientes', t)
+                              D.a.post('http://Localhost:3001/api/clientes', t)
                             );
                           case 3:
                             (a = e.sent), console.log(a);
@@ -3374,7 +3374,7 @@
                             }
                             return (
                               (t.next = 4),
-                              D.a.delete('http://178.128.67.247:3001/api/clientes/'.concat(c))
+                              D.a.delete('http://Localhost:3001/api/clientes/'.concat(c))
                             );
                           case 4:
                             e.props.deleteItemFromState(c);
@@ -3474,7 +3474,7 @@
                     for (;;)
                       switch ((t.prev = t.next)) {
                         case 0:
-                          return (t.next = 2), D.a.get('http://178.128.67.247:3001/api/clientes');
+                          return (t.next = 2), D.a.get('http://Localhost:3001/api/clientes');
                         case 2:
                           (c = t.sent), e.setState({ items: c.data });
                         case 4:
@@ -3640,7 +3640,7 @@
                                 productosDevueltos: a.state.productosDevolucion,
                               }),
                               (e.next = 3),
-                              D.a.post('http://178.128.67.247:3001/api/devoluciones', t)
+                              D.a.post('http://Localhost:3001/api/devoluciones', t)
                             );
                           case 3:
                             window.location.reload();
@@ -3674,7 +3674,7 @@
                             return (
                               (e.next = 2),
                               D.a
-                                .get('http://178.128.67.247:3001/api/productos')
+                                .get('http://Localhost:3001/api/productos')
                                 .then(function (e) {
                                   for (var t = e.data, c = [], n = 0; n < t.length; n++) {
                                     var r = t[n];
@@ -3736,7 +3736,7 @@
                               n++, (e.next = 2);
                               break;
                             case 10:
-                              D.a.put('http://178.128.67.247:3001/api/productos/'.concat(t), {
+                              D.a.put('http://Localhost:3001/api/productos/'.concat(t), {
                                 cantidad: c,
                               });
                             case 11:
@@ -3775,7 +3775,7 @@
                               r++, (e.next = 5);
                               break;
                             case 13:
-                              D.a.put('http://178.128.67.247:3001/api/productos/'.concat(t), {
+                              D.a.put('http://Localhost:3001/api/productos/'.concat(t), {
                                 cantidad: n,
                               }),
                                 (o = a.state.productosDevolucion.filter(function (e) {
@@ -4277,7 +4277,7 @@
                           return (
                             (e.next = 2),
                             D.a
-                              .get('http://178.128.67.247:3001/api/productos')
+                              .get('http://Localhost:3001/api/productos')
                               .then(function (e) {
                                 for (var t = e.data, c = [], n = 0; n < t.length; n++) {
                                   var r = t[n];
@@ -4349,7 +4349,7 @@
                               productosSeleccionado: a.state.productosSeleccionado,
                             }),
                             (e.next = 4),
-                            D.a.post('http://178.128.67.247:3001/api/facturas', t)
+                            D.a.post('http://Localhost:3001/api/facturas', t)
                           );
                         case 4:
                           window.location.reload();
@@ -4387,7 +4387,7 @@
                             n++, (e.next = 2);
                             break;
                           case 10:
-                            D.a.put('http://178.128.67.247:3001/api/productos/'.concat(t), {
+                            D.a.put('http://Localhost:3001/api/productos/'.concat(t), {
                               cantidad: c,
                             });
                           case 11:
@@ -4426,7 +4426,7 @@
                             r++, (e.next = 4);
                             break;
                           case 12:
-                            D.a.put('http://178.128.67.247:3001/api/productos/'.concat(t), {
+                            D.a.put('http://Localhost:3001/api/productos/'.concat(t), {
                               cantidad: n,
                             }),
                               (o = a.state.productosSeleccionado.filter(function (e) {
@@ -4760,7 +4760,7 @@
                             return (
                               (e.next = 2),
                               D.a
-                                .get('http://178.128.67.247:3001/api/productos')
+                                .get('http://Localhost:3001/api/productos')
                                 .then(function (e) {
                                   for (var t = e.data, c = [], n = 0; n < t.length; n++) {
                                     var r = t[n];
@@ -4809,7 +4809,7 @@
                                 productosSeleccionado: a.state.productosSeleccionado,
                               }),
                               (e.next = 3),
-                              D.a.post('http://178.128.67.247:3001/api/facturas', t)
+                              D.a.post('http://Localhost:3001/api/facturas', t)
                             );
                           case 3:
                             window.location.reload();
@@ -4848,7 +4848,7 @@
                               n++, (e.next = 2);
                               break;
                             case 10:
-                              D.a.put('http://178.128.67.247:3001/api/productos/'.concat(t), {
+                              D.a.put('http://Localhost:3001/api/productos/'.concat(t), {
                                 cantidad: c,
                               });
                             case 11:
@@ -4887,7 +4887,7 @@
                               r++, (e.next = 4);
                               break;
                             case 12:
-                              D.a.put('http://178.128.67.247:3001/api/productos/'.concat(t), {
+                              D.a.put('http://Localhost:3001/api/productos/'.concat(t), {
                                 cantidad: n,
                               }),
                                 (o = a.state.productosSeleccionado.filter(function (e) {
