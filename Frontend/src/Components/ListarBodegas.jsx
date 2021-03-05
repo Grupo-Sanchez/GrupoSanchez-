@@ -136,13 +136,13 @@ const ListarBodegas = (props) => {
     fecthDataProductos();
   }, []);
 
-  useEffect(() => {
-    fecthData();
-    fecthDataProductos();
-  }, [dataproductos, data]);
-  function handleInvalidSubmit(event, errors, values) {
-    console.log('invalid submit', { event, errors, values });
-  }
+  // useEffect(() => {
+  //   fecthData();
+  //   fecthDataProductos();
+  // }, [dataproductos, data]);
+  // function handleInvalidSubmit(event, errors, values) {
+  //   console.log('invalid submit', { event, errors, values });
+  // }
 
   const handleChange = (e) => {
     setForm({
@@ -200,47 +200,47 @@ const ListarBodegas = (props) => {
   };
 
   const seleccionarAMigrar = (bodegaMigrar) => {
-    setModalmigrar(false); //cierro modal donde selecciono donde iran los productos
-    setSeleccionMigrar(bodegaMigrar._id); //Nueva bodega de los productos
-    const Id = Seleccionado._id;
-    const payload = { value: bodegaMigrar._id, name: bodegaMigrar.numBodega };
+    // setModalmigrar(false); //cierro modal donde selecciono donde iran los productos
+    // setSeleccionMigrar(bodegaMigrar._id); //Nueva bodega de los productos
+    // const Id = Seleccionado._id;
+    // const payload = { value: bodegaMigrar._id, name: bodegaMigrar.numBodega };
     //hacer migracion
-    for (let i = 0; i < dataproductos.length; i++) {
-      if (dataproductos[i].bodega[0].value === Id) {
-        dataproductos[i].bodega[0] = payload;
-        axios
-          .put(`http://178.128.67.247:3001/api/productos/${dataproductos[i]._id}`, {
-            nombre: dataproductos[i].nombre,
-            area: dataproductos[i].area,
-            codigos: dataproductos[i].codigos,
-            proveedores: dataproductos[i].proveedores,
-            ubicacion: dataproductos[i].ubicacion,
-            marca: dataproductos[i].marca,
-            bodega: payload,
-            precios: dataproductos[i].precios,
-            cantidad: dataproductos[i].cantidad,
-            descripcion_corta: dataproductos[i].descripcion_corta,
-            descripcion_larga: dataproductos[i].descripcion_larga,
-            cantidad_minima: dataproductos[i].cantidad_minima,
-            fecha_creacion: dataproductos[i].fecha_creacion,
-          })
-          .then((response) => {
-            console.log(response);
-            Confirm.open({
-              title: '!exito!',
-              message: 'Migracion de datos exitosamente',
-              onok: () => {},
-            });
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
-    }
-    setModalModificarBodega(false);
+    // for (let i = 0; i < dataproductos.length; i++) {
+    //   if (dataproductos[i].bodega[0].value === Id) {
+    //     dataproductos[i].bodega[0] = payload;
+    //     axios
+    //       .put(`http://178.128.67.247:3001/api/productos/${dataproductos[i]._id}`, {
+    //         nombre: dataproductos[i].nombre,
+    //         area: dataproductos[i].area,
+    //         codigos: dataproductos[i].codigos,
+    //         proveedores: dataproductos[i].proveedores,
+    //         ubicacion: dataproductos[i].ubicacion,
+    //         marca: dataproductos[i].marca,
+    //         bodega: payload,
+    //         precios: dataproductos[i].precios,
+    //         cantidad: dataproductos[i].cantidad,
+    //         descripcion_corta: dataproductos[i].descripcion_corta,
+    //         descripcion_larga: dataproductos[i].descripcion_larga,
+    //         cantidad_minima: dataproductos[i].cantidad_minima,
+    //         fecha_creacion: dataproductos[i].fecha_creacion,
+    //       })
+    //       .then((response) => {
+    //         console.log(response);
+    //         Confirm.open({
+    //           title: '!exito!',
+    //           message: 'Migracion de datos exitosamente',
+    //           onok: () => {},
+    //         });
+    //         setTimeout(() => {
+    //           window.location.reload();
+    //         }, 2000);
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       });
+    //   }
+    // }
+    // setModalModificarBodega(false);
   };
 
   return (
@@ -256,11 +256,11 @@ const ListarBodegas = (props) => {
           </div>
         </ModalHeader>
         <ModalBody>
-          <div>
+          <div className="row ml-3 justify-content-between ">
             {data.map((Bodegas) => {
               console.log(Bodegas);
               return (
-                <div onClick={() => llenar(Bodegas)}>
+                <div className="row mr-3 mt-3" onClick={() => llenar(Bodegas)}>
                   <CardBodega
                     numBodega={Bodegas.numBodega}
                     Description={Bodegas.descripcion}
@@ -298,60 +298,45 @@ const ListarBodegas = (props) => {
             <Table
               responsive
               striped
-              bordered
               hover
               align="center"
               size="sm"
               id="myTable"
-              style={{ width: '500px' }}
+              style={{
+                width: '1200px',
+                'border-collapse': 'separate',
+                border: 'solid #ccc 2px',
+                '-moz-border-radius': '26px',
+                '-webkit-border-radius': '26px',
+                'border-radius': '26px',
+                '-webkit-box-shadow': '0 1px 1px #ccc',
+                '-moz-box-shadow': '0 1px 1px #ccc',
+                'box-shadow': '0 1px 1px #ccc',
+              }}
             >
               <thead>
-                <tr>
+                <tr style={{ textAlign: 'center' }}>
                   <th>#</th>
-                  <th>Nombre</th>
-                  <th>Area</th>
-                  <th>Ubicación</th>
+                  <th>Código de Barra</th>
+                  <th>Codigo Principal</th>
+                  <th style={{ width: '300px' }}>Descripcion</th>
                   <th>Marca</th>
-                  <th>Cantidad Mínima</th>
-                  <th>Códigos</th>
-                  <th>Proveedores </th>
-                  <th>Descripciones </th>
-                  <th>Precios</th>
+                  <th>Inventario</th>
+                  <th>Precio</th>
                 </tr>
               </thead>
               <tbody>
-                {dataproductos
-                  .filter((dataPro) => dataPro.bodega[0].name.includes(bodega))
-                  .map((elemento, index) => (
-                    <tr>
-                      <td>{(index += 1)}</td>
-                      <td>{elemento.nombre}</td>
-                      <td>{elemento.area}</td>
-                      <td>{elemento.ubicacion}</td>
-                      <td>{elemento.marca[0].name}</td>
-                      <td>{elemento.cantidad_minima}</td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                {dataproductos.map((elemento, index) => (
+                  <tr>
+                    <td>{(index += 1)}</td>
+                    <td>{`${elemento.codigoBarra}`}</td>
+                    <td>{elemento.codigoPrincipal}</td>
+                    <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
+                    <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
+                    <td>{elemento.cantidad}</td>
+                    <td>{elemento.precios[0]}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>
@@ -633,40 +618,6 @@ const ListarBodegas = (props) => {
         </ModalFooter>
       </Modal>
       {/* Modal para seleccionar a bodega que se migraran productos */}
-      <Modal
-        isOpen={modalmigrar}
-        className="text-center"
-        style={{ maxWidth: '1700px', width: '60%' }}
-      >
-        <ModalHeader>
-          <div>
-            <h3>ELIJA BODEGA A DONDE MIGRAR PRODUCTOS </h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div>
-            {data.map((Bodegass) => {
-              console.log(Bodegass);
-              return (
-                <div onClick={() => seleccionarAMigrar(Bodegass)}>
-                  <CardBodega
-                    numBodega={Bodegass.numBodega}
-                    Description={Bodegass.descripcion}
-                    Encargado={Bodegass.encargado}
-                    CantPasillos={Bodegass.cantPasillos}
-                  />
-                  <span>‎ ‏‏‎</span>
-                </div>
-              );
-            })}
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-danger" onClick={props.change}>
-            CANCELAR
-          </button>
-        </ModalFooter>
-      </Modal>
     </div>
   );
 };
