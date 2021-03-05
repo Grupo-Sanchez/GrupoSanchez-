@@ -316,7 +316,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     fecthProductos();
     seleccionado.descripcion = '';
@@ -526,7 +526,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.proveedores = tagsProveedores;
@@ -607,7 +607,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -632,7 +632,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -670,7 +670,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -712,14 +712,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -776,21 +776,21 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-            onok: () => {},
+            onok: () => { },
           });
         }
       } else {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'El codigo principal esta repetido.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -807,7 +807,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -877,7 +877,7 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -918,7 +918,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -987,7 +987,7 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -1046,7 +1046,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1069,7 +1069,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1374,8 +1374,8 @@ export default function AgregarProducto(props) {
               </Row>
               <br />
               <Row>
-                <h style={{ marginLeft: '50px' }}>Descripción </h>
-                <Col style={{ marginLeft: '25px' }}>
+                <h style={{ marginLeft: '0px' }}>escripción </h>
+                <Col style={{ marginLeft: '5px' }}>
                   <AvForm>
                     <AvField
                       style={paddingAvInput()}
@@ -1411,7 +1411,7 @@ export default function AgregarProducto(props) {
                     </AvForm>
                   </Row>
                   <Row>
-                    <h style={{ marginLeft: '-115px' }}>Código de Barra</h>
+                    <h style={{ marginLeft: '-120px' }}>Código de Barra</h>
                     <Col>
                       <input
                         style={paddingInput()}
@@ -1492,8 +1492,8 @@ export default function AgregarProducto(props) {
             </ModalFooter>
           </Modal>
           <AvForm>
-            <Row style={{ marginRight: '200px' }}>
-              <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripcion</h>
+            <Row style={{ marginLeft: '-105px' }}>
+              <h style={{ marginRight: '50px', paddingRight: '50px' }}>Descripcion</h>
               <Col sm={{ size: 'auto' }}>
                 <AvField
                   style={paddingAvInput()}
@@ -1511,9 +1511,9 @@ export default function AgregarProducto(props) {
                   value={seleccionado ? seleccionado.descripcion : ''}
                   onChange={(e) => manejarCambio(e)}
                 />
-                <Row>
-                  <h style={{ paddingRight: '-25px', marginLeft: '-150px' }}>Codigo Principal</h>
-                  <Col style={{ paddingRight: '-25px', marginLeft: '30px' }}>
+                <Row style={{ marginLeft: '-75px' }}>
+                  <h style={{ paddingRight: '65px', marginLeft: '-120px' }}>Codigo Principal</h>
+                  <Col sm={{ size: 'auto' }}>
                     <AvField
                       style={paddingAvInput()}
                       className="form-control"
@@ -1533,8 +1533,8 @@ export default function AgregarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <h style={{ 'margin-left': '5px' }}>Descripción especifica</h>
-              <Col sm={{ size: 5 }}>
+              <label style={{ 'margin-left': '170px' }}>Descripción<br />especifica  </label>
+              <Col style={{ 'margin-left': '35px' }}>
                 <FormGroup>
                   <AvField
                     style={paddingDescripciones()}
@@ -1614,9 +1614,9 @@ export default function AgregarProducto(props) {
                 </AvForm>
               </Row>
               <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
-                <h style={{ marginLeft: '-50px' }}>Marca</h>
+                <h style={{ marginLeft: '-120px' }}>Marca</h>
                 <Col sm={{ size: 'auto' }}>
-                  <div style={{ marginLeft: '-15px' }}>
+                  <div style={{ marginLeft: '55px' }}>
                     <SelectSearch
                       printOptions="on-focus"
                       search
@@ -1629,10 +1629,10 @@ export default function AgregarProducto(props) {
                     />
                   </div>
                   <br />
-                  <label style={{ 'margin-left': '15px', paddingTop: '-10px' }}># Pasillo</label>
+                  <label style={{ 'margin-left': '15px', paddingTop: '-10px', fontSize: '25px' }}># Pasillo</label>
                   <Row>
                     <h style={{ 'margin-left': '-45px' }}>Bodega</h>
-                    <Col sm={{ size: 'auto' }} style={{ 'margin-left': '-25px' }}>
+                    <Col sm={{ size: 'auto' }} style={{ 'margin-left': '45px' }}>
                       <SelectSearch
                         class="selectsearch2"
                         printOptions="on-focus"
@@ -1703,7 +1703,7 @@ export default function AgregarProducto(props) {
                   <br />
                   <Row style={{ marginLeft: '-60px' }}>
                     <h>Inventario</h>
-                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '50px', top: '-20px' }}>
+                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '85px', top: '-20px' }}>
                       <h style={{ 'margin-left': '5px' }}>Cantidad</h>
                       <input
                         style={paddingAvInputCantidades()}
@@ -1734,9 +1734,9 @@ export default function AgregarProducto(props) {
                     </Col>
                   </Row>
                   <Row>
-                    <h style={{ marginLeft: '-90px' }}>Codigo de Barra</h>
+                    <h style={{ marginLeft: '-50px' }}>Codigo de Barra</h>
                     <AvForm>
-                      <Col style={{ paddingRight: '-25px', marginLeft: '40px' }}>
+                      <Col style={{ paddingRight: '-25px', marginLeft: '85px' }}>
                         <AvField
                           style={paddingAvInput()}
                           className="form-control"
@@ -1764,8 +1764,8 @@ export default function AgregarProducto(props) {
                 </Col>
               </Row>
             </Col>
-            <h style={{ marginLeft: '-5px' }}>Área</h>
-            <Col>
+            <label style={{ 'margin-left': '85px' }}>Área</label>
+            <Col style={{ 'margin-left': '60px' }}>
               <AvForm>
                 <AvField
                   style={{
@@ -1777,7 +1777,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="area"
                   id="area"
-                  errorMessage="Campo Obligatorio"
+                  errorMessage=" "
                   validate={{
                     required: { value: true },
                     pattern: { value: regex },
@@ -1787,7 +1787,7 @@ export default function AgregarProducto(props) {
                   onChange={(e) => manejarCambio(e)}
                 />
               </AvForm>
-              <Row style={{ marginLeft: '-110px' }}>
+              <Row style={{ marginLeft: '-110px', top: '30px', position: 'relative' }}>
                 <label style={{ marginTop: '25px' }}>Proveedor</label>
                 <SelectSearch
                   search
@@ -1856,11 +1856,11 @@ export default function AgregarProducto(props) {
                   }}
                 >
                   <Row>
-                    <label style={{ 'margin-left': '40px', marginTop: '-20px' }}>
+                    <label style={{ 'margin-left': '-5px', marginTop: '-20px' }}>
                       Precios de
                       <br /> Venta
                     </label>
-                    <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
+                    <Col sm={{ size: 'auto' }} style={{ 'margin-left': '35px', top: '-30px' }}>
                       <div>
                         <h style={{ paddingRight: '-300px' }}>Precio 1</h>
                         <AvField
