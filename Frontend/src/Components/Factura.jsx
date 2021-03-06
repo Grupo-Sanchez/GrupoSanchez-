@@ -1,5 +1,17 @@
 import React, { Component, useState, useEffect } from 'react';
-import { Button, Table, Row, Col, Label, FormGroup } from 'reactstrap';
+import {
+  Button,
+  Table,
+  Row,
+  Col,
+  Label,
+  FormGroup,
+  Input,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from 'reactstrap';
 import axios from 'axios';
 import {
   AvForm,
@@ -17,6 +29,8 @@ import '../Styles/SearchBarVendedor.css';
 import { ReactComponent as Plus } from '../Icons/plus.svg';
 import { ReactComponent as Delete } from '../Icons/delete.svg';
 import { ReactComponent as SegundoPrecio } from '../Icons/SegundoPrecio.svg';
+import { Confirm } from './Confirm';
+import FacturaImprimir from './FacturaImprimir.jsx';
 
 const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
 export default function Facturas() {
@@ -43,8 +57,18 @@ export default function Facturas() {
       exento: false,
     },
   ]);
+  const [bodegasProductoSeleccionado, setbodegasProductoSeleccionado] = useState([]);
+  const [valueBodegaProducto, setvalueBodegaProducto] = useState([]);
+  const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
+  const [recibo, setrecibo] = useState([]);
   const [productoSeleccionado, setproductoSeleccionado] = useState([]);
   const [productosAfacturar, setproductosAfacturar] = useState([]);
+  const [facturas, setfacturas] = useState([]);
+  const fecthFacturas = () => {
+    axios.get('http://localhost:3001/api/facturas').then((response) => {
+      setfacturas(response.data);
+    });
+  };
   const getProductos = async () => {
     await axios
       .get('http://localhost:3001/api/productos')
@@ -62,6 +86,7 @@ export default function Facturas() {
               proveedores: element.proveedores,
               precios: element.precios,
               area: element.area,
+              bodega: element.bodega,
               marca: element.marca,
               _v: element._v,
               cantidad: element.cantidad,
@@ -83,6 +108,7 @@ export default function Facturas() {
   const [totalfinal, setTotalFinal] = useState(0);
   const addRow = (producto) => {
     result += producto.precioSumado;
+    let cantidadEnBodega = 0;
     if (productoSeleccionado.exento) {
       impuesto += 0;
     } else {
@@ -108,14 +134,16 @@ export default function Facturas() {
           precioUnitario: item.precios[0],
           precioSumado: 0,
           exento: item.exento,
+          bodega: item.bodega,
         });
-        setCantidadmax(item.cantidad);
+        setbodegasProductoSeleccionado(item.bodega);
       }
       return 0;
     });
   };
   useEffect(() => {
     getProductos();
+    fecthFacturas();
   }, []);
 
   const handleChange = (e) => {
@@ -123,29 +151,74 @@ export default function Facturas() {
     b(e);
     setquantity(1);
   };
-
-  const handleValidSubmit = async () => {
-    const campos = {
-      subtotal: sumatotal,
-      impuesto: impuestototal,
-      total: totalfinal,
-      productosAfacturar: productosAfacturar,
-      nombreCliente: nombre,
-      rtn: rtn,
-    };
-    // await axios.post('http://localhost:3001/api/facturas', campos);
-    setproductosAfacturar([]);
-    setresult(0);
+  let idBodega;
+  const handleChangeBodega = (e) => {
     setindice(1);
-    setimpuesto(0);
-    settotal(0);
-    setImpuestoTotal(0);
-    setSumaTotal(0);
-    setTotalFinal(0);
-    setnombre('');
-    setrtn('');
     setquantity(1);
-    setproductoSeleccionado({});
+    bodegasProductoSeleccionado.filter((item) => {
+      if (item.value === e) {
+        idBodega = e;
+        setCantidadmax(item.cantBodega);
+      }
+      return 0;
+    });
+  };
+  let campos = {};
+  const handleValidSubmit = async () => {
+    if (rtn.length !== 14 && rtn !== '') {
+      Confirm.open({
+        title: 'Error',
+        message: 'Campo de RTN invalido',
+        onok: () => {},
+      });
+    } else {
+      if (productosAfacturar.length !== 0) {
+        let nombretemp = nombre;
+        let rtntemp = rtn;
+        if (nombre === '') {
+          nombretemp = '----------';
+        }
+        if (rtn === '') {
+          rtntemp = '----------';
+        }
+        //let numeroFactura = invNum.next('10000000');
+        //alert(numeroFactura);
+        campos = {
+          subtotal: sumatotal,
+          impuesto: impuestototal,
+          total: totalfinal,
+          productosSeleccionado: productosAfacturar,
+          nombreCliente: nombretemp,
+          identificacion: rtntemp,
+          invoiceNumber: Number(facturas[facturas.length - 1].invoiceNumber) + 1,
+          fecha: new Date(),
+        };
+        alert('INVOICE');
+        alert(campos.invoiceNumber);
+        setrecibo(campos);
+        //await axios.post('http://localhost:3001/api/facturas', campos);
+        fecthFacturas();
+        setModalModificarPrecios(true);
+      } else {
+        Confirm.open({
+          title: 'Error',
+          message: 'Debe tener productos seleccionados para poder facturar',
+          onok: () => {},
+        });
+      }
+      setproductosAfacturar([]);
+      setresult(0);
+      setindice(1);
+      setimpuesto(0);
+      settotal(0);
+      setImpuestoTotal(0);
+      setSumaTotal(0);
+      setTotalFinal(0);
+      setnombre('');
+      setrtn('');
+      setquantity(1);
+      setproductoSeleccionado({});
+    }
   };
   function paddingAvInput() {
     return {
@@ -171,7 +244,11 @@ export default function Facturas() {
           if (element.codigoPrincipal === element2.codigoPrincipal) {
             if (element.precioUnitario !== element2.precios[1]) {
               result -= (element.precioUnitario - element2.precios[1]) * element.cantidad;
-              impuesto += Number(result * 0.15);
+              if (element2.exento) {
+                impuesto += 0;
+              } else {
+                impuesto += Number(result * 0.15);
+              }
               total += result + impuesto;
               setSumaTotal(result + sumatotal);
               setImpuestoTotal(impuesto + impuestototal);
@@ -204,6 +281,30 @@ export default function Facturas() {
     await getProductos();
   };
 
+  function styleButtonSegundoPrecio() {
+    return {
+      'background-color': 'transparent',
+      border: 'none',
+      position: 'absolute',
+      top: '35px',
+      marginLeft: '-40px',
+      'font-size': '18px',
+      'border-radius': '26px',
+      'box-shadow': 'none',
+    };
+  }
+  function styleButtonEliminar() {
+    return {
+      'background-color': 'transparent',
+      border: 'none',
+      position: 'absolute',
+      top: '35px',
+      marginLeft: '-15px',
+      'font-size': '18px',
+      'border-radius': '26px',
+      'box-shadow': 'none',
+    };
+  }
   const eliminarProducto = async (i, cantidad) => {
     getProductos();
     let cantidad2 = 0;
@@ -213,30 +314,6 @@ export default function Facturas() {
         cantidad2 = Number(element.cantidad) + Number(cantidad);
         break;
       }
-    }
-    function styleButtonSegundoPrecio() {
-      return {
-        'background-color': 'transparent',
-        border: 'none',
-        position: 'absolute',
-        top: '35px',
-        marginLeft: '-40px',
-        'font-size': '18px',
-        'border-radius': '26px',
-        'box-shadow': 'none',
-      };
-    }
-    function styleButtonEliminar() {
-      return {
-        'background-color': 'transparent',
-        border: 'none',
-        position: 'absolute',
-        top: '35px',
-        marginLeft: '-15px',
-        'font-size': '18px',
-        'border-radius': '26px',
-        'box-shadow': 'none',
-      };
     }
     const items = productosAfacturar.filter((item) => item.value !== i);
     setproductosAfacturar(items);
@@ -248,7 +325,24 @@ export default function Facturas() {
     setSumaTotal(0);
     setTotalFinal(0);
     setproductoSeleccionado([]);
+    result = 0;
+    total = 0;
+    impuesto = 0;
     setCantidadmax(1);
+    for (let index = 0; index < items.length; index++) {
+      const element = items[index];
+      result += element.precioUnitario * element.cantidad;
+      if (element.exento) {
+        impuesto += 0;
+      } else {
+        impuesto += Number(result * 0.15);
+      }
+      total += result + impuesto;
+    }
+    setSumaTotal(result);
+    setImpuestoTotal(impuesto);
+    setTotalFinal(total);
+    setproductosAfacturar(items);
     getProductos();
   };
   const handleChangeNombe = (event) => {
@@ -258,14 +352,49 @@ export default function Facturas() {
     setrtn(event.target.value);
   };
   const agregarProductoaTabla = async () => {
-    addRow({
-      name: productoSeleccionado.name,
-      value: productoSeleccionado.value,
-      codigoPrincipal: productoSeleccionado.codigoPrincipal,
-      cantidad: quantity,
-      precioUnitario: Number(productoSeleccionado.precioUnitario),
-      precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
-    });
+    let sumar = false;
+    let producto = [];
+    for (let index = 0; index < productosAfacturar.length; index++) {
+      const element = productosAfacturar[index];
+      if (element.codigoPrincipal === productoSeleccionado.codigoPrincipal) {
+        element.cantidad = Number(Number(quantity) + Number(element.cantidad));
+        result -= element.precioSumado;
+        element.precioSumado = Number(element.precioUnitario) * element.cantidad;
+        producto = element;
+        sumar = true;
+        break;
+      }
+    }
+    if (!sumar) {
+      addRow({
+        name: productoSeleccionado.name,
+        value: productoSeleccionado.value,
+        codigoPrincipal: productoSeleccionado.codigoPrincipal,
+        cantidad: quantity,
+        precioUnitario: Number(productoSeleccionado.precioUnitario),
+        precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
+        exento: productoSeleccionado.exento,
+      });
+      productoSeleccionado.bodega.filter((item) => {
+        if (item.value === idBodega) {
+          item.cantBodega -= quantity;
+        }
+        return 0;
+      });
+    } else {
+      result += producto.precioSumado;
+      if (productoSeleccionado.exento) {
+        impuesto += 0;
+      } else {
+        impuesto += Number(result * 0.15);
+      }
+      total += result + impuesto;
+      setSumaTotal(result + sumatotal);
+      setImpuestoTotal(impuesto + impuestototal);
+      setTotalFinal(total + totalfinal);
+      setindice(1);
+      setquantity(1);
+    }
     updateTool(productoSeleccionado.value);
   };
   function limit() {
@@ -286,7 +415,15 @@ export default function Facturas() {
   const manejarCambiocantmin = (e, n) => {};
   const regexSoloNumeros = /^[0-9]+$/;
   return (
-    <div>
+    <div class="hide-on-print">
+      <Modal isOpen={ModalModificarPrecios}>
+        <ModalBody>
+          <FacturaImprimir
+            productos={recibo}
+            change={() => setModalModificarPrecios(!ModalModificarPrecios)}
+          />
+        </ModalBody>
+      </Modal>
       <h1 align="center">FACTURA</h1>
       <br />
       <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
@@ -302,6 +439,15 @@ export default function Facturas() {
                 value={productoSeleccionado.value}
               />
             </div>
+          </Col>
+          <Col>
+            <SelectSearch
+              search
+              placeholder="Seleccione la bodega del Producto"
+              options={bodegasProductoSeleccionado}
+              onChange={(e) => handleChangeBodega(e)}
+              value={valueBodegaProducto}
+            />
           </Col>
           <br />
           <label style={{ marginLeft: '380px', marginTop: '5px' }}>Cantidad</label>
@@ -354,7 +500,7 @@ export default function Facturas() {
       <br />
       <h3 style={{ 'margin-left': '862px' }}>Formulario Cliente</h3>
       <Row>
-        <Col>
+        <Col style={{ marginTop: '-45px' }}>
           <div
             style={{
               maxHeight: '750px',
