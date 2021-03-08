@@ -316,7 +316,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => {},
+      onok: () => { },
     });
     fecthProductos();
     seleccionado.descripcion = '';
@@ -531,7 +531,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.proveedores = tagsProveedores;
@@ -610,7 +610,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -635,7 +635,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -673,7 +673,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
+          onok: () => { },
         });
       } else {
         setModalInsertarPrecio(false);
@@ -719,14 +719,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -783,21 +783,21 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-            onok: () => {},
+            onok: () => { },
           });
         }
       } else {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'El codigo principal esta repetido.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -814,7 +814,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -884,7 +884,7 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -925,7 +925,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -994,7 +994,7 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -1053,7 +1053,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1080,7 +1080,7 @@ export default function AgregarProducto(props) {
         title: 'Error',
         message:
           'Debe seleccionar la bodega, ingresar el pasillo en el que esta el producto y la cantidad correspondiente',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1318,8 +1318,8 @@ export default function AgregarProducto(props) {
           height: '100vh',
           'overflow-y': 'overflow',
           top: '20px',
-          width: '1600px',
-          maxWidth: '1700px',
+          width: '1900px',
+          maxWidth: '1900px',
           'border-radius': '36px',
           'overflow-x': 'hidden',
         }}
@@ -1530,7 +1530,7 @@ export default function AgregarProducto(props) {
                   type="text"
                   name="descripcion"
                   id="descripcion"
-                  errorMessage="Descripcion Inválida"
+                  errorMessage=" "
                   validate={{
                     required: { value: true },
                     pattern: { value: regex },
@@ -1558,7 +1558,7 @@ export default function AgregarProducto(props) {
                       type="text"
                       name="codigoPrincipal"
                       id="codigoPrincipal"
-                      errorMessage="Codigo Inválido"
+                      errorMessage=" "
                       validate={{
                         required: { value: true },
                         pattern: { value: regex },
@@ -1571,12 +1571,12 @@ export default function AgregarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <label style={{ 'margin-left': '170px', fontSize: '23px' }}>
+              <label style={{ 'margin-left': '130px', fontSize: '23px' }}>
                 Descripción
                 <br />
                 especifica{' '}
               </label>
-              <Col style={{ 'margin-left': '25px' }}>
+              <Col style={{ 'margin-left': '65px' }}>
                 <FormGroup>
                   <AvField
                     style={paddingDescripciones()}
@@ -1699,7 +1699,7 @@ export default function AgregarProducto(props) {
                             fontSize: '14px',
                             top: '-22px',
                             position: 'relative',
-                            'margin-left': '12px',
+                            'margin-left': '-80px',
                           }}
                         >
                           Cantidad
@@ -1722,11 +1722,11 @@ export default function AgregarProducto(props) {
                     <Col
                       style={{
                         width: '80px',
-                        'margin-left': '5px',
+                        'margin-left': '-100px',
                       }}
                     >
                       <div>
-                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative' }}>
+                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-90px' }}>
                           # Pasillo
                         </label>
                         <input
@@ -1744,7 +1744,7 @@ export default function AgregarProducto(props) {
                         />
                       </div>
                     </Col>
-                    <Col>
+                    <Col style={{ width: '40px' }}>
                       <Button
                         style={{
                           'font-size': '20px',
@@ -1752,8 +1752,8 @@ export default function AgregarProducto(props) {
                           width: '40px',
                           height: '40px',
                           'line-height': '2px',
-                          'margin-left': '-20px',
                           position: 'relative',
+                          'margin-left': '-350px',
                         }}
                         onClick={() => onChangeBodega()}
                         color="primary"
@@ -1846,14 +1846,16 @@ export default function AgregarProducto(props) {
                 </Col>
               </Row>
             </Col>
-            <label style={{ 'margin-left': '85px', fontSize: '23px' }}>Departamento</label>
+            <Col style={{ 'max-width': '120px' }}>
+              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '120px' }}>Departamento</label>
+            </Col>
             <Col>
               <AvForm>
                 <AvField
                   style={{
                     'border-radius': '26px',
                     width: '320px',
-                    marginLeft: '-5px',
+                    marginLeft: '175px',
                   }}
                   className="form-control"
                   type="text"
@@ -1869,20 +1871,23 @@ export default function AgregarProducto(props) {
                   onChange={(e) => manejarCambio(e)}
                 />
               </AvForm>
-              <Row style={{ marginLeft: '-110px', top: '30px', position: 'relative' }}>
-                <label style={{ marginTop: '25px', fontSize: '23px' }}>Proveedor</label>
-                <SelectSearch
-                  search
-                  onChange={setSize6}
-                  placeholder="Encuentre el Proveedor del Producto"
-                  required
-                  autoComplete
-                  options={proveedores}
-                  onClick={handleOnChange(size6)}
-                  value={size6}
-                />
-                <Col sm={{ size: 'auto' }} style={{ top: '-15px', marginLeft: '60px' }}>
-                  <label style={{ top: '-200px', fontSize: '23px' }}>Costo</label>
+              <Row style={{ top: '30px', position: 'relative' }}>
+                <Col>
+                  <label style={{ fontSize: '23px', 'margin-left': '-110px', position: 'relative' }}>Proveedor</label>
+                </Col>
+                <Col style={{ 'margin-left': '-100px', position: 'relative' }}>
+                  <SelectSearch
+                    search
+                    onChange={setSize6}
+                    placeholder="Encuentre el Proveedor del Producto"
+                    required
+                    autoComplete
+                    options={proveedores}
+                    onClick={handleOnChange(size6)}
+                    value={size6}
+                  />
+                </Col>
+                <Col style={{ marginLeft: '30px', 'max-width': '90px' }}>
                   <input
                     style={paddingAvInputCantidades()}
                     className="form-control"
@@ -1892,28 +1897,22 @@ export default function AgregarProducto(props) {
                     value={precioprovedor7}
                     min={1}
                   />
-                  <div
+                </Col>
+                <Col style={{ width: '40px' }}>
+                  <Button
                     style={{
-                      position: 'absolute',
-                      top: '28px',
-                      'margin-left': '320px',
+                      'font-size': '20px',
+                      'border-radius': '50%',
+                      width: '40px',
+                      height: '40px',
+                      'line-height': '2px',
+                      marginLeft: '-130px',
                     }}
+                    color="primary"
+                    onClick={() => onChangeProv()}
                   >
-                    <Button
-                      style={{
-                        'font-size': '20px',
-                        'border-radius': '50%',
-                        width: '40px',
-                        height: '40px',
-                        'line-height': '2px',
-                        'margin-left': '-350px',
-                      }}
-                      color="primary"
-                      onClick={() => onChangeProv()}
-                    >
-                      +
+                    +
                     </Button>
-                  </div>
                 </Col>
                 <div style={paddingdiv()}>
                   <ul style={paddingul()}>
@@ -1932,80 +1931,80 @@ export default function AgregarProducto(props) {
                   </ul>
                 </div>
                 <div />
-                <AvForm
-                  style={{
-                    marginTop: '50px',
-                  }}
-                >
-                  <Row>
-                    <label style={{ 'margin-left': '-5px', marginTop: '-20px', fontSize: '23px' }}>
-                      Precios de
+              </Row>
+              <AvForm
+                style={{
+                  marginTop: '50px',
+                }}
+              >
+                <Row>
+                  <label style={{ 'margin-left': '-10px', marginTop: '-20px', fontSize: '23px' }}>
+                    Precios de
                       <br /> Venta
                     </label>
-                    <Col sm={{ size: 'auto' }} style={{ 'margin-left': '35px', top: '-30px' }}>
-                      <div>
-                        <h
-                          style={{
-                            paddingRight: '-300px',
-                            color: '#62d162',
-                            fontSize: '23px',
-                            top: '-5px',
-                            position: 'relative',
-                          }}
-                        >
-                          Precio 1
+                  <Col sm={{ size: 'auto' }} style={{ 'margin-left': '35px', top: '-30px' }}>
+                    <div style={{ 'padding-left': '40px' }}>
+                      <h
+                        style={{
+                          paddingRight: '-300px',
+                          color: '#62d162',
+                          fontSize: '23px',
+                          top: '-5px',
+                          position: 'relative',
+                        }}
+                      >
+                        Precio 1
                         </h>
-                        <AvField
-                          style={paddingAvInputCantidades()}
-                          className="form-control"
-                          type="Number"
-                          name="precio1"
-                          id="precio1"
-                          errorMessage="Obligatorio"
-                          validate={{
-                            required: { value: true },
-                          }}
-                          min={1}
-                          onChange={(e) => manejarCambioPrecio1(e)}
-                          value={preciouno}
-                        />
-                      </div>
-                    </Col>
-                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
-                      <label style={{ 'margin-right': '5px', fontSize: '23px' }}>Precio 2</label>
                       <AvField
                         style={paddingAvInputCantidades()}
                         className="form-control"
                         type="Number"
-                        name="Fecha"
-                        name="precio2"
-                        id="precio2"
+                        name="precio1"
+                        id="precio1"
+                        errorMessage="Obligatorio"
                         validate={{
-                          required: { value: false },
+                          required: { value: true },
                         }}
-                        onChange={(e) => manejarCambioPrecio2(e)}
-                        value={preciodos}
+                        min={1}
+                        onChange={(e) => manejarCambioPrecio1(e)}
+                        value={preciouno}
                       />
-                    </Col>
-                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
-                      <label style={{ 'margin-left': '10px', fontSize: '23px' }}>Precio 3</label>
-                      <AvField
-                        style={paddingAvInputCantidades()}
-                        className="form-control"
-                        type="Number"
-                        name="Etiqueta"
-                        name="precio3"
-                        id="precio3"
-                        validate={{
-                          required: { value: false },
-                        }}
-                        onChange={(e) => manejarCambioPrecio3(e)}
-                        value={preciotres}
-                      />
-                    </Col>
-                  </Row>
-                </AvForm>
-              </Row>
+                    </div>
+                  </Col>
+                  <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
+                    <label style={{ 'margin-right': '5px', fontSize: '23px' }}>Precio 2</label>
+                    <AvField
+                      style={paddingAvInputCantidades()}
+                      className="form-control"
+                      type="Number"
+                      name="Fecha"
+                      name="precio2"
+                      id="precio2"
+                      validate={{
+                        required: { value: false },
+                      }}
+                      onChange={(e) => manejarCambioPrecio2(e)}
+                      value={preciodos}
+                    />
+                  </Col>
+                  <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
+                    <label style={{ 'margin-left': '10px', fontSize: '23px' }}>Precio 3</label>
+                    <AvField
+                      style={paddingAvInputCantidades()}
+                      className="form-control"
+                      type="Number"
+                      name="Etiqueta"
+                      name="precio3"
+                      id="precio3"
+                      validate={{
+                        required: { value: false },
+                      }}
+                      onChange={(e) => manejarCambioPrecio3(e)}
+                      value={preciotres}
+                    />
+                  </Col>
+                </Row>
+              </AvForm>
               <Row style={{ marginTop: '-25px' }}>
                 <Col style={{ 'margin-left': '-50px' }}>
                   <Button
@@ -2020,7 +2019,7 @@ export default function AgregarProducto(props) {
                     <Remove width="25px" height="25px" />
                   </Button>
                   <h style={{ 'margin-left': '-240px' }}>Imagen del Producto</h>
-                  <section style={{ paddingLeft: '40px' }} className="container">
+                  <section style={{ paddingLeft: '120px' }} className="container">
                     <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
                       <input {...getInputProps()} />
                       <br />
@@ -2036,7 +2035,7 @@ export default function AgregarProducto(props) {
                 </Col>
               </Row>
             </Col>
-          </Row>
+          </Row>.....
           <br />
         </ModalBody>
         <ModalFooter>
