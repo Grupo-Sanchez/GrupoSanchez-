@@ -11,6 +11,7 @@ import {
   ModalBody,
   ModalHeader,
   ModalFooter,
+  Alert,
 } from 'reactstrap';
 import axios from 'axios';
 import {
@@ -124,6 +125,9 @@ export default function Facturas() {
   };
 
   const b = (idToSearch) => {
+    setbodegasProductoSeleccionado([]);
+    setCantidadmax('');
+    setvalueBodegaProducto([]);
     productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
         setproductoSeleccionado({
@@ -136,7 +140,11 @@ export default function Facturas() {
           exento: item.exento,
           bodega: item.bodega,
         });
-        setbodegasProductoSeleccionado(item.bodega);
+        if (item.bodega.length === 0) {
+          setCantidadmax(item.cantidad);
+        } else {
+          setbodegasProductoSeleccionado(item.bodega);
+        }
       }
       return 0;
     });
@@ -151,13 +159,13 @@ export default function Facturas() {
     b(e);
     setquantity(1);
   };
-  let idBodega;
+  const [idBodega, setidBodega] = useState('');
   const handleChangeBodega = (e) => {
     setindice(1);
     setquantity(1);
     bodegasProductoSeleccionado.filter((item) => {
       if (item.value === e) {
-        idBodega = e;
+        setidBodega(e);
         setCantidadmax(item.cantBodega);
       }
       return 0;
@@ -193,6 +201,20 @@ export default function Facturas() {
           invoiceNumber: Number(facturas[facturas.length - 1].invoiceNumber) + 1,
           fecha: new Date(),
         };
+        for (let i = 0; i < productosEnBodega.length; i++) {
+          const element = productosEnBodega[i];
+          if (element.bodega.length === 0) {
+            axios.put(`http://localhost:3001/api/productos/${element.value}`, {
+              cantidad: element.cantidad,
+            });
+          } else {
+            alert(JSON.stringify(element.bodega));
+            axios.put(`http://localhost:3001/api/productos/${element.value}`, {
+              bodega: element.bodega,
+            });
+          }
+        }
+        getProductos();
         alert('INVOICE');
         alert(campos.invoiceNumber);
         setrecibo(campos);
@@ -375,12 +397,6 @@ export default function Facturas() {
         precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
         exento: productoSeleccionado.exento,
       });
-      productoSeleccionado.bodega.filter((item) => {
-        if (item.value === idBodega) {
-          item.cantBodega -= quantity;
-        }
-        return 0;
-      });
     } else {
       result += producto.precioSumado;
       if (productoSeleccionado.exento) {
@@ -395,7 +411,32 @@ export default function Facturas() {
       setindice(1);
       setquantity(1);
     }
-    updateTool(productoSeleccionado.value);
+    if (productoSeleccionado.bodega.length === 0) {
+      for (let index = 0; index < productosEnBodega.length; index++) {
+        const element = productosEnBodega[index];
+        if (element.value === productoSeleccionado.value) {
+          element.cantidad -= quantity;
+          break;
+        }
+      }
+    } else {
+      for (let index = 0; index < productosEnBodega.length; index++) {
+        const element = productosEnBodega[index];
+        if (element.value === productoSeleccionado.value) {
+          for (let index2 = 0; index2 < element.bodega.length; index2++) {
+            const element2 = element.bodega[index2];
+            if (element2.value === idBodega) {
+              element2.cantBodega -= quantity;
+              break;
+            }
+          }
+        }
+      }
+    }
+    setbodegasProductoSeleccionado([]);
+    setvalueBodegaProducto([]);
+    setproductoSeleccionado([]);
+    setCantidadmax('');
   };
   function limit() {
     const temp = document.getElementById('cantidad');
