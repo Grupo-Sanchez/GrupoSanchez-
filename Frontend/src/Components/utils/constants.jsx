@@ -8,6 +8,7 @@ import {
   faAddressBook,
   faFileInvoice,
   faTasks,
+  faFolder,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const rutasPropietario = [
@@ -30,6 +31,11 @@ export const rutasPropietario = [
     name: 'Marcas',
     to: '/Propietario/Marcas',
     icon: faTag,
+  },
+  {
+    name: 'Departamentos',
+    to: '/Propietario/Departamentos',
+    icon: faFolder,
   },
   {
     name: 'Proveedores',

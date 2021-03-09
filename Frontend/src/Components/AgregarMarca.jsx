@@ -12,7 +12,7 @@ const AgregarProveedor = (props) => {
   };
 
   const fetchData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
       setData(response.data);
     });
   };
@@ -39,7 +39,7 @@ const AgregarProveedor = (props) => {
       };
       if (isAvailable(payload)) {
         console.log(payload);
-        const response = await axios.post('http://178.128.67.247:3001/api/marcas', payload);
+        const response = await axios.post('http://Localhost:3001/api/marcas', payload);
         console.log(response);
         cerrarModal();
       } else {

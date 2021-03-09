@@ -23,7 +23,7 @@ class ModalForm extends Component {
   };
 
   deleteItem = async (id) => {
-    await axios.delete(`http://178.128.67.247:3001/api/clientes/${id}`);
+    await axios.delete(`http://Localhost:3001/api/clientes/${id}`);
     Confirm.open({
       title: 'Aviso',
       message: 'cliente eliminado',

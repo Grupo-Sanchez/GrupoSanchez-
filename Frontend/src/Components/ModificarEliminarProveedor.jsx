@@ -40,13 +40,13 @@ const ModificarEliminarProveedor = () => {
   const [position, setPosition] = useState('');
 
   const fetchData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+    await axios.get('http://Localhost:3001/api/proveedor').then((response) => {
       setData(response.data);
     });
   };
 
   const fetchProducts = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
@@ -86,7 +86,7 @@ const ModificarEliminarProveedor = () => {
           comentario: values.comentario,
         };
         await axios
-          .put(`http://178.128.67.247:3001/api/proveedor/${modificar._id}`, payload)
+          .put(`http://Localhost:3001/api/proveedor/${modificar._id}`, payload)
           .then((response) => {
             console.log(response);
           })
@@ -124,7 +124,7 @@ const ModificarEliminarProveedor = () => {
           console.log(list);
           if (flag) {
             axios
-              .put(`http://178.128.67.247:3001/api/productos/${product[i]._id}`, {
+              .put(`http://Localhost:3001/api/productos/${product[i]._id}`, {
                 proveedores: list,
               })
 
@@ -203,7 +203,7 @@ const ModificarEliminarProveedor = () => {
       }
     }
     if (isDeletable) {
-      await axios.delete(`http://178.128.67.247:3001/api/proveedor/${modificar._id}`);
+      await axios.delete(`http://Localhost:3001/api/proveedor/${modificar._id}`);
       Confirm.open({
         title: 'Proveedor Eliminado',
         message: 'Proveedor eliminado exitosamente',

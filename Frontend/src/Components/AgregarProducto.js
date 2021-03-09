@@ -185,7 +185,7 @@ export default function AgregarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthMarcas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://Localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -207,7 +207,7 @@ export default function AgregarProducto(props) {
   const [precioprovedor6, setPrecioProvedor6] = useState(0);
   const [precioprovedor7, setPrecioProvedor7] = useState(0);
   const fecthBodegas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
@@ -221,7 +221,7 @@ export default function AgregarProducto(props) {
     });
   };
   const fecthProveedores = async () => {
-    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+    await axios.get('http://Localhost:3001/api/proveedor').then((response) => {
       // setData(response.data);
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
@@ -259,7 +259,7 @@ export default function AgregarProducto(props) {
     setBodegas(bodegas.filter(({ item }) => !tagsBodegas.includes(item)));
   };
   const fecthProductos = async () => {
-    await axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    await axios.get('http://Localhost:3001/api/productos').then((response) => {
       setProductos(response.data);
     });
   };
@@ -287,7 +287,7 @@ export default function AgregarProducto(props) {
       productoExento: seleccionado.productoExento,
       fecha_creacion: hoy.toLocaleDateString('en-US'),
     };
-    const res = await axios.post('http://178.128.67.247:3001/api/productos', campos);
+    const res = await axios.post('http://Localhost:3001/api/productos', campos);
     console.log(res);
     Confirm.open({
       title: '',
