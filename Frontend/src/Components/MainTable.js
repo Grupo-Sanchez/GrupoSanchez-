@@ -11,7 +11,7 @@ class MainTable extends Component {
   };
 
   getItems = async () => {
-    const res = await axios.get('http://178.128.67.247:3001/api/clientes');
+    const res = await axios.get('http://localhost:3001/api/clientes');
     this.setState({ items: res.data });
   };
 
