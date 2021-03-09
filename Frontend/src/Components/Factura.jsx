@@ -103,7 +103,7 @@ export default function Facturas() {
         alert('Error');
       });
   };
-  const [cantidadmax, setCantidadmax] = useState(1);
+  const [cantidadmax, setCantidadmax] = useState('');
   const [sumatotal, setSumaTotal] = useState(0);
   const [impuestototal, setImpuestoTotal] = useState(0);
   const [totalfinal, setTotalFinal] = useState(0);
