@@ -23,7 +23,7 @@ const clienteSchema = new Schema({
     type: String,
   },
   RTN: {
-    type: Number,
+    type: String,
   },
   tel: {
     type: Number,
