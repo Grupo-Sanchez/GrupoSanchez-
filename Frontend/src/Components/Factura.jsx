@@ -128,6 +128,7 @@ export default function Facturas() {
     setbodegasProductoSeleccionado([]);
     setCantidadmax('');
     setvalueBodegaProducto([]);
+    let bodegasTemp = [];
     productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
         setproductoSeleccionado({
@@ -143,11 +144,13 @@ export default function Facturas() {
         if (item.bodega.length === 0) {
           setCantidadmax(item.cantidad);
         } else {
-          setbodegasProductoSeleccionado(item.bodega);
+          //setbodegasProductoSeleccionado(item.bodega);
+          bodegasTemp = item.bodega;
         }
       }
       return 0;
     });
+    setbodegasProductoSeleccionado(bodegasTemp.filter((item) => item.cantBodega > 0));
   };
   useEffect(() => {
     getProductos();
@@ -190,7 +193,6 @@ export default function Facturas() {
           rtntemp = '----------';
         }
         //let numeroFactura = invNum.next('10000000');
-        //alert(numeroFactura);
         campos = {
           subtotal: sumatotal,
           impuesto: impuestototal,
@@ -208,17 +210,14 @@ export default function Facturas() {
               cantidad: element.cantidad,
             });
           } else {
-            alert(JSON.stringify(element.bodega));
             axios.put(`http://localhost:3001/api/productos/${element.value}`, {
               bodega: element.bodega,
             });
           }
         }
         getProductos();
-        alert('INVOICE');
-        alert(campos.invoiceNumber);
         setrecibo(campos);
-        //await axios.post('http://localhost:3001/api/facturas', campos);
+        await axios.post('http://localhost:3001/api/facturas', campos);
         fecthFacturas();
         setModalModificarPrecios(true);
       } else {
@@ -246,12 +245,12 @@ export default function Facturas() {
     return {
       'margin-left': '15px',
       'border-radius': '26px',
-      width: '250px',
+      width: '80px',
     };
   }
   function paddingAvInputCantidadDisponible() {
     return {
-      'margin-left': '25px',
+      'margin-left': '0px',
       'border-radius': '26px',
       width: '80px',
     };
@@ -264,24 +263,40 @@ export default function Facturas() {
         for (let i = 0; i < productosEnBodega.length; i++) {
           const element2 = productosEnBodega[i];
           if (element.codigoPrincipal === element2.codigoPrincipal) {
-            if (element.precioUnitario !== element2.precios[1]) {
-              result -= (element.precioUnitario - element2.precios[1]) * element.cantidad;
-              if (element2.exento) {
-                impuesto += 0;
+            if (element2.precios[1]) {
+              if (element.precioUnitario !== element2.precios[1]) {
+                result -= (element.precioUnitario - element2.precios[1]) * element.cantidad;
+                if (element2.exento) {
+                  impuesto += 0;
+                } else {
+                  impuesto += Number(result * 0.15);
+                }
+                total += result + impuesto;
+                setSumaTotal(result + sumatotal);
+                setImpuestoTotal(impuesto + impuestototal);
+                setTotalFinal(total + totalfinal);
+                element.precioUnitario = element2.precios[1];
+                element.precioSumado = element.cantidad * element.precioUnitario;
+                Confirm.open({
+                  title: '',
+                  message: 'Segundo precio aplicado!',
+                  onok: () => {},
+                });
+                break;
               } else {
-                impuesto += Number(result * 0.15);
+                Confirm.open({
+                  title: '',
+                  message: 'El segundo precio ya fue aplicado.',
+                  onok: () => {},
+                });
+                break;
               }
-              total += result + impuesto;
-              setSumaTotal(result + sumatotal);
-              setImpuestoTotal(impuesto + impuestototal);
-              setTotalFinal(total + totalfinal);
-              element.precioUnitario = element2.precios[1];
-              element.precioSumado = element.cantidad * element.precioUnitario;
-              alert('Segundo Precio Aplicado');
-              break;
             } else {
-              alert('El segundo precio ya fue aplicado');
-              break;
+              Confirm.open({
+                title: '',
+                message: 'No existe un segundo precio para este producto.',
+                onok: () => {},
+              });
             }
           }
         }
@@ -469,7 +484,7 @@ export default function Facturas() {
       <br />
       <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
         <Row>
-          <h4 style={{ paddingLeft: '200px' }}>Producto:</h4>
+          <h4 style={{ paddingLeft: '200px' }}>Producto</h4>
           <Col>
             <div style={{ 'margin-left': '-25px' }}>
               <SelectSearch
@@ -480,15 +495,6 @@ export default function Facturas() {
                 value={productoSeleccionado.value}
               />
             </div>
-          </Col>
-          <Col>
-            <SelectSearch
-              search
-              placeholder="Seleccione la bodega del Producto"
-              options={bodegasProductoSeleccionado}
-              onChange={(e) => handleChangeBodega(e)}
-              value={valueBodegaProducto}
-            />
           </Col>
           <br />
           <label style={{ marginLeft: '380px', marginTop: '5px' }}>Cantidad</label>
@@ -512,7 +518,7 @@ export default function Facturas() {
                       border: 'none',
                       position: 'absolute',
                       top: '-13px',
-                      left: '285px',
+                      left: '110px',
                       outline: 'none',
                       'box-shadow': 'none',
                     }}
@@ -522,18 +528,41 @@ export default function Facturas() {
                   </Button>
                 </AvForm>
               </Row>
-              <label style={{ marginLeft: '-80px' }}>
-                Cantidad <br />
-                Disponible
-              </label>
-              <input
-                style={paddingAvInputCantidadDisponible()}
-                type="number"
-                id="cantidadDisp"
-                disabled={true}
-                value={cantidadmax}
-              />
+              <Row>
+                <Col style={{ top: '10px' }}>
+                  <AvForm>
+                    <AvField
+                      style={paddingAvInputCantidadDisponible()}
+                      type="number"
+                      name="name1"
+                      id="cantidadDisp"
+                      disabled={true}
+                      value={cantidadmax}
+                    />
+                  </AvForm>
+                </Col>
+                <Col>
+                  <label style={{ marginLeft: '-368px', top: '50px' }}>
+                    Cantidad <br />
+                    Disponible
+                  </label>
+                </Col>
+              </Row>
             </div>
+          </Col>
+        </Row>
+        <Row>
+          <Col style={{ marginLeft: '184px', top: '-45px' }}>
+            <h4>Bodega</h4>
+          </Col>
+          <Col style={{ marginLeft: '-1530px', top: '-45px' }}>
+            <SelectSearch
+              search
+              placeholder="Seleccione la bodega del Producto"
+              options={bodegasProductoSeleccionado}
+              onChange={(e) => handleChangeBodega(e)}
+              value={valueBodegaProducto}
+            />
           </Col>
         </Row>
         <br />
