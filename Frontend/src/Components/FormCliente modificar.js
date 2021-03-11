@@ -299,10 +299,6 @@ const formClienteModificar = (props) => {
       <Row>
         <Col></Col>
         <Col xs="6">
-          <Button className="botonFormGreen" outline color="success">
-            modificar
-          </Button>
-
           <Button
             onClick={() =>
               Confirm.open({
@@ -318,6 +314,9 @@ const formClienteModificar = (props) => {
             color="danger"
           >
             cancelar
+          </Button>
+          <Button className="botonFormGreen" outline color="success">
+            modificar
           </Button>
         </Col>
       </Row>
