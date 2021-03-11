@@ -88,6 +88,11 @@
   align-items: center;
   /* background-color: rebeccapurple; */
   padding: 0.5em 1em;
+  font-size: medium;
+}
+
+.sidenav-inner-item span {
+  margin-left: 15px;
 }
 
 .sidenav-inner-item:hover {

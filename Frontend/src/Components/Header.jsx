@@ -82,22 +82,7 @@ const Header = (props) => {
           {items.map(({ name, to, icon }, i) => (
             <div key={i} className="sidenav-item" onClick={handleItemClick.bind(this, to)}>
               <div className="sidenav-inner-item">
-                <div
-                  style={{
-                    width: '2em',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    marginRight: '0.5em',
-                  }}
-                >
-                  {/*<FontAwesomeIcon icon={icon} />*/}
-                  <img
-                    style={{
-                      'max-width': '64px',
-                    }}
-                    src={icon}
-                  />
-                </div>
+                <img style={{ maxWidth: '48px' }} src={icon} />
                 <span>{name}</span>
               </div>
             </div>
