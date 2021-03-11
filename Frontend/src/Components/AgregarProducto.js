@@ -1449,7 +1449,7 @@ export default function AgregarProducto(props) {
                 <Col >
                   <label>Producto Exento</label>
                 </Col>
-                <Col style={{ marginLeft: '-700px' }}>
+                <Col style={{ marginLeft: '-660px' }}>
                   <AvForm>
                     <AvRadioGroup id="exento" inline name="producto_exento" required>
                       <AvRadio
@@ -1464,6 +1464,21 @@ export default function AgregarProducto(props) {
                       />
                     </AvRadioGroup>
                   </AvForm>
+                </Col>
+              </Row>
+              <br />
+              <Row style={{ 'font-size': '23px', 'text-align': 'left', marginLeft: '0px' }}>
+                <h>Código de Barra</h>
+                <Col style={{ marginLeft: '50px' }}>
+                  <input
+                    style={paddingInput()}
+                    updatable={true}
+                    type="text"
+                    value={codigobarra}
+                    placeholder="Inserte codigo de barra"
+                    onChange={manejarCambioRapidaBarra}
+                    onKeyDown={handleKeyDown}
+                  />
                 </Col>
               </Row>
               <br />
@@ -1572,12 +1587,12 @@ export default function AgregarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <label style={{ 'margin-left': '130px', fontSize: '23px' }}>
+              <label style={{ 'margin-left': '80px', fontSize: '23px' }}>
                 Descripción
                 <br />
                 especifica{' '}
               </label>
-              <Col style={{ 'margin-left': '65px' }}>
+              <Col style={{ 'margin-left': '45px' }}>
                 <FormGroup>
                   <AvField
                     style={paddingDescripciones()}
