@@ -7,6 +7,7 @@
   justify-content: space-between;
   background-color: #343a40;
   color: white;
+  font-size: x-large;
 }
 
 .header-content {
@@ -29,7 +30,7 @@
   position: fixed;
   background-color: white;
   color: black;
-  width: 13rem;
+  width: 17rem;
   height: 100%;
   top: 0;
   left: 0;
@@ -52,6 +53,7 @@
   align-items: center;
   width: 100%;
   padding: 1rem;
+  font-size: x-large;
 }
 
 .sidenav-content {
@@ -88,11 +90,11 @@
   align-items: center;
   /* background-color: rebeccapurple; */
   padding: 0.5em 1em;
-  font-size: medium;
 }
 
 .sidenav-inner-item span {
-  margin-left: 15px;
+  margin-left: 20px;
+  font-size: large;
 }
 
 .sidenav-inner-item:hover {
