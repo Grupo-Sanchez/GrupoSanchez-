@@ -1352,7 +1352,8 @@ export default function AgregarProducto(props) {
             className="text-center"
             style={{
               'overflow-y': 'auto',
-              maxWidth: '1000px',
+              maxWidth: '1300px',
+              width: '1100px',
               'border-radius': '36px',
               position: 'absolute',
               left: '50%',
@@ -1366,9 +1367,11 @@ export default function AgregarProducto(props) {
             </div>
             <ModalBody>
               <br />
-              <Row>
-                <h style={{ marginLeft: '40px' }}>Código Principal</h>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
+                  <label>Código Principal</label>
+                </Col>
+                <Col style={{ 'margin-left': '-15px ' }}>
                   <input
                     style={paddingInput()}
                     updatable={true}
@@ -1378,11 +1381,13 @@ export default function AgregarProducto(props) {
                     onChange={manejarCambioRapida}
                   />
                 </Col>
-                <h style={{ marginLeft: '55px', 'font-size': '23px' }}>Inventario</h>
-                <Col style={{ marginLeft: '20px', top: '-25px' }}>
-                  <h style={{ marginLeft: '-50px' }}>Cantidad</h>
+                <Col style={{ marginLeft: '20px' }}>
+                  <label>Inventario</label>
+                </Col>
+                <Col style={{ top: '-25px' }}>
+                  <h style={{ 'font-size': '18px' }}>Cantidad</h>
                   <input
-                    style={paddingAvInputCantidadesCreacionRapida()}
+                    style={paddingAvInputCantidades()}
                     className="form-control"
                     type="number"
                     id="cantidad"
@@ -1393,11 +1398,13 @@ export default function AgregarProducto(props) {
                 </Col>
               </Row>
               <br />
-              <Row>
-                <h style={{ marginLeft: '0px' }}>Descripción </h>
-                <Col style={{ marginLeft: '5px' }}>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                <Col>
+                  <h>Descripción</h>
+                </Col>
+                <Col style={{ marginLeft: '-30px' }}>
                   <AvForm>
-                    <AvField
+                    <AvInput
                       style={paddingAvInput()}
                       className="form-control"
                       type="text"
@@ -1414,43 +1421,14 @@ export default function AgregarProducto(props) {
                       onChange={(e) => manejarCambiodescripcionRapida(e)}
                     />
                   </AvForm>
-                  <Row>
-                    <AvForm>
-                      <AvRadioGroup id="exento" inline name="producto_exento" required>
-                        <AvRadio
-                          onClick={() => setProductoExento(true)}
-                          label="Producto Exento"
-                          value="exento"
-                        />
-                        <AvRadio
-                          onClick={() => setProductoExento(false)}
-                          label="Producto No Exento"
-                          value="noexento"
-                        />
-                      </AvRadioGroup>
-                    </AvForm>
-                  </Row>
-                  <Row>
-                    <h style={{ marginLeft: '-120px' }}>Código de Barra</h>
-                    <Col>
-                      <input
-                        style={paddingInput()}
-                        updatable={true}
-                        type="text"
-                        value={codigobarra}
-                        placeholder="Inserte codigo de barra"
-                        onChange={manejarCambioRapidaBarra}
-                        onKeyDown={handleKeyDown}
-                      />
-                    </Col>
-                  </Row>
                 </Col>
-                <label style={{ marginLeft: '30px' }}>Precio de Venta</label>
-                <Col style={{ marginLeft: '-30px', top: '-40px' }}>
-                  <label style={{ marginLeft: '-30px' }}>Precio 1</label>
+                <Col>
+                  <h>Precio de Venta</h>
+                </Col>
+                <Col style={{ 'margin-left': '-30px' }}>
                   <AvForm>
                     <AvField
-                      style={paddingAvInputCantidadesCreacionRapida()}
+                      style={paddingAvInputCantidades()}
                       className="form-control"
                       type="Number"
                       name="precio1"
@@ -1466,6 +1444,29 @@ export default function AgregarProducto(props) {
                   </AvForm>
                 </Col>
               </Row>
+              <br />
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                <Col >
+                  <label>Producto Exento</label>
+                </Col>
+                <Col style={{ marginLeft: '-700px' }}>
+                  <AvForm>
+                    <AvRadioGroup id="exento" inline name="producto_exento" required>
+                      <AvRadio
+                        onClick={() => setProductoExento(true)}
+                        label="Producto Exento"
+                        value="exento"
+                      />
+                      <AvRadio
+                        onClick={() => setProductoExento(false)}
+                        label="Producto No Exento"
+                        value="noexento"
+                      />
+                    </AvRadioGroup>
+                  </AvForm>
+                </Col>
+              </Row>
+              <br />
               <div style={{ marginLeft: '-250px' }}>
                 <Barcode value={codigobarra} />
               </div>
@@ -1847,7 +1848,7 @@ export default function AgregarProducto(props) {
               </Row>
             </Col>
             <Col style={{ 'max-width': '120px' }}>
-              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '120px' }}>Departamento</label>
+              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '113px' }}>Departamento</label>
             </Col>
             <Col>
               <AvForm>
