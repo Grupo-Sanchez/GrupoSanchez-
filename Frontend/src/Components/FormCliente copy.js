@@ -36,6 +36,10 @@ const formClienteCopy = (props) => {
   // };
 
   const handleValidSubmit = async (event, values) => {
+    if (values.RTN === '') {
+      values.RTN = 'consumidor fin';
+    }
+
     const campos = {
       cedula: values.cedula,
       nombre: values.nombre,
@@ -52,7 +56,7 @@ const formClienteCopy = (props) => {
         if (res.data.message) {
           Confirm.open({
             title: 'aviso',
-            message: 'error campos duplicados',
+            message: 'error el No. de identidad ya existe',
             onok: () => {},
           });
         } else {
@@ -228,10 +232,6 @@ const formClienteCopy = (props) => {
                     value: 14,
                     errorMessage: 'el Rtn debe tener 14 digitos',
                   },
-                  min: {
-                    value: 0,
-                    errorMessage: 'ingrese con formato solicitado 14 digitos',
-                  },
                 }}
               />
             </Col>
@@ -282,11 +282,8 @@ const formClienteCopy = (props) => {
       <br></br>
 
       <Row>
-        <Col sm={{ size: 'auto', offset: 8 }}>
-          <Button className="botonesForm" outline color="success">
-            agregar
-          </Button>
-
+        <Col></Col>
+        <Col xs="6">
           <Button
             onClick={() =>
               Confirm.open({
@@ -297,11 +294,14 @@ const formClienteCopy = (props) => {
                 },
               })
             }
-            className="botonesForm"
+            className="botonFormRed"
             outline
             color="danger"
           >
             cancelar
+          </Button>
+          <Button className="botonFormGreen" outline color="success">
+            agregar
           </Button>
         </Col>
       </Row>
