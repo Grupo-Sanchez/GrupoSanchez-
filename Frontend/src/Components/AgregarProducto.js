@@ -1318,8 +1318,8 @@ export default function AgregarProducto(props) {
           height: '100vh',
           'overflow-y': 'overflow',
           top: '20px',
-          width: '1900px',
-          maxWidth: '1900px',
+          width: '1700px',
+          maxWidth: '1700px',
           'border-radius': '36px',
           'overflow-x': 'hidden',
         }}
@@ -1587,12 +1587,12 @@ export default function AgregarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <label style={{ 'margin-left': '80px', fontSize: '23px' }}>
+              <label style={{ 'margin-left': '-100px', fontSize: '23px' }}>
                 Descripción
                 <br />
                 especifica{' '}
               </label>
-              <Col style={{ 'margin-left': '45px' }}>
+              <Col style={{ 'margin-left': '35px' }}>
                 <FormGroup>
                   <AvField
                     style={paddingDescripciones()}
@@ -1738,11 +1738,11 @@ export default function AgregarProducto(props) {
                     <Col
                       style={{
                         width: '80px',
-                        'margin-left': '-100px',
+                        'margin-left': '-55px',
                       }}
                     >
                       <div>
-                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-90px' }}>
+                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-80px' }}>
                           # Pasillo
                         </label>
                         <input
@@ -1769,7 +1769,7 @@ export default function AgregarProducto(props) {
                           height: '40px',
                           'line-height': '2px',
                           position: 'relative',
-                          'margin-left': '-350px',
+                          'margin-left': '-220px',
                         }}
                         onClick={() => onChangeBodega()}
                         color="primary"
@@ -1863,7 +1863,7 @@ export default function AgregarProducto(props) {
               </Row>
             </Col>
             <Col style={{ 'max-width': '120px' }}>
-              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '113px' }}>Departamento</label>
+              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>Departamento</label>
             </Col>
             <Col>
               <AvForm>
@@ -1871,7 +1871,7 @@ export default function AgregarProducto(props) {
                   style={{
                     'border-radius': '26px',
                     width: '320px',
-                    marginLeft: '175px',
+                    marginLeft: '45px',
                   }}
                   className="form-control"
                   type="text"
@@ -1888,10 +1888,8 @@ export default function AgregarProducto(props) {
                 />
               </AvForm>
               <Row style={{ top: '30px', position: 'relative' }}>
+                <h style={{ fontSize: '23px', marginLeft: '-90px' }}>Proveedor</h>
                 <Col>
-                  <label style={{ fontSize: '23px', 'margin-left': '-110px', position: 'relative' }}>Proveedor</label>
-                </Col>
-                <Col style={{ 'margin-left': '-100px', position: 'relative' }}>
                   <SelectSearch
                     search
                     onChange={setSize6}
@@ -1922,7 +1920,7 @@ export default function AgregarProducto(props) {
                       width: '40px',
                       height: '40px',
                       'line-height': '2px',
-                      marginLeft: '-130px',
+                      marginLeft: '-150px',
                     }}
                     color="primary"
                     onClick={() => onChangeProv()}
@@ -1954,11 +1952,11 @@ export default function AgregarProducto(props) {
                 }}
               >
                 <Row>
-                  <label style={{ 'margin-left': '-10px', marginTop: '-20px', fontSize: '23px' }}>
+                  <label style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}>
                     Precios de
                       <br /> Venta
                     </label>
-                  <Col sm={{ size: 'auto' }} style={{ 'margin-left': '35px', top: '-30px' }}>
+                  <Col sm={{ size: 'auto' }} style={{ 'margin-left': '8px', top: '-30px' }}>
                     <div style={{ 'padding-left': '40px' }}>
                       <h
                         style={{
@@ -2035,7 +2033,7 @@ export default function AgregarProducto(props) {
                     <Remove width="25px" height="25px" />
                   </Button>
                   <h style={{ 'margin-left': '-240px' }}>Imagen del Producto</h>
-                  <section style={{ paddingLeft: '120px' }} className="container">
+                  <section style={{ paddingLeft: '100px' }} className="container">
                     <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
                       <input {...getInputProps()} />
                       <br />
