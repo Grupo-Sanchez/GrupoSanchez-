@@ -90,7 +90,13 @@ const Header = (props) => {
                     marginRight: '0.5em',
                   }}
                 >
-                  <FontAwesomeIcon icon={icon} />
+                  {/*<FontAwesomeIcon icon={icon} />*/}
+                  <img
+                    style={{
+                      'max-width': '64px',
+                    }}
+                    src={icon}
+                  />
                 </div>
                 <span>{name}</span>
               </div>
