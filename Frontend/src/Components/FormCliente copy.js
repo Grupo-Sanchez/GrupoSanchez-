@@ -284,10 +284,6 @@ const formClienteCopy = (props) => {
       <Row>
         <Col></Col>
         <Col xs="6">
-          <Button className="botonFormGreen" outline color="success">
-            agregar
-          </Button>
-
           <Button
             onClick={() =>
               Confirm.open({
@@ -303,6 +299,9 @@ const formClienteCopy = (props) => {
             color="danger"
           >
             cancelar
+          </Button>
+          <Button className="botonFormGreen" outline color="success">
+            agregar
           </Button>
         </Col>
       </Row>
