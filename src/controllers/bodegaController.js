@@ -1,5 +1,5 @@
 const bodega = require('../models/bodegasModel');
-// const product = require('../models/ProductoModel');
+const product = require('../models/ProductoModel');
 
 // exports.read_bodega = async (req, res) => {
 //   try {
@@ -17,8 +17,6 @@ exports.create_bodega = async (req, res) => {
       numBodega,
       descripcion,
       encargado,
-      cantPasillos,
-      CantProductos,
     });
     ret = await new_bodega.save();
     res.json(ret);
@@ -36,15 +34,15 @@ exports.read_bodega = async (req, res) => {
   }
 };
 
-// exports.filter_bodegas = async (req, res) => {
-//   try {
-//     const name = req.params.name;
-//     const ret = await product.find({ bodega: { $elemMatch: { name: name } } });
-//     res.send(ret);
-//   } catch (error) {
-//     res.send({ message: 'Bad request: ' + error });
-//   }
-// };
+exports.filter_bodegas = async (req, res) => {
+  try {
+    const name = req.params.name;
+    const ret = await product.find({ bodega: { $elemMatch: { name: name } } });
+    res.send(ret);
+  } catch (error) {
+    res.send({ message: 'Bad request: ' + error });
+  }
+};
 
 exports.update_bodega = async (req, res) => {
   try {

@@ -14,6 +14,6 @@ router
   .put(bodega.update_bodega)
   .delete(bodega.delete_bodega);
 
-// router.route('/filter/:name').get(bodega.filter_bodegas);
+router.route('/filter/:name').get(bodega.filter_bodegas);
 
 module.exports = router;
