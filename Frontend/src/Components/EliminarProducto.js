@@ -1564,9 +1564,11 @@ export default function EliminarProducto(props) {
                 <td>{`${elemento.codigoBarra}`}</td>
                 <td>{elemento.codigoPrincipal}</td>
                 <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
-                <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
+                <td style={{ whiteSpace: 'unset' }}>
+                  {elemento.marca[0] ? elemento.marca[0].name : ''}
+                </td>
                 <td>{elemento.cantidad}</td>
-                <td>{elemento.precios[0]}</td>
+                <td>L. {elemento.precios[0]}.00</td>
                 <td align="center">
                   <Button
                     style={{
