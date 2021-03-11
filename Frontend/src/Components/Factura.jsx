@@ -391,67 +391,76 @@ export default function Facturas() {
   const agregarProductoaTabla = async () => {
     let sumar = false;
     let producto = [];
-    for (let index = 0; index < productosAfacturar.length; index++) {
-      const element = productosAfacturar[index];
-      if (element.codigoPrincipal === productoSeleccionado.codigoPrincipal) {
-        element.cantidad = Number(Number(quantity) + Number(element.cantidad));
-        result -= element.precioSumado;
-        element.precioSumado = Number(element.precioUnitario) * element.cantidad;
-        producto = element;
-        sumar = true;
-        break;
-      }
-    }
-    if (!sumar) {
-      addRow({
-        name: productoSeleccionado.name,
-        value: productoSeleccionado.value,
-        codigoPrincipal: productoSeleccionado.codigoPrincipal,
-        cantidad: quantity,
-        precioUnitario: Number(productoSeleccionado.precioUnitario),
-        precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
-        exento: productoSeleccionado.exento,
-      });
-    } else {
-      result += producto.precioSumado;
-      if (productoSeleccionado.exento) {
-        impuesto += 0;
-      } else {
-        impuesto += Number(result * 0.15);
-      }
-      total += result + impuesto;
-      setSumaTotal(result + sumatotal);
-      setImpuestoTotal(impuesto + impuestototal);
-      setTotalFinal(total + totalfinal);
-      setindice(1);
-      setquantity(1);
-    }
-    if (productoSeleccionado.bodega.length === 0) {
-      for (let index = 0; index < productosEnBodega.length; index++) {
-        const element = productosEnBodega[index];
-        if (element.value === productoSeleccionado.value) {
-          element.cantidad -= quantity;
+    alert(JSON.stringify(productoSeleccionado.length));
+    if (productoSeleccionado.length !== 0) {
+      for (let index = 0; index < productosAfacturar.length; index++) {
+        const element = productosAfacturar[index];
+        if (element.codigoPrincipal === productoSeleccionado.codigoPrincipal) {
+          element.cantidad = Number(Number(quantity) + Number(element.cantidad));
+          result -= element.precioSumado;
+          element.precioSumado = Number(element.precioUnitario) * element.cantidad;
+          producto = element;
+          sumar = true;
           break;
         }
       }
-    } else {
-      for (let index = 0; index < productosEnBodega.length; index++) {
-        const element = productosEnBodega[index];
-        if (element.value === productoSeleccionado.value) {
-          for (let index2 = 0; index2 < element.bodega.length; index2++) {
-            const element2 = element.bodega[index2];
-            if (element2.value === idBodega) {
-              element2.cantBodega -= quantity;
-              break;
+      if (!sumar) {
+        addRow({
+          name: productoSeleccionado.name,
+          value: productoSeleccionado.value,
+          codigoPrincipal: productoSeleccionado.codigoPrincipal,
+          cantidad: quantity,
+          precioUnitario: Number(productoSeleccionado.precioUnitario),
+          precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
+          exento: productoSeleccionado.exento,
+        });
+      } else {
+        result += producto.precioSumado;
+        if (productoSeleccionado.exento) {
+          impuesto += 0;
+        } else {
+          impuesto += Number(result * 0.15);
+        }
+        total += result + impuesto;
+        setSumaTotal(result + sumatotal);
+        setImpuestoTotal(impuesto + impuestototal);
+        setTotalFinal(total + totalfinal);
+        setindice(1);
+        setquantity(1);
+      }
+      if (productoSeleccionado.bodega.length === 0) {
+        for (let index = 0; index < productosEnBodega.length; index++) {
+          const element = productosEnBodega[index];
+          if (element.value === productoSeleccionado.value) {
+            element.cantidad -= quantity;
+            break;
+          }
+        }
+      } else {
+        for (let index = 0; index < productosEnBodega.length; index++) {
+          const element = productosEnBodega[index];
+          if (element.value === productoSeleccionado.value) {
+            for (let index2 = 0; index2 < element.bodega.length; index2++) {
+              const element2 = element.bodega[index2];
+              if (element2.value === idBodega) {
+                element2.cantBodega -= quantity;
+                break;
+              }
             }
           }
         }
       }
+      setbodegasProductoSeleccionado([]);
+      setvalueBodegaProducto([]);
+      setproductoSeleccionado([]);
+      setCantidadmax('');
+    } else {
+      Confirm.open({
+        title: 'Error',
+        message: 'Debe elegir un producto primero.',
+        onok: () => {},
+      });
     }
-    setbodegasProductoSeleccionado([]);
-    setvalueBodegaProducto([]);
-    setproductoSeleccionado([]);
-    setCantidadmax('');
   };
   function limit() {
     const temp = document.getElementById('cantidad');
