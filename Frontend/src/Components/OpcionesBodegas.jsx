@@ -145,11 +145,14 @@ const OpcionesBodegas = (props) => {
   const formulario = [];
   const [dataBodegas, setDataBodegas] = useState(formulario);
   const [dataproductos, setDataproductos] = useState([]);
+  const [dataproductosTemporal, setdataproductosTemporal] = useState([]);
   const [dataproductosDelete, setDataproductosDelete] = useState([]);
   const [ModalProductos, setModalProductos] = useState(false);
   const [ModalCrearBodega, setModalCrearBodega] = useState(false);
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
-  const [ModalListar, setModalListar] = useState(true);
+  const [ModalMigrarProducto, setModalMigrarProducto] = useState(false);
+  const [CantMigrar, setCantMigrar] = useState();
+
   const [BodegaModificar, setBodegaModificar] = useState({
     numBodega: '',
     descripcion: '',
@@ -278,12 +281,13 @@ const OpcionesBodegas = (props) => {
 
   //Metodo para cargar los productos de bodega seleccionada
   const fecthDataProductos = async (e) => {
-    await axios.get(`http://Localhost:3001/api/bodegas/filter/Bodega ${e}`).then((response) => {
+    await axios.get(`http://Localhost:3001/api/bodegas/filter/${e}`).then((response) => {
       setDataproductos(response.data);
     });
   };
+
   const fecthDataProductosDelete = async (e) => {
-    await axios.get(`http://Localhost:3001/api/bodegas/filter/Bodega ${e}`).then((response) => {
+    await axios.get(`http://Localhost:3001/api/bodegas/filter/${e}`).then((response) => {
       setDataproductosDelete(response.data);
     });
   };
@@ -303,21 +307,19 @@ const OpcionesBodegas = (props) => {
   //Abril modal donde se listan las bodegas
   const CerrarModalTablaProductos = () => {
     setModalProductos(false);
-    setModalListar(true);
   };
 
   //Cuando se presiona click a una bodega
   const ListadoBodegas = (i) => {
     setBodegaSeleccionada(i); //Bodega seleccionada
     setModalProductos(true); //abrir el modal de los productos de la bodega seleccionada
-    fecthDataProductos(i.numBodega);
-    setModalListar(true);
+    fecthDataProductos(i._id);
   };
 
   //Abrir modal para modificar una bodega.
   const ModificarBodega = (i) => {
     setBodegaModificar(i);
-    fecthDataProductosDelete(i.numBodega);
+    fecthDataProductosDelete(i._id);
     setModalModificarBodega(true);
   };
   const onDelete = (memberId) => {
@@ -356,6 +358,22 @@ const OpcionesBodegas = (props) => {
       },
     });
   };
+
+  //Metodo para listar productos
+  const migrar = (elemento, index) => {
+    //Recorro todos los productos
+    for (let i = 0; i < dataproductos.length; i++) {
+      //Recorro todas las bodegas de los productos
+      for (let j = 0; j < dataproductos[i].bodega.length; j++) {
+        //comparo si la bodega es la que estoy buscando
+        if (dataproductos[i].bodega[j].value === BodegaSeleccionada._id) {
+          alert('entro');
+          // setModalMigrarProducto(true);
+        }
+      }
+    }
+  };
+
   return (
     <div>
       {/* Modal principal, donde se encuentran todos los elementos */}
@@ -469,6 +487,7 @@ const OpcionesBodegas = (props) => {
                   <th>Marca</th>
                   <th>Inventario</th>
                   <th>Precio</th>
+                  <th>Gestionar</th>
                 </tr>
               </thead>
               <tbody>
@@ -476,10 +495,11 @@ const OpcionesBodegas = (props) => {
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
-                    {/* <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
-                    <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td> */}
+                    <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
+                    <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
                     <td>{elemento.cantidad}</td>
-                    <td>{elemento.precios[0]}</td>
+                    <td>{elemento.precios}</td>
+                    <td onClick={() => migrar(elemento, index)}>ACCION</td>
                   </tr>
                 ))}
               </tbody>
@@ -670,6 +690,93 @@ const OpcionesBodegas = (props) => {
                   </div>
                 </div>
               </div>
+              <div className="col-sm">
+                <AvField
+                  name="numBodega"
+                  label="Numero de bodega"
+                  type="number"
+                  onChange={handleChange}
+                  value={BodegaModificar.numBodega}
+                  validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
+                />
+                <AvField
+                  name="Description"
+                  label="Descripcion"
+                  type="text"
+                  onChange={handleChange}
+                  value={BodegaModificar.descripcion}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado ' },
+                  }}
+                />
+                <AvField
+                  name="Encargado"
+                  label="Encargado"
+                  type="text"
+                  onChange={handleChange}
+                  value={BodegaModificar.encargado}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado' },
+                  }}
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <FormGroup>
+              <Button
+                type="submit"
+                color="primary"
+                style={{
+                  'border-radius': '26px',
+                  'border-color': '#98ff98',
+                  color: 'green',
+                  border: '1px solid green',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+              >
+                EDITAR BODEGA
+              </Button>
+              <span>‎ ‏‏‎</span>
+              <Button
+                className="btn btn-danger"
+                style={{
+                  margin: '10px',
+                  'border-radius': '26px',
+                  'border-color': '#ff9800',
+                  color: 'red',
+                  border: '1px solid red',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+                onClick={() => CancelarBodegaModificar()}
+              >
+                CANCELAR
+              </Button>
+            </FormGroup>
+          </ModalFooter>
+        </AvForm>
+      </Modal>
+      {/* Modal para seleccionar migracion de producto */}
+      <Modal
+        isOpen={ModalMigrarProducto}
+        className="text-center"
+        style={{ maxWidth: '700px', width: '90%' }}
+      >
+        <AvForm onValidSubmit={handleValidSubmitModificar} onInvalidSubmit={handleInvalidSubmit}>
+          {/* <ModalHeader> */}
+          <div className="container-fluid mt-4 mb-4">
+            <div className="col-md-12">
+              <h1 className="text-center">MOVILIZAR PRODUCTO </h1>
+            </div>
+          </div>
+          <hr></hr>
+          {/* </ModalHeader> */}
+          <ModalBody>
+            <div className="row">
               <div className="col-sm">
                 <AvField
                   name="numBodega"

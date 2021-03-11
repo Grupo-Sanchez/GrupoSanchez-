@@ -36,8 +36,8 @@ exports.read_bodega = async (req, res) => {
 
 exports.filter_bodegas = async (req, res) => {
   try {
-    const name = req.params.name;
-    const ret = await product.find({ bodega: { $elemMatch: { name: name } } });
+    const id = req.params.name;
+    const ret = await product.find({ bodega: { $elemMatch: { value: id } } });
     res.send(ret);
   } catch (error) {
     res.send({ message: 'Bad request: ' + error });
