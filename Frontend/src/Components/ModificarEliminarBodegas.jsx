@@ -60,6 +60,7 @@ const ModificarEliminarBodegas = (props) => {
     console.log('invalid submit', { event, errors, values });
   }
 
+  ///funcion del SUMBMIT
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
     const payload = { value: Seleccionado._id, name: values.numBodega };

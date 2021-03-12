@@ -145,7 +145,7 @@ const OpcionesBodegas = (props) => {
   const formulario = [];
   const [dataBodegas, setDataBodegas] = useState(formulario);
   const [dataproductos, setDataproductos] = useState([]);
-  const [dataproductosTemporal, setdataproductosTemporal] = useState([]);
+  const [x, setx] = useState([]);
   const [dataproductosDelete, setDataproductosDelete] = useState([]);
   const [ModalProductos, setModalProductos] = useState(false);
   const [ModalCrearBodega, setModalCrearBodega] = useState(false);
@@ -284,6 +284,10 @@ const OpcionesBodegas = (props) => {
     await axios.get(`http://Localhost:3001/api/bodegas/filter/${e}`).then((response) => {
       setDataproductos(response.data);
     });
+    alert('CANTIDAD DE DATAPRODUCTOS ');
+    alert(dataproductos.length);
+    alert('QUE TRAE DATAPRODUCTOS');
+    alert(JSON.stringify(dataproductos));
   };
 
   const fecthDataProductosDelete = async (e) => {
@@ -309,11 +313,36 @@ const OpcionesBodegas = (props) => {
     setModalProductos(false);
   };
 
+  const Change = () => {
+    let Temporal = [];
+    alert('CAMBIO CANTIDADES');
+    alert(dataproductos.length);
+    //Recorro todos los productos
+    for (let i = 0; i < dataproductos.length; i++) {
+      //Recorro todas las bodegas de los productos
+      for (let j = 0; j < dataproductos[i].bodega.length; j++) {
+        //comparo si la bodega es la que estoy buscando
+        if (dataproductos[i].bodega[j].value === BodegaSeleccionada._id) {
+          // alert(JSON.stringify(dataproductos[i].descripcion));
+          // alert(JSON.stringify(dataproductos[i].bodega[j].cantBodega));
+          let Newproducto;
+          Newproducto = dataproductos[i];
+          // console.log('NUM');
+          // console.log(dataproductos[i].bodega[j].cantBodega);
+          Newproducto.cantidad = dataproductos[i].bodega[j].cantBodega;
+          Temporal[i] += Newproducto;
+        }
+      }
+    }
+    setx(Temporal);
+  };
+
   //Cuando se presiona click a una bodega
   const ListadoBodegas = (i) => {
+    fecthDataProductos(i._id); //cargo los productos de toda la bodega
     setBodegaSeleccionada(i); //Bodega seleccionada
     setModalProductos(true); //abrir el modal de los productos de la bodega seleccionada
-    fecthDataProductos(i._id);
+    Change(); //actualizo la cantidad exacta que cada producto tiene
   };
 
   //Abrir modal para modificar una bodega.
@@ -359,21 +388,8 @@ const OpcionesBodegas = (props) => {
     });
   };
 
-  //Metodo para listar productos
-  const migrar = (elemento, index) => {
-    //Recorro todos los productos
-    for (let i = 0; i < dataproductos.length; i++) {
-      //Recorro todas las bodegas de los productos
-      for (let j = 0; j < dataproductos[i].bodega.length; j++) {
-        //comparo si la bodega es la que estoy buscando
-        if (dataproductos[i].bodega[j].value === BodegaSeleccionada._id) {
-          alert('entro');
-          // setModalMigrarProducto(true);
-        }
-      }
-    }
-  };
-
+  /////
+  /////INICIO DEL RENDER
   return (
     <div>
       {/* Modal principal, donde se encuentran todos los elementos */}
@@ -484,22 +500,22 @@ const OpcionesBodegas = (props) => {
                   <th>Código de Barra</th>
                   <th>Codigo Principal</th>
                   <th style={{ width: '300px' }}>Descripcion</th>
-                  <th>Marca</th>
+                  {/* <th>Marca</th> */}
                   <th>Inventario</th>
                   <th>Precio</th>
                   <th>Gestionar</th>
                 </tr>
               </thead>
               <tbody>
-                {dataproductos.map((elemento, index) => (
+                {x.map((elemento, index) => (
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
                     <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
-                    <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
+                    {/* <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td> */}
                     <td>{elemento.cantidad}</td>
                     <td>{elemento.precios}</td>
-                    <td onClick={() => migrar(elemento, index)}>ACCION</td>
+                    <td>ACCION</td>
                   </tr>
                 ))}
               </tbody>
