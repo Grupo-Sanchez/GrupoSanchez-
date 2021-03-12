@@ -66,12 +66,12 @@ export const rutasJefeTienda = [
   {
     name: 'Facturar',
     to: '/JefeTienda/Facturar',
-    icon: faFileInvoice,
+    icon: reportes,
   },
   {
     name: 'Devoluciones',
     to: '/JefeTienda/Devoluciones',
-    icon: faTasks,
+    icon: reportes,
   },
 ];
 
