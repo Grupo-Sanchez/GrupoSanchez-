@@ -145,7 +145,7 @@ const OpcionesBodegas = (props) => {
   const formulario = [];
   const [dataBodegas, setDataBodegas] = useState(formulario);
   const [dataproductos, setDataproductos] = useState([]);
-  const [x, setx] = useState([]);
+  const [dataProductosFinal, setDataProductosFinal] = useState([]);
   const [dataproductosDelete, setDataproductosDelete] = useState([]);
   const [ModalProductos, setModalProductos] = useState(false);
   const [ModalCrearBodega, setModalCrearBodega] = useState(false);
@@ -315,8 +315,8 @@ const OpcionesBodegas = (props) => {
 
   const Change = () => {
     let Temporal = [];
-    alert('CAMBIO CANTIDADES');
-    alert(dataproductos.length);
+    //alert('CAMBIO CANTIDADES');
+    //alert(dataproductos.length);
     //Recorro todos los productos
     for (let i = 0; i < dataproductos.length; i++) {
       //Recorro todas las bodegas de los productos
@@ -330,11 +330,12 @@ const OpcionesBodegas = (props) => {
           // console.log('NUM');
           // console.log(dataproductos[i].bodega[j].cantBodega);
           Newproducto.cantidad = dataproductos[i].bodega[j].cantBodega;
-          Temporal[i] += Newproducto;
+          Temporal[i] = Newproducto;
         }
       }
     }
-    setx(Temporal);
+    alert(JSON.stringify(Temporal));
+    setDataProductosFinal(Temporal);
   };
 
   //Cuando se presiona click a una bodega
@@ -500,19 +501,19 @@ const OpcionesBodegas = (props) => {
                   <th>Código de Barra</th>
                   <th>Codigo Principal</th>
                   <th style={{ width: '300px' }}>Descripcion</th>
-                  {/* <th>Marca</th> */}
+                  {<th>Marca</th>}
                   <th>Inventario</th>
                   <th>Precio</th>
                   <th>Gestionar</th>
                 </tr>
               </thead>
               <tbody>
-                {x.map((elemento, index) => (
+                {dataProductosFinal.map((elemento, index) => (
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
                     <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
-                    {/* <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td> */}
+                    {<td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>}
                     <td>{elemento.cantidad}</td>
                     <td>{elemento.precios}</td>
                     <td>ACCION</td>
