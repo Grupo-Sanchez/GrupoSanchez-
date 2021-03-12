@@ -19,6 +19,10 @@ import clientes from '../../Icons/clientes.png';
 import usuarios from '../../Icons/users.png';
 import tags from '../../Icons/tags.png';
 
+//jefe de tienda icons
+import factura from '../../Icons/factura.png';
+import devoluciones from '../../Icons/devoluciones.png';
+
 export const rutasPropietario = [
   {
     name: 'Productos',
@@ -66,12 +70,12 @@ export const rutasJefeTienda = [
   {
     name: 'Facturar',
     to: '/JefeTienda/Facturar',
-    icon: reportes,
+    icon: factura,
   },
   {
     name: 'Devoluciones',
     to: '/JefeTienda/Devoluciones',
-    icon: reportes,
+    icon: devoluciones,
   },
 ];
 
