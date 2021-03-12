@@ -1,21 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Button,
-  Table,
-  Label,
-  FormGroup,
-  Input,
-  Row,
-  Col,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  ModalFooter,
-} from 'reactstrap';
+import { Button, Table, FormGroup, Row, Col, Modal, ModalBody, ModalFooter } from 'reactstrap';
 import SelectSearch from 'react-select-search';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
-import { AvForm, AvField, AvInput } from 'availity-reactstrap-validation';
+import { AvForm, AvField, AvInput, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';
 import imagePath from '../Icons/lupa1.jpeg';
 import AgregarProveedor from './AgregarProveedor.jsx';
@@ -103,6 +91,7 @@ export default function EliminarProducto(props) {
   let [precioprov7, setPrecioProv7] = useState(true);
   const [size2, setSize2] = useState('2');
   const [size3, setSize3] = useState('3');
+  const [nombreProducto, setNombre] = useState('');
   const [size4, setSize4] = useState('4');
   const [size5, setSize5] = useState('5');
   const [size6, setSize6] = useState('6');
@@ -110,14 +99,14 @@ export default function EliminarProducto(props) {
   const [precio1, setprecio1] = useState('');
   const [precio2, setprecio2] = useState('');
   const [precio3, setprecio3] = useState('');
-  const [modalVerCodigos, setModalVerCodigos] = useState(false);
+  const [modalVerProducto, setModalVerProducto] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalModificar, setModalModificar] = useState(false);
   const [ModalModificarCodigos, setModalModificarCodigos] = useState(false);
   const [ModalModificarProveedores, setModalModificarProveedores] = useState(false);
   const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
-  const [ModalVerPrecios, setModalVerPrecios] = useState(false);
+  const [Exento, setExento] = useState('');
   const [ModalVerCodigoBarra, setModalVerCodigoBarra] = useState(false);
   const [inputcod2, setinputcod2] = useState(false);
   const [inputcod3, setinputcod3] = useState(false);
@@ -162,6 +151,7 @@ export default function EliminarProducto(props) {
     fecha_vencimiento: new Date(),
   });
   const [bodega, setBodega] = useState('');
+  const [codPrincipal, setCodPrincipal] = useState('');
   const [cantsel, setCantsel] = useState(seleccionado.cantidad);
   const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
   const [precioprovedor1, setPrecioProvedor1] = useState('');
@@ -381,6 +371,25 @@ export default function EliminarProducto(props) {
       cursor: 'pointer',
     };
   }
+  const mostrarModalVerProducto = (elemento) => {
+    setSeleccionado(elemento);
+    setCantminsel(elemento.cantidad_minima);
+    setCantsel(elemento.cantidad);
+    setNombre(elemento.descripcion);
+    settagsBodegas(elemento.bodega);
+    setCodPrincipal(elemento.codigoPrincipal);
+    setCodigoBarra(elemento.codigoBarra);
+    setprecio1(elemento.precios[0]);
+    setprecio2(elemento.precios[1]);
+    setprecio3(elemento.precios[2]);
+    settagsProveedores(elemento.proveedores);
+    setTags(elemento.codigos);
+    if (elemento.productoExento) {
+      alert('exento');
+      setExento('Exento');
+    }
+    setModalVerProducto(true);
+  };
   function paddingmain() {
     return {
       width: 'auto',
@@ -458,12 +467,36 @@ export default function EliminarProducto(props) {
       padding: '0 8px',
     };
   }
-
   function paddingAvInput() {
     return {
       'margin-left': '-20px',
       'border-radius': '26px',
       width: '320px',
+    };
+  }
+  function paddinginputVerProducto() {
+    return {
+      display: 'flex',
+      'align-items': 'left',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '0px solid',
+      padding: '0 8px',
+      outline: 'none',
+    };
+  }
+  function paddinginputVerProductoExento() {
+    return {
+      display: 'flex',
+      'align-items': 'left',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '0px solid',
+      padding: '0 8px',
+      outline: 'none',
+      color: '#ffa500',
     };
   }
   function paddingAvInputCantidades() {
@@ -588,7 +621,22 @@ export default function EliminarProducto(props) {
   /*
   Metodo para fuardar codigos del ModalModificar
    */
-
+  function paddingdivcodigosRef() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '300px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '30px',
+      overflow: 'auto',
+      maxHeight: '100px',
+      top: '20px',
+    };
+  }
   const handleChange = (e, num) => {
     if (num === 2) {
       setinputcod2(e.target.value);
@@ -761,7 +809,6 @@ export default function EliminarProducto(props) {
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
     console.log(i.nombre);
-    setModalVerCodigos(true);
   };
   const onTodoChange = (value) => {
     this.setState({
@@ -837,7 +884,6 @@ export default function EliminarProducto(props) {
     }
     return 0;
   };*/
-  const [nombreProducto, setNombre] = useState('');
   const Modificar = (element) => {
     setSeleccionado(element);
     setSize('');
@@ -1152,10 +1198,6 @@ export default function EliminarProducto(props) {
     setprecio3(seleccionado.precios[2]);
     setModalModificarPrecios(true);
   };
-  const mostrarPrecios = (elemento) => {
-    setSeleccionado(elemento);
-    setModalVerPrecios(true);
-  };
   const mostrarCodigoBarra = (elemento) => {
     setSeleccionado(elemento);
 
@@ -1461,7 +1503,6 @@ export default function EliminarProducto(props) {
   const mostarModalProveedor = () => {
     setModalInsertar(true);
   };
-
   const cerraroAbrirModal = () => {
     setModalInsertar(!modalInsertar);
     fecthProveedores();
@@ -1555,6 +1596,7 @@ export default function EliminarProducto(props) {
               <th>Inventario</th>
               <th>Precio</th>
               <th class="text-center"> Acción</th>
+              <th>Prueba</th>
             </tr>
           </thead>
           <tbody>
@@ -1577,6 +1619,9 @@ export default function EliminarProducto(props) {
                   >
                     <Logo width="30px" height="30px" />
                   </Button>
+                </td>
+                <td>
+                  <button onClick={() => mostrarModalVerProducto(elemento)}>ver producto</button>
                 </td>
               </tr>
             ))}
@@ -2090,6 +2135,132 @@ export default function EliminarProducto(props) {
       </div>
       <AgregarBodega isOpen={modalAgregarBodega} change={() => cerraroAbrirModalBodega()} />
       <AgregarProducto isOpen={modalAgregarProducto} change={() => cerraroAbrirModalProducto()} />
+      {/*------------------------MODAL VER PRODUCTO-------------------------- */}
+      <Modal
+        isOpen={modalVerProducto}
+        className="text-center"
+        style={{
+          height: '100vh',
+          'overflow-y': 'overflow',
+          top: '20px',
+          width: '1700px',
+          maxWidth: '1700px',
+          'border-radius': '36px',
+          'overflow-x': 'hidden',
+        }}
+      >
+        <div>
+          <h3>Información detallada del producto</h3>
+        </div>
+        <ModalBody>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col>
+              <label style={{ color: '#ffa500' }}>Información de Producto</label>
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Descripcion:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="text"
+                name="descripcion"
+                id="descripcionver"
+                value={seleccionado ? seleccionado.descripcion : ''}
+                readOnly
+              />
+            </Col>
+            <br />
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Marca:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="text"
+                name="verMarca"
+                id="verMarca"
+                value={marcaSel}
+                readOnly
+              />
+            </Col>
+            <br />
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Codigo Principal:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="text"
+                name="codigoPrincipal"
+                id="codigoPrincipal"
+                value={seleccionado.codigoPrincipal ? seleccionado.codigoPrincipal : ''}
+                readOnly
+              />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '270px' }}>
+              <label>Códigos de Referencia:</label>
+            </Col>
+            <Col>
+              <div>
+                <ul>
+                  {tags.map((tag, index) => (
+                    <li key={index}>
+                      <span>{tag}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Código de Barra:</label>
+            </Col>
+            <Col>
+              <Barcode value={seleccionado.codigoBarra} />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Descripción Específica:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="textarea"
+                name="verDescripcion_especifica"
+                id="verDescripcion_especifica"
+                value={seleccionado ? seleccionado.descripcion_larga : ''}
+              />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Producto:</label>
+            </Col>
+            <Col style={{ maxWidth: '85px' }}>
+              <input
+                style={paddinginputVerProductoExento()}
+                type="text"
+                name="codigoPrincipal"
+                id="codigoPrincipal"
+                value={Exento}
+                color="#ffa500"
+                readOnly
+              />
+            </Col>
+          </Row>
+        </ModalBody>
+      </Modal>
     </div>
   );
 }
