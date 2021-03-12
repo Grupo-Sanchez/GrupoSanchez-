@@ -152,6 +152,7 @@ const OpcionesBodegas = (props) => {
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
   const [ModalMigrarProducto, setModalMigrarProducto] = useState(false);
   const [CantMigrar, setCantMigrar] = useState();
+  const [existencia, setExistencia] = useState(0);
 
   const [BodegaModificar, setBodegaModificar] = useState({
     numBodega: '',
@@ -367,12 +368,19 @@ const OpcionesBodegas = (props) => {
       for (let j = 0; j < dataproductos[i].bodega.length; j++) {
         //comparo si la bodega es la que estoy buscando
         if (dataproductos[i].bodega[j].value === BodegaSeleccionada._id) {
-          alert('entro');
-          // setModalMigrarProducto(true);
+          //alert('entro');
         }
       }
     }
   };
+
+  const modalAntesDeMigrar = (cantidad) => {
+    setModalMigrarProducto(true);
+    setExistencia(cantidad);
+  };
+
+  //metodo para obtener el id de la bodega seleccionada
+  const manejarCombobox = (e) => {};
 
   return (
     <div>
@@ -491,7 +499,7 @@ const OpcionesBodegas = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {dataproductos.map((elemento, index) => (
+                {dataproductos.map((elemento) => (
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
@@ -499,7 +507,7 @@ const OpcionesBodegas = (props) => {
                     <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
                     <td>{elemento.cantidad}</td>
                     <td>{elemento.precios}</td>
-                    <td onClick={() => migrar(elemento, index)}>ACCION</td>
+                    <td onClick={() => modalAntesDeMigrar(elemento.cantidad)}>ACCION</td>
                   </tr>
                 ))}
               </tbody>
@@ -778,34 +786,34 @@ const OpcionesBodegas = (props) => {
           <ModalBody>
             <div className="row">
               <div className="col-sm">
-                <AvField
-                  name="numBodega"
-                  label="Numero de bodega"
-                  type="number"
-                  onChange={handleChange}
-                  value={BodegaModificar.numBodega}
-                  validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
-                />
-                <AvField
-                  name="Description"
-                  label="Descripcion"
-                  type="text"
-                  onChange={handleChange}
-                  value={BodegaModificar.descripcion}
-                  validate={{
-                    required: { value: true, errorMessage: 'Campo debe ser llenado ' },
-                  }}
-                />
-                <AvField
-                  name="Encargado"
-                  label="Encargado"
-                  type="text"
-                  onChange={handleChange}
-                  value={BodegaModificar.encargado}
-                  validate={{
-                    required: { value: true, errorMessage: 'Campo debe ser llenado' },
-                  }}
-                />
+                <Row>
+                  <Col sm="12" md={{ size: 6, offset: 3 }}>
+                    <label>movilizar a bodega: </label>
+                    <select>
+                      {dataBodegas.map((bodega) => {
+                        return <option value={bodega._id}>{bodega.descripcion}</option>;
+                      })}
+                    </select>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="12" md={{ size: 6, offset: 3 }}>
+                    <label>cantidad existente en bodega actual: </label>
+                    <label>{existencia}</label>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col sm="12" md={{ size: 6, offset: 3 }}>
+                    <label>cantidad a enviar</label>
+                    <AvField
+                      name="Encargado"
+                      type="number"
+                      onChange={handleChange}
+                      min="1"
+                      max={existencia}
+                    />
+                  </Col>
+                </Row>
               </div>
             </div>
           </ModalBody>
