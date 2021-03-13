@@ -95,6 +95,14 @@ export default function AgregarUsuario(props) {
       width: '320px',
     };
   }
+  function paddingAvInputGreen() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      'border-color': '#62d162',
+      width: '320px',
+    };
+  }
   function paddingAvInputCantidades() {
     return {
       'border-radius': '26px',
@@ -318,34 +326,13 @@ export default function AgregarUsuario(props) {
         <ModalBody>
           <div>
             <AvForm>
-              <Row>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
-                  <label>Identidad</label>
+                  <label style={{ color: '#62d162' }}>Primer nombre</label>
                 </Col>
                 <Col>
                   <AvField
-                    style={paddingAvInput()}
-                    errorMessage="Numero de identidad inválido"
-                    validate={{
-                      required: { value: true },
-                      pattern: { value: regexSoloNumeros },
-                      minLength: { value: 13 },
-                    }}
-                    maxLength="13"
-                    className="form-control"
-                    type="text"
-                    name="identidad"
-                    id="identidad"
-                    value={seleccionado ? seleccionado.identidad : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-                <Col>
-                  <label>Primer nombre</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
+                    style={paddingAvInputGreen()}
                     errorMessage="Nombre Inválido"
                     validate={{
                       required: { value: true },
@@ -360,13 +347,33 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
+                <Col>
+                  <label style={{ color: '#62d162' }}>Primer apellido</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInputGreen()}
+                    errorMessage="Apellido Inválido"
+                    validate={{
+                      required: { value: true },
+                      pattern: { value: regex },
+                      minLength: { value: 1 },
+                    }}
+                    className="form-control"
+                    type="text"
+                    name="primer_apellido"
+                    id="primer_apellido"
+                    value={seleccionado ? seleccionado.primer_apellido : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
               </Row>
             </AvForm>
           </div>
 
           <div>
             <AvForm>
-              <Row>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
                   <label>Segundo nombre</label>
                 </Col>
@@ -388,34 +395,7 @@ export default function AgregarUsuario(props) {
                   />
                 </Col>
                 <Col>
-                  <label>Primer apellido</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
-                    errorMessage="Apellido Inválido"
-                    validate={{
-                      required: { value: true },
-                      pattern: { value: regex },
-                      minLength: { value: 1 },
-                    }}
-                    className="form-control"
-                    type="text"
-                    name="primer_apellido"
-                    id="primer_apellido"
-                    value={seleccionado ? seleccionado.primer_apellido : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-              </Row>
-            </AvForm>
-          </div>
-
-          <div>
-            <AvForm>
-              <Row>
-                <Col>
-                  <label>Segundo Apellido</label>
+                  <label>Segundo apellido</label>
                 </Col>
                 <Col>
                   <AvField
@@ -431,6 +411,75 @@ export default function AgregarUsuario(props) {
                     name="segundo_apellido"
                     id="segundo_apellido"
                     value={seleccionado ? seleccionado.segundo_apellido : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
+              </Row>
+            </AvForm>
+          </div>
+
+          <div>
+            <AvForm>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                <Col>
+                  <label style={{ color: '#62d162' }}>Nombre de usuario</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInputGreen()}
+                    errorMessage="Revise el formato"
+                    className="form-control"
+                    type="text"
+                    name="usuario"
+                    id="usuario"
+                    //value={seleccionado ? seleccionado.usuario : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
+                <Col>
+                  <label style={{ color: '#62d162' }}>No. Identidad</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInputGreen()}
+                    errorMessage="Numero de identidad inválido"
+                    validate={{
+                      required: { value: true },
+                      pattern: { value: regexSoloNumeros },
+                      minLength: { value: 13 },
+                    }}
+                    maxLength="13"
+                    className="form-control"
+                    type="text"
+                    name="identidad"
+                    id="identidad"
+                    value={seleccionado ? seleccionado.identidad : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
+              </Row>
+            </AvForm>
+          </div>
+          <div>
+            <AvForm>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                <Col>
+                  <label>Telefono</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInput()}
+                    errorMessage="Telefono Inválido"
+                    validate={{
+                      required: { value: false },
+                      pattern: { value: regexSoloNumeros },
+                      minLength: { value: 1 },
+                    }}
+                    className="form-control"
+                    type="text"
+                    name="telefono"
+                    id="telefono"
+                    value={seleccionado ? seleccionado.telefono : ''}
                     onChange={manejarCambio}
                   />
                 </Col>
@@ -458,31 +507,12 @@ export default function AgregarUsuario(props) {
               </Row>
             </AvForm>
           </div>
+
           <div>
             <AvForm>
-              <Row>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
-                  <label>Telefono</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
-                    errorMessage="Telefono Inválido"
-                    validate={{
-                      required: { value: false },
-                      pattern: { value: regexSoloNumeros },
-                      minLength: { value: 1 },
-                    }}
-                    className="form-control"
-                    type="text"
-                    name="telefono"
-                    id="telefono"
-                    value={seleccionado ? seleccionado.telefono : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-                <Col>
-                  <label>Correo</label>
+                  <label>Correo electronico</label>
                 </Col>
                 <Col>
                   <AvField
@@ -500,19 +530,12 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-              </Row>
-            </AvForm>
-          </div>
-
-          <div>
-            <AvForm>
-              <Row>
                 <Col>
-                  <label>Constraseña</label>
+                  <label style={{ color: '#62d162' }}>Constraseña</label>
                 </Col>
                 <Col>
                   <AvField
-                    style={paddingAvInput()}
+                    style={paddingAvInputGreen()}
                     errorMessage="Constraseña debe tener mas de 4 caracteres"
                     validate={{
                       required: { value: true },
@@ -526,34 +549,17 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-                <Col>
-                  <label>Confirmar Constraseña</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
-                    errorMessage="Constraseña no coincide"
-                    validate={{
-                      required: { value: true },
-                      minLength: { value: 4 },
-                    }}
-                    className="form-control"
-                    type="password"
-                    name="password"
-                    id="password"
-                  />
-                </Col>
               </Row>
             </AvForm>
           </div>
           <div>
-            <label>Tipo de usuario</label>
+            <label style={{ color: '#62d162', fontSize: '23px' }}>Tipo de usuario</label>
             <Row>
               <Col sm="12" md={{ size: 6, offset: 3 }}>
                 {' '}
                 <div style={{ marginLeft: '35px' }}>
                   <SelectSearch
-                    style={paddingAvInput()}
+                    style={paddingAvInputGreen()}
                     search
                     placeholder="Seleccione el rol del usuario"
                     required
