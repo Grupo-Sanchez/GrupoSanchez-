@@ -35,7 +35,7 @@ const thumbsContainer = {
   flexWrap: 'wrap',
   marginTop: -160,
   'margin-left': '300px',
-  paddingRight: '50px',
+  paddingLeft: '60px',
   margin: 'auto',
   width: '1%',
 };
@@ -62,13 +62,13 @@ const baseStyle = {
 const thumb = {
   display: 'inline-flex',
   borderRadius: 2,
-  border: '1px solid #eaeaea',
   marginBottom: 8,
   marginRight: 8,
-  width: 150,
-  height: 150,
+  width: 'auto',
+  height: 'auto',
+  maxHeight: '200px',
+  maxWidth: '300px',
   padding: 4,
-  boxSizing: 'border-box',
 };
 
 const thumbInner = {
@@ -110,6 +110,11 @@ export default function EliminarProducto(props) {
   const [size6, setSize6] = useState('6');
   const [size7, setSize7] = useState('7');
   const [precio1, setprecio1] = useState('');
+  const [files, setFiles] = useState([]);
+  const [fotos1, setfotos1] = useState([]);
+  const [idImagen, setidImagen] = useState([]);
+  let [singleFiles, setSingleFiles] = useState([]);
+  const [singleProgress, setSingleProgress] = useState(0);
   const [precio2, setprecio2] = useState('');
   const [precio3, setprecio3] = useState('');
   const [productoExento, setProductoExento] = useState(false);
@@ -254,10 +259,6 @@ export default function EliminarProducto(props) {
     fecthMarcas();
     fecthProveedores();
   };
-
-  useEffect(() => {
-    fecthData();
-  }, []);
   const removeTagsProv = (index) => {
     let provAgregar = [];
     for (let inde = 0; inde < tagsProveedores.length; inde++) {
@@ -327,9 +328,19 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => { },
+        onok: () => {},
       });
     }
+  };
+
+  const removerImagen = () => {
+    setFiles([]);
+    setSingleFiles([]);
+  };
+  const cancelarMod = () => {
+    setModalModificar(false);
+    setFiles([]);
+    setSingleFiles([]);
   };
   const onChangeBodega = () => {
     if (precioprovedor6 !== 0) {
@@ -351,11 +362,26 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
   function paddingclose() {
+    return {
+      display: 'block',
+      width: '20px',
+      height: '20px',
+      'line-height': '16px',
+      'text-align': 'center',
+      'font-size': '20px',
+      'margin-left': '60px',
+      color: 'white',
+      'border-radius': '50%',
+      background: '#f60000',
+      cursor: 'pointer',
+    };
+  }
+  function paddingcloseprov() {
     return {
       display: 'block',
       width: '20px',
@@ -386,6 +412,23 @@ export default function EliminarProducto(props) {
     };
   }
   function paddingmain() {
+    return {
+      width: 'auto',
+      height: '32px',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      color: '#282c34',
+      padding: '0 8px',
+      'font-size': '20px',
+      'list-style': 'none',
+      margin: '0 8px 8px 0',
+      'border-radius': '25px',
+      'margin-top': '8px',
+      background: '#e9e3e3',
+    };
+  }
+  function paddingmainprov() {
     return {
       width: 'auto',
       height: '32px',
@@ -450,16 +493,16 @@ export default function EliminarProducto(props) {
       'align-items': 'flex-start',
       'flex-wrap': 'wrap',
       'min-height': '48px',
-      width: '400px',
+      width: '300px',
       border: 'none',
       'border-radius': '10px',
       padding: '0 8px',
-      'margin-left': '80px',
+      'margin-left': '10px',
       overflow: 'auto',
-      maxHeight: '100px',
+      maxHeight: '180px',
     };
   }
-  function paddingdivbodegas() {
+  function paddingdivprov() {
     return {
       display: 'flex',
       'align-items': 'flex-start',
@@ -469,13 +512,42 @@ export default function EliminarProducto(props) {
       border: 'none',
       'border-radius': '10px',
       padding: '0 8px',
-      'margin-left': '50px',
+      'margin-left': '80px',
+      overflow: 'auto',
+      maxHeight: '180px',
+      marginTop: '-15px',
+    };
+  }
+  function paddingdivbodegas() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '500px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '150px',
       paddingRight: '-250px',
       overflow: 'auto',
-      maxHeight: '100px',
+      maxHeight: '180px',
+      marginTop: '-25px',
     };
   }
   function paddingInput() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '1px solid #0052cc',
+      'border-radius': '26px',
+      padding: '0 8px',
+    };
+  }
+  function paddingInputprov() {
     return {
       display: 'flex',
       'align-items': 'flex-start',
@@ -538,12 +610,25 @@ export default function EliminarProducto(props) {
       'margin-top': '3px',
     };
   }
+  function paddingtitleprov() {
+    return {
+      'margin-top': '3px',
+    };
+  }
   function paddingtitlebodega() {
     return {
       'margin-top': '3px',
     };
   }
   function paddingul() {
+    return {
+      'flex-wrap': 'wrap',
+      padding: '0',
+      paddingLeft: '45px',
+      margin: '8px 0 0 0',
+    };
+  }
+  function paddingulprov() {
     return {
       'flex-wrap': 'wrap',
       padding: '0',
@@ -583,10 +668,41 @@ export default function EliminarProducto(props) {
       setExento('Exento');
     }
     setModalVerProducto(true);
+    const pic = fotos1.filter((item) => item.idProducto === elemento.codigoPrincipal);
+    // setFiles(pic);
+    if (pic.length > 0) {
+      let f = new File([pic[pic.length - 1]], pic[pic.length - 1].fileName, {
+        type: pic[pic.length - 1].fileType,
+        lastModified: new Date(),
+      });
+      let files2 = [];
+      files2.push(f);
+      setFiles(
+        files2.map((file) =>
+          Object.assign(file, {
+            preview: `http://localhost:3000/${pic[pic.length - 1].filePath
+              .replace('\\', '')
+              .replace('Frontend', '')
+              .replace('\\', '')
+              .replace('\\', '/')
+              .split('public')
+              .join('')
+              .replace('//uploads/', '/uploads/')}`,
+          }),
+        ),
+      );
+      console.log('----------');
+      console.log(pic[pic.length - 1]._id);
+      setidImagen(pic[pic.length - 1]._id);
+      setSingleFiles(pic);
+    }
   };
   let proveedoresSeleccionados = [];
-  const manejarCambioPrecioBodega = (e) => {
+  const manejarCambioPasillo = (e) => {
     setPrecioProvedor6(e.target.value);
+  };
+  const manejarCambioPrecioBodega = (e) => {
+    setPrecioProvedor1(e.target.value);
   };
   const manejarCambioPrecioProveedor = (e) => {
     setPrecioProvedor7(e.target.value);
@@ -673,22 +789,26 @@ export default function EliminarProducto(props) {
     seleccionado.precios[0] = parseInt(document.getElementById('modprecio1').value, 10);
     seleccionado.precios[1] = parseInt(document.getElementById('modprecio2').value, 10);
     seleccionado.precios[2] = parseInt(document.getElementById('modprecio3').value, 10);
-    if (precio2 !== '' && precio3 === '' && seleccionado.precios[0] > seleccionado.precios[1]) {
+    if (
+      seleccionado.precios[1] !== '' &&
+      seleccionado.precios[2] === '' &&
+      seleccionado.precios[0] > seleccionado.precios[1]
+    ) {
       menor = true;
     } else if (
-      precio3 !== '' &&
-      precio2 === '' &&
+      seleccionado.precios[2] !== null &&
+      seleccionado.precios[1] === null &&
       seleccionado.precios[0] > seleccionado.precios[2]
     ) {
       menor = true;
     } else if (
-      precio2 !== '' &&
-      precio3 !== '' &&
+      seleccionado.precios[1] !== null &&
+      seleccionado.precios[2] !== null &&
       seleccionado.precios[0] > seleccionado.precios[1] &&
       seleccionado.precios[1] > seleccionado.precios[2]
     ) {
       menor = true;
-    } else if (precio2 === '' && precio3 === '') {
+    } else if (seleccionado.precios[1] === null && seleccionado.precios[2] === null) {
       menor = true;
     }
     if (!menor) {
@@ -696,7 +816,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       setModalModificarPrecios(false);
@@ -717,7 +837,45 @@ export default function EliminarProducto(props) {
       },
     });
   };
-
+  const getSingleFiles = async () => {
+    try {
+      await axios.get('http://localhost:3001/api/getSingleFiles').then((response) => {
+        const fotos = response.data;
+        let tempfotos = [];
+        for (let index = 0; index < fotos.length; index++) {
+          const element = fotos[index];
+          tempfotos.push(element);
+        }
+        singleFiles = tempfotos;
+      });
+      setfotos1(singleFiles);
+      console.log(fotos1);
+    } catch (error) {
+      //alert('ACA DOS: ', error);
+    }
+    return null;
+  };
+  const singleFileUpload = async (data1, options1) => {
+    try {
+      await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
+    } catch (error) {
+      alert(`ACA: , ${error}`);
+    }
+    return null;
+  };
+  const singleFileOptions = {
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
+      setSingleProgress(percentage);
+    },
+  };
+  const uploadSingleFile = async () => {
+    const formData = new FormData();
+    formData.append('id', seleccionado.codigoPrincipal);
+    formData.append('file', singleFiles[0]);
+    await singleFileUpload(formData, singleFileOptions);
+  };
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
   const [marcaSel, setMarcaSel] = useState([]);
   const [bodegaSel, setBodegaSel] = useState([]);
@@ -737,7 +895,6 @@ export default function EliminarProducto(props) {
         }
       }
     }
-
     for (let index = 0; index < bodegas.length; index++) {
       const element = bodegas[index];
       if (element.value === bodegaSel) {
@@ -769,7 +926,11 @@ export default function EliminarProducto(props) {
       ) {
         if (banderaPrecios) {
           setModalModificar(false);
-          axios
+          /*let result = findRemoveSync('../public/uploads/', {
+            files: '2021-03-13T02-49-34.397Z-multiplexer12.png',
+          });*/
+
+          await axios
             .put(`http://localhost:3001/api/productos/${Id}`, {
               descripcion: document.getElementById('modnombre').value,
               area: document.getElementById('modarea').value,
@@ -790,26 +951,33 @@ export default function EliminarProducto(props) {
                 title: '',
                 message: `Producto ${seleccionado.descripcion} modificado exitosamente`,
                 onok: () => {
-                  fecthData();
+                  window.location.reload();
                 },
               }),
             )
             .catch((error) => {
               console.log(error);
             });
+          if (singleFiles.length > 0) {
+            uploadSingleFile();
+          } else {
+            await axios.delete(`http://localhost:3001/api/SingleFile/${idImagen}`);
+          }
+          removerImagen();
+          getSingleFiles();
         }
       } else {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -892,7 +1060,13 @@ export default function EliminarProducto(props) {
     }
     return 0;
   };*/
+
   const [nombreProducto, setNombre] = useState('');
+
+  useEffect(() => {
+    fecthData();
+    getSingleFiles();
+  }, []);
   const Modificar = (element) => {
     setSeleccionado(element);
     setSize('');
@@ -912,13 +1086,39 @@ export default function EliminarProducto(props) {
     setCodes(element.codigos);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
-    // setMarcaSel(element.marca[0].value);
-    //setBodegaSel(element.bodega[0].value);
-    //setNombre(element.nombre);
     setTagsTemp(element.codigos);
     settempProv(element.proveedores);
     settagsBodegas(seleccionado.bodega);
     //settempBod(tagsBodegas);
+    getSingleFiles();
+    const pic = fotos1.filter((item) => item.idProducto === element.codigoPrincipal);
+    // setFiles(pic);
+    if (pic.length > 0) {
+      let f = new File([pic[pic.length - 1]], pic[pic.length - 1].fileName, {
+        type: pic[pic.length - 1].fileType,
+        lastModified: new Date(),
+      });
+      let files2 = [];
+      files2.push(f);
+      setFiles(
+        files2.map((file) =>
+          Object.assign(file, {
+            preview: `http://localhost:3000/${pic[pic.length - 1].filePath
+              .replace('\\', '')
+              .replace('Frontend', '')
+              .replace('\\', '')
+              .replace('\\', '/')
+              .split('public')
+              .join('')
+              .replace('//uploads/', '/uploads/')}`,
+          }),
+        ),
+      );
+      console.log('----------');
+      console.log(pic[pic.length - 1]._id);
+      setidImagen(pic[pic.length - 1]._id);
+      setSingleFiles(pic);
+    }
     setCodigoBarra(element.codigoBarra);
     setprecio1(element.precios[0]);
     setprecio2(element.precios[1]);
@@ -1105,7 +1305,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => { },
+            onok: () => {},
           });
           entra = false;
         } else if (yaesta) {
@@ -1130,14 +1330,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1248,7 +1448,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
+        onok: () => {},
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -1318,7 +1518,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -1359,7 +1559,7 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => { },
+          onok: () => {},
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -1428,7 +1628,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -1483,7 +1683,6 @@ export default function EliminarProducto(props) {
     };
   }
 
-  const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
@@ -1494,6 +1693,7 @@ export default function EliminarProducto(props) {
           }),
         ),
       );
+      setSingleFiles(acceptedFiles);
     },
   });
 
@@ -1525,7 +1725,7 @@ export default function EliminarProducto(props) {
         onClick(e);
       }}
     >
-      <Plus width='50px' height='50px' />
+      <Plus width="50px" height="50px" />
       {children}
     </a>
   ));
@@ -1568,7 +1768,7 @@ export default function EliminarProducto(props) {
               <Plus width="50px" height="50px" />
             </Button>
           </Col>
-          <Col style={{ paddingRight: '450px' }}>
+          <Col style={{ paddingRight: '650px' }}>
             <input
               type="text"
               id="myInput"
@@ -1579,7 +1779,7 @@ export default function EliminarProducto(props) {
                 'background-image': `url('${imagePath}')`,
                 'background-position': '10px 10px',
                 'background-repeat': 'no-repeat',
-                width: '300px',
+                width: '500px',
                 'max-width': '600px',
                 'font-size': '16px',
                 padding: '12px 20px 12px 40px',
@@ -1671,10 +1871,53 @@ export default function EliminarProducto(props) {
         >
           <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
-            <Dropdown.Menu style={{ background: 'transparent', border: 'transparent', 'padding-left': '55px', 'margin-top': '-40px' }} >
-              <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="2" onClick={() => setModalAgregar(true)}>Crear Marca</Dropdown.Item>
-              <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="3" onClick={() => setModalInsertar(true)}>Crear Proveedor</Dropdown.Item>
-              <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="4" onClick={() => setModalAgregarBodega(true)}>Crear Bodega</Dropdown.Item>
+            <Dropdown.Menu
+              style={{
+                background: 'transparent',
+                border: 'transparent',
+                'padding-left': '55px',
+                'margin-top': '-40px',
+              }}
+            >
+              <Dropdown.Item
+                style={{
+                  borderRadius: '36px',
+                  'background-color': '#fff1d6',
+                  height: '40px',
+                  'margin-top': '2px',
+                  'font-size': '23px',
+                }}
+                eventKey="2"
+                onClick={() => setModalAgregar(true)}
+              >
+                Crear Marca
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  borderRadius: '36px',
+                  'background-color': '#fff1d6',
+                  height: '40px',
+                  'margin-top': '2px',
+                  'font-size': '23px',
+                }}
+                eventKey="3"
+                onClick={() => setModalInsertar(true)}
+              >
+                Crear Proveedor
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  borderRadius: '36px',
+                  'background-color': '#fff1d6',
+                  height: '40px',
+                  'margin-top': '2px',
+                  'font-size': '23px',
+                }}
+                eventKey="4"
+                onClick={() => setModalAgregarBodega(true)}
+              >
+                Crear Bodega
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           <div>
@@ -1686,7 +1929,6 @@ export default function EliminarProducto(props) {
               paddingLeft: '200px',
             }}
           >
-
             <Button
               style={{
                 'background-color': 'transparent',
@@ -1721,7 +1963,7 @@ export default function EliminarProducto(props) {
                   }}
                 >
                   Descripcion
-              </h>
+                </h>
                 <Col style={{ marginLeft: '10px ' }}>
                   <AvField
                     style={paddingAvInput()}
@@ -1749,7 +1991,7 @@ export default function EliminarProducto(props) {
                       }}
                     >
                       Codigo Principal
-                  </h>
+                    </h>
                     <Col>
                       <AvField
                         style={paddingAvInputObligatorio()}
@@ -1772,8 +2014,8 @@ export default function EliminarProducto(props) {
                 </Col>
                 <label style={{ 'margin-left': '-100px', fontSize: '23px' }}>
                   Descripción
-                <br />
-                especifica{' '}
+                  <br />
+                  especifica{' '}
                 </label>
                 <Col style={{ 'margin-left': '35px' }}>
                   <FormGroup>
@@ -1802,7 +2044,6 @@ export default function EliminarProducto(props) {
                   value={codRef}
                   onChange={(e) => manejarCambioCodRef(e)}
                 />
-                <br />
                 <div style={paddingdiv()}>
                   <ul style={paddingul()}>
                     {tags.map((tag, index) => (
@@ -1901,7 +2142,7 @@ export default function EliminarProducto(props) {
                             }}
                           >
                             Cantidad
-                        </label>
+                          </label>
                           <input
                             style={{
                               width: '90px',
@@ -1924,9 +2165,16 @@ export default function EliminarProducto(props) {
                         }}
                       >
                         <div>
-                          <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-60px' }}>
+                          <label
+                            style={{
+                              fontSize: '14px',
+                              top: '-22px',
+                              position: 'relative',
+                              'margin-left': '-60px',
+                            }}
+                          >
                             # Pasillo
-                        </label>
+                          </label>
                           <input
                             style={{
                               width: '70px',
@@ -1936,7 +2184,7 @@ export default function EliminarProducto(props) {
                             }}
                             className="form-control"
                             type="Number"
-                            onChange={(e) => manejarCambioPrecioBodega(e)}
+                            onChange={(e) => manejarCambioPasillo(e)}
                             value={precioprovedor6}
                             min={1}
                           />
@@ -1965,7 +2213,10 @@ export default function EliminarProducto(props) {
                               <span style={paddingtitle()}>
                                 {tag.name},# {tag.cantBodega} ,Pasillo {tag.numPasillo}
                               </span>
-                              <i style={paddingclosebodega()} onClick={() => removeTagsBodega(index)}>
+                              <i
+                                style={paddingclosebodega()}
+                                onClick={() => removeTagsBodega(index)}
+                              >
                                 <Remove width="20px" height="20px" />
                               </i>
                             </li>
@@ -1999,7 +2250,9 @@ export default function EliminarProducto(props) {
                         />
                       </Col>
                       <Col sm={{ size: 'auto' }} style={{ top: '-20px' }}>
-                        <h style={{ 'margin-left': '-15px', 'font-size': '20px' }}>Cantidad Mínima</h>
+                        <h style={{ 'margin-left': '-15px', 'font-size': '20px' }}>
+                          Cantidad Mínima
+                        </h>
                         <input
                           style={paddingAvInputCantidades()}
                           className="form-control"
@@ -2044,7 +2297,9 @@ export default function EliminarProducto(props) {
                 </Row>
               </Col>
               <Col style={{ 'max-width': '120px' }}>
-                <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>Departamento</label>
+                <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>
+                  Departamento
+                </label>
               </Col>
               <Col>
                 <AvForm>
@@ -2109,14 +2364,14 @@ export default function EliminarProducto(props) {
                       <Plus width="40px" height="50px" />
                     </Button>
                   </Col>
-                  <div style={paddingdiv()}>
-                    <ul style={paddingul()}>
+                  <div style={paddingdivprov()}>
+                    <ul style={paddingulprov()}>
                       {tagsProveedores.map((tag, index) => (
-                        <li style={paddingmain()} key={index}>
-                          <span style={paddingtitle()}>
+                        <li style={paddingmainprov()} key={index}>
+                          <span style={paddingtitleprov()}>
                             {tag.name}, L. {tag.precio}
                           </span>
-                          <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
+                          <i style={paddingcloseprov()} onClick={() => removeTagsProv(index)}>
                             <Remove width="20px" height="20px" />
                           </i>
                         </li>
@@ -2133,7 +2388,9 @@ export default function EliminarProducto(props) {
                   }}
                 >
                   <Row>
-                    <label style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}>
+                    <label
+                      style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}
+                    >
                       Precios de
                       <br /> Venta
                     </label>
@@ -2173,7 +2430,7 @@ export default function EliminarProducto(props) {
                         className="form-control"
                         type="Number"
                         name="Fecha"
-                        name="precio2"
+                        name="modprecio2"
                         id="modprecio2"
                         validate={{
                           required: { value: false },
@@ -2188,7 +2445,7 @@ export default function EliminarProducto(props) {
                         className="form-control"
                         type="Number"
                         name="Etiqueta"
-                        name="precio3"
+                        name="modprecio3"
                         id="modprecio3"
                         validate={{
                           required: { value: false },
@@ -2207,7 +2464,7 @@ export default function EliminarProducto(props) {
                         'margin-left': '-20px',
                         'border-radius': '26px',
                       }}
-                      onClick={() => setFiles([])}
+                      onClick={() => removerImagen()}
                     >
                       <Remove width="25px" height="25px" />
                     </Button>
@@ -2221,15 +2478,16 @@ export default function EliminarProducto(props) {
                       </div>
                     </section>
                     <Col>
-                      <div style={{ marginTop: -170, marginRight: '350px' }}>
+                      <div style={{ marginTop: -200, marginRight: '350px' }}>
                         <aside style={thumbsContainer}>{thumbs}</aside>
                       </div>
                     </Col>
                   </Col>
                 </Row>
               </Col>
-            </Row>.....
-          <br />
+            </Row>
+            .....
+            <br />
           </ModalBody>
           <ModalFooter>
             <button
@@ -2266,7 +2524,7 @@ export default function EliminarProducto(props) {
                 cursor: 'pointer',
               }}
               className="btn btn-danger"
-              onClick={() => setModalModificar(false)}
+              onClick={() => cancelarMod()}
             >
               Cancelar
             </button>
@@ -2320,7 +2578,7 @@ export default function EliminarProducto(props) {
                   </div>
                 </section>
                 <Col>
-                  <div style={{ marginTop: -170, marginRight: '350px' }}>
+                  <div style={{ marginTop: -200, marginRight: '350px' }}>
                     <aside style={thumbsContainer}>{thumbs}</aside>
                   </div>
                 </Col>
@@ -2399,10 +2657,10 @@ export default function EliminarProducto(props) {
               </Col>
             </Row>
             <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
+              <Col style={{ maxWidth: '350px' }}>
                 <label>Descripción Específica:</label>
               </Col>
-              <Col style={{ maxWidth: '480px' }}>
+              <Col style={{ maxWidth: '440px', marginLeft: '-50px' }}>
                 <input
                   style={paddinginputVerProducto()}
                   type="textarea"
@@ -2477,11 +2735,7 @@ export default function EliminarProducto(props) {
                 <label style={{ color: '#ffa500' }}>Inventario:</label>
               </Col>
               <Col style={{ maxWidth: '480px' }}>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="Number"
-                  readOnly
-                />
+                <input style={paddinginputVerProducto()} type="Number" readOnly />
               </Col>
               <Col style={{ maxWidth: '200px' }}>
                 <label>Precio 3:</label>
@@ -2522,7 +2776,7 @@ export default function EliminarProducto(props) {
                       <li key={index}>
                         <span>
                           Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
-                        {tag.numPasillo}
+                          {tag.numPasillo}
                           {tag.pasillo}
                         </span>
                       </li>
@@ -2548,7 +2802,7 @@ export default function EliminarProducto(props) {
               onClick={() => cerrarModalVerProducto()}
             >
               Cerrar
-          </button>
+            </button>
           </ModalFooter>
         </Modal>
       </div>
