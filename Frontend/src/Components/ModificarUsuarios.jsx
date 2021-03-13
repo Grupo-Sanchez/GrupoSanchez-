@@ -713,7 +713,8 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="nombre"
                     id="nombre"
-                    value={seleccionado ? seleccionado.nombre : ''}
+                    //value={seleccionado ? seleccionado.nombre : ''}
+                    value="Jefe de tienda"
                     readOnly
                   />
                 </Col>
