@@ -24,6 +24,7 @@ app.use(cors());
 app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
+app.use('/uploads', express.static('uploads'));
 
 // Nos conectamos a la base de datos por medio de mongoose
 // El proces busca donde se hizo el npm dotenv
