@@ -8,14 +8,13 @@ const facturas = require('./FacturaRoutes');
 const bodegas = require('./bodegaRoutes');
 const proveedores = require('./proveedorRoutes');
 const marcas = require('./marcaRoutes');
-
+const imagen = require('./file-upload-routes');
 const login = require('./login');
 
 const api = express.Router();
 
 //
 api.use('/', login);
-
 api.use('/administrador', administrador);
 api.use('/productos', productos);
 api.get('/productos', productos);
@@ -27,6 +26,8 @@ api.use('/users', users);
 api.get('/users', users);
 api.use('/clientes', clientes);
 api.get('/clientes', clientes);
+api.use('/SingleFile', imagen);
+api.get('/getSingleFiles', imagen);
 api.use('/bodegas', bodegas);
 api.get('/bodegas', bodegas);
 api.use('/proveedor', proveedores);
