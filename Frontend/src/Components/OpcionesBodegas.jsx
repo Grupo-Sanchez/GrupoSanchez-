@@ -1,110 +1,3 @@
-// import { useState } from 'react';
-// import { Col, Container, Row } from 'reactstrap';
-// import CartasOpciones from './CartasOpciones.jsx';
-// import Agregar from './CrearBodega.jsx';
-// import Listar from './ListarBodegas.jsx';
-// import Modificar from './ModificarEliminarBodegas.jsx';
-// import CrearBodega from '../Icons/CrearBodega.svg';
-// import EliminarBodega from '../Icons/EliminarBodega.svg';
-// import EditarBodega from '../Icons/EditarBodega.svg';
-// import ConsultarBodega from '../Icons/ConsultarBodega.svg';
-
-// const OpcionesBodegas = () => {
-//   const [modalAgregar, setModalAgregar] = useState(false);
-//   const [modalEliminar, setModalEliminar] = useState(false);
-//   const [modalConsultar, setModalConsultar] = useState(false);
-//   const [modalModificar, setModalModificar] = useState(false);
-//   const items = [
-//     {
-//       titulo: 'Crear Bodegas',
-//       icon: (
-//         <img
-//           src={CrearBodega}
-//           style={{
-//             width: '240px',
-//             height: 'auto',
-//             paddingBottom: '20px',
-//             marginLeft: 'auto',
-//             marginRight: 'auto',
-//           }}
-//         />
-//       ),
-//       to: '/',
-//       isOpen: () => setModalAgregar(true),
-//     },
-//     {
-//       titulo: 'Modificar/Eliminar Bodegas',
-//       icon: (
-//         <img
-//           src={EditarBodega}
-//           style={{
-//             width: '240px',
-//             height: 'auto',
-//             paddingBottom: '20px',
-//             marginLeft: 'auto',
-//             marginRight: 'auto',
-//           }}
-//         />
-//       ),
-//       to: '/',
-//       isOpen: () => setModalModificar(true),
-//     },
-//     // {
-//     //   titulo: 'Eliminar Bodegas',
-//     //   icon: (
-//     //     <img
-//     //       src={EliminarBodega}
-//     //       style={{
-//     //         width: '240px',
-//     //         height: 'auto',
-//     //         paddingBottom: '20px',
-//     //         marginLeft: 'auto',
-//     //         marginRight: 'auto',
-//     //       }}
-//     //     />
-//     //   ),
-//     //   to: '/',
-//     //   isOpen: () => setModalEliminar(true),
-//     // },
-//     {
-//       titulo: 'Consultar Bodegas',
-//       icon: (
-//         <img
-//           src={ConsultarBodega}
-//           style={{
-//             width: '240px',
-//             height: 'auto',
-//             paddingBottom: '20px',
-//             marginLeft: 'auto',
-//             marginRight: 'auto',
-//           }}
-//         />
-//       ),
-//       to: '/',
-//       isOpen: () => setModalConsultar(true),
-//     },
-//   ];
-
-//   return (
-//     <Container fluid="md" style={{ padding: '0' }}>
-//       <h1 style={{ textAlign: 'center', paddingTop: '25px' }}>Bodegas</h1>
-//       {/* <Agregar isOpen={modalAgregar} change={() => setModalAgregar(!modalAgregar)} />
-//       <Listar isOpen={modalConsultar} change={() => setModalConsultar(!modalConsultar)} />
-//       <Modificar isOpen={modalModificar} change={() => setModalModificar(!modalModificar)} />
-//       <Row md="3" style={{ paddingTop: '25px' }}>
-//         {items.map(({ titulo, to, icon, isOpen }, i) => (
-//           <Col key={i}>
-//             <CartasOpciones titulo={titulo} to={to} icon={icon} isOpen={isOpen} />
-//           </Col>
-//         ))}
-//       </Row> */}
-//       <Listar ></Listar>
-//     </Container>
-//   );
-// };
-
-// export default OpcionesBodegas;
-
 import React, { useState, useEffect } from 'react';
 import {
   Modal,
@@ -169,8 +62,11 @@ const OpcionesBodegas = (props) => {
   const [ModalMigrarProducto, setModalMigrarProducto] = useState(false);
   const [productos, setProductos] = useState([]);
   const [CantMigrar, setCantMigrar] = useState();
-
+  let cant;
+  let InfoMigracion;
   const [existencia, setExistencia] = useState(0);
+  const [ProductoMigrar, setProductoMigrar] = useState(); //Producto que se migrara
+  const [BodegaProducto, setBodegaProducto] = useState(); //En que bodega esta el producto a migrar
 
   const [BodegaModificar, setBodegaModificar] = useState({
     numBodega: '',
@@ -182,6 +78,12 @@ const OpcionesBodegas = (props) => {
     numBodega: '',
     Description: '',
     Encargado: '',
+  });
+  const [BodegaSeleccionada, setBodegaSeleccionada] = useState({
+    _id: '',
+    numBodega: '',
+    descripcion: '',
+    encargado: '',
   });
 
   //Metodo para abrir modal de crear bodega
@@ -239,6 +141,79 @@ const OpcionesBodegas = (props) => {
         });
       });
   }
+  //Revisar que el producto tenga la bodega
+  const poseeBodega = () => {
+    return false;
+  };
+
+  //MIGRACION DE UNA BODEGA
+  async function handleValidMigrar(event, values) {
+    let NewProduct;
+    let newBodega;
+    const MigrarProducto = {
+      CantMigrar: values.requeridos,
+      bodegaMigrar: values.bodegaMigrar, //id de bodega donde se migrara
+    };
+    let intento = MigrarProducto.bodegaMigrar;
+    if (MigrarProducto.bodegaMigrar === BodegaSeleccionada._id) {
+      Confirm.open({
+        title: 'aviso',
+        message: 'No puede migrar a la misma bodega',
+        onok: () => {},
+      });
+    } else if (existencia === `${MigrarProducto.CantMigrar}`) {
+      let temp = [];
+      let bandera = 0;
+      let existe = false;
+      for (let i = 0; i < ProductoMigrar.bodega.length; i++) {
+        if (ProductoMigrar.bodega[i].value === ProductoMigrar.bodega[BodegaProducto].value) {
+          console.log('No se agrega bodega');
+        } else {
+          temp[bandera] = ProductoMigrar.bodega[i];
+        }
+        if (ProductoMigrar.bodega[i].value === intento) {
+          existe = true;
+        }
+      }
+      NewProduct = ProductoMigrar;
+      NewProduct.bodega = temp; //YA SE PUEDE MANDAR AL FETCH
+      // alert(JSON.stringify(temp));
+      if (existe === true) {
+        for (let i = 0; i < ProductoMigrar.bodega.length; i++) {
+          if (ProductoMigrar.bodega[i].value === intento) {
+            let total =
+              parseInt(ProductoMigrar.bodega[i].cantBodega, 10) + parseInt(existencia, 10);
+            NewProduct.bodega[i].cantBodega = total;
+          }
+        }
+      } else {
+        // alert('ENTRO AL ELSE');
+        let total = existencia;
+        newBodega = {
+          name: '..',
+          value: MigrarProducto.bodegaMigrar,
+          numPasillo: '12',
+          cantBodega: total,
+        };
+        NewProduct.bodega.push(newBodega);
+      }
+
+      //////
+      //////
+      /////ACA SE DEBE ACTUALIZAR EL PRODUCTO, SE TIENE QUE ACTUALIZAR NEW PRODUCT, DENTRO DE ESTE IF
+      /////
+      ///// EL NUEVO PRODUCTO ES (NewProduct)
+      ////
+      /////SOLO SE DEBE ACTUALIZAR, NADA MAS.
+    } else {
+      Confirm.open({
+        title: 'aviso',
+        message: 'SE VA A IMPLEMENTAR PRONTO',
+        onok: () => {},
+      });
+    }
+    setModalMigrarProducto(false);
+  }
 
   //Metodo para modificar una bodega
   async function handleValidSubmitModificar(event, value) {
@@ -277,12 +252,6 @@ const OpcionesBodegas = (props) => {
   }
 
   //Bodega que el usuario esta gestionando
-  const [BodegaSeleccionada, setBodegaSeleccionada] = useState({
-    _id: '',
-    numBodega: '',
-    descripcion: '',
-    encargado: '',
-  });
 
   //Formulario que esta contenido toda la bodega
   const [form, setForm] = useState({
@@ -333,26 +302,6 @@ const OpcionesBodegas = (props) => {
     setBodegaSeleccionada(bod); //Bodega seleccionada
     fecthDataProductos(bod._id); //Selecciono todos los productos de la bodega, con la cantidad actualizada
     setModalProductos(true); //abrir el modal de los productos de la bodega seleccionada
-    // alert(JSON.stringify(daniel.length));
-    // alert(JSON.stringify(dataProductosFinal.length));
-    // let temporal = dataproductos;
-    // let enviar = [];
-    // for (let i = 0; i < temporal.length; i++) {
-    //   //Recorro todas las bodegas de los productos
-    //   for (let j = 0; j < temporal[i].bodega.length; j++) {
-    //     //comparo si la bodega es la que estoy buscando
-    //     if (temporal[i].bodega[j].value === BodegaSeleccionada._id) {
-    //       //selecciono producto
-    //       let Newproducto;
-    //       Newproducto = temporal[i];
-    //       //agrego cantidad que es la que se ocupa
-    //       Newproducto.cantidad = temporal[i].bodega[j].cantBodega;
-    //       //lo envio al arreglo
-    //       enviar[i] = Newproducto;
-    //     }
-    //   }
-    // }
-    // setDataProductosFinal(enviar);
   };
 
   //Abrir modal para modificar una bodega.
@@ -393,14 +342,16 @@ const OpcionesBodegas = (props) => {
         formBodega.numBodega = 0;
         formBodega.Description = '';
         formBodega.Encargado = '';
-        setModalModificarBodega(false);
+        setModalMigrarProducto(false);
       },
     });
   };
-
-  const modalAntesDeMigrar = (cantidad) => {
+  //Muestra los datos de migracion
+  const modalAntesDeMigrar = (bodega, producto) => {
     setModalMigrarProducto(true);
-    setExistencia(cantidad);
+    setExistencia(dataproductos[producto].bodega[bodega].cantBodega); //Existencia a migrar
+    setProductoMigrar(dataproductos[producto]); // Producto a migrar
+    setBodegaProducto(bodega);
   };
 
   //metodo para obtener el id de la bodega seleccionada
@@ -409,15 +360,13 @@ const OpcionesBodegas = (props) => {
   function paddingAvInput() {
     return {
       'border-radius': '26px',
-      width: '240px',
-      height: '41px',
       'text-align-last': 'center',
     };
   }
   function paddingAvInput2() {
     return {
       'border-radius': '26px',
-      width: '240px',
+      width: '260px',
       height: '41px',
       'text-align-last': 'center',
       margin: '0 auto',
@@ -541,27 +490,24 @@ const OpcionesBodegas = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {dataproductos.map((elemento) => (
+                {dataproductos.map((elemento, index2) => (
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
                     <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
                     {<td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>}
-                    {/* {elemento.map((elemento1) => (    item === BodegaSeleccionada._id */}
                     <td>
-                      {elemento.bodega.map((item) => {
-                        let cant = '';
+                      {elemento.bodega.map((item, index) => {
+                        cant = '';
                         if (item.value === BodegaSeleccionada._id) {
                           cant = item.cantBodega;
+                          InfoMigracion = index;
                         }
                         return cant;
-                        //return item.value === BodegaSeleccionada._id;
                       })}
                     </td>
-                    {/* // ))} */}
                     <td>{elemento.precios}</td>
-
-                    <td onClick={() => modalAntesDeMigrar(elemento.cantidad)}>ACCION</td>
+                    <td onClick={() => modalAntesDeMigrar(InfoMigracion, index2)}>ACCION</td>
                   </tr>
                 ))}
               </tbody>
@@ -823,12 +769,13 @@ const OpcionesBodegas = (props) => {
         </AvForm>
       </Modal>
       {/* Modal para seleccionar migracion de producto */}
+
       <Modal
         isOpen={ModalMigrarProducto}
         className="text-center"
         style={{ maxWidth: '700px', width: '90%' }}
       >
-        <AvForm onValidSubmit={handleValidSubmitModificar} onInvalidSubmit={handleInvalidSubmit}>
+        <AvForm onValidSubmit={handleValidMigrar} onInvalidSubmit={handleInvalidSubmit}>
           {/* <ModalHeader> */}
           <div className="container-fluid mt-4 mb-4">
             <div className="col-md-12">
@@ -838,57 +785,37 @@ const OpcionesBodegas = (props) => {
           <hr></hr>
           {/* </ModalHeader> */}
           <ModalBody>
-            <Container>
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <label style={{ fontSize: 'x-large' }}>Movilizar a bodega: </label>
-                </Col>
-              </Row>
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <select style={paddingAvInput()}>
-                    {dataBodegas.map((bodega) => {
-                      return <option value={bodega._id}>{bodega.descripcion}</option>;
-                    })}
-                  </select>
-                </Col>
-              </Row>
-              <br></br>
-              <br></br>
-
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <label style={{ fontSize: 'x-large' }}>
-                    Cantidad existente en bodega actual:{' '}
-                  </label>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <label style={{ fontSize: 'larger' }}>{existencia}</label>
-                </Col>
-              </Row>
-              <br></br>
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <label style={{ fontSize: 'x-large' }}>Cantidad a enviar:</label>
-                </Col>
-              </Row>
-
-              <Row>
-                <Col>
-                  <AvField
-                    style={paddingAvInput2()}
-                    name="Encargado"
-                    type="number"
-                    onChange={handleChange}
-                    min="1"
-                    max={existencia}
-                  />
-                </Col>
-              </Row>
-            </Container>
+            <div className="row">
+              <div className="container col-md-8 ">
+                <h4 className="text-center">DONDE MIGRAR PRODUCTO </h4>
+                <AvField
+                  style={paddingAvInput()}
+                  type="select"
+                  name="bodegaMigrar"
+                  helpMessage="Orden=> Descripcion, No. Bodega"
+                  validate={{ required: { value: true, errorMessage: 'Seleccione una bodega' } }}
+                >
+                  {dataBodegas.map((bodega) => {
+                    return (
+                      <option value={bodega._id}>
+                        {bodega.descripcion} , {bodega.numBodega}
+                      </option>
+                    );
+                  })}
+                </AvField>
+                <h4 className="text-center">Cantidad a Migrar </h4>
+                <AvField
+                  style={paddingAvInput2()}
+                  type="number"
+                  name="requeridos"
+                  min="1"
+                  max={existencia}
+                  validate={{ required: { value: true, errorMessage: 'Ingrese una cantidad' } }}
+                />
+                <h4 className="text-center">EXISTENCIA: </h4>
+                <h3 className="text-center">{existencia}</h3>
+              </div>
+            </div>
           </ModalBody>
           <ModalFooter>
             <FormGroup>
