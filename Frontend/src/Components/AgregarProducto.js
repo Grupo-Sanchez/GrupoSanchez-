@@ -186,7 +186,7 @@ export default function AgregarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthMarcas = async () => {
-    await axios.get('http://localhost:3001/api/marcas').then((response) => {
+    await axios.get('http://localhost:3001/api/marca').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -194,8 +194,8 @@ export default function AgregarProducto(props) {
         marcasAgregar.push({
           value: element._id,
           name: element.nombre,
-          _v: element._v,
         });
+        alert(element._id);
       }
       setMarcas(marcasAgregar);
     });

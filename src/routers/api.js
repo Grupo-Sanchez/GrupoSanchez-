@@ -10,11 +10,12 @@ const proveedores = require('./proveedorRoutes');
 const imagen = require('./file-upload-routes');
 const marcas = require('./marca.router');
 const login = require('./login');
-
+const marcas2 = require('./marcaRoutes');
 const api = express.Router();
 
 //
 api.use('/', login);
+api.use('/marca', marcas2);
 api.use('/marcas', marcas);
 api.use('/administrador', administrador);
 api.use('/productos', productos);

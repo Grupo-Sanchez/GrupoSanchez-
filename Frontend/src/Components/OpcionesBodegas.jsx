@@ -350,7 +350,7 @@ const OpcionesBodegas = (props) => {
   };
   //Muestra los datos de migracion
   const modalAntesDeMigrar = (bodega, producto) => {
-    alert(dataproductos[producto].bodega[bodega].cantBodega);
+    //alert(dataproductos[producto].bodega[bodega].cantBodega);
     setExistencia(dataproductos[producto].bodega[bodega].cantBodega); //Existencia a migrar
     setProductoMigrar(dataproductos[producto]); // Producto a migrar
     setBodegaProducto(bodega);
