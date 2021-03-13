@@ -26,10 +26,9 @@ import Formulario from './FormularioBodega';
 import CartaBodegas from './CartaBodega';
 import '../Styles/ConfirmStyle.css';
 import { Confirm } from './Confirm';
+import home from '../Icons/warehouse.png';
 
 const CrearBodega = (props) => {
-  const dataApuntes = [];
-  const [data, setData] = useState(dataApuntes);
   const [form, setForm] = useState({
     numBodega: '',
     Description: '',
@@ -37,21 +36,24 @@ const CrearBodega = (props) => {
     CantPasillos: '',
     CantProductos: '',
   });
+
+  const cerrarModal = () => {
+    Confirm.open({
+      title: '¡Advertencia!',
+      message: '¿Desea descartar todos los campos?',
+      onok: () => {
+        props.change();
+        form.numBodega = 0;
+        form.Description = '';
+        form.Encargado = '';
+      },
+
+    });
+  };
+
   function handleInvalidSubmit(event, errors, values) {
     console.log('invalid submit', { event, errors, values });
   }
-  const cerrarModal = () => {
-    props.change();
-    form.numBodega = 0;
-    form.Description = '';
-    form.Encargado = '';
-    form.cantPasillos = 0;
-  };
-  const fecthData = async () => {
-    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
-      setData(response.data);
-    });
-  };
   async function handleValidSubmit(event, values) {
     const campos = {
       numBodega: values.numBodega,
@@ -75,7 +77,6 @@ const CrearBodega = (props) => {
             message: 'bodega agregada correctamente',
             onok: () => {},
           });
-          fecthData();
           cerrarModal();
         }
       })
@@ -95,10 +96,6 @@ const CrearBodega = (props) => {
     });
   };
 
-  useEffect(() => {
-    fecthData();
-  }, []);
-
   return (
     <Modal
       isOpen={props.isOpen}
@@ -114,17 +111,30 @@ const CrearBodega = (props) => {
         <ModalBody>
           <div className="row">
             <div className="col-sm ">
-              <CartaBodegas {...form} />
+              <div className="card-bodegas mx-auto Fitness-Card">
+                <div className="card-body">
+                  <div className="row center">
+                    <div className="col-6">
+                      <img src={home} className="float-right" alt=" not found" />
+                    </div>
+                    <div className="col-6 Fitness-Card-Info ">
+                      <div>
+                        <p className="text-left">
+                          <b>descripción:</b> {form.Description}
+                        </p>
+                        <p className="text-left">
+                          <b>Encargado:</b> {form.Encargado}
+                        </p>
+                        <p className="text-left">
+                          <b>No. Bodega</b> {form.numBodega}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="col-sm">
-              <AvField
-                name="numBodega"
-                label="Numero de bodega"
-                type="number"
-                onChange={handleChange}
-                value={form.numBodega}
-                validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
-              />
               <AvField
                 name="Description"
                 label="Descripcion"
@@ -146,25 +156,48 @@ const CrearBodega = (props) => {
                 }}
               />
               <AvField
-                name="CantPasillos"
-                label="Cantidad de pasillos"
+                name="numBodega"
+                label="Numero de bodega"
                 type="number"
                 onChange={handleChange}
-                value={form.CantPasillos}
-                validate={{
-                  required: { value: true, errorMessage: 'Campo debe ser llenado' },
-                }}
+                value={form.numBodega}
+                validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
               />
             </div>
           </div>
         </ModalBody>
         <ModalFooter>
           <FormGroup>
-            <Button type="submit" color="primary">
+            <Button
+              type="submit"
+              color="primary"
+              style={{
+                'border-radius': '26px',
+                'border-color': '#98ff98',
+                color: 'green',
+                border: '1px solid green',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+            >
               Agregar Bodega
             </Button>
             <span>‎ ‏‏‎</span>
-            <Button className="btn btn-danger" onClick={cerrarModal}>
+            <Button
+              className="btn btn-danger"
+              style={{
+                margin: '10px',
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'red',
+                border: '1px solid red',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              onClick={cerrarModal}
+            >
               CANCELAR
             </Button>
           </FormGroup>

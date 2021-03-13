@@ -55,20 +55,15 @@ const ModificarEliminarBodegas = (props) => {
     form.Encargado = '';
     form.cantPasillos = 0;
   };
-  const fetchProducts = async () => {
-    await axios.get('http://localhost:3001/api/productos').then((response) => {
-      setProduct(response.data);
-    });
-  };
 
   function handleInvalidSubmit(event, errors, values) {
     console.log('invalid submit', { event, errors, values });
   }
 
+  ///funcion del SUMBMIT
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
     const payload = { value: Seleccionado._id, name: values.numBodega };
-    fetchProducts();
     axios
       .put(`http://localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
@@ -89,39 +84,6 @@ const ModificarEliminarBodegas = (props) => {
             message: 'bodega modificada correctamente',
             onok: () => {},
           });
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
-          for (let i = 0; i < product.length; i++) {
-            if (
-              product[i].bodega[0].value === Seleccionado._id &&
-              product[i].bodega[0].name !== payload.name
-            ) {
-              product[i].bodega[0] = payload;
-              axios
-                .put(`http://localhost:3001/api/productos/${product[i]._id}`, {
-                  nombre: product[i].nombre,
-                  area: product[i].area,
-                  codigos: product[i].codigos,
-                  proveedores: product[i].proveedores,
-                  ubicacion: product[i].ubicacion,
-                  marca: product[i].marca,
-                  bodega: payload,
-                  precios: product[i].precios,
-                  cantidad: product[i].cantidad,
-                  descripcion_corta: product[i].descripcion_corta,
-                  descripcion_larga: product[i].descripcion_larga,
-                  cantidad_minima: product[i].cantidad_minima,
-                  fecha_creacion: product[i].fecha_creacion,
-                })
-                .then((response) => {
-                  console.log(response);
-                })
-                .catch((error) => {
-                  console.log(error);
-                });
-            }
-          }
           setModalModificarBodega(false);
         }
       })
@@ -149,59 +111,37 @@ const ModificarEliminarBodegas = (props) => {
   };
   useEffect(() => {
     fecthData();
-    fetchProducts();
   }, []);
-
-  useEffect(() => {
-    fecthData();
-    fetchProducts();
-  }, [data, product]);
 
   const onDelete = (memberId) => {
     axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const eliminar = (bodega) => {
-    // if (i.CantProductos === '0') {
-    //   setData(data.filter((elemento) => elemento._id !== i));
-    //   onDelete(i._id);
+    // let booleano = 0;
+    // for (let i = 0; i < product.length; i++) {
+    //   if (product[i].bodega[0].value === bodega._id) {
+    //     booleano = 1;
+    //     fecthData();
+    //     Confirm.open({
+    //       title: 'error',
+    //       message: 'La bodega no debe contener productos para poder eliminarla',
+    //       onok: () => {},
+    //     });
+    //   }
+    // }
+    // if (booleano === 0) {
+    //   onDelete(bodega._id);
     //   Confirm.open({
     //     title: '!exito!',
-    //     message: 'bodega Eliminada correctamente',
+    //     message: 'bodega modificada correctamente',
     //     onok: () => {},
     //   });
-    //   setTimeout(() => {
-    //     window.location.reload();
-    //   }, 2000);
-    // } else {
-    //   Confirm.open({
-    //     title: 'error',
-    //     message: 'La bodega no debe contener productos para poder eliminarla',
-    //     onok: () => {},
-    //   });
+    //   fecthData();
     // }
-    let booleano = 0;
-    for (let i = 0; i < product.length; i++) {
-      if (product[i].bodega[0].value === bodega._id) {
-        booleano = 1;
-        fecthData();
-        Confirm.open({
-          title: 'error',
-          message: 'La bodega no debe contener productos para poder eliminarla',
-          onok: () => {},
-        });
-      }
-    }
-    if (booleano === 0) {
-      onDelete(bodega._id);
-      Confirm.open({
-        title: '!exito!',
-        message: 'bodega modificada correctamente',
-        onok: () => {},
-      });
-      fecthData();
-    }
   };
+
+  ///metodo para llenar bodegas
 
   const llenar = (i) => {
     setSeleccionado(i);
@@ -217,7 +157,7 @@ const ModificarEliminarBodegas = (props) => {
       <Modal
         isOpen={props.isOpen}
         className="text-center"
-        style={{ maxWidth: '1700px', width: '80%' }}
+        style={{ maxWidth: '1900px', width: '90%' }}
       >
         <ModalHeader>
           <div>
