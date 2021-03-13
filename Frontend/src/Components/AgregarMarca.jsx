@@ -56,7 +56,6 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
     setnombreMarca(null);
     setDescripcionMarca(null);
 
-
     setValidNom(false);
     setInvalidNom(false);
   };
@@ -103,7 +102,6 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
   //     alert('Debe llenar el campo requerido');
   //   }
   // };
-
 
   return (
     <Modal isOpen={isOpen}>
