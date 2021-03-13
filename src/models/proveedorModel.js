@@ -5,9 +5,6 @@ const proveedorSchema = new Schema({
     type: String,
     required: 'se requiere la compañia',
   },
-  agencia: {
-    type: String,
-  },
   nombre: {
     type: String,
     required: 'Se requiere el nombre',
@@ -16,28 +13,19 @@ const proveedorSchema = new Schema({
     type: String,
     required: 'Se requiere el apellido',
   },
-  genero: {
-    type: String,
-  },
   email: {
     type: String,
   },
   telefono: {
     type: String,
   },
-  direccion1: {
-    type: String,
-  },
-  direccion2: {
+  direction: {
     type: String,
   },
   ciudad: {
     type: String,
   },
   departamento: {
-    type: String,
-  },
-  codigoPostal: {
     type: String,
   },
   pais: {

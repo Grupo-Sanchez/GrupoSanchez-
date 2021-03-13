@@ -51,14 +51,11 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
     change();
   };
 
-  // const getData = () => {
-  //   axios.get('http://Localhost:3001/api/marcas').then(setData);
-  // };
-
   const clean = () => {
     setImagenMarca(null);
     setnombreMarca(null);
     setDescripcionMarca(null);
+
 
     setValidNom(false);
     setInvalidNom(false);
@@ -106,6 +103,7 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
   //     alert('Debe llenar el campo requerido');
   //   }
   // };
+
 
   return (
     <Modal isOpen={isOpen}>

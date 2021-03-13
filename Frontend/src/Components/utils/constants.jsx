@@ -10,46 +10,59 @@ import {
   faTasks,
 } from '@fortawesome/free-solid-svg-icons';
 
+import productos from '../../Icons/productos.png';
+import bodegas from '../../Icons/bodega.png';
+import proveedores from '../../Icons/proveedores.png';
+import reportes from '../../Icons/reporte.png';
+import notificacion from '../../Icons/notificacion.png';
+import clientes from '../../Icons/clientes.png';
+import usuarios from '../../Icons/users.png';
+import tags from '../../Icons/tags.png';
+
+//jefe de tienda icons
+import factura from '../../Icons/factura.png';
+import devoluciones from '../../Icons/devoluciones.png';
+
 export const rutasPropietario = [
   {
     name: 'Productos',
     to: '/Propietario/Productos',
-    icon: faBox,
+    icon: productos,
   },
   {
     name: 'Usuarios',
     to: '/Propietario/Usuarios',
-    icon: faUser,
+    icon: usuarios,
   },
   {
     name: 'Bodegas',
     to: '/Propietario/Bodegas',
-    icon: faWarehouse,
+    icon: bodegas,
   },
   {
     name: 'Marcas',
     to: '/Propietario/Marcas',
-    icon: faTag,
+    icon: tags,
   },
   {
     name: 'Proveedores',
     to: '/Propietario/Proveedores',
-    icon: faTruck,
+    icon: proveedores,
   },
   {
     name: 'Clientes',
     to: '/Propietario/Clientes',
-    icon: faAddressBook,
+    icon: clientes,
   },
   {
     name: 'Reportes',
     to: '/EnConstruccion',
-    icon: faClipboardList,
+    icon: reportes,
   },
   {
     name: 'Notificaciones',
     to: '/Propietario/Notificaciones',
-    icon: faClipboardList,
+    icon: notificacion,
   },
 ];
 
@@ -57,12 +70,12 @@ export const rutasJefeTienda = [
   {
     name: 'Facturar',
     to: '/JefeTienda/Facturar',
-    icon: faFileInvoice,
+    icon: factura,
   },
   {
     name: 'Devoluciones',
     to: '/JefeTienda/Devoluciones',
-    icon: faTasks,
+    icon: devoluciones,
   },
 ];
 

@@ -10,36 +10,6 @@ exports.read_proveedor = async (req, res) => {
   }
 };
 
-//READ ENTRIES CON FILTRO REGISTERED == TRUE Y TAMBIEN CON SORT == TRUE
-
-/*
-exports.read_entries = async (req, res) => {
-  try {
-    var ret = await cliente.find();
-    if (req.query.sort === "true") {
-      ret = ret.sort((a, b) => b.score - a.score);
-    }
-    if (req.query.registered === "yes") {
-      ret = ret.filter(a => a.registered === "yes");
-    }
-    res.json(ret);
-  } catch (error) {
-    res.send({ message: "Bad GET Request: " + error });
-  }
-};
-*/
-
-/*
-exports.create_cliente = async (req, res) => {
-  try {
-    const new_cliente = new cliente(req.query);
-    ret = await new_cliente.save();
-    res.json(ret);
-  } catch (error) {
-    res.send({ message: 'Bad request: ' + error });
-  }
-};
-*/
 exports.create_proveedor = async (req, res) => {
   const {
     company,
@@ -47,7 +17,7 @@ exports.create_proveedor = async (req, res) => {
     apellidos,
     email,
     telefono,
-    direccion,
+    direction,
     ciudad,
     departamento,
     pais,
@@ -60,7 +30,7 @@ exports.create_proveedor = async (req, res) => {
       apellidos,
       email,
       telefono,
-      direccion,
+      direction,
       ciudad,
       departamento,
       pais,

@@ -1,0 +1,50 @@
+td,
+th,
+tr,
+table {
+  border-top: 1px solid black;
+  border-collapse: collapse;
+}
+
+td.description,
+th.description {
+  font-size: 12px;
+  font-family: 'Times New Roman';
+  width: 75px;
+  max-width: 75px;
+}
+
+td.quantity,
+th.quantity {
+  font-size: 12px;
+  font-family: 'Times New Roman';
+  width: 40px;
+  max-width: 40px;
+  word-break: break-all;
+}
+
+td.price,
+th.price {
+  font-size: 12px;
+  font-family: 'Times New Roman';
+  width: 40px;
+  max-width: 40px;
+  word-break: break-all;
+}
+
+.centered {
+  text-align: center;
+  align-content: center;
+}
+
+img {
+  max-width: inherit;
+  width: inherit;
+}
+
+@media print {
+  .hidden-print,
+  .hidden-print * {
+    display: none !important;
+  }
+}

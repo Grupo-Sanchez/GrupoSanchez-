@@ -16,7 +16,13 @@
   text-align: center;
 }
 
+.informationTitle{
+  text-align: center;  
+}
 
+.informationSubTitle{
+  color: #eba434
+}
 
 .underline {
   background-image: linear-gradient(gray, gray);
