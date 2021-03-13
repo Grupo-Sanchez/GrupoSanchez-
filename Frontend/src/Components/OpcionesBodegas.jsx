@@ -168,6 +168,8 @@ const OpcionesBodegas = (props) => {
   const [ModalMigrarProducto, setModalMigrarProducto] = useState(false);
   const [productos, setProductos] = useState([]);
   const [CantMigrar, setCantMigrar] = useState();
+  const [daniel, setDaniel] = useState([]); //debo eliminar
+  let ddd = [];
 
   const [BodegaModificar, setBodegaModificar] = useState({
     numBodega: '',
@@ -298,23 +300,6 @@ const OpcionesBodegas = (props) => {
   //Metodo para cargar los productos de bodega seleccionada
   const fecthDataProductos = (e) => {
     axios.get(`http://Localhost:3001/api/bodegas/filter/${e}`).then((response) => {
-      let temporal = response.data;
-      let enviar = [];
-      for (let i = 0; i < response.data.length; i++) {
-        //Recorro todas las bodegas de los productos
-        for (let j = 0; j < response.data[i].bodega.length; j++) {
-          //comparo si la bodega es la que estoy buscando
-          if (response.data[i].bodega[j].value === BodegaSeleccionada._id) {
-            //selecciono producto
-            let Newproducto;
-            Newproducto = response.data[i];
-            //agrego cantidad que es la que se ocupa
-            Newproducto.cantidad = response.data[i].bodega[j].cantBodega;
-            //lo envio al arreglo
-            enviar[i] = Newproducto;
-          }
-        }
-      }
       setDataproductos(response.data);
     });
   };
@@ -343,10 +328,30 @@ const OpcionesBodegas = (props) => {
   };
 
   //Cuando se presiona click a una bodega
-  const ListadoBodegas = (i) => {
-    fecthDataProductos(i._id); //Selecciono todos los productos de la bodega, con la cantidad actualizada
-    setBodegaSeleccionada(i); //Bodega seleccionada
+  const ListadoBodegas = (bod) => {
+    setBodegaSeleccionada(bod); //Bodega seleccionada
+    fecthDataProductos(bod._id); //Selecciono todos los productos de la bodega, con la cantidad actualizada
     setModalProductos(true); //abrir el modal de los productos de la bodega seleccionada
+    // alert(JSON.stringify(daniel.length));
+    // alert(JSON.stringify(dataProductosFinal.length));
+    // let temporal = dataproductos;
+    // let enviar = [];
+    // for (let i = 0; i < temporal.length; i++) {
+    //   //Recorro todas las bodegas de los productos
+    //   for (let j = 0; j < temporal[i].bodega.length; j++) {
+    //     //comparo si la bodega es la que estoy buscando
+    //     if (temporal[i].bodega[j].value === BodegaSeleccionada._id) {
+    //       //selecciono producto
+    //       let Newproducto;
+    //       Newproducto = temporal[i];
+    //       //agrego cantidad que es la que se ocupa
+    //       Newproducto.cantidad = temporal[i].bodega[j].cantBodega;
+    //       //lo envio al arreglo
+    //       enviar[i] = Newproducto;
+    //     }
+    //   }
+    // }
+    // setDataProductosFinal(enviar);
   };
 
   //Abrir modal para modificar una bodega.
@@ -517,7 +522,11 @@ const OpcionesBodegas = (props) => {
                     <td>{elemento.codigoPrincipal}</td>
                     <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
                     {<td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>}
-                    <td>{elemento.cantidad}</td>
+                    {/* {elemento.map((elemento1) => ( */}
+                    <td>
+                      {elemento.filter((item) => item.bodegas.value === BodegaSeleccionada._id)}
+                    </td>
+                    {/* // ))} */}
                     <td>{elemento.precios}</td>
                     <td>ACCION</td>
                   </tr>
