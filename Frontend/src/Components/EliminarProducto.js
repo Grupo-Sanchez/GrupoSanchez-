@@ -93,6 +93,7 @@ export default function EliminarProducto(props) {
   const JsBarcode = require('jsbarcode');
   const [size, setSize] = useState('1');
   let [precioprov1, setPrecioProv1] = useState(true);
+  const [Exento, setExento] = useState('');
   const [codigoBarra, setCodigoBarra] = useState('');
   let [precioprov2, setPrecioProv2] = useState(true);
   const [tags, setTags] = useState([]);
@@ -168,6 +169,7 @@ export default function EliminarProducto(props) {
     codigoBarra: '',
     fecha_vencimiento: new Date(),
   });
+  const [modalVerProducto, setModalVerProducto] = useState(false);
   const [bodega, setBodega] = useState('');
   const [cantsel, setCantsel] = useState(seleccionado.cantidad);
   const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
@@ -326,7 +328,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -360,7 +362,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -409,6 +411,31 @@ export default function EliminarProducto(props) {
       'border-radius': '25px',
       'margin-top': '8px',
       background: '#e9e3e3',
+    };
+  }
+  function paddinginputVerProducto() {
+    return {
+      display: 'flex',
+      'align-items': 'left',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '0px solid',
+      padding: '0 8px',
+      outline: 'none',
+    };
+  }
+  function paddinginputVerProductoExento() {
+    return {
+      display: 'flex',
+      'align-items': 'left',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '0px solid',
+      padding: '0 8px',
+      outline: 'none',
+      color: '#ffa500',
     };
   }
   function paddingmainbodegas() {
@@ -549,6 +576,25 @@ export default function EliminarProducto(props) {
       setCodigoBarra(tags[1]);
     }
   };
+  const cerrarModalVerProducto = () => {
+    setModalVerProducto(false);
+  };
+  const mostrarModalVerProducto = (elemento) => {
+    setSeleccionado(elemento);
+    setCantminsel(elemento.cantidad_minima);
+    setCantsel(elemento.cantidad);
+    settagsBodegas(elemento.bodega);
+    setCodigoBarra(elemento.codigoBarra);
+    setprecio1(elemento.precios[0]);
+    setprecio2(elemento.precios[1]);
+    setprecio3(elemento.precios[2]);
+    settagsProveedores(elemento.proveedores);
+    setTags(elemento.codigos);
+    if (elemento.productoExento) {
+      setExento('Exento');
+    }
+    setModalVerProducto(true);
+  };
   let proveedoresSeleccionados = [];
   const manejarCambioPrecioBodega = (e) => {
     setPrecioProvedor6(e.target.value);
@@ -661,7 +707,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       setModalModificarPrecios(false);
@@ -816,14 +862,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1151,7 +1197,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => {},
+            onok: () => { },
           });
           entra = false;
         } else if (yaesta) {
@@ -1176,14 +1222,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1294,7 +1340,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -1364,7 +1410,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -1405,7 +1451,7 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -1474,7 +1520,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -1571,7 +1617,7 @@ export default function EliminarProducto(props) {
         onClick(e);
       }}
     >
-      <Plus width="50px" height="50px" />
+      <Plus width='50px' height='50px' />
       {children}
     </a>
   ));
@@ -1594,44 +1640,47 @@ export default function EliminarProducto(props) {
     fecthData();
   };
   return (
-    <div align="center">
+    <div align="center" style={{ width: '1800px', maxWidth: '1800px' }}>
       <br />
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
       <br />
       <br />
-      <Row>
-        <Col style={{ paddingLeft: '100px' }}>
-          <Button
-            style={{
-              'background-color': 'transparent',
-              borderColor: 'transparent',
-              'margin-left': '20px',
-              'border-radius': '26px',
-            }}
-            onClick={() => mostrarModalProducto()}
-          >
-            <Plus width="50px" height="50px" />
-          </Button>
-        </Col>
-        <Col style={{ paddingRight: '650px' }}>
-          <input
-            type="text"
-            id="myInput"
-            onChange={() => myFunction()}
-            placeholder="Encuentre Productos.."
-            title="Type in a name"
-            style={{
-              'background-image': `url('${imagePath}')`,
-              'background-position': '10px 10px',
-              'background-repeat': 'no-repeat',
-              width: '90%',
-              'font-size': '16px',
-              padding: '12px 20px 12px 40px',
-              'border-radius': '26px',
-            }}
-          ></input>
-        </Col>
-      </Row>
+      <div>
+        <Row>
+          <Col style={{ paddingLeft: '100px' }}>
+            <Button
+              style={{
+                'background-color': 'transparent',
+                borderColor: 'transparent',
+                'margin-left': '20px',
+                'border-radius': '26px',
+              }}
+              onClick={() => mostrarModalProducto()}
+            >
+              <Plus width="50px" height="50px" />
+            </Button>
+          </Col>
+          <Col style={{ paddingRight: '450px' }}>
+            <input
+              type="text"
+              id="myInput"
+              onChange={() => myFunction()}
+              placeholder="Encuentre Productos.."
+              title="Type in a name"
+              style={{
+                'background-image': `url('${imagePath}')`,
+                'background-position': '10px 10px',
+                'background-repeat': 'no-repeat',
+                width: '300px',
+                'max-width': '600px',
+                'font-size': '16px',
+                padding: '12px 20px 12px 40px',
+                'border-radius': '26px',
+              }}
+            ></input>
+          </Col>
+        </Row>
+      </div>
       <div
         style={{
           maxHeight: '600px',
@@ -1672,7 +1721,7 @@ export default function EliminarProducto(props) {
           </thead>
           <tbody>
             {data.map((elemento, index) => (
-              <tr>
+              <tr onDoubleClick={() => mostrarModalVerProducto(elemento)}>
                 <td>{(index += 1)}</td>
                 <td>{`${elemento.codigoBarra}`}</td>
                 <td>{elemento.codigoPrincipal}</td>
@@ -1703,64 +1752,21 @@ export default function EliminarProducto(props) {
           isOpen={ModalModificar}
           className="text-center"
           style={{
-            height: '100vh',
+            height: '90vh',
             'overflow-y': 'overflow',
             top: '20px',
             width: '1700px',
             maxWidth: '1700px',
             'border-radius': '36px',
-            'overflow-x': 'hidden',
+            'overflow-x': 'overflow',
           }}
         >
           <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
             <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
-            <Dropdown.Menu
-              style={{
-                background: 'transparent',
-                border: 'transparent',
-                'padding-left': '55px',
-                'margin-top': '-40px',
-              }}
-            >
-              <Dropdown.Item
-                style={{
-                  borderRadius: '36px',
-                  'background-color': '#fff1d6',
-                  height: '40px',
-                  'margin-top': '2px',
-                  'font-size': '23px',
-                }}
-                eventKey="2"
-                onClick={() => setModalAgregar(true)}
-              >
-                Crear Marca
-              </Dropdown.Item>
-              <Dropdown.Item
-                style={{
-                  borderRadius: '36px',
-                  'background-color': '#fff1d6',
-                  height: '40px',
-                  'margin-top': '2px',
-                  'font-size': '23px',
-                }}
-                eventKey="3"
-                onClick={() => setModalInsertar(true)}
-              >
-                Crear Proveedor
-              </Dropdown.Item>
-              <Dropdown.Item
-                style={{
-                  borderRadius: '36px',
-                  'background-color': '#fff1d6',
-                  height: '40px',
-                  'margin-top': '2px',
-                  'font-size': '23px',
-                }}
-                eventKey="4"
-                onClick={() => setModalAgregarBodega(true)}
-              >
-                Crear Bodega
-              </Dropdown.Item>
+            <Dropdown.Menu style={{ background: 'transparent', border: 'transparent', 'padding-left': '55px', 'margin-top': '-40px' }} >
+              <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="2" onClick={() => setModalAgregar(true)}>Crear Marca</Dropdown.Item>
+              <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="3" onClick={() => setModalInsertar(true)}>Crear Proveedor</Dropdown.Item>
+              <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="4" onClick={() => setModalAgregarBodega(true)}>Crear Bodega</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           <div>
@@ -1772,6 +1778,7 @@ export default function EliminarProducto(props) {
               paddingLeft: '200px',
             }}
           >
+
             <Button
               style={{
                 'background-color': 'transparent',
@@ -1806,7 +1813,7 @@ export default function EliminarProducto(props) {
                   }}
                 >
                   Descripcion
-                </h>
+              </h>
                 <Col style={{ marginLeft: '10px ' }}>
                   <AvField
                     style={paddingAvInput()}
@@ -1834,7 +1841,7 @@ export default function EliminarProducto(props) {
                       }}
                     >
                       Codigo Principal
-                    </h>
+                  </h>
                     <Col>
                       <AvField
                         style={paddingAvInputObligatorio()}
@@ -1857,8 +1864,8 @@ export default function EliminarProducto(props) {
                 </Col>
                 <label style={{ 'margin-left': '-100px', fontSize: '23px' }}>
                   Descripción
-                  <br />
-                  especifica{' '}
+                <br />
+                especifica{' '}
                 </label>
                 <Col style={{ 'margin-left': '35px' }}>
                   <FormGroup>
@@ -1986,7 +1993,7 @@ export default function EliminarProducto(props) {
                             }}
                           >
                             Cantidad
-                          </label>
+                        </label>
                           <input
                             style={{
                               width: '90px',
@@ -2009,16 +2016,9 @@ export default function EliminarProducto(props) {
                         }}
                       >
                         <div>
-                          <label
-                            style={{
-                              fontSize: '14px',
-                              top: '-22px',
-                              position: 'relative',
-                              'margin-left': '-60px',
-                            }}
-                          >
+                          <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-60px' }}>
                             # Pasillo
-                          </label>
+                        </label>
                           <input
                             style={{
                               width: '70px',
@@ -2057,10 +2057,7 @@ export default function EliminarProducto(props) {
                               <span style={paddingtitle()}>
                                 {tag.name},# {tag.cantBodega} ,Pasillo {tag.numPasillo}
                               </span>
-                              <i
-                                style={paddingclosebodega()}
-                                onClick={() => removeTagsBodega(index)}
-                              >
+                              <i style={paddingclosebodega()} onClick={() => removeTagsBodega(index)}>
                                 <Remove width="20px" height="20px" />
                               </i>
                             </li>
@@ -2094,9 +2091,7 @@ export default function EliminarProducto(props) {
                         />
                       </Col>
                       <Col sm={{ size: 'auto' }} style={{ top: '-20px' }}>
-                        <h style={{ 'margin-left': '-15px', 'font-size': '20px' }}>
-                          Cantidad Mínima
-                        </h>
+                        <h style={{ 'margin-left': '-15px', 'font-size': '20px' }}>Cantidad Mínima</h>
                         <input
                           style={paddingAvInputCantidades()}
                           className="form-control"
@@ -2141,9 +2136,7 @@ export default function EliminarProducto(props) {
                 </Row>
               </Col>
               <Col style={{ 'max-width': '120px' }}>
-                <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>
-                  Departamento
-                </label>
+                <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>Departamento</label>
               </Col>
               <Col>
                 <AvForm>
@@ -2232,9 +2225,7 @@ export default function EliminarProducto(props) {
                   }}
                 >
                   <Row>
-                    <label
-                      style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}
-                    >
+                    <label style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}>
                       Precios de
                       <br /> Venta
                     </label>
@@ -2329,9 +2320,8 @@ export default function EliminarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-            </Row>
-            .....
-            <br />
+            </Row>.....
+          <br />
           </ModalBody>
           <ModalFooter>
             <button
@@ -2372,6 +2362,285 @@ export default function EliminarProducto(props) {
             >
               Cancelar
             </button>
+          </ModalFooter>
+        </Modal>
+        {/*------------------------MODAL VER PRODUCTO-------------------------- */}
+        <Modal
+          isOpen={modalVerProducto}
+          className="text-center"
+          style={{
+            height: '100vh',
+            'overflow-y': 'overflow',
+            top: '20px',
+            width: '1400px',
+            maxWidth: '1400px',
+            'border-radius': '36px',
+            'overflow-x': 'overflow',
+          }}
+        >
+          <div>
+            <h3>Información detallada del producto</h3>
+          </div>
+          <ModalBody>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col>
+                <label style={{ color: '#ffa500' }}>Información de Producto</label>
+              </Col>
+              <Col>
+                <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Descripcion:</label>
+              </Col>
+              <Col style={{ maxWidth: '380px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="text"
+                  name="descripcion"
+                  id="descripcionver"
+                  value={seleccionado ? seleccionado.descripcion : ''}
+                  readOnly
+                />
+              </Col>
+              <Col>
+                <section style={{ paddingLeft: '100px' }} className="container">
+                  <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
+                    <br />
+                    <br />
+                  </div>
+                </section>
+                <Col>
+                  <div style={{ marginTop: -170, marginRight: '350px' }}>
+                    <aside style={thumbsContainer}>{thumbs}</aside>
+                  </div>
+                </Col>
+              </Col>
+              <br />
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Marca:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="text"
+                  name="verMarca"
+                  id="verMarca"
+                  value={marcaSel}
+                  readOnly
+                />
+              </Col>
+              <br />
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Codigo Principal:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="text"
+                  name="codigoPrincipal"
+                  id="codigoPrincipal"
+                  value={seleccionado.codigoPrincipal ? seleccionado.codigoPrincipal : ''}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '270px' }}>
+                <label>Códigos de Referencia:</label>
+              </Col>
+              <Col>
+                <div>
+                  <ul>
+                    {tags.map((tag, index) => (
+                      <li key={index}>
+                        <span>{tag}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Código de Barra:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <Barcode value={seleccionado.codigoBarra} />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label style={{ color: '#ffa500' }}>Proveedores:</label>
+              </Col>
+              <Col>
+                <div>
+                  <ul>
+                    {tagsProveedores.map((tag, index) => (
+                      <li key={index}>
+                        <span>{tag.name}</span>
+                      </li>
+                    ))}
+
+                    <br />
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Descripción Específica:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="textarea"
+                  name="verDescripcion_especifica"
+                  id="verDescripcion_especifica"
+                  value={seleccionado ? seleccionado.descripcion_larga : ''}
+                />
+              </Col>
+              <Col>
+                <label style={{ color: '#ffa500' }}>Precios de Venta:</label>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Producto:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input
+                  style={paddinginputVerProductoExento()}
+                  type="text"
+                  name="codigoPrincipal"
+                  id="codigoPrincipal"
+                  value={Exento}
+                  color="#ffa500"
+                  readOnly
+                />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label>Precio 1:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  name="verprecio2"
+                  id="verprecio2"
+                  value={precio1}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Departamento:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="textarea"
+                  name="verDepartamento"
+                  id="verDepartamento"
+                  value={seleccionado ? seleccionado.area : ''}
+                  readOnly
+                />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label>Precio 2:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  name="verprecio2"
+                  id="verprecio2"
+                  value={precio2}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label style={{ color: '#ffa500' }}>Inventario:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  readOnly
+                />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label>Precio 3:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  name="verprecio3"
+                  id="verprecio3"
+                  value={precio3}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Inventario total:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="textarea"
+                  name="verDepartamento"
+                  value={cantsel}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '270px' }}>
+                <label>Bodegas:</label>
+              </Col>
+              <Col>
+                <div>
+                  <ul>
+                    {tagsBodegas.map((tag, index) => (
+                      <li key={index}>
+                        <span>
+                          Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
+                        {tag.numPasillo}
+                          {tag.pasillo}
+                        </span>
+                      </li>
+                    ))}
+                    <br />
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              style={{
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'red',
+                border: '2px solid red',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-danger"
+              onClick={() => cerrarModalVerProducto()}
+            >
+              Cerrar
+          </button>
           </ModalFooter>
         </Modal>
       </div>

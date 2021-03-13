@@ -1358,7 +1358,6 @@ export default function AgregarProducto(props) {
       {children}
     </a>
   ));
-
   return (
     <div id="target">
       <Modal
@@ -1371,71 +1370,16 @@ export default function AgregarProducto(props) {
           width: '1700px',
           maxWidth: '1700px',
           'border-radius': '36px',
-          'overflow-x': 'hidden',
+          'overflow-x': 'overflow',
         }}
       >
         <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
           <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
-          <Dropdown.Menu
-            style={{
-              background: 'transparent',
-              border: 'transparent',
-              'padding-left': '55px',
-              'margin-top': '-40px',
-            }}
-          >
-            <Dropdown.Item
-              style={{
-                borderRadius: '36px',
-                'background-color': '#fff1d6',
-                height: '40px',
-                'margin-top': '2px',
-                'font-size': '23px',
-              }}
-              eventKey="1"
-              onClick={() => setmodalCreacionRapida(true)}
-            >
-              Creación Rápida
-            </Dropdown.Item>
-            <Dropdown.Item
-              style={{
-                borderRadius: '36px',
-                'background-color': '#fff1d6',
-                height: '40px',
-                'margin-top': '2px',
-                'font-size': '23px',
-              }}
-              eventKey="2"
-              onClick={() => setModalAgregar(true)}
-            >
-              Crear Marca
-            </Dropdown.Item>
-            <Dropdown.Item
-              style={{
-                borderRadius: '36px',
-                'background-color': '#fff1d6',
-                height: '40px',
-                'margin-top': '2px',
-                'font-size': '23px',
-              }}
-              eventKey="3"
-              onClick={() => setModalInsertar(true)}
-            >
-              Crear Proveedor
-            </Dropdown.Item>
-            <Dropdown.Item
-              style={{
-                borderRadius: '36px',
-                'background-color': '#fff1d6',
-                height: '40px',
-                'margin-top': '2px',
-                'font-size': '23px',
-              }}
-              eventKey="4"
-              onClick={() => setModalAgregarBodega(true)}
-            >
-              Crear Bodega
-            </Dropdown.Item>
+          <Dropdown.Menu style={{ background: 'transparent', border: 'transparent', 'padding-left': '55px', 'margin-top': '-40px' }} >
+            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="1" onClick={() => setmodalCreacionRapida(true)} >Creación Rápida</Dropdown.Item>
+            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="2" onClick={() => setModalAgregar(true)}>Crear Marca</Dropdown.Item>
+            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="3" onClick={() => setModalInsertar(true)}>Crear Proveedor</Dropdown.Item>
+            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="4" onClick={() => setModalAgregarBodega(true)}>Crear Bodega</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <div>
@@ -1741,18 +1685,17 @@ export default function AgregarProducto(props) {
               >
                 <Button
                   style={{
-                    'font-size': '20px',
-                    'border-radius': '50%',
-                    width: '40px',
-                    height: '40px',
-                    'line-height': '2px',
-                    'margin-left': '-350px',
-                    top: '-75px',
+                    'background-color': 'transparent',
+                    border: 'none',
+                    position: 'absolute',
+                    top: '-13px',
+                    left: '-203px',
+                    outline: 'none',
+                    'box-shadow': 'none',
                   }}
                   onClick={() => addTagsClick(codRef)}
-                  color="primary"
                 >
-                  +
+                  <Plus width="40px" height="50px" />
                 </Button>
               </div>
               <Row>
@@ -1842,14 +1785,7 @@ export default function AgregarProducto(props) {
                       }}
                     >
                       <div>
-                        <label
-                          style={{
-                            fontSize: '14px',
-                            top: '-22px',
-                            position: 'relative',
-                            'margin-left': '-60px',
-                          }}
-                        >
+                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-60px' }}>
                           # Pasillo
                         </label>
                         <input
@@ -1870,18 +1806,17 @@ export default function AgregarProducto(props) {
                     <Col style={{ width: '40px' }}>
                       <Button
                         style={{
-                          'font-size': '20px',
-                          'border-radius': '50%',
-                          width: '40px',
-                          height: '40px',
-                          'line-height': '2px',
-                          position: 'relative',
-                          'margin-left': '-200px',
+                          'background-color': 'transparent',
+                          border: 'none',
+                          position: 'absolute',
+                          top: '-13px',
+                          outline: 'none',
+                          'box-shadow': 'none',
+                          'margin-left': '-130px',
                         }}
                         onClick={() => onChangeBodega()}
-                        color="primary"
                       >
-                        +
+                        <Plus width="40px" height="50px" />
                       </Button>
                     </Col>
                     <div style={paddingdivbodegas()}>
@@ -2024,17 +1959,17 @@ export default function AgregarProducto(props) {
                 <Col style={{ width: '40px' }}>
                   <Button
                     style={{
-                      'font-size': '20px',
-                      'border-radius': '50%',
-                      width: '40px',
-                      height: '40px',
-                      'line-height': '2px',
-                      marginLeft: '-150px',
+                      'background-color': 'transparent',
+                      border: 'none',
+                      position: 'absolute',
+                      outline: 'none',
+                      'box-shadow': 'none',
+                      top: '-10px',
+                      marginLeft: '-100px',
                     }}
-                    color="primary"
-                    onClick={() => onChangeProv()}
+                    onClick={(e) => onChangeProv(e)}
                   >
-                    +
+                    <Plus width="40px" height="50px" />
                   </Button>
                 </Col>
                 <div style={paddingdiv()}>
