@@ -145,6 +145,12 @@ const OpcionesBodegas = (props) => {
   const poseeBodega = () => {
     return false;
   };
+  const fecthUpdateProducto = async (e) => {
+    let Id = e._id;
+    await axios.put(`http://localhost:3001/api/productos/${Id}`, {
+      bodega: e.bodega,
+    });
+  };
 
   //MIGRACION DE UNA BODEGA
   async function handleValidMigrar(event, values) {
@@ -198,13 +204,9 @@ const OpcionesBodegas = (props) => {
         NewProduct.bodega.push(newBodega);
       }
 
-      //////
-      //////
       /////ACA SE DEBE ACTUALIZAR EL PRODUCTO, SE TIENE QUE ACTUALIZAR NEW PRODUCT, DENTRO DE ESTE IF
-      /////
-      ///// EL NUEVO PRODUCTO ES (NewProduct)
-      ////
-      /////SOLO SE DEBE ACTUALIZAR, NADA MAS.
+      // alert(JSON.stringify(NewProduct.bodega));
+      fecthUpdateProducto(NewProduct);
     } else {
       Confirm.open({
         title: 'aviso',
@@ -342,16 +344,17 @@ const OpcionesBodegas = (props) => {
         formBodega.numBodega = 0;
         formBodega.Description = '';
         formBodega.Encargado = '';
-        setModalMigrarProducto(false);
+        setModalModificarBodega(false);
       },
     });
   };
   //Muestra los datos de migracion
   const modalAntesDeMigrar = (bodega, producto) => {
-    setModalMigrarProducto(true);
+    alert(dataproductos[producto].bodega[bodega].cantBodega);
     setExistencia(dataproductos[producto].bodega[bodega].cantBodega); //Existencia a migrar
     setProductoMigrar(dataproductos[producto]); // Producto a migrar
     setBodegaProducto(bodega);
+    setModalMigrarProducto(true);
   };
 
   //metodo para obtener el id de la bodega seleccionada
@@ -450,13 +453,15 @@ const OpcionesBodegas = (props) => {
       <Modal
         isOpen={ModalProductos}
         className="text-center"
-        style={{ maxWidth: '1700px', width: '80%' }}
+        style={{ maxWidth: '1700px', width: '90%' }}
       >
-        <ModalHeader>
-          <div className="row">
-            <h3>PRODUCTOS EN BODEGA</h3>
+        <div className="container-fluid mt-4 ">
+          <div className="col-md-12 mb-4">
+            <h1 className="text-center">LISTADO DE PRODUCTOS </h1>
           </div>
-        </ModalHeader>
+          <hr></hr>
+        </div>
+
         <ModalBody>
           <div>
             <Table
@@ -539,12 +544,13 @@ const OpcionesBodegas = (props) => {
         className="text-center"
         style={{ maxWidth: '1700px', width: '80%' }}
       >
+        <div className="container-fluid mt-4 ">
+          <div className="col-md-12 mb-4">
+            <h1 className="text-center">CREACION DE BODEGAS </h1>
+          </div>
+          <hr></hr>
+        </div>
         <AvForm onValidSubmit={handleValidSubmit} onInvalidSubmit={handleInvalidSubmit}>
-          <ModalHeader>
-            <div>
-              <h3>CREACION DE BODEGAS</h3>
-            </div>
-          </ModalHeader>
           <ModalBody>
             <div className="row">
               <div className="col-sm ">
@@ -847,7 +853,7 @@ const OpcionesBodegas = (props) => {
                   'font-size': '16px',
                   cursor: 'pointer',
                 }}
-                onClick={() => CancelarBodegaModificar()}
+                onClick={() => setModalMigrarProducto(false)}
               >
                 CANCELAR
               </Button>
