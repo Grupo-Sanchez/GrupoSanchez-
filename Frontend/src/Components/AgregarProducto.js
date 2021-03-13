@@ -317,7 +317,7 @@ export default function AgregarProducto(props) {
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => { },
+      onok: () => {},
     });
     fecthProductos();
     seleccionado.descripcion = '';
@@ -532,7 +532,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.proveedores = tagsProveedores;
@@ -611,7 +611,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Códigos vacios',
         message: 'No puede insertar si no existe ningun código',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -636,7 +636,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       seleccionado.precio[0] = parseInt(precio1, 10);
@@ -674,7 +674,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => { },
+          onok: () => {},
         });
       } else {
         setModalInsertarPrecio(false);
@@ -720,14 +720,14 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -784,21 +784,21 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-            onok: () => { },
+            onok: () => {},
           });
         }
       } else {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'El codigo principal esta repetido.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -815,7 +815,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
+        onok: () => {},
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -885,7 +885,7 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -926,7 +926,7 @@ export default function AgregarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => { },
+          onok: () => {},
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -995,7 +995,7 @@ export default function AgregarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -1054,7 +1054,7 @@ export default function AgregarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1081,7 +1081,7 @@ export default function AgregarProducto(props) {
         title: 'Error',
         message:
           'Debe seleccionar la bodega, ingresar el pasillo en el que esta el producto y la cantidad correspondiente',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1319,7 +1319,7 @@ export default function AgregarProducto(props) {
         onClick(e);
       }}
     >
-      <Plus width='50px' height='50px' />
+      <Plus width="50px" height="50px" />
       {children}
     </a>
   ));
@@ -1340,11 +1340,66 @@ export default function AgregarProducto(props) {
       >
         <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
           <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
-          <Dropdown.Menu style={{ background: 'transparent', border: 'transparent', 'padding-left': '55px', 'margin-top': '-40px' }} >
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="1" onClick={() => setmodalCreacionRapida(true)} >Creación Rápida</Dropdown.Item>
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="2" onClick={() => setModalAgregar(true)}>Crear Marca</Dropdown.Item>
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="3" onClick={() => setModalInsertar(true)}>Crear Proveedor</Dropdown.Item>
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="4" onClick={() => setModalAgregarBodega(true)}>Crear Bodega</Dropdown.Item>
+          <Dropdown.Menu
+            style={{
+              background: 'transparent',
+              border: 'transparent',
+              'padding-left': '55px',
+              'margin-top': '-40px',
+            }}
+          >
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="1"
+              onClick={() => setmodalCreacionRapida(true)}
+            >
+              Creación Rápida
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="2"
+              onClick={() => setModalAgregar(true)}
+            >
+              Crear Marca
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="3"
+              onClick={() => setModalInsertar(true)}
+            >
+              Crear Proveedor
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="4"
+              onClick={() => setModalAgregarBodega(true)}
+            >
+              Crear Bodega
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <div>
@@ -1455,7 +1510,7 @@ export default function AgregarProducto(props) {
               </Row>
               <br />
               <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                <Col >
+                <Col>
                   <label>Producto Exento</label>
                 </Col>
                 <Col style={{ marginLeft: '-660px' }}>
@@ -1750,7 +1805,14 @@ export default function AgregarProducto(props) {
                       }}
                     >
                       <div>
-                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-60px' }}>
+                        <label
+                          style={{
+                            fontSize: '14px',
+                            top: '-22px',
+                            position: 'relative',
+                            'margin-left': '-60px',
+                          }}
+                        >
                           # Pasillo
                         </label>
                         <input
@@ -1870,7 +1932,9 @@ export default function AgregarProducto(props) {
               </Row>
             </Col>
             <Col style={{ 'max-width': '120px' }}>
-              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>Departamento</label>
+              <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>
+                Departamento
+              </label>
             </Col>
             <Col>
               <AvForm>
@@ -1961,8 +2025,8 @@ export default function AgregarProducto(props) {
                 <Row>
                   <label style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}>
                     Precios de
-                      <br /> Venta
-                    </label>
+                    <br /> Venta
+                  </label>
                   <Col sm={{ size: 'auto' }} style={{ 'margin-left': '8px', top: '-30px' }}>
                     <div style={{ 'padding-left': '40px' }}>
                       <h
@@ -1975,7 +2039,7 @@ export default function AgregarProducto(props) {
                         }}
                       >
                         Precio 1
-                        </h>
+                      </h>
                       <AvField
                         style={paddingAvInputCantidades()}
                         className="form-control"
@@ -2056,7 +2120,8 @@ export default function AgregarProducto(props) {
                 </Col>
               </Row>
             </Col>
-          </Row>.....
+          </Row>
+          .....
           <br />
         </ModalBody>
         <ModalFooter>

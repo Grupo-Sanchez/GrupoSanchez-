@@ -8,6 +8,7 @@ import {
   faAddressBook,
   faFileInvoice,
   faTasks,
+  faFolder,
 } from '@fortawesome/free-solid-svg-icons';
 
 import productos from '../../Icons/productos.png';
@@ -43,6 +44,11 @@ export const rutasPropietario = [
     name: 'Marcas',
     to: '/Propietario/Marcas',
     icon: tags,
+  },
+  {
+    name: 'Departamentos',
+    to: '/Propietario/Departamentos',
+    icon: faFolder,
   },
   {
     name: 'Proveedores',
