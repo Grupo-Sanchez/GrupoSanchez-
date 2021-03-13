@@ -141,6 +141,8 @@ const ModificarEliminarBodegas = (props) => {
     // }
   };
 
+  ///metodo para llenar bodegas
+
   const llenar = (i) => {
     setSeleccionado(i);
     setModalModificarBodega(true);

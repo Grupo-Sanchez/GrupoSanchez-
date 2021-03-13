@@ -143,6 +143,21 @@ import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
 
 const OpcionesBodegas = (props) => {
   const formulario = [];
+  const [Proseleccionado, setProSeleccionado] = useState({
+    descripcion: '',
+    area: '',
+    codigos: [],
+    proveedores: [],
+    codigoPrincipal: '',
+    marca: [],
+    precio: [],
+    cantidad: 1,
+    bodega: [],
+    codigoBarra: '',
+    descripcion_larga: '',
+    cantidad_minima: 1,
+    productoExento: false,
+  });
   const [dataBodegas, setDataBodegas] = useState(formulario);
   const [dataproductos, setDataproductos] = useState([]);
   const [dataProductosFinal, setDataProductosFinal] = useState([]);
@@ -151,6 +166,7 @@ const OpcionesBodegas = (props) => {
   const [ModalCrearBodega, setModalCrearBodega] = useState(false);
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
   const [ModalMigrarProducto, setModalMigrarProducto] = useState(false);
+  const [productos, setProductos] = useState([]);
   const [CantMigrar, setCantMigrar] = useState();
 
   const [BodegaModificar, setBodegaModificar] = useState({
@@ -280,14 +296,27 @@ const OpcionesBodegas = (props) => {
   };
 
   //Metodo para cargar los productos de bodega seleccionada
-  const fecthDataProductos = async (e) => {
-    await axios.get(`http://Localhost:3001/api/bodegas/filter/${e}`).then((response) => {
+  const fecthDataProductos = (e) => {
+    axios.get(`http://Localhost:3001/api/bodegas/filter/${e}`).then((response) => {
+      let temporal = response.data;
+      let enviar = [];
+      for (let i = 0; i < response.data.length; i++) {
+        //Recorro todas las bodegas de los productos
+        for (let j = 0; j < response.data[i].bodega.length; j++) {
+          //comparo si la bodega es la que estoy buscando
+          if (response.data[i].bodega[j].value === BodegaSeleccionada._id) {
+            //selecciono producto
+            let Newproducto;
+            Newproducto = response.data[i];
+            //agrego cantidad que es la que se ocupa
+            Newproducto.cantidad = response.data[i].bodega[j].cantBodega;
+            //lo envio al arreglo
+            enviar[i] = Newproducto;
+          }
+        }
+      }
       setDataproductos(response.data);
     });
-    alert('CANTIDAD DE DATAPRODUCTOS ');
-    alert(dataproductos.length);
-    alert('QUE TRAE DATAPRODUCTOS');
-    alert(JSON.stringify(dataproductos));
   };
 
   const fecthDataProductosDelete = async (e) => {
@@ -313,37 +342,11 @@ const OpcionesBodegas = (props) => {
     setModalProductos(false);
   };
 
-  const Change = () => {
-    let Temporal = [];
-    //alert('CAMBIO CANTIDADES');
-    //alert(dataproductos.length);
-    //Recorro todos los productos
-    for (let i = 0; i < dataproductos.length; i++) {
-      //Recorro todas las bodegas de los productos
-      for (let j = 0; j < dataproductos[i].bodega.length; j++) {
-        //comparo si la bodega es la que estoy buscando
-        if (dataproductos[i].bodega[j].value === BodegaSeleccionada._id) {
-          // alert(JSON.stringify(dataproductos[i].descripcion));
-          // alert(JSON.stringify(dataproductos[i].bodega[j].cantBodega));
-          let Newproducto;
-          Newproducto = dataproductos[i];
-          // console.log('NUM');
-          // console.log(dataproductos[i].bodega[j].cantBodega);
-          Newproducto.cantidad = dataproductos[i].bodega[j].cantBodega;
-          Temporal[i] = Newproducto;
-        }
-      }
-    }
-    alert(JSON.stringify(Temporal));
-    setDataProductosFinal(Temporal);
-  };
-
   //Cuando se presiona click a una bodega
   const ListadoBodegas = (i) => {
-    fecthDataProductos(i._id); //cargo los productos de toda la bodega
+    fecthDataProductos(i._id); //Selecciono todos los productos de la bodega, con la cantidad actualizada
     setBodegaSeleccionada(i); //Bodega seleccionada
     setModalProductos(true); //abrir el modal de los productos de la bodega seleccionada
-    Change(); //actualizo la cantidad exacta que cada producto tiene
   };
 
   //Abrir modal para modificar una bodega.
@@ -508,7 +511,7 @@ const OpcionesBodegas = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {dataProductosFinal.map((elemento, index) => (
+                {dataproductos.map((elemento, index) => (
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
