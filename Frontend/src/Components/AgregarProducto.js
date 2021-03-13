@@ -1375,11 +1375,66 @@ export default function AgregarProducto(props) {
       >
         <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
           <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
-          <Dropdown.Menu style={{ background: 'transparent', border: 'transparent', 'padding-left': '55px', 'margin-top': '-40px' }} >
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="1" onClick={() => setmodalCreacionRapida(true)} >Creación Rápida</Dropdown.Item>
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="2" onClick={() => setModalAgregar(true)}>Crear Marca</Dropdown.Item>
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="3" onClick={() => setModalInsertar(true)}>Crear Proveedor</Dropdown.Item>
-            <Dropdown.Item style={{ borderRadius: '36px', 'background-color': '#fff1d6', height: '40px', 'margin-top': '2px', 'font-size': '23px' }} eventKey="4" onClick={() => setModalAgregarBodega(true)}>Crear Bodega</Dropdown.Item>
+          <Dropdown.Menu
+            style={{
+              background: 'transparent',
+              border: 'transparent',
+              'padding-left': '55px',
+              'margin-top': '-40px',
+            }}
+          >
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="1"
+              onClick={() => setmodalCreacionRapida(true)}
+            >
+              Creación Rápida
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="2"
+              onClick={() => setModalAgregar(true)}
+            >
+              Crear Marca
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="3"
+              onClick={() => setModalInsertar(true)}
+            >
+              Crear Proveedor
+            </Dropdown.Item>
+            <Dropdown.Item
+              style={{
+                borderRadius: '36px',
+                'background-color': '#fff1d6',
+                height: '40px',
+                'margin-top': '2px',
+                'font-size': '23px',
+              }}
+              eventKey="4"
+              onClick={() => setModalAgregarBodega(true)}
+            >
+              Crear Bodega
+            </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
         <div>
@@ -1785,7 +1840,14 @@ export default function AgregarProducto(props) {
                       }}
                     >
                       <div>
-                        <label style={{ fontSize: '14px', top: '-22px', position: 'relative', 'margin-left': '-60px' }}>
+                        <label
+                          style={{
+                            fontSize: '14px',
+                            top: '-22px',
+                            position: 'relative',
+                            'margin-left': '-60px',
+                          }}
+                        >
                           # Pasillo
                         </label>
                         <input
