@@ -9,14 +9,12 @@ import '../Styles/Forms.css';
 
 const styles = {
   input: {
-    width: '200px',
     height: '30px',
-    borderRadius: '30px',
+    borderRadius: '36px',
     float: 'right',
   },
   textarea: {
-    width: '200px',
-    borderRadius: '30px',
+    borderRadius: '36px',
     float: 'right',
   },
   required: {
@@ -55,20 +53,20 @@ const AgregarProveedor = (props) => {
     try {
       const payload = {
         company: values.company,
-        agencia: values.agencia,
         nombre: values.nombre,
         apellidos: values.apellidos,
         email: values.email,
         telefono: values.telefono,
-        direccion: values.direccion,
+        direction: values.direccion,
         ciudad: values.ciudad,
         departamento: values.departamento,
         pais: values.pais,
         comentario: values.comentario,
       };
-
+      console.log(payload);
       if (isAvailable(payload)) {
         const response = await axios.post('http://localhost:3001/api/proveedor', payload);
+        fetchData();
         Confirm.open({
           title: 'Proveedor Agregado',
           message: 'El proveedor ha sido agregado exitosamente',
@@ -76,6 +74,8 @@ const AgregarProveedor = (props) => {
             cerrarModal();
           },
         });
+        console.log(payload);
+        console.log(response);
       } else {
         Confirm.open({
           title: 'Nombre de Compañía duplicado',
@@ -93,7 +93,7 @@ const AgregarProveedor = (props) => {
   }
 
   return (
-    <Modal isOpen={props.isOpen} style={{ maxWidth: '1600px', width: '800px' }}>
+    <Modal isOpen={props.isOpen} style={{ maxWidth: '900px', width: '80%', margin: '10px auto' }}>
       <AvForm onValidSubmit={handleValidSubmit} onInvalidSubmit={handleInvalidSubmit}>
         <ModalBody>
           <h1 className="text-muted formTitle">Creación de Proveedor Nuevo</h1>
@@ -105,9 +105,11 @@ const AgregarProveedor = (props) => {
                     <Label className="text-right underline big">Información de proveedor</Label>
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Label style={{ color: '#62d162' }}>Compañía</Label>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
+                    <Label style={{ color: '#62d162' }}>Compañía</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
                       name="company"
                       label="Compañía"
@@ -117,15 +119,19 @@ const AgregarProveedor = (props) => {
                     />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label>Pais</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput name="pais" label="País" type="text" style={styles.input} />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
-                    <Label>Departamento/Estado</Label>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
+                    <Label>Departamento / Estado</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
                       style={styles.input}
                       name="departamento"
@@ -134,21 +140,25 @@ const AgregarProveedor = (props) => {
                     />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label>Ciudad</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput style={styles.input} name="ciudad" label="Ciudad" type="text" />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label>Dirección</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
+                      style={styles.textarea}
                       name="direccion"
                       label="Dirección"
                       type="textarea"
                       rows="3"
-                      style={styles.textarea}
                     />
                   </Col>
                 </Row>
@@ -159,9 +169,11 @@ const AgregarProveedor = (props) => {
                     <Label className="text-right underline big">Información de contacto</Label>
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label style={{ color: '#62d162' }}>Nombre</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
                       name="nombre"
                       label="Nombre"
@@ -171,9 +183,11 @@ const AgregarProveedor = (props) => {
                     />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label style={{ color: '#62d162' }}>Apellido</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
                       name="apellidos"
                       label="Apellido de Vendedor"
@@ -183,9 +197,11 @@ const AgregarProveedor = (props) => {
                     />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label style={{ color: '#62d162' }}>Teléfono</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
                       name="telefono"
                       label="Teléfono"
@@ -201,15 +217,19 @@ const AgregarProveedor = (props) => {
                     />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label>Correo</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput name="email" label="Email" type="email" style={styles.input} />
                   </Col>
                 </Row>
-                <Row noGutters>
-                  <Col style={{ paddingBottom: '20px' }}>
+                <Row noGutters style={{ paddingBottom: '20px' }}>
+                  <Col md="6" sm="12" xs="12">
                     <Label>Comentario</Label>
+                  </Col>
+                  <Col md="6" sm="12" xs="12">
                     <AvInput
                       style={styles.textarea}
                       name="comentario"
@@ -245,7 +265,6 @@ const AgregarProveedor = (props) => {
               outline
               color="danger"
               style={{ marginLeft: '1em', borderRadius: '30px' }}
-              className="submit-button"
               onClick={cerrarModal}
             >
               Cancelar
