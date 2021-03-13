@@ -694,6 +694,7 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="identidad"
                     id="identidad"
+                    //value="Jefe de Tienda"
                     value={seleccionado ? seleccionado.rol[0].name : ''}
                     readOnly
                   />
