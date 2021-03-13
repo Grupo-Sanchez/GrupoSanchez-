@@ -1,9 +1,9 @@
 import AmbientePropietarioBase from '../Components/AmbientePropietarioBase.jsx';
-import OpcionesProveedor from '../Components/OpcionesProveedor.jsx';
+import AmbientePropietarioModificarProveedores from './AmbientePropietarioModificarProveedores.jsx';
 
 const AmbientePropietarioProducto = () => (
   <AmbientePropietarioBase>
-    <OpcionesProveedor />
+    <AmbientePropietarioModificarProveedores />
   </AmbientePropietarioBase>
 );
 

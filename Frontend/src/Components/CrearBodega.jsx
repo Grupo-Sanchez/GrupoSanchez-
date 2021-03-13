@@ -47,6 +47,7 @@ const CrearBodega = (props) => {
         form.Description = '';
         form.Encargado = '';
       },
+
     });
   };
 
@@ -62,7 +63,7 @@ const CrearBodega = (props) => {
       CantProductos: '0',
     };
     await axios
-      .post('http://178.128.67.247:3001/api/bodegas', campos)
+      .post('http://localhost:3001/api/bodegas', campos)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({

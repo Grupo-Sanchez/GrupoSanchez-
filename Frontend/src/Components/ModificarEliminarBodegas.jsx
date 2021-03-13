@@ -65,7 +65,7 @@ const ModificarEliminarBodegas = (props) => {
     const Id = Seleccionado._id;
     const payload = { value: Seleccionado._id, name: values.numBodega };
     axios
-      .put(`http://178.128.67.247:3001/api/bodegas/${Id}`, {
+      .put(`http://localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -105,7 +105,7 @@ const ModificarEliminarBodegas = (props) => {
   };
 
   const fecthData = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       setData(response.data);
     });
   };
@@ -114,7 +114,7 @@ const ModificarEliminarBodegas = (props) => {
   }, []);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const eliminar = (bodega) => {

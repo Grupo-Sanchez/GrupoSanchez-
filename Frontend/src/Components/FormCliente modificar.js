@@ -33,6 +33,9 @@ const formClienteModificar = (props) => {
   // };
 
   const modifyProveedor = async (values) => {
+    if (values.RTN === '') {
+      values.RTN = 'consumidor fin';
+    }
     const payload = {
       cedula: values.cedula,
       nombre: values.nombre,
@@ -45,12 +48,12 @@ const formClienteModificar = (props) => {
     };
 
     await axios
-      .put(`http://178.128.67.247:3001/api/clientes/${props.id}`, payload)
+      .put(`http://localhost:3001/api/clientes/${props.id}`, payload)
       .then((res) => {
         if (res.data.message) {
           Confirm.open({
             title: 'aviso',
-            message: 'error campos duplicados',
+            message: 'error el No. Identidad ya existe',
             onok: () => {},
           });
         } else {
@@ -238,10 +241,6 @@ const formClienteModificar = (props) => {
                     value: 14,
                     errorMessage: 'el Rtn debe tener 14 digitos',
                   },
-                  min: {
-                    value: 0,
-                    errorMessage: 'ingrese con formato solicitado 14 digitos',
-                  },
                 }}
               />
             </Col>
@@ -298,11 +297,8 @@ const formClienteModificar = (props) => {
       <br></br>
 
       <Row>
-        <Col sm={{ size: 'auto', offset: 8 }}>
-          <Button className="botonesForm" outline color="success">
-            modificar
-          </Button>
-
+        <Col></Col>
+        <Col xs="6">
           <Button
             onClick={() =>
               Confirm.open({
@@ -313,11 +309,14 @@ const formClienteModificar = (props) => {
                 },
               })
             }
-            className="botonesForm"
+            className="botonFormRed"
             outline
             color="danger"
           >
             cancelar
+          </Button>
+          <Button className="botonFormGreen" outline color="success">
+            modificar
           </Button>
         </Col>
       </Row>

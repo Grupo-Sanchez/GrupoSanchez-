@@ -47,6 +47,70 @@ const ListarBodegas = (props) => {
     descripcion: '',
     encargado: '',
   });
+  
+  const [seleccionadoPro, setSeleccionadoPro] = useState({
+    nombre: '',
+    area: '',
+    codigos: [],
+    proveedores: [],
+    ubicacion: '',
+    marca: [],
+    precios: [],
+    cantidad: '',
+    descripcion_corta: '',
+    descripcion_larga: '',
+    cantidad_minima: '',
+  });
+
+  const onDelete = (memberId) => {
+    axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
+    // window.location.reload(false);
+  };
+  const [ModalModificarBodega, setModalModificarBodega] = useState(false);
+  const eliminar = (i) => {
+    // console.log('eliminar');
+    // console.log(i.CantProductos);
+    if (i.CantProductos === '0') {
+      setData(data.filter((elemento) => elemento._id !== i));
+      onDelete(i._id);
+      Confirm.open({
+        title: '!exito!',
+        message: 'bodega Eliminada correctamente',
+        onok: () => {},
+      });
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } else {
+      Confirm.open({
+        title: 'error',
+        message: 'La bodega no debe contener productos para poder eliminarla',
+        onok: () => {},
+      });
+    }
+  };
+  const mostrarCodigos = (i) => {
+    setSeleccionadoPro(i);
+    console.log(i.nombre);
+    setModalVerCodigos(true);
+  };
+  const mostrarProveedores = (i) => {
+    setSeleccionadoPro(i);
+    setModalVerProveedor(true);
+  };
+  const mostrarPrecios = (elemento) => {
+    setSeleccionadoPro(elemento);
+    setModalVerPrecios(true);
+  };
+  const mostrarDescripciones = (elemento) => {
+    setSeleccionadoPro(elemento);
+    setmodalVerDescripciones(true);
+  };
+  const recargar = () => {
+    // props.change;
+    window.location.reload(false);
+  };
+
 
   const [formBodega, setformBodega] = useState({
     numBodega: '',
@@ -71,6 +135,7 @@ const ListarBodegas = (props) => {
         formBodega.Encargado = '';
         setModalCrearBodega(false);
       },
+
     });
   };
   //Metodo para invalidar creacion de una bodega
@@ -121,6 +186,7 @@ const ListarBodegas = (props) => {
         numBodega: value.numBodega,
         descripcion: value.Description,
         encargado: value.Encargado,
+
       })
       .then((res) => {
         if (res.data.message) {
@@ -207,6 +273,7 @@ const ListarBodegas = (props) => {
     fecthDataProductos(i.numBodega);
     props.change();
   };
+
 
   //Abrir modal para modificar una bodega.
   const ModificarBodega = (i) => {
