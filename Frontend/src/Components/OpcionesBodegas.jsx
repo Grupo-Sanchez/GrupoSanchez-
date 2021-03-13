@@ -522,9 +522,16 @@ const OpcionesBodegas = (props) => {
                     <td>{elemento.codigoPrincipal}</td>
                     <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
                     {<td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>}
-                    {/* {elemento.map((elemento1) => ( */}
+                    {/* {elemento.map((elemento1) => (    item === BodegaSeleccionada._id */}
                     <td>
-                      {elemento.filter((item) => item.bodegas.value === BodegaSeleccionada._id)}
+                      {elemento.bodega.map((item) => {
+                        let cant = '';
+                        if (item.value === BodegaSeleccionada._id) {
+                          cant = item.cantBodega;
+                        }
+                        return cant;
+                        //return item.value === BodegaSeleccionada._id;
+                      })}
                     </td>
                     {/* // ))} */}
                     <td>{elemento.precios}</td>
