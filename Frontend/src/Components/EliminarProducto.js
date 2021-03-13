@@ -184,7 +184,7 @@ export default function EliminarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthProveedores = async () => {
-    await axios.get('http://178.128.67.247:3001/api/proveedor').then((response) => {
+    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
       const proveedoresagregados = [];
       for (let index = 0; index < proveedoresDB.length; index++) {
@@ -213,7 +213,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthBodegas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
       for (let index = 0; index < bodegasobtenidas.length; index++) {
@@ -228,7 +228,7 @@ export default function EliminarProducto(props) {
   };
   let cont = 1;
   const fecthMarcas = async () => {
-    await axios.get('http://178.128.67.247:3001/api/marcas').then((response) => {
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -243,7 +243,7 @@ export default function EliminarProducto(props) {
     });
   };
   const fecthData = () => {
-    axios.get('http://178.128.67.247:3001/api/productos').then((response) => {
+    axios.get('http://localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
     fecthBodegas();
@@ -255,18 +255,41 @@ export default function EliminarProducto(props) {
     fecthData();
   }, []);
   const removeTagsProv = (index) => {
-    settagsProveedores([
-      ...tagsProveedores.filter((tag) => tagsProveedores.indexOf(tag) !== index),
-    ]);
-    fecthProveedores();
-    setProveedores(proveedores.filter(({ item }) => !tagsProveedores.includes(item)));
-  };
+    let provAgregar = [];
+    for (let inde = 0; inde < tagsProveedores.length; inde++) {
+      const element2 = tagsProveedores[inde];
+      if (inde === index) {
+        provAgregar.push(element2);
+      }
+    }
 
+    //alert(JSON.stringify(provAgregar));
+    for (let index2 = 0; index2 < provAgregar.length; index2++) {
+      const element = provAgregar[index2];
+      proveedores.push(element);
+    }
+    setProveedores(proveedores);
+    //alert(JSON.stringify(proveedores));
+    tagsProveedores.splice(index, 1);
+  };
   const removeTagsBodega = (index) => {
     //setBodegas([...bodegas, tagsBodegas[index]]);
-    settagsBodegas([...tagsBodegas.filter((tag) => tagsBodegas.indexOf(tag) !== index)]);
-    fecthBodegas();
-    setBodegas(bodegas.filter(({ item }) => !tagsBodegas.includes(item)));
+    let provAgregar = [];
+    for (let inde = 0; inde < tagsBodegas.length; inde++) {
+      const element2 = tagsBodegas[inde];
+      if (inde === index) {
+        provAgregar.push(element2);
+      }
+    }
+
+    //alert(JSON.stringify(provAgregar));
+    for (let index2 = 0; index2 < provAgregar.length; index2++) {
+      const element = provAgregar[index2];
+      bodegas.push(element);
+    }
+    setBodegas(bodegas);
+    //alert(JSON.stringify(proveedores));
+    tagsBodegas.splice(index, 1);
   };
   const onChangeProv = () => {
     if (precioprovedor7 !== 0) {
@@ -626,7 +649,7 @@ export default function EliminarProducto(props) {
     }
   };
   const onDelete = (memberId) => {
-    axios.delete(`http://178.128.67.247:3001/api/productos/${memberId}`);
+    axios.delete(`http://localhost:3001/api/productos/${memberId}`);
   };
   const eliminar = (i) => {
     setData(data.filter((elemento) => elemento._id !== i));
@@ -692,7 +715,7 @@ export default function EliminarProducto(props) {
         if (banderaPrecios) {
           setModalModificar(false);
           axios
-            .put(`http://178.128.67.247:3001/api/productos/${Id}`, {
+            .put(`http://localhost:3001/api/productos/${Id}`, {
               descripcion: document.getElementById('modnombre').value,
               area: document.getElementById('modarea').value,
               codigoPrincipal: seleccionado.codigoPrincipal,
@@ -1574,34 +1597,34 @@ export default function EliminarProducto(props) {
           }}
         >
           <h3>EDITAR PRODUCTO</h3>
-          <Button
-            style={{
-              'background-color': 'transparent',
-              borderColor: 'transparent',
-              position: 'absolute',
-              top: '8px',
-              right: '16px',
-              'font-size': '18px',
-              'border-radius': '26px',
-            }}
-            onClick={() =>
-              Confirm.open({
-                title: '',
-                message: `¿Desea Eliminar el producto ${seleccionado.descripcion}?`,
-                onok: () => {
-                  eliminar(seleccionado._id);
-                },
-              })
-            }
-          >
-            <Delete width="50px" height="50px" />
-          </Button>
           <ModalBody
             style={{
               'margin-right': '-80px',
               paddingLeft: '200px',
             }}
           >
+            <Button
+              style={{
+                'background-color': 'transparent',
+                border: 'none',
+                position: 'absolute',
+                top: '-30px',
+                right: '80px',
+                'font-size': '18px',
+                'border-radius': '26px',
+              }}
+              onClick={() =>
+                Confirm.open({
+                  title: '',
+                  message: `¿Desea Eliminar el producto ${seleccionado.descripcion}?`,
+                  onok: () => {
+                    eliminar(seleccionado._id);
+                  },
+                })
+              }
+            >
+              <Delete fill="#dc0000" width="50px" height="50px" />
+            </Button>
             <br />
             <AvForm>
               <Row style={{ marginRight: '200px' }}>
@@ -1678,7 +1701,7 @@ export default function EliminarProducto(props) {
                       <li style={paddingmain()} key={index}>
                         <span style={paddingtitle()}>{tag}</span>
                         <i style={paddingclose()} onClick={() => removeTags(index)}>
-                          x
+                          <Remove width="20px" height="20px" />
                         </i>
                       </li>
                     ))}
@@ -1693,17 +1716,17 @@ export default function EliminarProducto(props) {
                 >
                   <Button
                     style={{
-                      'font-size': '20px',
-                      'border-radius': '50%',
-                      width: '40px',
-                      height: '40px',
-                      'line-height': '2px',
-                      'margin-left': '-350px',
+                      'background-color': 'transparent',
+                      border: 'none',
+                      position: 'absolute',
+                      top: '-13px',
+                      left: '-203px',
+                      outline: 'none',
+                      'box-shadow': 'none',
                     }}
                     onClick={() => addTagsClick(codRef)}
-                    color="primary"
                   >
-                    +
+                    <Plus width="40px" height="50px" />
                   </Button>
                 </div>
                 <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
@@ -1752,29 +1775,20 @@ export default function EliminarProducto(props) {
                           value={precioprovedor6}
                           min={1}
                         />
-                        <div
+                        <Button
                           style={{
+                            'background-color': 'transparent',
+                            border: 'none',
                             position: 'absolute',
-                            top: '1px',
-                            'margin-left': '525px',
+                            top: '78px',
+                            left: '467px',
+                            outline: 'none',
+                            'box-shadow': 'none',
                           }}
+                          onClick={() => onChangeBodega()}
                         >
-                          <Button
-                            style={{
-                              'font-size': '20px',
-                              'border-radius': '50%',
-                              width: '40px',
-                              height: '40px',
-                              'line-height': '2px',
-                              'margin-left': '-780px',
-                              marginTop: '90px',
-                            }}
-                            onClick={() => onChangeBodega()}
-                            color="primary"
-                          >
-                            +
-                          </Button>
-                        </div>
+                          <Plus width="40px" height="50px" />
+                        </Button>
                       </AvForm>
                       <div style={paddingdivbodegas()}>
                         <ul style={paddingulbodegas()}>
@@ -1787,7 +1801,7 @@ export default function EliminarProducto(props) {
                                 style={paddingclosebodega()}
                                 onClick={() => removeTagsBodega(index)}
                               >
-                                x
+                                <Remove width="20px" height="20px" />
                               </i>
                             </li>
                           ))}
@@ -1905,28 +1919,20 @@ export default function EliminarProducto(props) {
                       onChange={(e) => manejarCambioPrecioProveedor(e)}
                       min={1}
                     />
-                    <div
+                    <Button
                       style={{
+                        'background-color': 'transparent',
+                        border: 'none',
                         position: 'absolute',
-                        top: '28px',
-                        'margin-left': '320px',
+                        top: '20px',
+                        left: '120px',
+                        outline: 'none',
+                        'box-shadow': 'none',
                       }}
+                      onClick={() => onChangeProv()}
                     >
-                      <Button
-                        style={{
-                          'font-size': '20px',
-                          'border-radius': '50%',
-                          width: '40px',
-                          height: '40px',
-                          'line-height': '2px',
-                          'margin-left': '-350px',
-                        }}
-                        color="primary"
-                        onClick={() => onChangeProv()}
-                      >
-                        +
-                      </Button>
-                    </div>
+                      <Plus width="40px" height="50px" />
+                    </Button>
                   </Col>
                   <div style={paddingdiv()}>
                     <ul style={paddingul()}>
@@ -1936,7 +1942,7 @@ export default function EliminarProducto(props) {
                             {tag.name}, L. {tag.precio}
                           </span>
                           <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
-                            x
+                            <Remove width="20px" height="20px" />
                           </i>
                         </li>
                       ))}
