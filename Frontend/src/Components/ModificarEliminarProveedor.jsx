@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Table, Row, Modal, ModalBody, Container, Col, Input, Label } from 'reactstrap';
-import { AvForm, AvField, AvInput, AvGroup, AvRadio } from 'availity-reactstrap-validation';
+import { AvForm, AvInput, AvGroup } from 'availity-reactstrap-validation';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import AgregarProveedor from './AgregarProveedor.jsx';
+import InformacionProveedor from './InformacionProveedor.jsx';
 import '../Styles/ConfirmStyle.css';
 import '../Styles/SearchBar.css';
 import '../Styles/Forms.css';
@@ -15,18 +16,19 @@ import { ReactComponent as PlusIcon } from '../Icons/plus.svg';
 
 const styles = {
   input: {
-    width: '200px',
     height: '30px',
-    borderRadius: '30px',
+    borderRadius: '36px',
     float: 'right',
   },
   textarea: {
-    width: '200px',
-    borderRadius: '30px',
+    borderRadius: '36px',
     float: 'right',
   },
   required: {
     borderColor: '#62d162',
+  },
+  clickable: {
+    cursor: 'pointer',
   },
 };
 
@@ -37,16 +39,16 @@ const ModificarEliminarProveedor = () => {
   const [input, setInput] = useState('');
   const [product, setProduct] = useState('');
   const [modalAgregar, setModalAgregar] = useState(false);
-  const [position, setPosition] = useState('');
+  const [modalInformation, setModalInformation] = useState(false);
 
   const fetchData = async () => {
-    await axios.get('http://Localhost:3001/api/proveedor').then((response) => {
+    await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       setData(response.data);
     });
   };
 
   const fetchProducts = async () => {
-    await axios.get('http://Localhost:3001/api/productos').then((response) => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
@@ -86,7 +88,7 @@ const ModificarEliminarProveedor = () => {
           comentario: values.comentario,
         };
         await axios
-          .put(`http://Localhost:3001/api/proveedor/${modificar._id}`, payload)
+          .put(`http://localhost:3001/api/proveedor/${modificar._id}`, payload)
           .then((response) => {
             console.log(response);
           })
@@ -124,7 +126,7 @@ const ModificarEliminarProveedor = () => {
           console.log(list);
           if (flag) {
             axios
-              .put(`http://Localhost:3001/api/productos/${product[i]._id}`, {
+              .put(`http://localhost:3001/api/productos/${product[i]._id}`, {
                 proveedores: list,
               })
 
@@ -192,6 +194,11 @@ const ModificarEliminarProveedor = () => {
     setModal(true);
   };
 
+  const modalShowInformation = async (i) => {
+    setModificar(data[i]);
+    setModalInformation(true);
+  };
+
   const onDelete = async () => {
     fetchProducts();
     let isDeletable = true;
@@ -203,7 +210,7 @@ const ModificarEliminarProveedor = () => {
       }
     }
     if (isDeletable) {
-      await axios.delete(`http://Localhost:3001/api/proveedor/${modificar._id}`);
+      await axios.delete(`http://localhost:3001/api/proveedor/${modificar._id}`);
       Confirm.open({
         title: 'Proveedor Eliminado',
         message: 'Proveedor eliminado exitosamente',
@@ -234,7 +241,16 @@ const ModificarEliminarProveedor = () => {
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <div style={{ width: '90%' }}>
         <AgregarProveedor isOpen={modalAgregar} change={() => closeModalAgregar()} />
-        <Modal isOpen={modal} style={{ maxWidth: '1600px', width: '800px' }}>
+        <InformacionProveedor
+          isOpen={modalInformation}
+          proveedor={modificar}
+          change={() => setModalInformation(!modalInformation)}
+        />
+        <Modal
+          isOpen={modal}
+          size="lg"
+          style={{ maxWidth: '900px', width: '80%', margin: '10px auto' }}
+        >
           <AvForm
             onValidSubmit={handleValidSubmit}
             onInvalidSubmit={handleInvalidSubmit}
@@ -270,15 +286,17 @@ const ModificarEliminarProveedor = () => {
               </Row>
               <AvGroup>
                 <Row>
-                  <Col md="6">
+                  <Col md="6" sm="6" xs="12">
                     <Row noGutters>
                       <Col style={{ textAlign: 'right', paddingBottom: '1em' }}>
                         <Label className="text-right underline big">Información de proveedor</Label>
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label style={{ color: '#62d162' }}>Compañía</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           name="company"
                           label="Compañía"
@@ -290,15 +308,19 @@ const ModificarEliminarProveedor = () => {
                         />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label>Pais</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput style={styles.input} name="pais" label="País" type="text" />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
-                        <Label>Departamento/Estado</Label>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
+                        <Label>Departamento / Estado</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           style={styles.input}
                           name="departamento"
@@ -307,18 +329,21 @@ const ModificarEliminarProveedor = () => {
                         />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label>Ciudad</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput style={styles.input} name="ciudad" label="Ciudad" type="text" />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label>Dirección</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           style={styles.textarea}
-                          className="float-right paddingAvInput "
                           name="direccion"
                           label="Dirección"
                           type="textarea"
@@ -327,15 +352,17 @@ const ModificarEliminarProveedor = () => {
                       </Col>
                     </Row>
                   </Col>
-                  <Col md="6">
+                  <Col md="6" sm="6 " xs="12">
                     <Row noGutters>
                       <Col style={{ textAlign: 'right', paddingBottom: '1em' }}>
                         <Label className="text-right underline big">Información de contacto</Label>
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label style={{ color: '#62d162' }}>Nombre</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           style={{ ...styles.input, ...styles.required }}
                           name="nombre"
@@ -347,9 +374,11 @@ const ModificarEliminarProveedor = () => {
                         />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label style={{ color: '#62d162' }}>Apellido</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           style={{ ...styles.input, ...styles.required }}
                           name="apellidos"
@@ -361,9 +390,11 @@ const ModificarEliminarProveedor = () => {
                         />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label style={{ color: '#62d162' }}>Teléfono</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           style={{ ...styles.input, ...styles.required }}
                           name="telefono"
@@ -379,24 +410,21 @@ const ModificarEliminarProveedor = () => {
                         />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label>Correo</Label>
-                        <AvInput
-                          style={styles.input}
-                          className="float-right paddingAvInput "
-                          name="email"
-                          label="Email"
-                          type="email"
-                        />
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
+                        <AvInput style={styles.input} name="email" label="Email" type="email" />
                       </Col>
                     </Row>
-                    <Row noGutters>
-                      <Col style={{ paddingBottom: '20px' }}>
+                    <Row noGutters style={{ paddingBottom: '20px' }}>
+                      <Col md="6" sm="12" xs="12">
                         <Label>Comentario</Label>
+                      </Col>
+                      <Col md="6" sm="12" xs="12">
                         <AvInput
                           style={styles.textarea}
-                          className="float-right paddingAvInput "
                           name="comentario"
                           label="Comentario"
                           type="textarea"
@@ -492,11 +520,21 @@ const ModificarEliminarProveedor = () => {
             <tbody>
               {data.map((elemento, i) => (
                 <tr>
-                  <td>{elemento.company}</td>
-                  <td style={{ whiteSpace: 'unset' }}>{elemento.nombre}</td>
-                  <td>{elemento.apellidos}</td>
-                  <td>{elemento.email}</td>
-                  <td>{elemento.telefono}</td>
+                  <td style={styles.clickable} onDoubleClick={() => modalShowInformation(i)}>
+                    {elemento.company}
+                  </td>
+                  <td style={styles.clickable} onDoubleClick={() => modalShowInformation(i)}>
+                    {elemento.nombre}
+                  </td>
+                  <td style={styles.clickable} onDoubleClick={() => modalShowInformation(i)}>
+                    {elemento.apellidos}
+                  </td>
+                  <td style={styles.clickable} onDoubleClick={() => modalShowInformation(i)}>
+                    {elemento.email}
+                  </td>
+                  <td style={styles.clickable} onDoubleClick={() => modalShowInformation(i)}>
+                    {elemento.telefono}
+                  </td>
                   <td>
                     <Button
                       onClick={() => modificarModal(i)}

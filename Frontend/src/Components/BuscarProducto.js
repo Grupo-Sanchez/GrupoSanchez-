@@ -39,7 +39,7 @@ export default function BuscarProducto(props) {
   });
 
   const fecthData = async () => {
-    await axios.get('http://Localhost:3001/api/productos').then((response) => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
   };

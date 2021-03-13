@@ -56,7 +56,7 @@ const ModificarEliminarBodegas = (props) => {
     form.cantPasillos = 0;
   };
   const fetchProducts = async () => {
-    await axios.get('http://Localhost:3001/api/productos').then((response) => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
       setProduct(response.data);
     });
   };
@@ -70,7 +70,7 @@ const ModificarEliminarBodegas = (props) => {
     const payload = { value: Seleccionado._id, name: values.numBodega };
     fetchProducts();
     axios
-      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
+      .put(`http://localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -99,7 +99,7 @@ const ModificarEliminarBodegas = (props) => {
             ) {
               product[i].bodega[0] = payload;
               axios
-                .put(`http://Localhost:3001/api/productos/${product[i]._id}`, {
+                .put(`http://localhost:3001/api/productos/${product[i]._id}`, {
                   nombre: product[i].nombre,
                   area: product[i].area,
                   codigos: product[i].codigos,
@@ -143,7 +143,7 @@ const ModificarEliminarBodegas = (props) => {
   };
 
   const fecthData = async () => {
-    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       setData(response.data);
     });
   };
@@ -158,7 +158,7 @@ const ModificarEliminarBodegas = (props) => {
   }, [data, product]);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const eliminar = (bodega) => {

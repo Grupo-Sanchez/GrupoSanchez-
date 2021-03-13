@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
+import React, { Component, useState, useEffect, alert } from 'react';
 import { Button, Table, Row, Col, Label, FormGroup } from 'reactstrap';
 import axios from 'axios';
 import {
@@ -32,9 +32,9 @@ export default function Facturas() {
   const [productosEnBodega, setproductosEnBodega] = useState([
     {
       indice: 0,
-      name: '',
+      descripcion: '',
       value: '',
-      codigo: '',
+      codigoPrincipal: '',
       cantidad: 0,
       precioUnitario: 0,
       precioSumado: 0,
@@ -44,7 +44,7 @@ export default function Facturas() {
   const [productosSeleccionado, setproductosSeleccionado] = useState([]);
   const getProductos = async () => {
     await axios
-      .get('http://Localhost:3001/api/productos')
+      .get('http://localhost:3001/api/productos')
       .then((response) => {
         const productos = response.data;
         const productosagregados = [];
@@ -52,13 +52,12 @@ export default function Facturas() {
           const element = productos[index];
           productosagregados.push({
             indice: 0,
-            name: element.nombre,
-            value: element._id,
-            codigos: element.codigos,
+            descripcion: element.descripcion,
+            value: element.value,
+            codigoPrincipal: element.codigoPrincipal,
             proveedores: element.proveedores,
             precios: element.precios,
             area: element.area,
-            ubicacion: element.ubicacion,
             marca: element.marca,
             _v: element._v,
             cantidad: element.cantidad,
@@ -90,9 +89,9 @@ export default function Facturas() {
     productosEnBodega.filter((item) => {
       if (item.value === idToSearch) {
         setproductoSeleccionado({
-          name: item.name,
+          descripcion: item.descripcion,
           value: item.value,
-          codigo: item.codigos[0],
+          codigoPrincipal: item.codigoPrincipal,
           cantidad: 1,
           precioUnitario: item.precios[0],
           precioSumado: 0,
@@ -120,7 +119,7 @@ export default function Facturas() {
       rtn: rtn,
     };
     //alert(JSON.stringify(campos));
-    // await axios.post('http://Localhost:3001/api/facturas', campos);
+    // await axios.post('http://localhost:3001/api/facturas', campos);
     setproductosSeleccionado([]);
     setresult(0);
     setindice(1);
@@ -143,7 +142,7 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
+    axios.put(`http://localhost:3001/api/productos/${id}`, { cantidad: cantidad2 });
   };
   const handleQuantityChange = (e) => {
     setindice(1);
@@ -153,6 +152,7 @@ export default function Facturas() {
   const eliminarProducto = async (i, cantidad) => {
     let cantidad2 = 0;
     getProductos();
+    alert(JSON.stringify(productoSeleccionado));
     for (let index = 0; index < productosEnBodega.length; index++) {
       const element = productosEnBodega[index];
       if (element.value === i) {
@@ -160,7 +160,7 @@ export default function Facturas() {
         break;
       }
     }
-    axios.put(`http://Localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
+    axios.put(`http://localhost:3001/api/productos/${i}`, { cantidad: cantidad2 });
     const items = productosSeleccionado.filter((item) => item.value !== i);
     setproductosSeleccionado(items);
     setresult(0);
@@ -179,9 +179,9 @@ export default function Facturas() {
   };
   const agregarProductoaTabla = async () => {
     addRow({
-      name: productoSeleccionado.name,
+      descripcion: productoSeleccionado.descripcion,
       value: productoSeleccionado.value,
-      codigo: productoSeleccionado.codigo,
+      codigoPrincipal: productoSeleccionado.codigoPrincipal,
       cantidad: quantity,
       precioUnitario: Number(productoSeleccionado.precioUnitario),
       precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
@@ -196,8 +196,8 @@ export default function Facturas() {
       <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
         <Row>
           <h4 style={{ paddingLeft: '200px' }}>Producto:</h4>
-          <Col>
-            <div align="center">
+          <Col sm={{ size: 'auto' }}>
+            <div style={{ paddingLeft: '200px' }} style={{ 'margin-left': '-25px' }}>
               <SelectSearch
                 search
                 placeholder="Encuentre el Producto a Facturar"
@@ -255,8 +255,8 @@ export default function Facturas() {
                 {productosSeleccionado.map((row, i) => (
                   <tr key={i}>
                     <th>{indice++}</th>
-                    <th>{row.name}</th>
-                    <th>{row.codigo}</th>
+                    <th>{row.descripcion}</th>
+                    <th>{row.codigoPrincipal}</th>
                     <th>{row.cantidad}</th>
                     <th>{row.precioUnitario}</th>
                     <th>{row.precioSumado}</th>

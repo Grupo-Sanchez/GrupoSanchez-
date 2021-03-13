@@ -23,7 +23,7 @@ class ModalForm extends Component {
   };
 
   deleteItem = async (id) => {
-    await axios.delete(`http://Localhost:3001/api/clientes/${id}`);
+    await axios.delete(`http://localhost:3001/api/clientes/${id}`);
     Confirm.open({
       title: 'Aviso',
       message: 'cliente eliminado',
@@ -89,7 +89,6 @@ class ModalForm extends Component {
       <div>
         {button}
         <Modal
-          className="estiloModal "
           style={{
             height: '95vh',
             'overflow-y': 'auto',

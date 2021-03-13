@@ -64,7 +64,7 @@ const ListarBodegas = (props) => {
   });
 
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/bodegas/${memberId}`);
+    axios.delete(`http://localhost:3001/api/bodegas/${memberId}`);
     // window.location.reload(false);
   };
   const [ModalModificarBodega, setModalModificarBodega] = useState(false);
@@ -120,13 +120,13 @@ const ListarBodegas = (props) => {
   });
 
   const fecthData = async () => {
-    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       setData(response.data);
       // alert(data[0]);
     });
   };
   const fecthDataProductos = async () => {
-    await axios.get('http://Localhost:3001/api/productos').then((response) => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
       setDataproductos(response.data);
       // alert(dataproductos[0]);
     });
@@ -153,7 +153,7 @@ const ListarBodegas = (props) => {
   async function handleValidSubmit(event, values) {
     const Id = Seleccionado._id;
     axios
-      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
+      .put(`http://localhost:3001/api/bodegas/${Id}`, {
         numBodega: values.numBodega,
         descripcion: values.Description,
         encargado: values.Encargado,
@@ -209,7 +209,7 @@ const ListarBodegas = (props) => {
       if (dataproductos[i].bodega[0].value === Id) {
         dataproductos[i].bodega[0] = payload;
         axios
-          .put(`http://Localhost:3001/api/productos/${dataproductos[i]._id}`, {
+          .put(`http://localhost:3001/api/productos/${dataproductos[i]._id}`, {
             nombre: dataproductos[i].nombre,
             area: dataproductos[i].area,
             codigos: dataproductos[i].codigos,
