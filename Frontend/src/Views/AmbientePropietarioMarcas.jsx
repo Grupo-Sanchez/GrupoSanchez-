@@ -5,6 +5,7 @@ import AmbientePropietarioBase from '../Components/AmbientePropietarioBase.jsx';
 const AmbientePropietarioProducto = () => (
   <AmbientePropietarioBase>
     <Gestionar />
+    {/* <OpcionesMarcas /> */}
   </AmbientePropietarioBase>
 );
 
