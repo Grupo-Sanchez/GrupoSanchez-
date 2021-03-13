@@ -1,0 +1,68 @@
+.paddingAvInput {
+  width: 200px;
+  border-radius: 30px;
+  height: 30px;
+}
+
+.paddingAvInputRequired {
+  width: 200px;
+  border-radius: 30px;
+  height: 30px;
+  border-color: #62d162;
+}
+
+.formTitle {
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.informationTitle{
+  text-align: center;  
+}
+
+.informationSubTitle{
+  color: #eba434
+}
+
+.underline {
+  background-image: linear-gradient(gray, gray);
+  background-position: bottom center; /*Adjust the background-position to move the line*/
+  background-size: 100% 2px; /*Adjust the background size to control length and height*/
+  background-repeat: no-repeat;
+  padding-bottom: 4px; /* this can also control the position */
+}
+
+
+
+
+.big {
+  background-size: 100% 2px;
+}
+
+.buttonCancel {
+  background-color: #ffffff;
+  color: #f60000;
+  border-color: #f60000;
+  border-radius: 30px;
+}
+
+.submit-button {
+  background-color: #ffffff;
+  color: #62d162;
+  border-color: #62d162;
+  border-radius: 30px;
+}
+
+.submit-button:hover {
+  background-color: #62d162;
+  color: #ffffff;
+  border-color: #ffffff;
+  border-radius: 30px;
+}
+
+.buttonCancel:hover {
+  background-color: #f60000;
+  color: #ffffff;
+  border-color: #ffffff;
+  border-radius: 30px;
+}

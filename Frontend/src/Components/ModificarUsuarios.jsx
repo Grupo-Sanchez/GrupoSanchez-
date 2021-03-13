@@ -81,14 +81,14 @@ export default function ModificarUsuario(props) {
   const [modalModificar, setModalModificarUsuario] = useState(false);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/users/${memberId}`);
+    axios.delete(`http://localhost:3001/api/users/${memberId}`);
     setModalModificarUsuario(false);
   };
 
   const [data, setData] = useState([]);
 
   const fecthData = async () => {
-    await axios.get('http://Localhost:3001/api/users').then((response) => {
+    await axios.get('http://localhost:3001/api/users').then((response) => {
       setData(response.data);
     });
   };
