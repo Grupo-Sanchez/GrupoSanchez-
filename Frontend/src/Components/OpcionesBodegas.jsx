@@ -119,6 +119,7 @@ import {
   Table,
   Row,
   Col,
+  Container,
 } from 'reactstrap';
 import {
   AvForm,
@@ -168,8 +169,8 @@ const OpcionesBodegas = (props) => {
   const [ModalMigrarProducto, setModalMigrarProducto] = useState(false);
   const [productos, setProductos] = useState([]);
   const [CantMigrar, setCantMigrar] = useState();
-  const [daniel, setDaniel] = useState([]); //debo eliminar
-  let ddd = [];
+
+  const [existencia, setExistencia] = useState(0);
 
   const [BodegaModificar, setBodegaModificar] = useState({
     numBodega: '',
@@ -397,8 +398,32 @@ const OpcionesBodegas = (props) => {
     });
   };
 
-  /////
-  /////INICIO DEL RENDER
+  const modalAntesDeMigrar = (cantidad) => {
+    setModalMigrarProducto(true);
+    setExistencia(cantidad);
+  };
+
+  //metodo para obtener el id de la bodega seleccionada
+  const manejarCombobox = (e) => {};
+
+  function paddingAvInput() {
+    return {
+      'border-radius': '26px',
+      width: '240px',
+      height: '41px',
+      'text-align-last': 'center',
+    };
+  }
+  function paddingAvInput2() {
+    return {
+      'border-radius': '26px',
+      width: '240px',
+      height: '41px',
+      'text-align-last': 'center',
+      margin: '0 auto',
+    };
+  }
+
   return (
     <div>
       {/* Modal principal, donde se encuentran todos los elementos */}
@@ -516,7 +541,7 @@ const OpcionesBodegas = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {dataproductos.map((elemento, index) => (
+                {dataproductos.map((elemento) => (
                   <tr>
                     <td>{`${elemento.codigoBarra}`}</td>
                     <td>{elemento.codigoPrincipal}</td>
@@ -535,7 +560,8 @@ const OpcionesBodegas = (props) => {
                     </td>
                     {/* // ))} */}
                     <td>{elemento.precios}</td>
-                    <td>ACCION</td>
+
+                    <td onClick={() => modalAntesDeMigrar(elemento.cantidad)}>ACCION</td>
                   </tr>
                 ))}
               </tbody>
@@ -812,38 +838,57 @@ const OpcionesBodegas = (props) => {
           <hr></hr>
           {/* </ModalHeader> */}
           <ModalBody>
-            <div className="row">
-              <div className="col-sm">
-                <AvField
-                  name="numBodega"
-                  label="Numero de bodega"
-                  type="number"
-                  onChange={handleChange}
-                  value={BodegaModificar.numBodega}
-                  validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
-                />
-                <AvField
-                  name="Description"
-                  label="Descripcion"
-                  type="text"
-                  onChange={handleChange}
-                  value={BodegaModificar.descripcion}
-                  validate={{
-                    required: { value: true, errorMessage: 'Campo debe ser llenado ' },
-                  }}
-                />
-                <AvField
-                  name="Encargado"
-                  label="Encargado"
-                  type="text"
-                  onChange={handleChange}
-                  value={BodegaModificar.encargado}
-                  validate={{
-                    required: { value: true, errorMessage: 'Campo debe ser llenado' },
-                  }}
-                />
-              </div>
-            </div>
+            <Container>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'x-large' }}>Movilizar a bodega: </label>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <select style={paddingAvInput()}>
+                    {dataBodegas.map((bodega) => {
+                      return <option value={bodega._id}>{bodega.descripcion}</option>;
+                    })}
+                  </select>
+                </Col>
+              </Row>
+              <br></br>
+              <br></br>
+
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'x-large' }}>
+                    Cantidad existente en bodega actual:{' '}
+                  </label>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'larger' }}>{existencia}</label>
+                </Col>
+              </Row>
+              <br></br>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'x-large' }}>Cantidad a enviar:</label>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <AvField
+                    style={paddingAvInput2()}
+                    name="Encargado"
+                    type="number"
+                    onChange={handleChange}
+                    min="1"
+                    max={existencia}
+                  />
+                </Col>
+              </Row>
+            </Container>
           </ModalBody>
           <ModalFooter>
             <FormGroup>
@@ -860,7 +905,7 @@ const OpcionesBodegas = (props) => {
                   cursor: 'pointer',
                 }}
               >
-                EDITAR BODEGA
+                ENVIAR
               </Button>
               <span>‎ ‏‏‎</span>
               <Button
