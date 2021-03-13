@@ -119,6 +119,7 @@ import {
   Table,
   Row,
   Col,
+  Container,
 } from 'reactstrap';
 import {
   AvForm,
@@ -381,6 +382,24 @@ const OpcionesBodegas = (props) => {
 
   //metodo para obtener el id de la bodega seleccionada
   const manejarCombobox = (e) => {};
+
+  function paddingAvInput() {
+    return {
+      'border-radius': '26px',
+      width: '240px',
+      height: '41px',
+      'text-align-last': 'center',
+    };
+  }
+  function paddingAvInput2() {
+    return {
+      'border-radius': '26px',
+      width: '240px',
+      height: '41px',
+      'text-align-last': 'center',
+      margin: '0 auto',
+    };
+  }
 
   return (
     <div>
@@ -784,38 +803,57 @@ const OpcionesBodegas = (props) => {
           <hr></hr>
           {/* </ModalHeader> */}
           <ModalBody>
-            <div className="row">
-              <div className="col-sm">
-                <Row>
-                  <Col sm="12" md={{ size: 6, offset: 3 }}>
-                    <label>movilizar a bodega: </label>
-                    <select>
-                      {dataBodegas.map((bodega) => {
-                        return <option value={bodega._id}>{bodega.descripcion}</option>;
-                      })}
-                    </select>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col sm="12" md={{ size: 6, offset: 3 }}>
-                    <label>cantidad existente en bodega actual: </label>
-                    <label>{existencia}</label>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col sm="12" md={{ size: 6, offset: 3 }}>
-                    <label>cantidad a enviar</label>
-                    <AvField
-                      name="Encargado"
-                      type="number"
-                      onChange={handleChange}
-                      min="1"
-                      max={existencia}
-                    />
-                  </Col>
-                </Row>
-              </div>
-            </div>
+            <Container>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'x-large' }}>Movilizar a bodega: </label>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <select style={paddingAvInput()}>
+                    {dataBodegas.map((bodega) => {
+                      return <option value={bodega._id}>{bodega.descripcion}</option>;
+                    })}
+                  </select>
+                </Col>
+              </Row>
+              <br></br>
+              <br></br>
+
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'x-large' }}>
+                    Cantidad existente en bodega actual:{' '}
+                  </label>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'larger' }}>{existencia}</label>
+                </Col>
+              </Row>
+              <br></br>
+              <Row>
+                <Col sm="12" md={{ size: 6, offset: 3 }}>
+                  <label style={{ fontSize: 'x-large' }}>Cantidad a enviar:</label>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <AvField
+                    style={paddingAvInput2()}
+                    name="Encargado"
+                    type="number"
+                    onChange={handleChange}
+                    min="1"
+                    max={existencia}
+                  />
+                </Col>
+              </Row>
+            </Container>
           </ModalBody>
           <ModalFooter>
             <FormGroup>
@@ -832,7 +870,7 @@ const OpcionesBodegas = (props) => {
                   cursor: 'pointer',
                 }}
               >
-                EDITAR BODEGA
+                ENVIAR
               </Button>
               <span>‎ ‏‏‎</span>
               <Button
