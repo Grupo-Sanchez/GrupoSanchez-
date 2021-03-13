@@ -146,9 +146,9 @@ const gestionarDepartamentos = () => {
           <div className="departmentBoxesContainer">
             {items.map((departamento) => (
               <div className="departmentBox">
-                <DivButton className="editIcon">
+                {/* <DivButton className="editIcon">
                   <img alt={'Icono de edición'} src={edit} className="editIcon" />
-                </DivButton>
+                </DivButton> */}
                 <img
                   alt={`Icono ${departamento.nombre}`}
                   src={departamento.icon}

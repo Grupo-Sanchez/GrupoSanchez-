@@ -19,6 +19,7 @@ import notificacion from '../../Icons/notificacion.png';
 import clientes from '../../Icons/clientes.png';
 import usuarios from '../../Icons/users.png';
 import tags from '../../Icons/tags.png';
+import departamentos from '../../Icons/folders.svg';
 
 //jefe de tienda icons
 import factura from '../../Icons/factura.png';
@@ -48,7 +49,7 @@ export const rutasPropietario = [
   {
     name: 'Departamentos',
     to: '/Propietario/Departamentos',
-    icon: faFolder,
+    icon: departamentos,
   },
   {
     name: 'Proveedores',

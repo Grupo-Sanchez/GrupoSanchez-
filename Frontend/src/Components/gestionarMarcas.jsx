@@ -109,22 +109,22 @@ const gestionarDepartamentos = () => {
             </Col>
             <div className="marcas_container">
               {data.data.marcas.map((marca) => (
-                <div className="departmentBox">
+                <div className="MarcasBox">
                   <DivButton
-                    className="editIcon"
+                    className="MarcaeditIcon"
                     action={() => {
                       setIdMarcaSeleccionada(marca._id);
                       setModalModificar(!modalModificar);
                     }}
                   >
-                    <img alt={'Icono de edición'} src={edit} className="editIcon" />
+                    <img alt={'Icono de edición'} src={edit} className="MarcaeditIcon" />
                   </DivButton>
                   <img
                     alt={`Icono ${marca.nombre}`}
                     src={marca.imagenMarca}
-                    className="backgroundSVG"
+                    className="MarcabackgroundSVG"
                   />
-                  <div className="departmentLabel">Editar</div>
+                  <div className="marcasLabel">Editar</div>
                 </div>
               ))}
             </div>
