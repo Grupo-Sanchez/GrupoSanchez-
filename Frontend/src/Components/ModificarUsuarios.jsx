@@ -682,6 +682,7 @@ export default function ModificarUsuario(props) {
                     name="usuario"
                     id="usuario"
                     //value={seleccionado ? seleccionado.usuario : ''}
+                    value="User00"
                     readOnly
                   />
                 </Col>
@@ -694,8 +695,8 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="identidad"
                     id="identidad"
-                    //value="Jefe de Tienda"
-                    value={seleccionado ? seleccionado.rol[0].name : ''}
+                    value="Jefe de Tienda"
+                    //value={seleccionado ? seleccionado.rol[0].name : ''}
                     readOnly
                   />
                 </Col>
@@ -713,8 +714,7 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="nombre"
                     id="nombre"
-                    //value={seleccionado ? seleccionado.nombre : ''}
-                    value="Jefe de tienda"
+                    value={seleccionado ? seleccionado.nombre : ''}
                     readOnly
                   />
                 </Col>
