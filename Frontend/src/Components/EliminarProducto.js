@@ -211,6 +211,8 @@ export default function EliminarProducto(props) {
         bodegasAgregar.push({
           value: element._id,
           name: `Bodega ${element.numBodega}`,
+          cantPasillos: element.cantPasillos,
+          cantProductos: element.CantProductos,
         });
       }
       setBodegas(bodegasAgregar);
@@ -385,10 +387,12 @@ export default function EliminarProducto(props) {
     settagsProveedores(elemento.proveedores);
     setTags(elemento.codigos);
     if (elemento.productoExento) {
-      alert('exento');
       setExento('Exento');
     }
     setModalVerProducto(true);
+  };
+  const cerrarModalVerProducto = () => {
+    setModalVerProducto(false);
   };
   function paddingmain() {
     return {
@@ -2157,12 +2161,15 @@ export default function EliminarProducto(props) {
             <Col>
               <label style={{ color: '#ffa500' }}>Información de Producto</label>
             </Col>
+            <Col>
+              <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
+            </Col>
           </Row>
           <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
             <Col style={{ maxWidth: '300px' }}>
               <label>Descripcion:</label>
             </Col>
-            <Col>
+            <Col style={{ maxWidth: '380px' }}>
               <input
                 style={paddinginputVerProducto()}
                 type="text"
@@ -2171,6 +2178,19 @@ export default function EliminarProducto(props) {
                 value={seleccionado ? seleccionado.descripcion : ''}
                 readOnly
               />
+            </Col>
+            <Col>
+              <section style={{ paddingLeft: '100px' }} className="container">
+                <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
+                  <br />
+                  <br />
+                </div>
+              </section>
+              <Col>
+                <div style={{ marginTop: -170, marginRight: '350px' }}>
+                  <aside style={thumbsContainer}>{thumbs}</aside>
+                </div>
+              </Col>
             </Col>
             <br />
           </Row>
@@ -2225,15 +2245,31 @@ export default function EliminarProducto(props) {
             <Col style={{ maxWidth: '300px' }}>
               <label>Código de Barra:</label>
             </Col>
-            <Col>
+            <Col style={{ maxWidth: '480px' }}>
               <Barcode value={seleccionado.codigoBarra} />
+            </Col>
+            <Col style={{ maxWidth: '200px' }}>
+              <label style={{ color: '#ffa500' }}>Proveedores:</label>
+            </Col>
+            <Col>
+              <div>
+                <ul>
+                  {tagsProveedores.map((tag, index) => (
+                    <li key={index}>
+                      <span>{tag.name}</span>
+                    </li>
+                  ))}
+
+                  <br />
+                </ul>
+              </div>
             </Col>
           </Row>
           <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
             <Col style={{ maxWidth: '300px' }}>
               <label>Descripción Específica:</label>
             </Col>
-            <Col>
+            <Col style={{ maxWidth: '480px' }}>
               <input
                 style={paddinginputVerProducto()}
                 type="textarea"
@@ -2242,12 +2278,15 @@ export default function EliminarProducto(props) {
                 value={seleccionado ? seleccionado.descripcion_larga : ''}
               />
             </Col>
+            <Col>
+              <label style={{ color: '#ffa500' }}>Precios de Venta:</label>
+            </Col>
           </Row>
           <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
             <Col style={{ maxWidth: '300px' }}>
               <label>Producto:</label>
             </Col>
-            <Col style={{ maxWidth: '85px' }}>
+            <Col style={{ maxWidth: '480px' }}>
               <input
                 style={paddinginputVerProductoExento()}
                 type="text"
@@ -2258,8 +2297,126 @@ export default function EliminarProducto(props) {
                 readOnly
               />
             </Col>
+            <Col style={{ maxWidth: '200px' }}>
+              <label>Precio 1:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="Number"
+                name="verprecio2"
+                id="verprecio2"
+                value={precio1}
+                readOnly
+              />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Departamento:</label>
+            </Col>
+            <Col style={{ maxWidth: '480px' }}>
+              <input
+                style={paddinginputVerProducto()}
+                type="textarea"
+                name="verDepartamento"
+                id="verDepartamento"
+                value={seleccionado ? seleccionado.area : ''}
+                readOnly
+              />
+            </Col>
+            <Col style={{ maxWidth: '200px' }}>
+              <label>Precio 2:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="Number"
+                name="verprecio2"
+                id="verprecio2"
+                value={precio2}
+                readOnly
+              />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label style={{ color: '#ffa500' }}>Inventario:</label>
+            </Col>
+            <Col style={{ maxWidth: '480px' }}>
+              <input
+                style={paddinginputVerProducto()}
+                type="Number"
+                readOnly
+              />
+            </Col>
+            <Col style={{ maxWidth: '200px' }}>
+              <label>Precio 3:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="Number"
+                name="verprecio3"
+                id="verprecio3"
+                value={precio3}
+                readOnly
+              />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '300px' }}>
+              <label>Inventario total:</label>
+            </Col>
+            <Col>
+              <input
+                style={paddinginputVerProducto()}
+                type="textarea"
+                name="verDepartamento"
+                value={cantsel}
+                readOnly
+              />
+            </Col>
+          </Row>
+          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+            <Col style={{ maxWidth: '270px' }}>
+              <label>Bodegas:</label>
+            </Col>
+            <Col>
+              <div>
+                <ul>
+                  {tagsBodegas.map((tag, index) => (
+                    <li key={index}>
+                      <span>
+                        Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
+                        {tag.numPasillo}
+                        {tag.pasillo}
+                      </span>
+                    </li>
+                  ))}
+                  <br />
+                </ul>
+              </div>
+            </Col>
           </Row>
         </ModalBody>
+        <ModalFooter>
+          <button
+            style={{
+              'border-radius': '26px',
+              'border-color': '#ff9800',
+              color: 'red',
+              border: '2px solid red',
+              'background-color': 'white',
+              'font-size': '16px',
+              cursor: 'pointer',
+            }}
+            className="btn btn-danger"
+            onClick={() => cerrarModalVerProducto()}
+          >
+            Cerrar
+          </button>
+        </ModalFooter>
       </Modal>
     </div>
   );
