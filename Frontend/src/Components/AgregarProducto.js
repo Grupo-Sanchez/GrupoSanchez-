@@ -1335,7 +1335,7 @@ export default function AgregarProducto(props) {
           width: '1700px',
           maxWidth: '1700px',
           'border-radius': '36px',
-          'overflow-x': 'hidden',
+          'overflow-x': 'overflow',
         }}
       >
         <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
@@ -1650,18 +1650,17 @@ export default function AgregarProducto(props) {
               >
                 <Button
                   style={{
-                    'font-size': '20px',
-                    'border-radius': '50%',
-                    width: '40px',
-                    height: '40px',
-                    'line-height': '2px',
-                    'margin-left': '-350px',
-                    top: '-75px',
+                    'background-color': 'transparent',
+                    border: 'none',
+                    position: 'absolute',
+                    top: '-13px',
+                    left: '-203px',
+                    outline: 'none',
+                    'box-shadow': 'none',
                   }}
                   onClick={() => addTagsClick(codRef)}
-                  color="primary"
                 >
-                  +
+                  <Plus width="40px" height="50px" />
                 </Button>
               </div>
               <Row>
@@ -1772,18 +1771,17 @@ export default function AgregarProducto(props) {
                     <Col style={{ width: '40px' }}>
                       <Button
                         style={{
-                          'font-size': '20px',
-                          'border-radius': '50%',
-                          width: '40px',
-                          height: '40px',
-                          'line-height': '2px',
-                          position: 'relative',
-                          'margin-left': '-200px',
+                          'background-color': 'transparent',
+                          border: 'none',
+                          position: 'absolute',
+                          top: '-13px',
+                          outline: 'none',
+                          'box-shadow': 'none',
+                          'margin-left': '-130px',
                         }}
                         onClick={() => onChangeBodega()}
-                        color="primary"
                       >
-                        +
+                        <Plus width="40px" height="50px" />
                       </Button>
                     </Col>
                     <div style={paddingdivbodegas()}>
@@ -1924,18 +1922,18 @@ export default function AgregarProducto(props) {
                 <Col style={{ width: '40px' }}>
                   <Button
                     style={{
-                      'font-size': '20px',
-                      'border-radius': '50%',
-                      width: '40px',
-                      height: '40px',
-                      'line-height': '2px',
-                      marginLeft: '-150px',
+                      'background-color': 'transparent',
+                      border: 'none',
+                      position: 'absolute',
+                      outline: 'none',
+                      'box-shadow': 'none',
+                      top: '-10px',
+                      marginLeft: '-100px',
                     }}
-                    color="primary"
-                    onClick={() => onChangeProv()}
+                    onClick={(e) => onChangeProv(e)}
                   >
-                    +
-                    </Button>
+                    <Plus width="40px" height="50px" />
+                  </Button>
                 </Col>
                 <div style={paddingdiv()}>
                   <ul style={paddingul()}>
