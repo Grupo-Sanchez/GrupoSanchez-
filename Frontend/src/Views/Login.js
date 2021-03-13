@@ -86,7 +86,7 @@ const Login = (props) => {
 
   return (
     <>
-      <div className="pageContent">
+      <div className="pageLoginContent">
         <div className="outsideCard">
           <img
             src={

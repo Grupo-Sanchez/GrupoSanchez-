@@ -10,6 +10,8 @@ import {
   FormGroup,
   CustomInput,
   Table,
+  Row,
+  Col,
 } from 'reactstrap';
 import {
   AvForm,
@@ -27,28 +29,25 @@ import '../Styles/InterfazProducto.css';
 import CardBodega from './CartaBodega';
 import '../Styles/ConfirmStyle.css';
 import { Confirm } from './Confirm';
+import { ReactComponent as Plus } from '../Icons/plus.svg';
+import home from '../Icons/warehouse.png';
+import { ReactComponent as EditLogo } from '../Icons/edit.svg';
+import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
 
 const ListarBodegas = (props) => {
   const formulario = [];
-  const [data, setData] = useState(formulario);
-  const [bodega, setBodega] = useState();
+  const [dataBodegas, setDataBodegas] = useState(formulario);
   const [dataproductos, setDataproductos] = useState([]);
-  const [modalVerCodigos, setModalVerCodigos] = useState(false);
-  const [modalVerProveedor, setModalVerProveedor] = useState(false);
-  const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
-  const [ModalVerPrecios, setModalVerPrecios] = useState(false);
-
-  const [abrir, setAbrir] = useState(false);
-  const [SeleccionMigrar, setSeleccionMigrar] = useState();
-  const [modalmigrar, setModalmigrar] = useState(false);
-  const [Seleccionado, setSeleccionado] = useState({
-    _id: '',
+  const [dataproductosDelete, setDataproductosDelete] = useState([]);
+  const [ModalProductos, setModalProductos] = useState(false);
+  const [ModalCrearBodega, setModalCrearBodega] = useState(false);
+  const [ModalModificarBodega, setModalModificarBodega] = useState(false);
+  const [BodegaModificar, setBodegaModificar] = useState({
     numBodega: '',
     descripcion: '',
     encargado: '',
-    cantPasillos: '',
-    CantProductos: '',
   });
+  
   const [seleccionadoPro, setSeleccionadoPro] = useState({
     nombre: '',
     area: '',
@@ -112,52 +111,82 @@ const ListarBodegas = (props) => {
     window.location.reload(false);
   };
 
-  const [form, setForm] = useState({
+
+  const [formBodega, setformBodega] = useState({
     numBodega: '',
     Description: '',
     Encargado: '',
-    CantPasillos: '',
   });
 
-  const fecthData = async () => {
-    await axios.get('http://localhost:3001/api/bodegas').then((response) => {
-      setData(response.data);
-      // alert(data[0]);
-    });
+  //Metodo para abrir modal de crear bodega
+  const AbrirModelBodegas = () => {
+    setModalCrearBodega(true);
+    props.change();
   };
-  const fecthDataProductos = async () => {
-    await axios.get('http://localhost:3001/api/productos').then((response) => {
-      setDataproductos(response.data);
-      // alert(dataproductos[0]);
-    });
-  };
-  useEffect(() => {
-    fecthData();
-    fecthDataProductos();
-  }, []);
+  //Cancelar la creacion de una bodega
+  const CancelarBodega = () => {
+    Confirm.open({
+      title: '¡Advertencia!',
+      message: '¿Desea descartar todos los campos?',
+      onok: () => {
+        props.change();
+        formBodega.numBodega = 0;
+        formBodega.Description = '';
+        formBodega.Encargado = '';
+        setModalCrearBodega(false);
+      },
 
-  useEffect(() => {
-    fecthData();
-    fecthDataProductos();
-  }, [dataproductos, data]);
+    });
+  };
+  //Metodo para invalidar creacion de una bodega
   function handleInvalidSubmit(event, errors, values) {
     console.log('invalid submit', { event, errors, values });
   }
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  //Metodo para crear una bodega
   async function handleValidSubmit(event, values) {
-    const Id = Seleccionado._id;
+    const campos = {
+      numBodega: values.numBodega,
+      descripcion: values.Description,
+      encargado: values.Encargado,
+    };
+    await axios
+      .post('http://Localhost:3001/api/bodegas', campos)
+      .then((res) => {
+        if (res.data.message) {
+          Confirm.open({
+            title: 'aviso',
+            message: 'El numero de bodega ya existe',
+            onok: () => {},
+          });
+        } else {
+          Confirm.open({
+            title: '!exito!',
+            message: 'Gestion realizada correctamente',
+            onok: () => {},
+          });
+          setModalCrearBodega(false);
+        }
+      })
+      .catch((error) => {
+        Confirm.open({
+          title: 'error',
+          message: 'ha ocurrido un error',
+          onok: () => {},
+        });
+      });
+  }
+
+  //Metodo para modificar una bodega
+  async function handleValidSubmitModificar(event, value) {
+    const Id = BodegaModificar._id;
+    const payload = { value: BodegaModificar._id, name: value.numBodega };
     axios
-      .put(`http://localhost:3001/api/bodegas/${Id}`, {
-        numBodega: values.numBodega,
-        descripcion: values.Description,
-        encargado: values.Encargado,
-        cantPasillos: values.CantPasillos,
+      .put(`http://Localhost:3001/api/bodegas/${Id}`, {
+        numBodega: value.numBodega,
+        descripcion: value.Description,
+        encargado: value.Encargado,
+
       })
       .then((res) => {
         if (res.data.message) {
@@ -169,12 +198,10 @@ const ListarBodegas = (props) => {
         } else {
           Confirm.open({
             title: '!exito!',
-            message: 'bodega modificada correctamente',
+            message: 'Bodega modificada correctamente',
             onok: () => {},
           });
-          setTimeout(() => {
-            window.location.reload();
-          }, 2000);
+          setModalModificarBodega(false);
         }
       })
       .catch((error) => {
@@ -187,86 +214,170 @@ const ListarBodegas = (props) => {
     setModalModificarBodega(false);
   }
 
-  const llenar = (i) => {
-    setSeleccionado(i); //Bodega seleccionada
-    setAbrir(true); //abrir el modal de los productos de la bodega seleccionada
+  //Bodega que el usuario esta gestionando
+  const [BodegaSeleccionada, setBodegaSeleccionada] = useState({
+    _id: '',
+    numBodega: '',
+    descripcion: '',
+    encargado: '',
+  });
+
+  //Formulario que esta contenido toda la bodega
+  const [form, setForm] = useState({
+    numBodega: '',
+    Description: '',
+    Encargado: '',
+  });
+
+  //Metodo para cargar las bodegas al inicializar la pantalla
+  const fecthDataBodegas = async () => {
+    await axios.get('http://Localhost:3001/api/bodegas').then((response) => {
+      setDataBodegas(response.data);
+    });
+  };
+
+  //Metodo para cargar los productos de bodega seleccionada
+  const fecthDataProductos = async (e) => {
+    await axios.get(`http://Localhost:3001/api/bodegas/filter/Bodega ${e}`).then((response) => {
+      setDataproductos(response.data);
+    });
+  };
+  const fecthDataProductosDelete = async (e) => {
+    await axios.get(`http://Localhost:3001/api/bodegas/filter/Bodega ${e}`).then((response) => {
+      setDataproductosDelete(response.data);
+    });
+  };
+
+  useEffect(() => {
+    fecthDataBodegas();
+  }, []);
+
+  //controlador de las card de las bodegas
+  const handleChange = (e) => {
+    setformBodega({
+      ...formBodega,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  //Abril modal donde se listan las bodegas
+  const CerrarModalTablaProductos = () => {
+    setModalProductos(false);
     props.change();
-    setBodega(i.numBodega); //Numero de bodega seleccionada
   };
 
-  const migrarBodega = () => {
-    //Abrir modal para seleccionar a donde se migraran los datos
-    setModalmigrar(true);
+  //Cuando se presiona click a una bodega
+  const ListadoBodegas = (i) => {
+    setBodegaSeleccionada(i); //Bodega seleccionada
+    setModalProductos(true); //abrir el modal de los productos de la bodega seleccionada
+    fecthDataProductos(i.numBodega);
+    props.change();
   };
 
-  const seleccionarAMigrar = (bodegaMigrar) => {
-    setModalmigrar(false); //cierro modal donde selecciono donde iran los productos
-    setSeleccionMigrar(bodegaMigrar._id); //Nueva bodega de los productos
-    const Id = Seleccionado._id;
-    const payload = { value: bodegaMigrar._id, name: bodegaMigrar.numBodega };
-    //hacer migracion
-    for (let i = 0; i < dataproductos.length; i++) {
-      if (dataproductos[i].bodega[0].value === Id) {
-        dataproductos[i].bodega[0] = payload;
-        axios
-          .put(`http://localhost:3001/api/productos/${dataproductos[i]._id}`, {
-            nombre: dataproductos[i].nombre,
-            area: dataproductos[i].area,
-            codigos: dataproductos[i].codigos,
-            proveedores: dataproductos[i].proveedores,
-            ubicacion: dataproductos[i].ubicacion,
-            marca: dataproductos[i].marca,
-            bodega: payload,
-            precios: dataproductos[i].precios,
-            cantidad: dataproductos[i].cantidad,
-            descripcion_corta: dataproductos[i].descripcion_corta,
-            descripcion_larga: dataproductos[i].descripcion_larga,
-            cantidad_minima: dataproductos[i].cantidad_minima,
-            fecha_creacion: dataproductos[i].fecha_creacion,
-          })
-          .then((response) => {
-            console.log(response);
-            Confirm.open({
-              title: '!exito!',
-              message: 'Migracion de datos exitosamente',
-              onok: () => {},
-            });
-            setTimeout(() => {
-              window.location.reload();
-            }, 2000);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      }
+
+  //Abrir modal para modificar una bodega.
+  const ModificarBodega = (i) => {
+    setBodegaModificar(i);
+    fecthDataProductosDelete(i.numBodega);
+    setModalModificarBodega(true);
+  };
+  const onDelete = (memberId) => {
+    axios.delete(`http://178.128.67.247:3001/api/bodegas/${memberId}`);
+  };
+
+  const EliminarBodega = (bodega) => {
+    if (dataproductosDelete.length === 0) {
+      onDelete(BodegaModificar._id);
+      Confirm.open({
+        title: '!exito!',
+        message: 'Bodega eliminada exitosamente! ',
+        onok: () => {},
+      });
+      setModalModificarBodega(false);
+    } else {
+      Confirm.open({
+        title: '!error!',
+        message: 'Bodega no puede ser eliminada, debido a que contiene productos.',
+        onok: () => {},
+      });
     }
-    setModalModificarBodega(false);
   };
 
   return (
     <div>
+      {/* Modal principal, donde se encuentran todos los elementos */}
       <Modal
         isOpen={props.isOpen}
         className="text-center"
-        style={{ maxWidth: '1700px', width: '60%' }}
+        style={{ maxWidth: '1800px', width: '70%' }}
       >
         <ModalHeader>
-          <div>
-            <h3>LISTADO DE BODEGAS </h3>
+          <div className="row ml-4 mr-4">
+            <Button
+              style={{
+                'background-color': 'transparent',
+                borderColor: 'transparent',
+                position: 'absolute',
+                top: '8px',
+                left: '16px',
+                'font-size': '18px',
+                'border-radius': '26px',
+              }}
+              onClick={() => AbrirModelBodegas()}
+            >
+              <Plus width="50px" height="50px" />
+            </Button>
+            <div
+              style={{
+                'margin-right': '-50px',
+                paddingLeft: '150px',
+              }}
+            >
+              <h3 className="mr-6">LISTADO DE BODEGAS </h3>
+            </div>
           </div>
         </ModalHeader>
         <ModalBody>
-          <div>
-            {data.map((Bodegas) => {
+          <div className="row ml-3 justify-content-between ">
+            {dataBodegas.map((Bodegas) => {
               console.log(Bodegas);
               return (
-                <div onClick={() => llenar(Bodegas)}>
-                  <CardBodega
-                    numBodega={Bodegas.numBodega}
-                    Description={Bodegas.descripcion}
-                    Encargado={Bodegas.encargado}
-                    CantPasillos={Bodegas.cantPasillos}
-                  />
+                <div className="row mr-4 mt-3" onDoubleClick={() => ListadoBodegas(Bodegas)}>
+                  <div className="card-bodegas mx-auto Fitness-Card">
+                    <div className="card-body">
+                      <div className="row center">
+                        <div className="col-6">
+                          <img src={home} className="float-right" alt=" not found" />
+                        </div>
+                        <div className="col-6 Fitness-Card-Info ">
+                          <div>
+                            <Button
+                              style={{
+                                'background-color': 'transparent',
+                                borderColor: 'transparent',
+                                position: 'absolute',
+                                marginLeft: '90px',
+                              }}
+                              onClick={() => ModificarBodega(Bodegas)}
+                            >
+                              <EditLogo width="30px" height="30px" />
+                            </Button>
+                          </div>
+                          <div>
+                            <p className="text-left">
+                              <b>descripción:</b> {Bodegas.descripcion}
+                            </p>
+                            <p className="text-left">
+                              <b>Encargado:</b> {Bodegas.encargado}
+                            </p>
+                            <p className="text-left">
+                              <b>No. Bodega</b> {Bodegas.numBodega}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <span>‎ ‏‏‎</span>
                 </div>
               );
@@ -279,18 +390,15 @@ const ListarBodegas = (props) => {
           </button>
         </ModalFooter>
       </Modal>
-      {/* Modal para gestionar bodega especifica */}
-      <Modal isOpen={abrir} className="text-center" style={{ maxWidth: '1700px', width: '80%' }}>
+      {/* Modal para listar productos de la bodega seleccionada */}
+      <Modal
+        isOpen={ModalProductos}
+        className="text-center"
+        style={{ maxWidth: '1700px', width: '80%' }}
+      >
         <ModalHeader>
           <div className="row">
             <h3>PRODUCTOS EN BODEGA</h3>
-            <div style={{ paddingLeft: '1px' }}>
-              <button className="btn btn-danger" onClick={() => migrarBodega()}>
-                MIGRAR
-              </button>
-            </div>
-
-            {/* <Button className="btn btn-danger"> MIGRAR PRODUCTOS</Button> */}
           </div>
         </ModalHeader>
         <ModalBody>
@@ -298,374 +406,259 @@ const ListarBodegas = (props) => {
             <Table
               responsive
               striped
-              bordered
               hover
               align="center"
               size="sm"
               id="myTable"
-              style={{ width: '500px' }}
+              style={{
+                width: '1200px',
+                'border-collapse': 'separate',
+                border: 'solid #ccc 2px',
+                '-moz-border-radius': '26px',
+                '-webkit-border-radius': '26px',
+                'border-radius': '26px',
+                '-webkit-box-shadow': '0 1px 1px #ccc',
+                '-moz-box-shadow': '0 1px 1px #ccc',
+                'box-shadow': '0 1px 1px #ccc',
+              }}
             >
               <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Nombre</th>
-                  <th>Area</th>
-                  <th>Ubicación</th>
+                <tr style={{ textAlign: 'center' }}>
+                  <th>Código de Barra</th>
+                  <th>Codigo Principal</th>
+                  <th style={{ width: '300px' }}>Descripcion</th>
                   <th>Marca</th>
-                  <th>Cantidad Mínima</th>
-                  <th>Códigos</th>
-                  <th>Proveedores </th>
-                  <th>Descripciones </th>
-                  <th>Precios</th>
+                  <th>Inventario</th>
+                  <th>Precio</th>
                 </tr>
               </thead>
               <tbody>
-                {dataproductos
-                  .filter((dataPro) => dataPro.bodega[0].name.includes(bodega))
-                  .map((elemento, index) => (
-                    <tr>
-                      <td>{(index += 1)}</td>
-                      <td>{elemento.nombre}</td>
-                      <td>{elemento.area}</td>
-                      <td>{elemento.ubicacion}</td>
-                      <td>{elemento.marca[0].name}</td>
-                      <td>{elemento.cantidad_minima}</td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarCodigos(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarProveedores(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarDescripciones(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                      <td>
-                        <Button color="primary" onClick={() => mostrarPrecios(elemento)}>
-                          Ver
-                        </Button>
-                      </td>
-                    </tr>
-                  ))}
+                {dataproductos.map((elemento, index) => (
+                  <tr>
+                    <td>{`${elemento.codigoBarra}`}</td>
+                    <td>{elemento.codigoPrincipal}</td>
+                    {/* <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
+                    <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td> */}
+                    <td>{elemento.cantidad}</td>
+                    <td>{elemento.precios[0]}</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
           </div>
         </ModalBody>
         <ModalFooter>
-          <button className="btn btn-danger" onClick={() => recargar()}>
+          <button className="btn btn-danger" onClick={() => CerrarModalTablaProductos()}>
             CANCELAR
           </button>
         </ModalFooter>
       </Modal>
-      <Modal isOpen={modalVerCodigos}>
-        <ModalHeader>
-          <div className="text-center">
-            <h3>Agregar Productos</h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div className="form-group">
-            <label>codigo 1</label>
-            <input
-              className="form-control"
-              type="text"
-              name="nombre"
-              value={seleccionadoPro.codigos[0]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.nombre : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>codigo 2</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Fecha"
-              value={seleccionadoPro.codigos[1]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>codigo 3</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.codigos[2]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>codigo 4</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.codigos[3]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>codigo 5</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.codigos[4]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>codigo 6</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.codigos[5]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>codigo 7</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.codigos[6]}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-primary" onClick={() => setModalVerCodigos(false)}>
-            OK
-          </button>
-        </ModalFooter>
-      </Modal>
-      <Modal isOpen={modalVerProveedor}>
-        <ModalHeader>
-          <div>
-            <h3>Modificar Productos</h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div className="form-group">
-            <label>proveedor 1</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Apunte"
-              value={seleccionadoPro.proveedores[0] ? seleccionadoPro.proveedores[0].name : ''}
-              readOnly
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 2</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Fecha"
-              readOnly
-              value={seleccionadoPro.proveedores[1] ? seleccionadoPro.proveedores[1].name : ''}
-              // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 3</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.proveedores[2] ? seleccionadoPro.proveedores[2].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 4</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.proveedores[3] ? seleccionadoPro.proveedores[3].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 5</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.proveedores[4] ? seleccionadoPro.proveedores[4].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 6</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.proveedores[5] ? seleccionadoPro.proveedores[5].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-            <label>proveedor 7</label>
-            <input
-              className="form-control"
-              type="text"
-              name="Etiqueta"
-              value={seleccionadoPro.proveedores[6] ? seleccionadoPro.proveedores[6].name : ''}
-              readOnly
-              // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-              // onChange={manejarCambio}
-            />
-            <br />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-primary" onClick={() => setModalVerProveedor(false)}>
-            OK
-          </button>
-        </ModalFooter>
-      </Modal>
-      <Modal isOpen={modalVerDescripciones}>
-        <ModalHeader></ModalHeader>
-        <ModalBody>
-          <div>
-            <div>
-              <h3>Descripción corta</h3>
-            </div>
-            <FormGroup class="style">
-              <Label for="exampleText"></Label>
-              <Input
-                type="textarea"
-                name="text"
-                id="mostrarDescripcionCorta"
-                value={seleccionadoPro.descripcion_corta}
-                readOnly
-              />
-            </FormGroup>
-          </div>
-          <div>
-            <div>
-              <h3>Descripción larga </h3>
-            </div>
-            <div className="form-group">
-              <label htmlFor="exampleFormControlTextarea1"></label>
-              <textarea
-                className="form-control"
-                id="mostrarDescripcionLarga"
-                rows="5"
-                value={seleccionadoPro.descripcion_larga}
-                readOnly
-              />
-            </div>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={() => setmodalVerDescripciones(false)}>
-            OK
-          </Button>
-        </ModalFooter>
-      </Modal>
-      <Modal isOpen={ModalVerPrecios}>
-        <ModalHeader>
-          <div className="text-center">
-            <h3>Modificar Precios</h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div className="form-group">
-            <label>Precio 1</label>
-            <input
-              className="form-control"
-              type="text"
-              name="modprecio1"
-              id="verprecio1"
-              value={seleccionadoPro.precios[0]}
-              readOnly
-            />
-            <br />
-            <label>Precio 2</label>
-            <input
-              className="form-control"
-              type="text"
-              name="modprecio2"
-              id="verprecio2"
-              value={seleccionadoPro.precios[1]}
-              readOnly
-            />
-            <br />
-            <label>Precio 3</label>
-            <input
-              className="form-control"
-              type="text"
-              name="modprecio3"
-              id="verprecio3"
-              value={seleccionadoPro.precios[2]}
-              readOnly
-            />
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-primary" onClick={() => setModalVerPrecios(false)}>
-            OK
-          </button>
-        </ModalFooter>
-      </Modal>
-      {/* Modal para seleccionar a bodega que se migraran productos */}
+      {/* MODAL PARA CREAR UNA BODEGA */}
       <Modal
-        isOpen={modalmigrar}
+        isOpen={ModalCrearBodega}
         className="text-center"
-        style={{ maxWidth: '1700px', width: '60%' }}
+        style={{ maxWidth: '1700px', width: '80%' }}
       >
-        <ModalHeader>
-          <div>
-            <h3>ELIJA BODEGA A DONDE MIGRAR PRODUCTOS </h3>
-          </div>
-        </ModalHeader>
-        <ModalBody>
-          <div>
-            {data.map((Bodegass) => {
-              console.log(Bodegass);
-              return (
-                <div onClick={() => seleccionarAMigrar(Bodegass)}>
-                  <CardBodega
-                    numBodega={Bodegass.numBodega}
-                    Description={Bodegass.descripcion}
-                    Encargado={Bodegass.encargado}
-                    CantPasillos={Bodegass.cantPasillos}
-                  />
-                  <span>‎ ‏‏‎</span>
+        <AvForm onValidSubmit={handleValidSubmit} onInvalidSubmit={handleInvalidSubmit}>
+          <ModalHeader>
+            <div>
+              <h3>CREACION DE BODEGAS</h3>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+            <div className="row">
+              <div className="col-sm ">
+                <div className="card-bodegas mx-auto Fitness-Card">
+                  <div className="card-body">
+                    <div className="row center">
+                      <div className="col-6">
+                        <img src={home} className="float-right" alt=" not found" />
+                      </div>
+                      <div className="col-6 Fitness-Card-Info ">
+                        <div>
+                          <p className="text-left">
+                            <b>descripción:</b> {formBodega.Description}
+                          </p>
+                          <p className="text-left">
+                            <b>Encargado:</b> {formBodega.Encargado}
+                          </p>
+                          <p className="text-left">
+                            <b>No. Bodega</b> {formBodega.numBodega}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <button className="btn btn-danger" onClick={props.change}>
-            CANCELAR
-          </button>
-        </ModalFooter>
+              </div>
+              <div className="col-sm">
+                <AvField
+                  name="Description"
+                  label="Descripcion"
+                  type="text"
+                  onChange={handleChange}
+                  value={formBodega.Description}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado ' },
+                  }}
+                />
+                <AvField
+                  name="Encargado"
+                  label="Encargado"
+                  type="text"
+                  onChange={handleChange}
+                  value={formBodega.Encargado}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado' },
+                  }}
+                />
+                <AvField
+                  name="numBodega"
+                  label="Numero de bodega"
+                  type="number"
+                  onChange={handleChange}
+                  value={formBodega.numBodega}
+                  validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <FormGroup>
+              <Button
+                type="submit"
+                color="primary"
+                style={{
+                  'border-radius': '26px',
+                  'border-color': '#98ff98',
+                  color: 'green',
+                  border: '1px solid green',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+              >
+                Agregar Bodega
+              </Button>
+              <span>‎ ‏‏‎</span>
+              <Button
+                className="btn btn-danger"
+                style={{
+                  margin: '10px',
+                  'border-radius': '26px',
+                  'border-color': '#ff9800',
+                  color: 'red',
+                  border: '1px solid red',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+                onClick={CancelarBodega}
+              >
+                CANCELAR
+              </Button>
+            </FormGroup>
+          </ModalFooter>
+        </AvForm>
+      </Modal>
+      {/* MODAL PARA MODOFICAR UNA BODEGA EN ESPECIFICO */}
+      <Modal
+        isOpen={ModalModificarBodega}
+        className="text-center"
+        style={{ maxWidth: '1700px', width: '80%' }}
+      >
+        <AvForm onValidSubmit={handleValidSubmitModificar} onInvalidSubmit={handleInvalidSubmit}>
+          <ModalHeader>
+            <div className="row">
+              <div>
+                <h3>CREACION DE BODEGAS</h3>
+              </div>
+              <div>
+                <Button
+                  onClick={() => EliminarBodega()}
+                  style={{
+                    'background-color': 'transparent',
+                    borderColor: 'transparent',
+
+                    'border-radius': '26px',
+                  }}
+                  className="boton-basurero"
+                >
+                  <BasureroLogo fill="#dc0000" width="50px" height="50px" />
+                </Button>
+              </div>
+            </div>
+          </ModalHeader>
+          <ModalBody>
+            <div className="row">
+              <div className="col-sm ">
+                <div className="card-bodegas mx-auto Fitness-Card">
+                  <div className="card-body">
+                    <div className="row center">
+                      <div className="col-6">
+                        <img src={home} className="float-right" alt=" not found" />
+                      </div>
+                      <div className="col-6 Fitness-Card-Info ">
+                        <div>
+                          <p className="text-left">
+                            <b>descripción:</b> {formBodega.Description}
+                          </p>
+                          <p className="text-left">
+                            <b>Encargado:</b> {formBodega.Encargado}
+                          </p>
+                          <p className="text-left">
+                            <b>No. Bodega</b> {formBodega.numBodega}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm">
+                <AvField
+                  name="numBodega"
+                  label="Numero de bodega"
+                  type="number"
+                  onChange={handleChange}
+                  value={BodegaModificar.numBodega}
+                  validate={{ required: { value: true, errorMessage: 'Ingrese valor' } }}
+                />
+                <AvField
+                  name="Description"
+                  label="Descripcion"
+                  type="text"
+                  onChange={handleChange}
+                  value={BodegaModificar.descripcion}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado ' },
+                  }}
+                />
+                <AvField
+                  name="Encargado"
+                  label="Encargado"
+                  type="text"
+                  onChange={handleChange}
+                  value={BodegaModificar.encargado}
+                  validate={{
+                    required: { value: true, errorMessage: 'Campo debe ser llenado' },
+                  }}
+                />
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <FormGroup>
+              <Button type="submit" color="primary">
+                Editar Bodega
+              </Button>
+              <span>‎ ‏‏‎</span>
+              <Button className="btn btn-danger" onClick={() => setModalModificarBodega(false)}>
+                CANCELAR
+              </Button>
+            </FormGroup>
+          </ModalFooter>
+        </AvForm>
       </Modal>
     </div>
   );

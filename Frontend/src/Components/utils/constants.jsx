@@ -8,6 +8,7 @@ import {
   faAddressBook,
   faFileInvoice,
   faTasks,
+  faFolder,
 } from '@fortawesome/free-solid-svg-icons';
 
 import productos from '../../Icons/productos.png';
@@ -18,6 +19,11 @@ import notificacion from '../../Icons/notificacion.png';
 import clientes from '../../Icons/clientes.png';
 import usuarios from '../../Icons/users.png';
 import tags from '../../Icons/tags.png';
+import departamentos from '../../Icons/folders.svg';
+
+//jefe de tienda icons
+import factura from '../../Icons/factura.png';
+import devoluciones from '../../Icons/devoluciones.png';
 
 export const rutasPropietario = [
   {
@@ -39,6 +45,11 @@ export const rutasPropietario = [
     name: 'Marcas',
     to: '/Propietario/Marcas',
     icon: tags,
+  },
+  {
+    name: 'Departamentos',
+    to: '/Propietario/Departamentos',
+    icon: departamentos,
   },
   {
     name: 'Proveedores',
@@ -66,12 +77,12 @@ export const rutasJefeTienda = [
   {
     name: 'Facturar',
     to: '/JefeTienda/Facturar',
-    icon: faFileInvoice,
+    icon: factura,
   },
   {
     name: 'Devoluciones',
     to: '/JefeTienda/Devoluciones',
-    icon: faTasks,
+    icon: devoluciones,
   },
 ];
 
