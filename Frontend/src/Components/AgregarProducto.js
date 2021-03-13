@@ -364,7 +364,10 @@ export default function AgregarProducto(props) {
       this.setState({some:'val',arr:this.state.arr})
   }
   */
+
+  let [singleFiles, setSingleFiles] = useState([]);
   const [files, setFiles] = useState([]);
+  const [singleProgress, setSingleProgress] = useState(0);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
@@ -375,14 +378,43 @@ export default function AgregarProducto(props) {
           }),
         ),
       );
+      console.log('ACAAAAAAAAAAAAA');
+      setSingleFiles(acceptedFiles);
     },
   });
-
+  const singleFileUpload = async (data1, options1) => {
+    try {
+      await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
+    } catch (error) {
+      alert(`ACA: , ${error}`);
+    }
+    return null;
+  };
+  const removerImagen = () => {
+    setFiles([]);
+    setSingleFiles([]);
+  };
+  const singleFileOptions = {
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
+      setSingleProgress(percentage);
+    },
+  };
+  const uploadSingleFile = async () => {
+    const formData = new FormData();
+    /*let valores = {
+      idProducto: 'simonn',
+      file: singleFiles[0],
+    };*/
+    singleFiles[0].idProducto = 'asi es';
+    formData.append('id', seleccionado.codigoPrincipal);
+    formData.append('file', singleFiles[0]);
+    await singleFileUpload(formData, singleFileOptions);
+  };
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
-      <div style={thumbInner}>
-        <img src={file.preview} style={img} />
-      </div>
+      <div style={thumbInner}>{<img src={file.preview} style={img} />}</div>
     </div>
   ));
   const agregarMarca = (idToSearch) => {
@@ -779,6 +811,9 @@ export default function AgregarProducto(props) {
       ) {
         if (regex.test(seleccionado.descripcion) && regex.test(seleccionado.area)) {
           prueba();
+          if (singleFiles) {
+            uploadSingleFile();
+          }
           props.change();
         } else {
           Confirm.open({
@@ -2099,7 +2134,7 @@ export default function AgregarProducto(props) {
                       'margin-left': '-20px',
                       'border-radius': '26px',
                     }}
-                    onClick={() => setFiles([])}
+                    onClick={() => removerImagen()}
                   >
                     <Remove width="25px" height="25px" />
                   </Button>
