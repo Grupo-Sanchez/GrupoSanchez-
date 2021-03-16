@@ -1801,7 +1801,7 @@ export default function EliminarProducto(props) {
           striped
           hover
           align="center"
-          size="sm"
+          size="lg"
           id="myTable"
           style={{
             width: '1200px',

@@ -292,7 +292,7 @@ export default function ModificarUsuario(props) {
           striped
           hover
           align="center"
-          size="sm"
+          size="lg"
           id="myTable"
           style={{
             'max-width': '360px',
@@ -662,7 +662,7 @@ export default function ModificarUsuario(props) {
           style={{
             height: '95vh',
             'overflow-y': 'auto',
-            top: '20px',
+            top: '-100px',
             maxWidth: '1200px',
           }}
         >
