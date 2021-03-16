@@ -195,7 +195,6 @@ export default function AgregarProducto(props) {
           value: element._id,
           name: element.nombre,
         });
-        alert(element._id);
       }
       setMarcas(marcasAgregar);
     });
