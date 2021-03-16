@@ -102,7 +102,7 @@ const formClienteCopy = (props) => {
           {' '}
           <Row>
             <Col>
-              <label class="verde">Primer nombre</label>
+              <label className="verde titulo">Primer nombre</label>
             </Col>
             <Col>
               <AvField
@@ -126,7 +126,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label class="verde">Primer apellido</label>
+              <label className="verde titulo">Primer apellido</label>
             </Col>
             <Col>
               <AvField
@@ -152,7 +152,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label>segundo nombre</label>
+              <label className="titulo">segundo nombre</label>
             </Col>
             <Col>
               <AvField
@@ -172,7 +172,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label>Segundo apellido</label>
+              <label className="titulo">Segundo apellido</label>
             </Col>
             <Col>
               <AvField
@@ -195,7 +195,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label class="verde">No. Identidad</label>
+              <label className="verde titulo">No. Identidad</label>
             </Col>
             <Col>
               <AvField
@@ -215,7 +215,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label>RTN</label>
+              <label className="titulo">RTN</label>
             </Col>
             <Col>
               {' '}
@@ -243,7 +243,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label>Telefono</label>
+              <label className="titulo">Telefono</label>
             </Col>
             <Col>
               {' '}
@@ -269,7 +269,7 @@ const formClienteCopy = (props) => {
         <Col xs="6">
           <Row>
             <Col>
-              <label>Correo</label>
+              <label className="titulo">Correo</label>
             </Col>
             <Col>
               {' '}

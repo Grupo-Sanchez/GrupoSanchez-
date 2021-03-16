@@ -17,6 +17,9 @@ const styles = {
   required: {
     borderColor: '#62d162',
   },
+  labelsTitulo: {
+    fontSize: '23px',
+  },
 };
 
 const InformacionProveedor = (props) => {
@@ -38,7 +41,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="6" sm="6" xs="6">
-                  <Label>Compañía:</Label>
+                  <Label style={styles.labelsTitulo}>Compañía:</Label>
                 </Col>
                 <Col md="6" sm="6" xs="6">
                   <Label>{props.proveedor.company}</Label>
@@ -46,7 +49,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="6" sm="6" xs="6">
-                  <Label>País:</Label>
+                  <Label style={styles.labelsTitulo}>País:</Label>
                 </Col>
                 <Col md="6" sm="6" xs="6">
                   <Label>{props.proveedor.pais}</Label>
@@ -54,7 +57,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="6" sm="6" xs="6">
-                  <Label>Departamento / Estado:</Label>
+                  <Label style={styles.labelsTitulo}>Departamento / Estado:</Label>
                 </Col>
                 <Col md="6" sm="6" xs="6">
                   <Label>{props.proveedor.departamento}</Label>
@@ -62,7 +65,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="6" sm="6" xs="6">
-                  <Label>Ciudad:</Label>
+                  <Label style={styles.labelsTitulo}>Ciudad:</Label>
                 </Col>
                 <Col md="6" sm="6" xs="6">
                   <Label>{props.proveedor.ciudad}</Label>
@@ -70,7 +73,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="6" sm="6" xs="6">
-                  <Label>Dirección:</Label>
+                  <Label style={styles.labelsTitulo}>Dirección:</Label>
                 </Col>
                 <Col md="6" sm="6" xs="6">
                   <Label>{props.proveedor.direccion}</Label>
@@ -85,7 +88,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="4" xs="6">
-                  <Label>Nombre:</Label>
+                  <Label style={styles.labelsTitulo}>Nombre:</Label>
                 </Col>
                 <Col md="6" sm="6" xs="6">
                   <Label>{props.proveedor.nombre}</Label>
@@ -93,7 +96,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="4" xs="6">
-                  <Label>Apellido:</Label>
+                  <Label style={styles.labelsTitulo}>Apellido:</Label>
                 </Col>
                 <Col md="8" xs="6">
                   <Label>{props.proveedor.apellidos}</Label>
@@ -101,7 +104,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="4" xs="6">
-                  <Label>Teléfono:</Label>
+                  <Label style={styles.labelsTitulo}>Teléfono:</Label>
                 </Col>
                 <Col md="8" xs="6">
                   <Label>{props.proveedor.telefono}</Label>
@@ -109,7 +112,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="4" xs="6">
-                  <Label>Correo:</Label>
+                  <Label style={styles.labelsTitulo}>Correo:</Label>
                 </Col>
                 <Col md="8" xs="6">
                   <Label>{props.proveedor.email}</Label>
@@ -117,7 +120,7 @@ const InformacionProveedor = (props) => {
               </Row>
               <Row noGutters>
                 <Col md="4" xs="6">
-                  <Label>Comentario:</Label>
+                  <Label style={styles.labelsTitulo}>Comentario:</Label>
                 </Col>
                 <Col md="8" xs="6">
                   <Label>{props.proveedor.comentario}</Label>

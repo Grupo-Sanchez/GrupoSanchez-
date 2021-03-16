@@ -83,7 +83,7 @@ class DataTable extends Component {
           style={{
             height: '95vh',
             'overflow-y': 'auto',
-            top: '20px',
+            top: '-100px',
             maxWidth: '1024px',
           }}
           isOpen={this.state.abierto}
