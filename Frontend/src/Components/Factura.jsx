@@ -46,6 +46,7 @@ export default function Facturas() {
   const [rtn, setrtn] = useState('');
   const [formatopago, setformatopago] = useState('');
   const [productosDevolucion, setproductosDevolucion] = useState([]);
+  const [seleccionoBodega, setSeleccionoBodega] = useState(false);
   const [productosEnBodega, setproductosEnBodega] = useState([
     {
       indice: 0,
@@ -58,6 +59,11 @@ export default function Facturas() {
       exento: false,
     },
   ]);
+  const options = [
+    { value: 'Code', name: 'Código' },
+    { value: 'BarCode', name: 'Código de Barra' },
+    { value: 'Nombre', name: 'Descripción' },
+  ];
   const [bodegasProductoSeleccionado, setbodegasProductoSeleccionado] = useState([]);
   const [valueBodegaProducto, setvalueBodegaProducto] = useState([]);
   const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
@@ -82,6 +88,7 @@ export default function Facturas() {
             productosagregados.push({
               indice: 0,
               name: element.descripcion,
+              descripcion: element.descripcion,
               value: element._id,
               codigoPrincipal: element.codigoPrincipal,
               proveedores: element.proveedores,
@@ -98,6 +105,74 @@ export default function Facturas() {
           }
         }
         setproductosEnBodega(productosagregados);
+      })
+      .catch(() => {
+        alert('Error');
+      });
+  };
+  const getProductosPorCodigo = async () => {
+    await axios
+      .get('http://localhost:3001/api/productos')
+      .then((response) => {
+        const productos = response.data;
+        const productosagregadosPorCodigo = [];
+        for (let index = 0; index < productos.length; index++) {
+          const element = productos[index];
+          if (element.cantidad > 0) {
+            productosagregadosPorCodigo.push({
+              indice: 0,
+              name: element.codigoPrincipal,
+              value: element._id,
+              descripcion: element.descripcion,
+              codigoPrincipal: element.codigoPrincipal,
+              proveedores: element.proveedores,
+              precios: element.precios,
+              area: element.area,
+              bodega: element.bodega,
+              marca: element.marca,
+              _v: element._v,
+              cantidad: element.cantidad,
+              precioUnitario: element.precios,
+              precioSumado: 0,
+              exento: element.productoExento,
+            });
+          }
+        }
+        setproductosEnBodega(productosagregadosPorCodigo);
+      })
+      .catch(() => {
+        alert('Error');
+      });
+  };
+  const getProductosPorCodigoDeBarra = async () => {
+    await axios
+      .get('http://localhost:3001/api/productos')
+      .then((response) => {
+        const productos = response.data;
+        const productosagregadosPorCodigoDeBarra = [];
+        for (let index = 0; index < productos.length; index++) {
+          const element = productos[index];
+          if (element.cantidad > 0) {
+            productosagregadosPorCodigoDeBarra.push({
+              indice: 0,
+              name: element.codigoBarra,
+              value: element._id,
+              descripcion: element.descripcion,
+              codigoPrincipal: element.codigoPrincipal,
+              proveedores: element.proveedores,
+              precios: element.precios,
+              area: element.area,
+              bodega: element.bodega,
+              marca: element.marca,
+              _v: element._v,
+              cantidad: element.cantidad,
+              precioUnitario: element.precios,
+              precioSumado: 0,
+              exento: element.productoExento,
+            });
+          }
+        }
+        setproductosEnBodega(productosagregadosPorCodigoDeBarra);
       })
       .catch(() => {
         alert('Error');
@@ -134,6 +209,7 @@ export default function Facturas() {
         setproductoSeleccionado({
           name: item.name,
           value: item.value,
+          descripcion: item.descripcion,
           codigoPrincipal: item.codigoPrincipal,
           cantidad: 1,
           precioUnitario: item.precios[0],
@@ -143,8 +219,10 @@ export default function Facturas() {
         });
         if (item.bodega.length === 0) {
           setCantidadmax(item.cantidad);
+          setSeleccionoBodega(true);
         } else {
           //setbodegasProductoSeleccionado(item.bodega);
+          setSeleccionoBodega(false);
           bodegasTemp = item.bodega;
         }
       }
@@ -162,6 +240,16 @@ export default function Facturas() {
     b(e);
     setquantity(1);
   };
+  const handleChangeOpcionDeBusqueda = (e) => {
+    if (e === 'Code') {
+      getProductosPorCodigo();
+    } else if (e === 'BarCode') {
+      getProductosPorCodigoDeBarra();
+    } else if (e === 'Nombre') {
+      getProductos();
+    }
+  };
+  const tempOpciones = '';
   const [idBodega, setidBodega] = useState('');
   const handleChangeBodega = (e) => {
     setindice(1);
@@ -170,6 +258,7 @@ export default function Facturas() {
       if (item.value === e) {
         setidBodega(e);
         setCantidadmax(item.cantBodega);
+        setSeleccionoBodega(true);
       }
       return 0;
     });
@@ -187,12 +276,13 @@ export default function Facturas() {
         let nombretemp = nombre;
         let rtntemp = rtn;
         if (nombre === '') {
-          nombretemp = '----------';
+          nombretemp = 'Consumidor Final';
         }
         if (rtn === '') {
           rtntemp = '----------';
         }
         //let numeroFactura = invNum.next('10000000');
+        alert(Number(facturas[facturas.length - 1].invoiceNumber) + 1);
         campos = {
           subtotal: sumatotal,
           impuesto: impuestototal,
@@ -391,7 +481,6 @@ export default function Facturas() {
   const agregarProductoaTabla = async () => {
     let sumar = false;
     let producto = [];
-    alert(JSON.stringify(productoSeleccionado.length));
     if (productoSeleccionado.length !== 0) {
       for (let index = 0; index < productosAfacturar.length; index++) {
         const element = productosAfacturar[index];
@@ -404,56 +493,66 @@ export default function Facturas() {
           break;
         }
       }
-      if (!sumar) {
-        addRow({
-          name: productoSeleccionado.name,
-          value: productoSeleccionado.value,
-          codigoPrincipal: productoSeleccionado.codigoPrincipal,
-          cantidad: quantity,
-          precioUnitario: Number(productoSeleccionado.precioUnitario),
-          precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
-          exento: productoSeleccionado.exento,
+      if (!seleccionoBodega) {
+        Confirm.open({
+          title: 'Error',
+          message: 'Debe elegir una bodega primero.',
+          onok: () => {},
         });
       } else {
-        result += producto.precioSumado;
-        if (productoSeleccionado.exento) {
-          impuesto += 0;
+        if (!sumar) {
+          addRow({
+            name: productoSeleccionado.descripcion,
+            value: productoSeleccionado.value,
+            codigoPrincipal: productoSeleccionado.codigoPrincipal,
+            cantidad: quantity,
+            precioUnitario: Number(productoSeleccionado.precioUnitario),
+            precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
+            exento: productoSeleccionado.exento,
+          });
+          setSeleccionoBodega(false);
         } else {
-          impuesto += Number(result * 0.15);
-        }
-        total += result + impuesto;
-        setSumaTotal(result + sumatotal);
-        setImpuestoTotal(impuesto + impuestototal);
-        setTotalFinal(total + totalfinal);
-        setindice(1);
-        setquantity(1);
-      }
-      if (productoSeleccionado.bodega.length === 0) {
-        for (let index = 0; index < productosEnBodega.length; index++) {
-          const element = productosEnBodega[index];
-          if (element.value === productoSeleccionado.value) {
-            element.cantidad -= quantity;
-            break;
+          result += producto.precioSumado;
+          if (productoSeleccionado.exento) {
+            impuesto += 0;
+          } else {
+            impuesto += Number(result * 0.15);
           }
+          total += result + impuesto;
+          setSumaTotal(result + sumatotal);
+          setImpuestoTotal(impuesto + impuestototal);
+          setTotalFinal(total + totalfinal);
+          setindice(1);
+          setquantity(1);
         }
-      } else {
-        for (let index = 0; index < productosEnBodega.length; index++) {
-          const element = productosEnBodega[index];
-          if (element.value === productoSeleccionado.value) {
-            for (let index2 = 0; index2 < element.bodega.length; index2++) {
-              const element2 = element.bodega[index2];
-              if (element2.value === idBodega) {
-                element2.cantBodega -= quantity;
-                break;
+
+        if (productoSeleccionado.bodega.length === 0) {
+          for (let index = 0; index < productosEnBodega.length; index++) {
+            const element = productosEnBodega[index];
+            if (element.value === productoSeleccionado.value) {
+              element.cantidad -= quantity;
+              break;
+            }
+          }
+        } else {
+          for (let index = 0; index < productosEnBodega.length; index++) {
+            const element = productosEnBodega[index];
+            if (element.value === productoSeleccionado.value) {
+              for (let index2 = 0; index2 < element.bodega.length; index2++) {
+                const element2 = element.bodega[index2];
+                if (element2.value === idBodega) {
+                  element2.cantBodega -= quantity;
+                  break;
+                }
               }
             }
           }
         }
+        setbodegasProductoSeleccionado([]);
+        setvalueBodegaProducto([]);
+        setproductoSeleccionado([]);
+        setCantidadmax('');
       }
-      setbodegasProductoSeleccionado([]);
-      setvalueBodegaProducto([]);
-      setproductoSeleccionado([]);
-      setCantidadmax('');
     } else {
       Confirm.open({
         title: 'Error',
@@ -492,21 +591,34 @@ export default function Facturas() {
       <h1 align="center">FACTURA</h1>
       <br />
       <div style={{ display: 'inline-block', position: 'relative', width: '100%' }}>
-        <Row>
-          <h4 style={{ paddingLeft: '200px' }}>Producto</h4>
-          <Col>
+        <Row style={{ 'font-size': '23px' }}>
+          <h style={{ paddingLeft: '200px' }}>
+            Opción de <br />
+            búsqueda
+          </h>
+          <Col style={{ maxWidth: '390px' }}>
             <div style={{ 'margin-left': '-25px' }}>
               <SelectSearch
                 search
-                placeholder="Encuentre el Producto a Facturar"
-                options={productosEnBodega}
-                onChange={(e) => handleChange(e)}
-                value={productoSeleccionado.value}
+                placeholder="Elija opción de búsqueda"
+                options={options}
+                value={tempOpciones}
+                onChange={(e) => handleChangeOpcionDeBusqueda(e)}
               />
             </div>
           </Col>
+          <label style={{ marginLeft: '15px', position: 'relative' }}>Encuentre el Producto</label>
+          <Col style={{ marginLeft: '-50px' }}>
+            <SelectSearch
+              search
+              placeholder="Encuentre el Producto"
+              options={productosEnBodega}
+              onChange={(e) => handleChange(e)}
+              value={productoSeleccionado.value}
+            />
+          </Col>
           <br />
-          <label style={{ marginLeft: '380px', marginTop: '5px' }}>Cantidad</label>
+          <label style={{ marginLeft: '-85px', marginTop: '5px' }}>Cantidad</label>
           <Col style={{ paddingRight: '-100px' }}>
             <div>
               <Row>
@@ -551,7 +663,7 @@ export default function Facturas() {
                   </AvForm>
                 </Col>
                 <Col>
-                  <label style={{ marginLeft: '-368px', top: '50px' }}>
+                  <label style={{ marginLeft: '-360px', top: '50px' }}>
                     Cantidad <br />
                     Disponible
                   </label>
@@ -560,11 +672,11 @@ export default function Facturas() {
             </div>
           </Col>
         </Row>
-        <Row>
+        <Row style={{ 'font-size': '23px' }}>
           <Col style={{ marginLeft: '184px', top: '-45px' }}>
-            <h4>Bodega</h4>
+            <h>Bodega</h>
           </Col>
-          <Col style={{ marginLeft: '-1530px', top: '-45px' }}>
+          <Col style={{ marginLeft: '-1540px', top: '-45px' }}>
             <SelectSearch
               search
               placeholder="Seleccione la bodega del Producto"
@@ -577,7 +689,7 @@ export default function Facturas() {
         <br />
       </div>
       <br />
-      <h3 style={{ 'margin-left': '862px' }}>Formulario Cliente</h3>
+      <h3 style={{ 'margin-left': '945px' }}>Formulario Cliente</h3>
       <Row>
         <Col style={{ marginTop: '-45px' }}>
           <div
@@ -653,12 +765,12 @@ export default function Facturas() {
           </div>
         </Col>
         <Col>
-          <label style={{ marginLeft: '120px', marginTop: '30px' }}>Nombre</label>
+          <label style={{ marginLeft: '160px', marginTop: '30px', 'font-size': '23px' }}>Nombre</label>
           <div>
-            <label style={{ marginLeft: '120px', marginTop: '25px' }}>RTN</label>
+            <label style={{ marginLeft: '160px', marginTop: '15px', 'font-size': '23px' }}>RTN</label>
           </div>
         </Col>
-        <Col style={{ marginLeft: '-380px' }}>
+        <Col style={{ marginLeft: '-250px', top: '10px' }}>
           <br />
           <div>
             <AvForm>
