@@ -16,6 +16,7 @@
     "canvas": "^2.6.1",
     "is-alphanumeric": "^1.0.0",
     "jsbarcode": "^3.11.3",
+    "lodash": "^4.17.21",
     "numero-a-letras": "^1.0.6",
     "react": "^17.0.1",
     "react-barcode": "^1.4.0",

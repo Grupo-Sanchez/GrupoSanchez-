@@ -14,6 +14,7 @@ import {
   Alert,
 } from 'reactstrap';
 import axios from 'axios';
+import _ from 'lodash';
 import {
   AvForm,
   AvField,
@@ -184,7 +185,6 @@ export default function Facturas() {
   const [totalfinal, setTotalFinal] = useState(0);
   const addRow = (producto) => {
     result += producto.precioSumado;
-    let cantidadEnBodega = 0;
     if (productoSeleccionado.exento) {
       impuesto += 0;
     } else {
@@ -250,6 +250,7 @@ export default function Facturas() {
     }
   };
   const tempOpciones = '';
+  const [bodegaSeleccionada, setbodegaSeleccionada] = useState('');
   const [idBodega, setidBodega] = useState('');
   const handleChangeBodega = (e) => {
     setindice(1);
@@ -259,6 +260,7 @@ export default function Facturas() {
         setidBodega(e);
         setCantidadmax(item.cantBodega);
         setSeleccionoBodega(true);
+        setbodegaSeleccionada(item);
       }
       return 0;
     });
@@ -282,7 +284,6 @@ export default function Facturas() {
           rtntemp = '----------';
         }
         //let numeroFactura = invNum.next('10000000');
-        alert(Number(facturas[facturas.length - 1].invoiceNumber) + 1);
         campos = {
           subtotal: sumatotal,
           impuesto: impuestototal,
@@ -478,6 +479,32 @@ export default function Facturas() {
   const handleChangertn = (event) => {
     setrtn(event.target.value);
   };
+  const cantidadSel = (e, codPrincipal) => {
+    const cant = e.target.value;
+    for (let index = 0; index < productosAfacturar.length; index++) {
+      const element = productosAfacturar[index];
+      if (element.codigoPrincipal === codPrincipal) {
+        element.cantidad = cant;
+        element.precioSumado = Number(element.precioUnitario) * cant;
+        break;
+      }
+    }
+    /*const tempTot = 0;
+    let tempImp = 0;
+    const tempSubTot = 0;
+    setSumaTotal(0);
+    for (let index = 0; index < productosAfacturar.length; index++) {
+      const element = productosAfacturar[index];
+      setSumaTotal(Number(productosAfacturar.precioSumado) + sumatotal);
+      if (!element.exento) {
+        tempImp += Number(element.precioSumado) * 0.15;
+      }
+    }
+    alert(tempSubTot);
+    setImpuestoTotal(Number(tempImp));
+    setTotalFinal(Number(tempSubTot + tempImp));
+    */
+  };
   const agregarProductoaTabla = async () => {
     let sumar = false;
     let producto = [];
@@ -500,12 +527,22 @@ export default function Facturas() {
           onok: () => {},
         });
       } else {
+        if (bodegaSeleccionada) {
+          productoSeleccionado.bodega = [];
+          productoSeleccionado.bodega = bodegaSeleccionada;
+          productoSeleccionado.bodega.cantBodega = cantidadmax;
+        } else {
+          productoSeleccionado.cantidadInventario = cantidadmax;
+        }
+
         if (!sumar) {
           addRow({
             name: productoSeleccionado.descripcion,
             value: productoSeleccionado.value,
             codigoPrincipal: productoSeleccionado.codigoPrincipal,
             cantidad: quantity,
+            bodega: productoSeleccionado.bodega,
+            cantidadInventario: productoSeleccionado.cantidadInventario,
             precioUnitario: Number(productoSeleccionado.precioUnitario),
             precioSumado: quantity * Number(productoSeleccionado.precioUnitario),
             exento: productoSeleccionado.exento,
@@ -525,7 +562,7 @@ export default function Facturas() {
           setindice(1);
           setquantity(1);
         }
-
+        /*
         if (productoSeleccionado.bodega.length === 0) {
           for (let index = 0; index < productosEnBodega.length; index++) {
             const element = productosEnBodega[index];
@@ -548,6 +585,12 @@ export default function Facturas() {
             }
           }
         }
+        */
+        setproductosEnBodega(
+          productosEnBodega.filter(
+            (item) => item.codigoPrincipal !== productoSeleccionado.codigoPrincipal,
+          ),
+        );
         setbodegasProductoSeleccionado([]);
         setvalueBodegaProducto([]);
         setproductoSeleccionado([]);
@@ -730,7 +773,41 @@ export default function Facturas() {
               <tbody>
                 {productosAfacturar.map((row, i) => (
                   <tr key={i}>
-                    <th>{row.cantidad}</th>
+                    <th>
+                      <FormGroup>
+                        <Input
+                          style={{
+                            float: 'center',
+                            marginLeft: '8px',
+                            'border-radius': '26px',
+                            width: '100px',
+                          }}
+                          align="center"
+                          type="select"
+                          name="select"
+                          id={`select${row.codigoPrincipal}`}
+                          onChange={(e) => cantidadSel(e, row.codigoPrincipal)}
+                        >
+                          {_.times(
+                            row.cantidadInventario ? row.cantidadInventario : row.bodega.cantBodega,
+                            (i2) => (
+                              <>
+                                <option
+                                  style={{
+                                    float: 'center',
+                                    marginLeft: '8px',
+                                    'border-radius': '26px',
+                                    width: '100px',
+                                  }}
+                                >
+                                  {i2 + 1}
+                                </option>
+                              </>
+                            ),
+                          )}
+                        </Input>
+                      </FormGroup>
+                    </th>
                     <th>{row.name}</th>
                     <th>{row.precioUnitario}</th>
                     <th>{row.precioSumado}</th>
@@ -765,9 +842,13 @@ export default function Facturas() {
           </div>
         </Col>
         <Col>
-          <label style={{ marginLeft: '160px', marginTop: '30px', 'font-size': '23px' }}>Nombre</label>
+          <label style={{ marginLeft: '160px', marginTop: '30px', 'font-size': '23px' }}>
+            Nombre
+          </label>
           <div>
-            <label style={{ marginLeft: '160px', marginTop: '15px', 'font-size': '23px' }}>RTN</label>
+            <label style={{ marginLeft: '160px', marginTop: '15px', 'font-size': '23px' }}>
+              RTN
+            </label>
           </div>
         </Col>
         <Col style={{ marginLeft: '-250px', top: '10px' }}>
