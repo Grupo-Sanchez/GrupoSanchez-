@@ -481,6 +481,8 @@ export default function Facturas() {
   };
   const cantidadSel = (e, codPrincipal) => {
     const cant = e.target.value;
+    let tempImp = 0;
+    let tempSubTot = 0;
     for (let index = 0; index < productosAfacturar.length; index++) {
       const element = productosAfacturar[index];
       if (element.codigoPrincipal === codPrincipal) {
@@ -489,21 +491,20 @@ export default function Facturas() {
         break;
       }
     }
-    /*const tempTot = 0;
-    let tempImp = 0;
-    const tempSubTot = 0;
-    setSumaTotal(0);
+    const tempTot = 0;
+    alert(parseInt(sumatotal, 10));
     for (let index = 0; index < productosAfacturar.length; index++) {
       const element = productosAfacturar[index];
-      setSumaTotal(Number(productosAfacturar.precioSumado) + sumatotal);
+      tempSubTot += (parseInt(element.precioSumado, 10) + parseInt(sumatotal, 10));
+      setSumaTotal(
+        parseInt(element.precioSumado, 10) + parseInt(sumatotal, 10) - parseInt(sumatotal, 10),
+      );
       if (!element.exento) {
         tempImp += Number(element.precioSumado) * 0.15;
       }
     }
-    alert(tempSubTot);
     setImpuestoTotal(Number(tempImp));
-    setTotalFinal(Number(tempSubTot + tempImp));
-    */
+    setTotalFinal(parseInt(tempSubTot, 10) + parseInt(tempImp, 10));
   };
   const agregarProductoaTabla = async () => {
     let sumar = false;
@@ -548,6 +549,9 @@ export default function Facturas() {
             exento: productoSeleccionado.exento,
           });
           setSeleccionoBodega(false);
+          let tempSumaTotal = 0;
+          tempSumaTotal = parseInt(result, 10) + parseInt(sumatotal, 10);
+          alert(tempSumaTotal);
         } else {
           result += producto.precioSumado;
           if (productoSeleccionado.exento) {
@@ -556,7 +560,10 @@ export default function Facturas() {
             impuesto += Number(result * 0.15);
           }
           total += result + impuesto;
-          setSumaTotal(result + sumatotal);
+          let tempSumaTotal = 0;
+          tempSumaTotal = parseInt(result, 10) + parseInt(sumatotal, 10);
+          alert(tempSumaTotal);
+          setSumaTotal(parseInt(tempSumaTotal, 10));
           setImpuestoTotal(impuesto + impuestototal);
           setTotalFinal(total + totalfinal);
           setindice(1);
@@ -773,12 +780,12 @@ export default function Facturas() {
               <tbody>
                 {productosAfacturar.map((row, i) => (
                   <tr key={i}>
-                    <th>
+                    <th style={{ maxWidth: '35px' }}>
                       <FormGroup>
                         <Input
                           style={{
                             float: 'center',
-                            marginLeft: '8px',
+                            marginLeft: '55px',
                             'border-radius': '26px',
                             width: '100px',
                           }}
@@ -809,8 +816,8 @@ export default function Facturas() {
                       </FormGroup>
                     </th>
                     <th>{row.name}</th>
-                    <th>{row.precioUnitario}</th>
-                    <th>{row.precioSumado}</th>
+                    <th>L. {row.precioUnitario}</th>
+                    <th>L. {row.precioSumado}</th>
                     <th style={{ width: '200px' }}>
                       <Button
                         style={{
