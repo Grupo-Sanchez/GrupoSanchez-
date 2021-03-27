@@ -381,8 +381,6 @@ export default function AgregarProducto(props) {
       setSingleFiles(acceptedFiles);
     },
   });
-
-  //desde aqui
   const singleFileUpload = async (data1, options1) => {
     try {
       await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
@@ -413,7 +411,7 @@ export default function AgregarProducto(props) {
     formData.append('file', singleFiles[0]); //manda la imagen en si, la que eligio
     await singleFileUpload(formData, singleFileOptions);
   };
-  //hasta aqui
+
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>{<img src={file.preview} style={img} />}</div>
