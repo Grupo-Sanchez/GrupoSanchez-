@@ -105,9 +105,9 @@ export default function AgregarProducto(props) {
   const [tagstemp, setTagsTemp] = useState([]);
   const [codRef, setCodRef] = useState('');
   const [cantsel, setCantsel] = useState(1);
-  const [seleccionado, setSeleccionado] = useState({ /*Hace referencia al producto
-    seleccionado en la celda de la tabla*/
-    descripcion: '',
+  const [seleccionado, setSeleccionado] = useState({
+    /*Hace referencia al producto
+    seleccionado en la celda de la tabla*/ descripcion: '',
     area: '',
     codigos: [],
     proveedores: [],
@@ -147,7 +147,8 @@ export default function AgregarProducto(props) {
   const [productos, setProductos] = useState([]);
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
-  const fecthMarcas = async () => { /*metodo utilizado para cargar las marcas que iran
+  const fecthMarcas = async () => {
+    /*metodo utilizado para cargar las marcas que iran
     desplegadas en los combo box dentro de la interfaz de productos*/
     await axios.get('http://localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
@@ -163,10 +164,13 @@ export default function AgregarProducto(props) {
       setMarcas(marcasAgregar);
     });
   };
+  let [singleFiles, setSingleFiles] = useState([]);
+  const [files, setFiles] = useState([]);
   const [precioprovedor1, setPrecioProvedor1] = useState(0);
   const [precioprovedor6, setPrecioProvedor6] = useState(0);
   const [precioprovedor7, setPrecioProvedor7] = useState(0);
-  const fecthBodegas = async () => { /*metodo utilizado para cargar las bodegas que iran
+  const fecthBodegas = async () => {
+    /*metodo utilizado para cargar las bodegas que iran
     desplegadas en los combo box dentro de la interfaz de productos*/
     await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
@@ -181,7 +185,8 @@ export default function AgregarProducto(props) {
       setBodegas(bodegasAgregar);
     });
   };
-  const fecthProveedores = async () => { /*metodo utilizado para cargar los proveedores que iran
+  const fecthProveedores = async () => {
+    /*metodo utilizado para cargar los proveedores que iran
     desplegados en los combo box dentro de la interfaz de productos*/
     await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       // setData(response.data);
@@ -207,7 +212,8 @@ export default function AgregarProducto(props) {
       setProveedores(proveedoresagregados);
     });
   };
-  const removeTagsProv = (index) => { /*metodo para eliminar los tags o vaciar el arreglo de proveedores
+  const removeTagsProv = (index) => {
+    /*metodo para eliminar los tags o vaciar el arreglo de proveedores
     ingresados para la creación de productos*/
     let provAgregar = [];
     for (let inde = 0; inde < tagsProveedores.length; inde++) {
@@ -226,7 +232,8 @@ export default function AgregarProducto(props) {
     //alert(JSON.stringify(proveedores));
     tagsProveedores.splice(index, 1);
   };
-  const removeTagsBodega = (index) => { /*metodo para eliminar los tags especificados o vaciar el arreglo de bodegas
+  const removeTagsBodega = (index) => {
+    /*metodo para eliminar los tags especificados o vaciar el arreglo de bodegas
     ingresadas para la creación de productos */
     //setBodegas([...bodegas, tagsBodegas[index]]);
     let provAgregar = [];
@@ -246,7 +253,8 @@ export default function AgregarProducto(props) {
     //alert(JSON.stringify(proveedores));
     tagsBodegas.splice(index, 1);
   };
-  const fecthProductos = async () => { /*Metodo utilizado para cargar todos los productos
+  const fecthProductos = async () => {
+    /*Metodo utilizado para cargar todos los productos
     en una variable que luego será utilizada para llenar la tabla*/
     await axios.get('http://localhost:3001/api/productos').then((response) => {
       setProductos(response.data);
@@ -259,7 +267,8 @@ export default function AgregarProducto(props) {
     fecthBodegas();
   }, []);
   let hoy = new Date();
-  const prueba = async () => { /*metodo en el cual luego de ser llenados y validados
+  const prueba = async () => {
+    /*metodo en el cual luego de ser llenados y validados
 todos los atributos, escribe un producto nuevo a la db*/
     const campos = {
       descripcion: seleccionado.descripcion,
@@ -282,7 +291,7 @@ todos los atributos, escribe un producto nuevo a la db*/
     Confirm.open({
       title: '',
       message: '¡Producto Agregado!',
-      onok: () => { },
+      onok: () => {},
     });
     fecthProductos(); /*actualiza automaticamente el nuevo producto recien ingresado*/
     /*reinicio de variables*/
@@ -310,14 +319,15 @@ todos los atributos, escribe un producto nuevo a la db*/
     setprecio2(0);
     setprecio3(0);
     setCantsel(0);
+    setFiles([]);
+    setSingleFiles([]);
     setCantminsel(0);
   };
   /*Metodos referentes al drop de imagen en los modales de productos*/
-  let [singleFiles, setSingleFiles] = useState([]);
-  const [files, setFiles] = useState([]);
+
   const [singleProgress, setSingleProgress] = useState(0);
-  const { getRootProps, getInputProps } = useDropzone({ /*agrgar imagen a dropzone*/
-    accept: 'image/*',
+  const { getRootProps, getInputProps } = useDropzone({
+    /*agrgar imagen a dropzone*/ accept: 'image/*',
     onDrop: (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
@@ -329,15 +339,16 @@ todos los atributos, escribe un producto nuevo a la db*/
       setSingleFiles(acceptedFiles);
     },
   });
-  const singleFileUpload = async (data1, options1) => { //cargar imagen
+  const singleFileUpload = async (data1, options1) => {
+    //cargar imagen
     try {
-      await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
+      await axios.post('http://localhost:3001/api/singlefile', data1, options1);
     } catch (error) {
       alert(`ACA: , ${error}`);
     }
-    return null;
   };
-  const removerImagen = () => { /*eliminar imagen del dropzone*/
+  const removerImagen = () => {
+    /*eliminar imagen del dropzone*/
     setFiles([]);
     setSingleFiles([]);
   };
@@ -348,18 +359,18 @@ todos los atributos, escribe un producto nuevo a la db*/
       setSingleProgress(percentage);
     },
   };
-  const uploadSingleFile = async () => { /*cargar imagen para mostrar*/
+  const uploadSingleFile = async () => {
+    /*cargar imagen para mostrar*/
     const formData = new FormData();
     /*let valores = {
       idProducto: 'simonn',
       file: singleFiles[0],
     };*/
-    singleFiles[0].idProducto = 'asi es';
     formData.append('id', seleccionado.codigoPrincipal);
     formData.append('file', singleFiles[0]);
     await singleFileUpload(formData, singleFileOptions);
   };
-  const thumbs = files.map((file) => (/*mapeo de la imagen dentro del producto*/
+  const thumbs = files.map((file /*mapeo de la imagen dentro del producto*/) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>{<img src={file.preview} style={img} />}</div>
     </div>
@@ -483,6 +494,8 @@ todos los atributos, escribe un producto nuevo a la db*/
     settagsProveedores([]);
     setTags([]);
     settempBod([]);
+    setFiles([]);
+    setSingleFiles([]);
     settempProv([]);
     setprecio1(0);
     setprecio2(0);
@@ -593,14 +606,14 @@ todos los atributos, escribe un producto nuevo a la db*/
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -651,32 +664,33 @@ todos los atributos, escribe un producto nuevo a la db*/
         seleccionado.marca[0] !== undefined
       ) {
         if (regex.test(seleccionado.descripcion) && regex.test(seleccionado.area)) {
-          prueba();
           if (singleFiles) {
             uploadSingleFile();
           }
+          prueba();
           props.change();
         } else {
           Confirm.open({
             title: 'Error',
             message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-            onok: () => { },
+            onok: () => {},
           });
         }
       } else {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'El codigo principal esta repetido.',
-        onok: () => { },
+        onok: () => {},
       });
     }
+    fecthProductos();
   };
   const addTags = (event) => {
     let duplicadoPrincipal = false;
@@ -691,7 +705,7 @@ todos los atributos, escribe un producto nuevo a la db*/
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
+        onok: () => {},
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -761,7 +775,7 @@ todos los atributos, escribe un producto nuevo a la db*/
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -802,7 +816,7 @@ todos los atributos, escribe un producto nuevo a la db*/
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => { },
+          onok: () => {},
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -871,7 +885,7 @@ todos los atributos, escribe un producto nuevo a la db*/
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -930,7 +944,7 @@ todos los atributos, escribe un producto nuevo a la db*/
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -957,7 +971,7 @@ todos los atributos, escribe un producto nuevo a la db*/
         title: 'Error',
         message:
           'Debe seleccionar la bodega, ingresar el pasillo en el que esta el producto y la cantidad correspondiente',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1305,7 +1319,7 @@ todos los atributos, escribe un producto nuevo a la db*/
             <div>
               <h3>CREACIÓN RÁPIDA DE PRODUCTO NUEVO</h3>
             </div>
-            <ModalBody >
+            <ModalBody>
               <div style={{ 'font-size': '23px', 'text-align': 'left', color: '#62d162' }}>
                 <br />
                 <Row>
@@ -1837,7 +1851,9 @@ todos los atributos, escribe un producto nuevo a la db*/
                   />
                 </Col>
                 <Col style={{ marginLeft: '30px', 'max-width': '90px', top: '-35px' }}>
-                  <label style={{ marginLeft: '30px', top: '-50px', position: 'abolsute' }}>Costo</label>
+                  <label style={{ marginLeft: '30px', top: '-50px', position: 'abolsute' }}>
+                    Costo
+                  </label>
                   <input
                     style={paddingAvInputCantidades()}
                     className="form-control"
@@ -2034,6 +2050,6 @@ todos los atributos, escribe un producto nuevo a la db*/
       <Agregar isOpen={modalAgregar} change={() => cerraroAbrirModalMarca()} />
       <AgregarProveedor isOpen={modalInsertar} change={() => cerraroAbrirModal()} />
       <AgregarBodega isOpen={modalAgregarBodega} change={() => cerraroAbrirModalBodega()} />
-    </div >
+    </div>
   );
 }

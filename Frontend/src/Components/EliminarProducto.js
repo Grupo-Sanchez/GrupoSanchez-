@@ -253,8 +253,8 @@ export default function EliminarProducto(props) {
       setMarcas(marcasAgregar);
     });
   };
-  const fecthData = () => {
-    axios.get('http://localhost:3001/api/productos').then((response) => {
+  const fecthData = async () => {
+    await axios.get('http://localhost:3001/api/productos').then((response) => {
       setData(response.data);
     });
     fecthBodegas();
@@ -329,7 +329,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -363,7 +363,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -667,7 +667,7 @@ export default function EliminarProducto(props) {
     setTags(elemento.codigos);
     setMarcaSel(elemento.marca);
     setMarcaSelNom(elemento.marca[0].name);
-    alert(JSON.stringify(elemento.marca[0].name));
+    // alert(JSON.stringify(elemento.marca[0].name));
     if (elemento.productoExento) {
       setExento('Exento');
     }
@@ -780,7 +780,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => { },
+        onok: () => {},
       });
     } else {
       setModalModificarPrecios(false);
@@ -932,14 +932,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1268,7 +1268,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => { },
+            onok: () => {},
           });
           entra = false;
         } else if (yaesta) {
@@ -1293,14 +1293,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => { },
+          onok: () => {},
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => { },
+        onok: () => {},
       });
     }
   };
@@ -1411,7 +1411,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => { },
+        onok: () => {},
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -1481,7 +1481,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -1522,7 +1522,7 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => { },
+          onok: () => {},
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -1591,7 +1591,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => { },
+            onok: () => {},
           });
         } else if (entra) {
           Confirm.open({
@@ -2301,7 +2301,9 @@ export default function EliminarProducto(props) {
                     />
                   </Col>
                   <Col style={{ marginLeft: '30px', 'max-width': '90px', top: '-35px' }}>
-                    <label style={{ marginLeft: '30px', top: '-50px', position: 'abolsute' }}>Costo</label>
+                    <label style={{ marginLeft: '30px', top: '-50px', position: 'abolsute' }}>
+                      Costo
+                    </label>
                     <input
                       style={paddingAvInputCantidades()}
                       className="form-control"
@@ -2521,7 +2523,7 @@ export default function EliminarProducto(props) {
                   <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
                 </Col>
               </Row>
-              <Row >
+              <Row>
                 <Col>
                   <Row>
                     <Col style={{ maxWidth: '300px' }}>
@@ -2744,7 +2746,7 @@ export default function EliminarProducto(props) {
                         <li key={index}>
                           <span>
                             Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
-                          {tag.numPasillo}
+                            {tag.numPasillo}
                             {tag.pasillo}
                           </span>
                         </li>
