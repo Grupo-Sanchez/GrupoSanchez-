@@ -155,7 +155,17 @@ const OpcionesBodegas = (props) => {
   //MIGRACION DE UNA BODEGA
   async function handleValidMigrar(event, values) {
     let NewProduct;
+    let union;
     let newBodega;
+    let prueba;
+    let namm = 'Bodega ';
+    alert('entro');
+    for (let i = 0; i < dataBodegas.length; i++) {
+      if (dataBodegas[i]._id === values.bodegaMigrar) {
+        prueba = dataBodegas[i].numBodega;
+        union = namm + prueba;
+      }
+    }
 
     const MigrarProducto = {
       CantMigrar: values.requeridos,
@@ -197,7 +207,7 @@ const OpcionesBodegas = (props) => {
         // alert('ENTRO AL ELSE');
         let total = existencia;
         newBodega = {
-          name: '..',
+          name: union,
           value: MigrarProducto.bodegaMigrar,
           numPasillo: '12',
           cantBodega: total,
@@ -236,7 +246,7 @@ const OpcionesBodegas = (props) => {
       } else {
         let nummm = parseInt(MigrarProducto.CantMigrar, 10);
         newBodega = {
-          name: '..',
+          name: union,
           value: MigrarProducto.bodegaMigrar,
           numPasillo: '12',
           cantBodega: `${nummm}`,
@@ -244,7 +254,7 @@ const OpcionesBodegas = (props) => {
         NewProduct.bodega.push(newBodega);
         // alert(JSON.stringify(NewProduct.bodega));
       }
-      fecthUpdateProducto(NewProduct);
+      // fecthUpdateProducto(NewProduct);
       Confirm.open({
         title: 'aviso',
         message: 'Se realizo correctamente la migracion',
