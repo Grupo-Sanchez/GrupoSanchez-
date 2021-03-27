@@ -92,7 +92,7 @@ export default function AgregarUsuario(props) {
     return {
       'margin-left': '-20px',
       'border-radius': '26px',
-      width: '320px',
+      width: '260px',
     };
   }
   function paddingAvInputGreen() {
@@ -100,7 +100,17 @@ export default function AgregarUsuario(props) {
       'margin-left': '-20px',
       'border-radius': '26px',
       'border-color': '#62d162',
-      width: '320px',
+      width: '260px',
+      maxWidth: '260px',
+    };
+  }
+  function paddingAvInputGreen2() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      'border-color': '#62d162',
+      width: '260px',
+      maxWidth: '260px',
     };
   }
   function paddingAvInputCantidades() {
@@ -148,13 +158,18 @@ export default function AgregarUsuario(props) {
     };
   }
 
+  function handleInvalidSubmit(event, errors, values) {
+    console.log('invalid submit', { event, errors, values });
+  }
+
   const isAlphanumeric = require('is-alphanumeric');
 
   const options = [
+    { value: 'default', name: 'Seleccione el rol' },
     { value: 'propietario', name: 'Propietario' },
     { value: 'administrador', name: 'Administrador' },
     { value: 'jefetienda', name: 'Jefe de tienda' },
-    { value: 'ejecutivo', name: 'Ejecutivo de ventas' },
+    { value: 'ejecutivoventas', name: 'Ejecutivo de ventas' },
   ];
 
   const regex = /^[ña-zA-Z\u00E0-\u00FC-\s]+$/;
@@ -166,6 +181,7 @@ export default function AgregarUsuario(props) {
   const [seleccionado, setSeleccionado] = useState({
     identidad: '',
     nombre: '',
+    alias: '',
     segundo_nombre: '',
     primer_apellido: '',
     segundo_apellido: '',
@@ -176,12 +192,12 @@ export default function AgregarUsuario(props) {
     password: '',
   });
 
-  const [marca, setMarca] = useState('');
+  const [rol, setRol] = useState('');
 
   const signUpMethod = () => {
     if (seleccionado.rol) {
       const jsonString = {
-        email: seleccionado.correo,
+        correo: seleccionado.correo,
         password: seleccionado.password,
         rol: seleccionado.rol.value,
       };
@@ -211,8 +227,9 @@ export default function AgregarUsuario(props) {
   const agregarMarca = (idToSearch) => {
     options.filter((item) => {
       if (item.value === idToSearch) {
-        seleccionado.rol = item;
+        seleccionado.rol = item.value;
       }
+      console.log(seleccionado.rol);
       return 0;
     });
   };
@@ -223,7 +240,7 @@ export default function AgregarUsuario(props) {
 
   const cerrarModalAgregarUsuario = () => {
     props.change();
-
+    seleccionado.alias = '';
     seleccionado.identidad = '';
     seleccionado.nombre = '';
     seleccionado.segundo_nombre = '';
@@ -246,35 +263,48 @@ export default function AgregarUsuario(props) {
     });
   };
   const escribirUsuario = async () => {
+    // alert(JSON.stringify(document.getElementById('password').value));
+    // alert(JSON.stringify(document.getElementById('passwordConfirm').value));
     if (
       seleccionado.rol !== '' &&
+      seleccionado.rol !== 'Seleccione el rol' &&
       regexSoloNumeros.test(document.getElementById('identidad').value) &&
-      regex.test(document.getElementById('nombre').value) &&
-      (regex.test(document.getElementById('segundo_nombre').value) ||
-        seleccionado.segundo_nombre === '') &&
-      regex.test(document.getElementById('primer_apellido').value) &&
-      (regex.test(document.getElementById('segundo_apellido').value) ||
-        seleccionado.segundo_apellido === '') &&
-      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-      regexSoloNumeros.test(document.getElementById('telefono').value) &&
-      regEmail.test(document.getElementById('correo').value) &&
       seleccionado.identidad.length === 13 &&
-      seleccionado.rtn.length === 14 &&
-      seleccionado.password.length >= 4
+      seleccionado.password.length >= 4 &&
+      regex.test(document.getElementById('nombre').value) &&
+      regex.test(document.getElementById('primer_apellido').value) &&
+      seleccionado.alias !== '' &&
+      (seleccionado.rtn.length === 14 || seleccionado.rtn === '') &&
+      document.getElementById('password').value === document.getElementById('passwordConfirm').value
+      // (regEmail.test(document.getElementById('correo').value || document.getElementById('correo').value === ''))
+      // (regex.test(document.getElementById('segundo_nombre').value) ||
+      //   seleccionado.segundo_nombre === '') &&
+      // regex.test(document.getElementById('primer_apellido').value) &&
+      // (regex.test(document.getElementById('segundo_apellido').value) ||
+      //   seleccionado.segundo_apellido === '') &&
+      // //(regexSoloNumeros.test(document.getElementById('rtn').value)) &&
+      // regexSoloNumeros.test(document.getElementById('telefono').value) &&
+      // // regEmail.test(document.getElementById('correo').value) &&
+      // seleccionado.identidad.length === 13 &&
+      // //(seleccionado.rtn.length === 14 || seleccionado.rtn === '') &&
     ) {
       const campos = {
         identidad: seleccionado.identidad,
-        nombre: seleccionado.nombre,
-        segundo_nombre: seleccionado.segundo_nombre,
-        primer_apellido: seleccionado.primer_apellido,
-        segundo_apellido: seleccionado.segundo_apellido,
+        primerNombre: seleccionado.nombre,
+        segundoNombre: seleccionado.segundo_nombre,
+        primerApellido: seleccionado.primer_apellido,
+        segundoApellido: seleccionado.segundo_apellido,
         rtn: seleccionado.rtn,
         telefono: seleccionado.telefono,
         correo: seleccionado.correo,
+        alias: seleccionado.alias,
         rol: seleccionado.rol,
         password: seleccionado.password,
       };
-      const res = await axios.post('http://localhost:3001/api/Users', campos);
+      console.log('=>', campos);
+      axios
+        .post('http://localhost:3001/api/signup', campos)
+        .then((res) => console.log('res:', res));
       Confirm.open({
         title: 'Exito',
         message: 'Usuario agregado exitosamente.',
@@ -302,29 +332,88 @@ export default function AgregarUsuario(props) {
   const insertar = () => {};
 
   return (
-    <div>
-      <Modal
-        isOpen={props.isOpen}
-        className="text-center"
-        style={{
-          height: '95vh',
-          'overflow-y': 'auto',
-          top: '20px',
-          maxWidth: '1200px',
-        }}
-      >
-        <div>
-          <h3
-            style={{
-              top: '50px',
-            }}
-          >
-            AGREGAR NUEVO USUARIO
-          </h3>
-        </div>
-        <ModalBody>
+    <AvForm onValidSubmit={escribirUsuario} onInvalidSubmit={handleInvalidSubmit}>
+      <div>
+        <Modal
+          isOpen={props.isOpen}
+          className="text-center"
+          style={{
+            height: '95vh',
+            'overflow-y': 'auto',
+            top: '20px',
+            maxWidth: '1200px',
+          }}
+        >
+          <br />
           <div>
-            <AvForm>
+            <h3
+              style={{
+                top: '50px',
+              }}
+            >
+              AGREGAR NUEVO USUARIO
+            </h3>
+          </div>
+          <ModalBody>
+            <div style={{ margin: '15px 0px' }}>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                <Col>
+                  <label style={{ color: '#62d162' }}>Tipo de usuario</label>
+                </Col>
+                <Col>
+                  <div>
+                    {/* <SelectSearch
+                      style={paddingAvInputGreen2()}
+                      search
+                      placeholder="Seleccione el rol del usuario"
+                      required
+                      autoComplete
+                      options={options}
+                      value={marca}
+                      onChange={(e) => handleChange2(e)}
+                    /> */}
+                    <Input
+                      style={paddingAvInputGreen2()}
+                      type="select"
+                      name="select"
+                      id="exampleSelect"
+                      value={rol}
+                      onChange={(e) => {
+                        seleccionado.rol = e.target.value;
+                        setRol(seleccionado.rol);
+                        console.log(seleccionado.rol);
+                      }}
+                    >
+                      {options.map((option) => {
+                        return <option>{option.name}</option>;
+                      })}
+                    </Input>
+                  </div>
+                </Col>
+                <Col>
+                  <label>Teléfono</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInput()}
+                    errorMessage="Teléfono Inválido"
+                    validate={{
+                      required: { value: false },
+                      pattern: { value: regexSoloNumeros },
+                      minLength: { value: 1 },
+                    }}
+                    className="form-control"
+                    type="text"
+                    name="telefono"
+                    id="telefono"
+                    value={seleccionado ? seleccionado.telefono : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
+              </Row>
+            </div>
+
+            <div style={{ margin: '15px 0px' }}>
               <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
                   <label style={{ color: '#62d162' }}>Primer nombre</label>
@@ -367,11 +456,9 @@ export default function AgregarUsuario(props) {
                   />
                 </Col>
               </Row>
-            </AvForm>
-          </div>
+            </div>
 
-          <div>
-            <AvForm>
+            <div style={{ margin: '15px 0px' }}>
               <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
                   <label>Segundo nombre</label>
@@ -414,11 +501,9 @@ export default function AgregarUsuario(props) {
                   />
                 </Col>
               </Row>
-            </AvForm>
-          </div>
+            </div>
 
-          <div>
-            <AvForm>
+            <div style={{ margin: '15px 0px' }}>
               <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                 <Col>
                   <label style={{ color: '#62d162' }}>Nombre de usuario</label>
@@ -429,9 +514,9 @@ export default function AgregarUsuario(props) {
                     errorMessage="Revise el formato"
                     className="form-control"
                     type="text"
-                    name="usuario"
-                    id="usuario"
-                    //value={seleccionado ? seleccionado.usuario : ''}
+                    name="alias"
+                    id="alias"
+                    value={seleccionado ? seleccionado.alias : ''}
                     onChange={manejarCambio}
                   />
                 </Col>
@@ -457,78 +542,9 @@ export default function AgregarUsuario(props) {
                   />
                 </Col>
               </Row>
-            </AvForm>
-          </div>
-          <div>
-            <AvForm>
+            </div>
+            <div style={{ margin: '15px 0px' }}>
               <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                <Col>
-                  <label>Telefono</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
-                    errorMessage="Telefono Inválido"
-                    validate={{
-                      required: { value: false },
-                      pattern: { value: regexSoloNumeros },
-                      minLength: { value: 1 },
-                    }}
-                    className="form-control"
-                    type="text"
-                    name="telefono"
-                    id="telefono"
-                    value={seleccionado ? seleccionado.telefono : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-                <Col>
-                  <label>RTN</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
-                    errorMessage="RTN Inválido"
-                    validate={{
-                      required: { value: true },
-                      pattern: { value: regexSoloNumeros },
-                      minLength: { value: 14 },
-                    }}
-                    maxLength="14"
-                    className="form-control"
-                    type="text"
-                    name="rtn"
-                    id="rtn"
-                    value={seleccionado ? seleccionado.rtn : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
-              </Row>
-            </AvForm>
-          </div>
-
-          <div>
-            <AvForm>
-              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                <Col>
-                  <label>Correo electronico</label>
-                </Col>
-                <Col>
-                  <AvField
-                    style={paddingAvInput()}
-                    errorMessage="Revise el formato"
-                    validate={{
-                      email: true,
-                      minLength: { value: 5 },
-                    }}
-                    className="form-control"
-                    type="text"
-                    name="correo"
-                    id="correo"
-                    value={seleccionado ? seleccionado.correo : ''}
-                    onChange={manejarCambio}
-                  />
-                </Col>
                 <Col>
                   <label style={{ color: '#62d162' }}>Constraseña</label>
                 </Col>
@@ -548,71 +564,111 @@ export default function AgregarUsuario(props) {
                     onChange={manejarCambio}
                   />
                 </Col>
-              </Row>
-            </AvForm>
-          </div>
-          <div>
-            <label style={{ color: '#62d162', fontSize: '23px' }}>Tipo de usuario</label>
-            <Row>
-              <Col sm="12" md={{ size: 6, offset: 3 }}>
-                {' '}
-                <div style={{ marginLeft: '35px' }}>
-                  <SelectSearch
-                    style={paddingAvInputGreen()}
-                    search
-                    placeholder="Seleccione el rol del usuario"
-                    required
-                    autoComplete
-                    options={options}
-                    value={marca}
-                    onChange={(e) => handleChange2(e)}
+                <Col>
+                  <label>RTN</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInput()}
+                    errorMessage="RTN Inválido"
+                    validate={{
+                      pattern: { value: regexSoloNumeros },
+                      minLength: { value: 14 },
+                    }}
+                    maxLength="14"
+                    className="form-control"
+                    type="text"
+                    name="rtn"
+                    id="rtn"
+                    value={seleccionado ? seleccionado.rtn : ''}
+                    onChange={manejarCambio}
                   />
-                </div>
-              </Col>
-            </Row>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Container>
-            <Row>
-              <Col sm="12" md={{ size: 6, offset: 3 }}>
-                {' '}
-                <button
-                  style={{
-                    'border-radius': '26px',
-                    'border-color': '#98ff98',
-                    color: 'green',
-                    border: '1px solid green',
-                    'background-color': 'white',
-                    'font-size': '16px',
-                    cursor: 'pointer',
-                  }}
-                  className="btn btn-primary"
-                  onClick={() => escribirUsuario()}
-                >
-                  Agregar
-                </button>
-                <button
-                  style={{
-                    margin: '10px',
-                    'border-radius': '26px',
-                    'border-color': '#ff9800',
-                    color: 'red',
-                    border: '1px solid red',
-                    'background-color': 'white',
-                    'font-size': '16px',
-                    cursor: 'pointer',
-                  }}
-                  className="btn btn-danger"
-                  onClick={() => descartarCambios()}
-                >
-                  Cancelar
-                </button>
-              </Col>
-            </Row>
-          </Container>
-        </ModalFooter>
-      </Modal>
-    </div>
+                </Col>
+              </Row>
+            </div>
+
+            <div>
+              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                <Col>
+                  <label style={{ color: '#62d162' }}>Confirmar constraseña</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInputGreen()}
+                    errorMessage="Deben ser iguales."
+                    validate={{
+                      required: { value: true },
+                      minLength: { value: 4 },
+                    }}
+                    className="form-control"
+                    type="password"
+                    name="passwordConfirm"
+                    id="passwordConfirm"
+                    value=""
+                    // onChange={manejarCambio}
+                  />
+                </Col>
+                <Col>
+                  <label>Correo electronico</label>
+                </Col>
+                <Col>
+                  <AvField
+                    style={paddingAvInput()}
+                    errorMessage="Revise el formato"
+                    validate={{
+                      email: true,
+                      minLength: { value: 5 },
+                    }}
+                    className="form-control"
+                    type="text"
+                    name="correo"
+                    id="correo"
+                    value={seleccionado ? seleccionado.correo : ''}
+                    onChange={manejarCambio}
+                  />
+                </Col>
+              </Row>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            {' '}
+            <div>
+              <Button
+                style={{
+                  margin: '10px',
+                  'border-radius': '26px',
+                  'border-color': '#ff9800',
+                  color: 'red',
+                  border: '1px solid red',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+                className="btn btn-danger"
+                onClick={() => descartarCambios()}
+              >
+                Cancelar
+              </Button>
+              <Button
+                style={{
+                  'border-radius': '26px',
+                  'border-color': '#98ff98',
+                  color: 'green',
+                  border: '1px solid green',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                }}
+                outline
+                color="success"
+                onClick={() => escribirUsuario()}
+              >
+                Agregar
+              </Button>
+            </div>
+          </ModalFooter>
+        </Modal>
+      </div>
+    </AvForm>
   );
 }
