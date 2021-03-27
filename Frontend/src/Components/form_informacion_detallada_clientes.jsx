@@ -58,7 +58,7 @@ const infoDetalladaClientes = (props) => {
             </Col>
           </div>
           <div className="form_input">
-            <label className="titulos">RTN</label>
+            <label className="titulos">RTN:</label>
             <Col xs="6">
               <label>{props.elemento.RTN}</label>
             </Col>
@@ -79,18 +79,26 @@ const infoDetalladaClientes = (props) => {
             </Col>
           </div>
           <div className="form_input">
-            <label className="titulos">Teléfono</label>
+            <label className="titulos">Teléfono:</label>
             <Col xs="6">
               <label>{props.elemento.tel}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label className="titulos">Correo</label>
+            <label className="titulos">Correo:</label>
             <Col xs="6">
               <label>{props.elemento.email}</label>
             </Col>
           </div>
         </div>
+      </div>
+      <div className="form_container">
+        <Col xs="6"></Col>
+        <Col xs="6">
+          <Button onClick={() => props.toggle()} className="botonFormRed" outline color="danger">
+            cerrar
+          </Button>
+        </Col>
       </div>
     </>
   );
