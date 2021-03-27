@@ -87,14 +87,6 @@ const modificarMarca = ({ isOpen, change, datos }) => {
       .then(setDepartamento);
   };
 
-  // const updateMarca = () => {
-  //   axios.put(`http://Localhost:3001/api/marcas/update/${datos.idMarca}`).then(() => {
-  //     cerrarModal();
-  //     clean();
-  //     alert('Deberia haber modificado');
-  //   });
-  // };
-
   const deleteDepartamento = () => {
     axios
       .delete(`http://Localhost:3001/api/departamentos/${datos.idDepartamento}`, {
