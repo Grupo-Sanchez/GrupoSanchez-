@@ -1,4 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { Redirect, Route } from 'react-router-dom';
+// import { useHistory } from 'react-router';
+
 import {
   Button,
   Modal,
@@ -12,6 +15,8 @@ import {
   Spinner,
   Col,
 } from 'reactstrap';
+
+// import { withRouter } from 'react-router-dom';
 
 // Para el dropzone
 import Dropzone from 'react-dropzone';
@@ -45,6 +50,7 @@ const modificarMarca = ({ isOpen, change, datos }) => {
   const [nombreMarca, setnombreMarca] = useState(null);
   const [descripcionMarca, setDescripcionMarca] = useState(null);
   const [imagenMarca, setImagenMarca] = useState(null);
+  const [previewFile, setPreviewFile] = useState(null);
 
   // Validaciones UI
   const [validNom, setValidNom] = useState(false);
@@ -82,13 +88,23 @@ const modificarMarca = ({ isOpen, change, datos }) => {
   };
 
   const deleteMarca = () => {
-    axios.delete(`http://Localhost:3001/api/marcas/${datos.idMarca}`).then(() => {
-      datos.setIngresando(true);
+    axios
+      .delete(`http://Localhost:3001/api/marcas/${datos.idMarca}`, {
+        headers: {
+          Authorization: `token ${'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBydWViYUBwcnVlYmEuY29tIiwidXNlcklkIjoiNWZkZTVhNTg0MDE5OGJkNTlkZjA5ZDdiIiwiaWF0IjoxNjE2NzkwMDQ2LCJleHAiOjE2MTY3OTAxNjZ9.7AWe8RLJSBAzdqM-u7ToQ46-SsnbSo50QoQc8970ais'}`,
+        },
+      })
+      .then((resp) => {
+        console.log('Resp: ', resp);
+        datos.setIngresando(true);
 
-      cerrarModal();
-      clean();
-      // alert('Deberia haber eliminado');
-    });
+        cerrarModal();
+        clean();
+        // alert('Deberia haber eliminado');
+      })
+      .catch((e) => {
+        console.log('error: ', e);
+      });
   };
 
   useEffect(() => {
@@ -153,6 +169,13 @@ const modificarMarca = ({ isOpen, change, datos }) => {
   //   }
   // };
 
+  const handleChange = (event) => {
+    // console.log('===>', event);
+    // if (previewFile) {
+    setPreviewFile(URL.createObjectURL(event.target.files[0]));
+    // }
+  };
+
   return (
     <Modal isOpen={isOpen}>
       <div className="modalUpContainer">
@@ -166,7 +189,7 @@ const modificarMarca = ({ isOpen, change, datos }) => {
               deleteMarca();
             }}
           >
-            <img alt={'Icono de edición'} src={deleteSvg} className="plusIcon" />
+            <img alt={'Icono de edición'} src={deleteSvg} className="deleteIcon" />
           </DivButton>{' '}
         </div>
       </div>
@@ -182,20 +205,24 @@ const modificarMarca = ({ isOpen, change, datos }) => {
             action="http://Localhost:3001/api/marcas/create"
             method="post"
             enctype="multipart/form-data"
-            target="none"
+            target=""
           >
             <div className="imagesDiv">
               <div className="labelImageContainer ">
                 <Label className="imagesLabel">Imagen anterior</Label>
                 <div className="imageContainer">
-                  <img alt={'Icono de marca'} src={imagenMarca} className="marcaIcon" />
+                  {previewFile ? (
+                    <img alt="Imagen seleccionada" src={previewFile} className="marcaIcon" />
+                  ) : (
+                    <img alt={'Icono de marca'} src={imagenMarca} className="marcaIcon" />
+                  )}
                 </div>
               </div>
               <div className="labelImageContainer ">
                 <Label className="imagesLabel">Seleccionar nueva imagen</Label>
                 <input
                   className="dropzoneContainer"
-                  onChange={(e) => console.log(e)}
+                  onChange={handleChange}
                   type="file"
                   name="imagenMarca"
                 />
@@ -234,9 +261,17 @@ const modificarMarca = ({ isOpen, change, datos }) => {
                   type="submit"
                   color="primary"
                   onClick={() => {
-                    deleteMarca();
-                    clean();
-                    cerrarModal();
+                    if (typeof imagenMarca === 'string') {
+                      alert('Verifique si la marca está en uso');
+                    } else {
+                      console.log(typeof imagenMarca);
+
+                      deleteMarca();
+                      datos.setIngresando(true);
+
+                      clean();
+                      cerrarModal();
+                    }
                   }}
                 >
                   Confirmar Cambios

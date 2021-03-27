@@ -38,6 +38,7 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
   const [nombreMarca, setnombreMarca] = useState(null);
   const [descripcionMarca, setDescripcionMarca] = useState(null);
   const [imagenMarca, setImagenMarca] = useState(null);
+  const [previewFile, setPreviewFile] = useState(null);
 
   // Validaciones UI
   const [validNom, setValidNom] = useState(false);
@@ -55,53 +56,18 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
     setImagenMarca(null);
     setnombreMarca(null);
     setDescripcionMarca(null);
+    setPreviewFile(null);
 
     setValidNom(false);
     setInvalidNom(false);
   };
 
-  // // Asignar imagen al state
-  // const onDropImage = useCallback((f) => {
-  //   console.log('Dropped image', f);
-  //   setImagenMarca(f[0]);
-  // });
-
-  // const changeValue = (event) => {
-  //   const emptyVal = event.value === '';
-  //   switch (event.name) {
-  //     case 'nombre':
-  //       setnombreMarca(event.value);
-  //       setValidNom(!emptyVal);
-  //       setInvalidNom(emptyVal);
-  //       break;
-  //     case 'descripcion':
-  //       setDescripcionMarca(event.value);
-  //       break;
-  //     case 'imagenMarca':
-  //       setImagenMarca(event.target.files[0]);
-  //       break;
-  //     default:
-  //   }
-  // };
-
-  // const writeMarca = () => {
-  //   if (nombreMarca) {
-  //     const requestBody = {
-  //       nombre: nombreMarca,
-  //       descripcion: descripcionMarca,
-  //       imagenMarca: imagenMarca,
-  //     };
-
-  //     console.log('Lleva: ', requestBody);
-  //     axios
-  //       .post('http://Localhost:3001/api/marcas/create', requestBody)
-  //       .then((response) => console.log(response));
-
-  //     console.log('Deberia haber escrito');
-  //   } else {
-  //     alert('Debe llenar el campo requerido');
-  //   }
-  // };
+  const handleChange = (event) => {
+    // console.log('===>', event);
+    // if (previewFile) {
+    setPreviewFile(URL.createObjectURL(event.target.files[0]));
+    // }
+  };
 
   return (
     <Modal isOpen={isOpen}>
@@ -112,53 +78,37 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
         <hr />
       </Col>
       <ModalBody>
-        {/* ------- Dropzone comienza ------- */}
-        {/* <Dropzone onDrop={onDropImage}>
-          {({ getRootProps, getInputProps }) => (
-            <div className="dropzoneContainer">
-              <div {...getRootProps()}>
-                <input
-                  type="file"
-                  name="imagenMarca"
-                  onChange={(event) => changeValue(event.currentTarget)}
-                  {...getInputProps()}
-                />
-                <div>
-                  {imagenMarca ? (
-                    <div className="innerDropzoneContainer">
-                      <img
-                        alt={'Icono confirmacion de imagen'}
-                        src={check}
-                        className="backgroundSVG"
-                      />
-                      <p>Imagen seleccionada</p>
-                    </div>
-                  ) : (
-                    <div className="innerDropzoneContainer">
-                      <img alt={'Icono drag de imagen'} src={drag} className="backgroundSVG" />
-                      <p>Arraste imagen aquí</p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
-        </Dropzone> */}
-        {/* ------- Dropzone termina ------- */}
-
         <form
           className="form-items"
           action="http://Localhost:3001/api/marcas/create"
           method="post"
           enctype="multipart/form-data"
-          target="_blank"
         >
-          <input
-            className="dropzoneContainer "
-            onChange={(e) => console.log(e)}
-            type="file"
-            name="imagenMarca"
-          />
+          <div className="imagesDiv">
+            <div className="labelImageContainer ">
+              {previewFile ? (
+                <Label className="imagesLabel">Imagen seleccionada</Label>
+              ) : (
+                <Label className="imagesLabel">Seleccione una imagen</Label>
+              )}
+              <div className="imageContainer">
+                {previewFile ? (
+                  <img alt="Imagen seleccionada" src={previewFile} className="marcaIcon" />
+                ) : (
+                  <img alt="Seleccione imagen" src={drag} className="marcaIcon" />
+                )}
+              </div>
+            </div>
+            <div className="labelImageContainer ">
+              <Label className="imagesLabel">Seleccionar imagen</Label>
+              <input
+                className="dropzoneContainer"
+                onChange={handleChange}
+                type="file"
+                name="imagenMarca"
+              />
+            </div>
+          </div>
           {/* ------- Fields comienzan ------- */}
           <div className="labelInputForm">
             <div className="labelInputInnerForm">

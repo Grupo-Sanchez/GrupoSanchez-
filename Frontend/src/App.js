@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Redirect, Route, Link } from 'react-router-dom';
 
 // Import de Styles
-import './App.css';
+// import './App.css';
 
 // Import de login & landingpages
 

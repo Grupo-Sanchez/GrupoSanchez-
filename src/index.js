@@ -9,6 +9,8 @@ const cors = require('cors');
 const body = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const cookieParser = require('cookie-parser');
+// Manejo de cookies
 const fileRoutes = require('./routers/file-upload-routes.js');
 
 // Definimos ruta del backend (backend)
@@ -21,11 +23,16 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 // Middlewares
+app.use(cookieParser());
 app.use(cors());
 app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
 app.use('/uploads', express.static('uploads'));
+
+app.get('/set-cookies', (req, res) => {
+  res.cookie('Token', false);
+});
 
 //File Upload
 app.use(

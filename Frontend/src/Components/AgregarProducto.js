@@ -1320,8 +1320,13 @@ export default function AgregarProducto(props) {
     { value: 'm', name: 'Medium' },
     { value: 'l', name: 'Large' },
   ];
-  const [modalAgregar, setModalAgregar] = useState(false);
+  // const [modalAgregar, setModalAgregar] = useState(false);
   const [modalInsertar, setModalInsertar] = useState(false);
+
+  // Bug de agregar marca desde productos
+  const [ingresando, setIngresando] = useState(true);
+  const [modalAgregar, setModalAgregar] = useState(false);
+
   const mostrarModalMarca = () => {
     setModalAgregar(true);
   };
@@ -2200,7 +2205,11 @@ export default function AgregarProducto(props) {
           </button>
         </ModalFooter>
       </Modal>
-      <Agregar isOpen={modalAgregar} change={() => cerraroAbrirModalMarca()} />
+      <Agregar
+        datos={{ setIngresando }}
+        isOpen={modalAgregar}
+        change={() => setModalAgregar(!modalAgregar)}
+      />
       <AgregarProveedor isOpen={modalInsertar} change={() => cerraroAbrirModal()} />
       <AgregarBodega isOpen={modalAgregarBodega} change={() => cerraroAbrirModalBodega()} />
     </div>
