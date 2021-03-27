@@ -5,18 +5,18 @@ const UsersSchema = new Schema({
     type: String,
     required: 'se requiere la identidad',
   },
-  nombre: {
+  primerNombre: {
     type: String,
     required: 'el nombre es requerido',
   },
-  segundo_nombre: {
+  segundoNombre: {
     type: String,
   },
-  primer_apellido: {
+  primerApellido: {
     type: String,
     required: 'el primer apellido es requerido',
   },
-  segundo_apellido: {
+  segundoApellido: {
     type: String,
   },
   rtn: {

@@ -155,7 +155,18 @@ const OpcionesBodegas = (props) => {
   //MIGRACION DE UNA BODEGA
   async function handleValidMigrar(event, values) {
     let NewProduct;
+    let union;
     let newBodega;
+    let prueba;
+    let namm = 'Bodega ';
+    alert('entro');
+    for (let i = 0; i < dataBodegas.length; i++) {
+      if (dataBodegas[i]._id === values.bodegaMigrar) {
+        prueba = dataBodegas[i].numBodega;
+        union = namm + prueba;
+      }
+    }
+
     const MigrarProducto = {
       CantMigrar: values.requeridos,
       bodegaMigrar: values.bodegaMigrar, //id de bodega donde se migrara
@@ -167,7 +178,7 @@ const OpcionesBodegas = (props) => {
         message: 'No puede migrar a la misma bodega',
         onok: () => {},
       });
-    } else if (existencia === `${MigrarProducto.CantMigrar}`) {
+    } else if (`${existencia}` === `${MigrarProducto.CantMigrar}`) {
       let temp = [];
       let bandera = 0;
       let existe = false;
@@ -196,21 +207,57 @@ const OpcionesBodegas = (props) => {
         // alert('ENTRO AL ELSE');
         let total = existencia;
         newBodega = {
-          name: '..',
+          name: union,
           value: MigrarProducto.bodegaMigrar,
           numPasillo: '12',
           cantBodega: total,
         };
         NewProduct.bodega.push(newBodega);
       }
-
-      /////ACA SE DEBE ACTUALIZAR EL PRODUCTO, SE TIENE QUE ACTUALIZAR NEW PRODUCT, DENTRO DE ESTE IF
-      // alert(JSON.stringify(NewProduct.bodega));
       fecthUpdateProducto(NewProduct);
     } else {
+      //bodega vieja
+      let IdViejo = BodegaSeleccionada._id;
+      let CantVieja =
+        parseInt(ProductoMigrar.bodega[BodegaProducto].cantBodega, 10) -
+        parseInt(MigrarProducto.CantMigrar, 10);
+      NewProduct = ProductoMigrar;
+
+      NewProduct.bodega[BodegaProducto].cantBodega = `${CantVieja}`;
+      //bodega nueva
+      let bandera2 = 0; //ver si existe la bodega
+      let nueva = MigrarProducto.bodegaMigrar;
+      let cantNueva;
+      let a;
+      let cantJeje;
+      for (let i = 0; i < ProductoMigrar.bodega.length; i++) {
+        if (ProductoMigrar.bodega[i].value === nueva) {
+          bandera2 = 1;
+          cantNueva =
+            parseInt(ProductoMigrar.bodega[i].cantBodega, 10) +
+            parseInt(MigrarProducto.CantMigrar, 10);
+          a = i;
+          cantJeje = parseInt(MigrarProducto.CantMigrar, 10);
+        }
+      }
+      if (bandera2 === 1) {
+        //la bodega si existe
+        NewProduct.bodega[a].cantBodega = cantNueva;
+      } else {
+        let nummm = parseInt(MigrarProducto.CantMigrar, 10);
+        newBodega = {
+          name: union,
+          value: MigrarProducto.bodegaMigrar,
+          numPasillo: '12',
+          cantBodega: `${nummm}`,
+        };
+        NewProduct.bodega.push(newBodega);
+        // alert(JSON.stringify(NewProduct.bodega));
+      }
+      // fecthUpdateProducto(NewProduct);
       Confirm.open({
         title: 'aviso',
-        message: 'SE VA A IMPLEMENTAR PRONTO',
+        message: 'Se realizo correctamente la migracion',
         onok: () => {},
       });
     }
@@ -284,6 +331,7 @@ const OpcionesBodegas = (props) => {
 
   useEffect(() => {
     fecthDataBodegas();
+    fecthDataProductos();
   }, []);
 
   //controlador de las card de las bodegas
@@ -350,15 +398,12 @@ const OpcionesBodegas = (props) => {
   };
   //Muestra los datos de migracion
   const modalAntesDeMigrar = (bodega, producto) => {
-    //alert(dataproductos[producto].bodega[bodega].cantBodega);
+    // alert(dataproductos[producto].bodega[bodega].cantBodega);
     setExistencia(dataproductos[producto].bodega[bodega].cantBodega); //Existencia a migrar
     setProductoMigrar(dataproductos[producto]); // Producto a migrar
     setBodegaProducto(bodega);
     setModalMigrarProducto(true);
   };
-
-  //metodo para obtener el id de la bodega seleccionada
-  const manejarCombobox = (e) => {};
 
   function paddingAvInput() {
     return {
@@ -379,9 +424,9 @@ const OpcionesBodegas = (props) => {
   return (
     <div>
       {/* Modal principal, donde se encuentran todos los elementos */}
-      <div className="container-fluid mt-4">
+      <div className="mt-4">
         <div className="row">
-          <div className="col-md-4 ">
+          <div className="col-md-2 text-center ">
             <Button
               style={{
                 'background-color': 'transparent',
@@ -390,11 +435,11 @@ const OpcionesBodegas = (props) => {
               }}
               onClick={() => AbrirModelBodegas()}
             >
-              <Plus width="50px" height="50px" />
+              <Plus width="60px" height="60px" />
             </Button>
           </div>
 
-          <div className="col-md-8  ">
+          <div className="col-md-8 text-center  ">
             <h1 className="">LISTADO DE BODEGAS </h1>
           </div>
         </div>
@@ -511,8 +556,12 @@ const OpcionesBodegas = (props) => {
                         return cant;
                       })}
                     </td>
-                    <td>{elemento.precios}</td>
-                    <td onClick={() => modalAntesDeMigrar(InfoMigracion, index2)}>ACCION</td>
+                    <td>{elemento.precios[0]}</td>
+                    <td>
+                      <i onClick={() => modalAntesDeMigrar(InfoMigracion, index2)}>
+                        <EditLogo width="30px" height="30px" />
+                      </i>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -658,7 +707,7 @@ const OpcionesBodegas = (props) => {
           <div className="container-fluid mt-4">
             <div className="row">
               <div className="col-md-10">
-                <h1 className="text-left">MODIFICAR DE BODEGAS </h1>
+                <h1 className="text-left">MODIFICAR DE BODEGAS DESDE </h1>
               </div>
               {/* <div className="col-2"></div> */}
               <div className="col-md-2">
@@ -785,7 +834,9 @@ const OpcionesBodegas = (props) => {
           {/* <ModalHeader> */}
           <div className="container-fluid mt-4 mb-4">
             <div className="col-md-12">
-              <h1 className="text-center">MOVILIZAR PRODUCTO </h1>
+              <h1 className="text-center">
+                MOVILIZAR PRODUCTO DESDE BODEGA No. {`${BodegaSeleccionada.numBodega}`}
+              </h1>
             </div>
           </div>
           <hr></hr>

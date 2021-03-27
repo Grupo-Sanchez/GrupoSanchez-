@@ -13,10 +13,10 @@ exports.read_users = async (req, res) => {
 exports.create_users = async (req, res) => {
   const {
     identidad,
-    nombre,
-    segundo_nombre,
-    primer_apellido,
-    segundo_apellido,
+    primerNombre,
+    segundoNombre,
+    primerApellido,
+    segundoApellido,
     rtn,
     telefono,
     correo,
@@ -25,10 +25,10 @@ exports.create_users = async (req, res) => {
   try {
     const new_users = new users({
       identidad,
-      nombre,
-      segundo_nombre,
-      primer_apellido,
-      segundo_apellido,
+      primerNombre,
+      segundoNombre,
+      primerApellido,
+      segundoApellido,
       rtn,
       telefono,
       correo,

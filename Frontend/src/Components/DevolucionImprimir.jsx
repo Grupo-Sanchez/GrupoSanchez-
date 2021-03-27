@@ -58,9 +58,6 @@ export default function FacturaImprimir(props) {
             <th class="quantity">Cantidad</th>
             <th class="description">Nombre/Codigo Producto</th>
             <th class="price">Precio</th>
-            <td class="price" style={{ fontWeight: 'bold' }}>
-              TOTAL
-            </td>
           </tr>
         </thead>
         <tbody>
@@ -70,7 +67,6 @@ export default function FacturaImprimir(props) {
               <td class="description">
                 {row.name}, {row.codigo}
               </td>
-              <td class="price">L. {row.precioUnitario}</td>
               <td class="price">L. {row.precioSumado}</td>
             </tr>
           ))}

@@ -10,11 +10,11 @@ import '../Styles/Forms.css';
 const styles = {
   input: {
     height: '30px',
-    borderRadius: '36px',
+    borderRadius: '26px',
     float: 'right',
   },
   textarea: {
-    borderRadius: '36px',
+    borderRadius: '26px',
     float: 'right',
   },
   required: {

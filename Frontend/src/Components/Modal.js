@@ -67,7 +67,7 @@ class ModalForm extends Component {
           style={{
             height: '95vh',
             'overflow-y': 'auto',
-            top: '-100px',
+            top: '-120px',
             maxWidth: '1000px',
           }}
         >
