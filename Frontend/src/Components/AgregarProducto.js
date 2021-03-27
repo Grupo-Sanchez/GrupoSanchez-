@@ -445,9 +445,6 @@ export default function AgregarProducto(props) {
     seleccionado.fecha_vencimiento = date;
   };
   const handleOnChange = (value) => {
-    if (tempProv.length > 0) {
-      //setProveedores([...proveedores, tempProv]);
-    }
     tempProv.push(proveedores.filter((item) => item.value === value)[0]);
     proveedores = proveedores.filter((item) => item.value !== value);
   };
