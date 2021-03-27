@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable no-else-return */
+/* eslint-disable no-shadow */
 const express = require('express');
 
 const router = express.Router();
@@ -13,12 +12,12 @@ const checkAuth = require('../middleware/check-auth');
 const User = require('../models/loginModel');
 
 router.post('/signup', (req, res, next) => {
-  User.find({ email: req.body.email })
+  User.find({ alias: req.body.alias })
     .exec()
     .then((user) => {
       if (user.length >= 1) {
         return res.status(409).json({
-          message: 'Mail exists',
+          message: 'Este usuario ya existe.',
         });
       } else {
         // eslint-disable-next-line consistent-return
@@ -30,7 +29,15 @@ router.post('/signup', (req, res, next) => {
           } else {
             const user = new User({
               _id: new mongoose.Types.ObjectId(),
-              email: req.body.email,
+              alias: req.body.alias,
+              primerNombre: req.body.primerNombre,
+              segundoNombre: req.body.segundoNombre,
+              primerApellido: req.body.primerApellido,
+              segundoApellido: req.body.segundoApellido,
+              identidad: req.body.identidad,
+              telefono: req.body.telefono,
+              rtn: req.body.rtn,
+              correo: req.body.correo,
               rol: req.body.rol,
               password: hash,
             });
@@ -39,13 +46,14 @@ router.post('/signup', (req, res, next) => {
               .then((result) => {
                 console.log(result);
                 res.status(201).json({
-                  message: 'User created',
+                  message: 'Usuario creado.',
                 });
               })
               .catch((err) => {
                 console.log(err);
                 res.status(500).json({
                   error: err,
+                  message: 'Fallo al guardar dog',
                 });
               });
           }
@@ -55,24 +63,24 @@ router.post('/signup', (req, res, next) => {
 });
 
 router.post('/login', (req, res, next) => {
-  User.find({ email: req.body.email })
+  User.find({ alias: req.body.alias })
     .exec()
     .then((user) => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: 'Auth failed',
+          message: 'No encontro el alias',
         });
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           return res.status(401).json({
-            message: 'Auth failed',
+            message: 'Mala pass dog',
           });
         }
         if (result) {
           const token = jwt.sign(
             {
-              email: user[0].email,
+              alias: user[0].alias,
               userId: user[0]._id,
             },
             process.env.JWT_KEY,
@@ -80,7 +88,7 @@ router.post('/login', (req, res, next) => {
               expiresIn: 120,
             },
           );
-          console.log('Verificando: ', user[0].rol);
+          console.log('Verificando: ', user);
           const rutaTemporal = user[0].rol;
           return res.status(200).json({
             ruta: rutaTemporal,

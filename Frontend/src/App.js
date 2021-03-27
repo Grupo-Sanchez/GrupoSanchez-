@@ -138,10 +138,12 @@ const App = () => {
         <AmbienteJefeTiendaDevoluciones />
       </Route>
       {/* Ambientes vendedor */}
-      <Route exact path="/Vendedor">
+      <Route exact path="/EjecutivoVentas">
         <AmbienteVendedor />
       </Route>
-      <Route exact path="/Vendedor/Facturar">
+      <Route exact path="/EjecutivoVentas/Facturacion">
+      // <Route exact path="/Vendedor/Facturar">
+
         <AmbienteVendedorFacturacion />
       </Route>
       {/* Pagina en construccion o error */}
