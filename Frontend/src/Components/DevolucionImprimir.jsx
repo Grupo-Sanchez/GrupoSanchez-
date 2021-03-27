@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalFooter,
 } from 'reactstrap';
+import styles from '../Styles/estiloFactura.css';
 
 export default function FacturaImprimir(props) {
   let d = new Date();
@@ -54,22 +55,18 @@ export default function FacturaImprimir(props) {
       <Table>
         <thead>
           <tr>
-            <th class="quantity">Cantidad</th>
             <th class="description">Nombre/Codigo Producto</th>
+            <th class="quantity">Cantidad</th>
             <th class="price">Precio</th>
-            <td class="price" style={{ fontWeight: 'bold' }}>
-              TOTAL
-            </td>
           </tr>
         </thead>
         <tbody>
           {props.productos.productosSeleccionado.map((row, i) => (
             <tr key={i}>
-              <td class="quantity">{row.cantidad}</td>
               <td class="description">
                 {row.name}, {row.codigo}
               </td>
-              <td class="price">L. {row.precioUnitario}</td>
+              <td class="quantity">{row.cantidad}</td>
               <td class="price">L. {row.precioSumado}</td>
             </tr>
           ))}

@@ -479,32 +479,59 @@ export default function Facturas() {
   const handleChangertn = (event) => {
     setrtn(event.target.value);
   };
+  let sumaTotalTemp = 0;
+  let tempImp = 0;
   const cantidadSel = (e, codPrincipal) => {
     const cant = e.target.value;
-    let tempImp = 0;
-    let tempSubTot = 0;
+    let cantidadAnterior = 0;
     for (let index = 0; index < productosAfacturar.length; index++) {
       const element = productosAfacturar[index];
       if (element.codigoPrincipal === codPrincipal) {
         element.cantidad = cant;
+        cantidadAnterior =
+          parseInt(element.precioSumado, 10) / parseInt(element.precioUnitario, 10);
         element.precioSumado = Number(element.precioUnitario) * cant;
+        if (parseInt(e.target.value, 10) < cantidadAnterior) {
+          sumaTotalTemp +=
+            parseInt(sumatotal, 10) -
+            parseInt(element.precioUnitario, 10) *
+              parseInt(parseInt(cantidadAnterior, 10) - parseInt(cant, 10), 10);
+          setSumaTotal(sumaTotalTemp);
+          setTotalFinal(sumaTotalTemp + parseInt(tempImp, 10));
+        } else {
+          sumaTotalTemp += element.precioSumado;
+          setSumaTotal(parseInt(sumaTotalTemp, 10));
+          setTotalFinal(parseInt(sumaTotalTemp, 10) + parseInt(tempImp, 10));
+        }
         break;
       }
     }
+    if (productosAfacturar.length > 1) {
+      let prueba = 0;
+      for (let index = 0; index < productosAfacturar.length; index++) {
+        const element2 = productosAfacturar[index];
+        element2.precioSumado = Number(element2.precioUnitario) * cant;
+        prueba += productosAfacturar[index].precioSumado;
+        if (!element2.exento) {
+          tempImp += Number(element2.precioSumado) * 0.15;
+          alert(tempImp);
+          setImpuestoTotal(tempImp);
+        }
+      }
+      setSumaTotal(prueba);
+    }
     const tempTot = 0;
-    alert(parseInt(sumatotal, 10));
+    /*
     for (let index = 0; index < productosAfacturar.length; index++) {
       const element = productosAfacturar[index];
-      tempSubTot += (parseInt(element.precioSumado, 10) + parseInt(sumatotal, 10));
-      setSumaTotal(
-        parseInt(element.precioSumado, 10) + parseInt(sumatotal, 10) - parseInt(sumatotal, 10),
-      );
+      tempSubTot += parseInt(element.precioSumado, 10) + parseInt(sumatotal, 10);
       if (!element.exento) {
         tempImp += Number(element.precioSumado) * 0.15;
       }
     }
     setImpuestoTotal(Number(tempImp));
-    setTotalFinal(parseInt(tempSubTot, 10) + parseInt(tempImp, 10));
+    setTotalFinal(parseInt(sumatotal, 10) + parseInt(tempImp, 10));
+    */
   };
   const agregarProductoaTabla = async () => {
     let sumar = false;
@@ -549,9 +576,6 @@ export default function Facturas() {
             exento: productoSeleccionado.exento,
           });
           setSeleccionoBodega(false);
-          let tempSumaTotal = 0;
-          tempSumaTotal = parseInt(result, 10) + parseInt(sumatotal, 10);
-          alert(tempSumaTotal);
         } else {
           result += producto.precioSumado;
           if (productoSeleccionado.exento) {
@@ -560,16 +584,12 @@ export default function Facturas() {
             impuesto += Number(result * 0.15);
           }
           total += result + impuesto;
-          let tempSumaTotal = 0;
-          tempSumaTotal = parseInt(result, 10) + parseInt(sumatotal, 10);
-          alert(tempSumaTotal);
-          setSumaTotal(parseInt(tempSumaTotal, 10));
+          setSumaTotal(result + sumatotal);
           setImpuestoTotal(impuesto + impuestototal);
           setTotalFinal(total + totalfinal);
           setindice(1);
           setquantity(1);
         }
-        /*
         if (productoSeleccionado.bodega.length === 0) {
           for (let index = 0; index < productosEnBodega.length; index++) {
             const element = productosEnBodega[index];
@@ -592,12 +612,6 @@ export default function Facturas() {
             }
           }
         }
-        */
-        setproductosEnBodega(
-          productosEnBodega.filter(
-            (item) => item.codigoPrincipal !== productoSeleccionado.codigoPrincipal,
-          ),
-        );
         setbodegasProductoSeleccionado([]);
         setvalueBodegaProducto([]);
         setproductoSeleccionado([]);
@@ -686,6 +700,7 @@ export default function Facturas() {
                   <Button
                     style={{
                       'background-color': 'transparent',
+                      color: '#ffa500',
                       border: 'none',
                       position: 'absolute',
                       top: '-13px',
@@ -780,41 +795,7 @@ export default function Facturas() {
               <tbody>
                 {productosAfacturar.map((row, i) => (
                   <tr key={i}>
-                    <th style={{ maxWidth: '35px' }}>
-                      <FormGroup>
-                        <Input
-                          style={{
-                            float: 'center',
-                            marginLeft: '55px',
-                            'border-radius': '26px',
-                            width: '100px',
-                          }}
-                          align="center"
-                          type="select"
-                          name="select"
-                          id={`select${row.codigoPrincipal}`}
-                          onChange={(e) => cantidadSel(e, row.codigoPrincipal)}
-                        >
-                          {_.times(
-                            row.cantidadInventario ? row.cantidadInventario : row.bodega.cantBodega,
-                            (i2) => (
-                              <>
-                                <option
-                                  style={{
-                                    float: 'center',
-                                    marginLeft: '8px',
-                                    'border-radius': '26px',
-                                    width: '100px',
-                                  }}
-                                >
-                                  {i2 + 1}
-                                </option>
-                              </>
-                            ),
-                          )}
-                        </Input>
-                      </FormGroup>
-                    </th>
+                    <th>{row.cantidad}</th>
                     <th>{row.name}</th>
                     <th>L. {row.precioUnitario}</th>
                     <th>L. {row.precioSumado}</th>
@@ -899,13 +880,22 @@ export default function Facturas() {
                 value={rtn}
                 onChange={(e) => handleChangertn(e)}
               />
-              <Button
-                style={{ marginLeft: '70px', borderRadius: '25px' }}
-                color="primary"
+              <button
+                style={{
+                  'border-radius': '26px',
+                  'border-color': '#ff9800',
+                  color: 'green',
+                  border: '2px solid green',
+                  'background-color': 'white',
+                  'font-size': '16px',
+                  cursor: 'pointer',
+                  marginLeft: '70px',
+                }}
+                color="secondary"
                 onClick={handleValidSubmit}
               >
                 Facturar
-              </Button>
+              </button>
             </AvForm>
           </div>
           <div style={{ paddingTop: '80px', marginLeft: '-81px' }}>

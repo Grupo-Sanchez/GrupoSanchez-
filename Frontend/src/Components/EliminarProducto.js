@@ -578,7 +578,7 @@ export default function EliminarProducto(props) {
     bodegas = bodegas.filter((item) => item.value !== value);
   };
   const handleOnChange = (value) => {
-    for (let index = 0; index < proveedores.length; index++) {
+    /*for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
       if (element.value === value) {
         const id = element.value;
@@ -603,7 +603,6 @@ export default function EliminarProducto(props) {
         proveedoresSeleccionados.push(proveedorActual);
       }
     }
-
     if (proveedoresSeleccionados.length - 1 === 0) {
       precioprov1 = false;
     } else if (proveedoresSeleccionados.length - 1 === 1) {
@@ -619,8 +618,9 @@ export default function EliminarProducto(props) {
     } else if (proveedoresSeleccionados.length - 1 === 6) {
       precioprov7 = false;
     }
+    */
+    tempProv.push(proveedores.filter((item) => item.value === value)[0]);
     proveedores = proveedores.filter((item) => item.value !== value);
-    console.log(JSON.stringify(proveedores));
   };
   /*
   Metodo para fuardar codigos del ModalModificar
@@ -911,7 +911,7 @@ export default function EliminarProducto(props) {
     //setBodegaSel(element.bodega[0].value);
     setNombre(element.nombre);
     setTagsTemp(element.codigos);
-    settempProv(element.proveedores);
+    settempProv(tagsProveedores);
     settagsBodegas(element.bodega);
     settempBod(tagsBodegas);
     setCodigoBarra(element.codigoBarra);
@@ -2344,11 +2344,7 @@ export default function EliminarProducto(props) {
               <label style={{ color: '#ffa500' }}>Inventario:</label>
             </Col>
             <Col style={{ maxWidth: '480px' }}>
-              <input
-                style={paddinginputVerProducto()}
-                type="Number"
-                readOnly
-              />
+              <input style={paddinginputVerProducto()} type="Number" readOnly />
             </Col>
             <Col style={{ maxWidth: '200px' }}>
               <label>Precio 3:</label>
