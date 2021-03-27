@@ -1792,7 +1792,10 @@ export default function EliminarProducto(props) {
           </thead>
           <tbody>
             {data.map((elemento, index) => (
-              <tr onDoubleClick={() => mostrarModalVerProducto(elemento)}>
+              <tr
+                style={{ cursor: 'pointer' }}
+                onDoubleClick={() => mostrarModalVerProducto(elemento)}
+              >
                 <td>{(index += 1)}</td>
                 <td>{`${elemento.codigoBarra}`}</td>
                 <td>{elemento.codigoPrincipal}</td>
