@@ -2,6 +2,10 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 // import { useHistory } from 'react-router';
 
+import Snackbar from '@material-ui/core/Snackbar';
+
+import Alert from '@material-ui/lab/Alert';
+
 import {
   Button,
   Modal,
@@ -56,6 +60,8 @@ const modificarMarca = ({ isOpen, change, datos }) => {
   const [validNom, setValidNom] = useState(false);
   const [invalidNom, setInvalidNom] = useState(false);
 
+  const [openNotification, setOpenNotification] = useState(false);
+
   const [data, setData] = useState(null);
 
   // State para spinner
@@ -80,14 +86,6 @@ const modificarMarca = ({ isOpen, change, datos }) => {
       .get(`http://Localhost:3001/api/departamentos/${datos.idDepartamento}`)
       .then(setDepartamento);
   };
-
-  // const updateMarca = () => {
-  //   axios.put(`http://Localhost:3001/api/marcas/update/${datos.idMarca}`).then(() => {
-  //     cerrarModal();
-  //     clean();
-  //     alert('Deberia haber modificado');
-  //   });
-  // };
 
   const deleteDepartamento = () => {
     axios
@@ -133,6 +131,14 @@ const modificarMarca = ({ isOpen, change, datos }) => {
   //   console.log('Dropped image', f);
   //   setImagenMarca(f[0]);
   // });
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenNotification(false);
+  };
 
   const changeValue = (event) => {
     const emptyVal = event.value === '';
@@ -180,6 +186,16 @@ const modificarMarca = ({ isOpen, change, datos }) => {
 
   return (
     <Modal isOpen={isOpen}>
+      <Snackbar
+        open={openNotification}
+        autoHideDuration={2500}
+        onClose={handleClose}
+        className="notification"
+      >
+        <Alert onClose={handleClose} severity="error">
+          Debe agregar una nueva imagen!
+        </Alert>
+      </Snackbar>
       <div className="modalUpContainer">
         <div className="titleLabelContainer">
           <Label className="titleLabel">Modificar Departamento</Label>
@@ -264,7 +280,7 @@ const modificarMarca = ({ isOpen, change, datos }) => {
                   color="primary"
                   onClick={() => {
                     if (typeof imagenDepartamento === 'string') {
-                      alert('Verifique si la marca está en uso');
+                      setOpenNotification(!openNotification);
                     } else {
                       console.log(typeof imagenDepartamento);
 

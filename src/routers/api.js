@@ -7,7 +7,7 @@ const devoluciones = require('./DevolucionRoutes');
 const facturas = require('./FacturaRoutes');
 const bodegas = require('./bodegaRoutes');
 const proveedores = require('./proveedorRoutes');
-const marcas = require('./marcaRoutes');
+// const marcas = require('./marcaRoutes');
 const imagen = require('./file-upload-routes');
 const marcas = require('./marca.router');
 const departamentos = require('./departmento.router');
@@ -18,7 +18,7 @@ const api = express.Router();
 
 //
 api.use('/', login);
-api.use('/marca', marcas2);
+// api.use('/marca', marcas2);
 api.use('/marcas', marcas);
 api.use('/departamentos', departamentos);
 api.use('/administrador', administrador);

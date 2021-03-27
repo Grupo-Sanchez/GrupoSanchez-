@@ -13,6 +13,10 @@ import {
   Col,
 } from 'reactstrap';
 
+import Snackbar from '@material-ui/core/Snackbar';
+
+import Alert from '@material-ui/lab/Alert';
+
 // Para el dropzone
 import Dropzone from 'react-dropzone';
 
@@ -44,6 +48,8 @@ const AgregarDepartamento = ({ isOpen, change, datos }) => {
   const [validNom, setValidNom] = useState(false);
   const [invalidNom, setInvalidNom] = useState(false);
 
+  const [openNotification, setOpenNotification] = useState(false);
+
   // State para spinner
   const [cargando, setCargando] = useState(true);
 
@@ -69,8 +75,26 @@ const AgregarDepartamento = ({ isOpen, change, datos }) => {
     // }
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenNotification(false);
+  };
+
   return (
     <Modal isOpen={isOpen}>
+      <Snackbar
+        open={openNotification}
+        autoHideDuration={2500}
+        onClose={handleClose}
+        className="notification"
+      >
+        <Alert onClose={handleClose} severity="error">
+          Asegurese de agregar nombre e imagen!
+        </Alert>
+      </Snackbar>
       <div className="titleLabelContainer">
         <Label className="titleLabel">Crear Departamento</Label>
       </div>
@@ -137,9 +161,13 @@ const AgregarDepartamento = ({ isOpen, change, datos }) => {
                 type="submit"
                 color="primary"
                 onClick={() => {
+                  // if (imagenDepartamento == null || nombreDepartamento == null) {
+                  //   setOpenNotification(!openNotification);
+                  // } else {
                   datos.setIngresando(true);
                   clean();
                   cerrarModal();
+                  // }
                 }}
               >
                 Agregar Departamento

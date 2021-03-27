@@ -1,5 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Redirect, Route } from 'react-router-dom';
+
+import Snackbar from '@material-ui/core/Snackbar';
+
+import Alert from '@material-ui/lab/Alert';
+
 // import { useHistory } from 'react-router';
 
 import {
@@ -55,6 +60,8 @@ const modificarMarca = ({ isOpen, change, datos }) => {
   // Validaciones UI
   const [validNom, setValidNom] = useState(false);
   const [invalidNom, setInvalidNom] = useState(false);
+
+  const [openNotification, setOpenNotification] = useState(false);
 
   const [data, setData] = useState(null);
 
@@ -150,6 +157,14 @@ const modificarMarca = ({ isOpen, change, datos }) => {
     }
   };
 
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpenNotification(false);
+  };
+
   // const writeMarca = () => {
   //   if (nombreMarca) {
   //     const requestBody = {
@@ -178,6 +193,16 @@ const modificarMarca = ({ isOpen, change, datos }) => {
 
   return (
     <Modal isOpen={isOpen}>
+      <Snackbar
+        open={openNotification}
+        autoHideDuration={2500}
+        onClose={handleClose}
+        className="notification"
+      >
+        <Alert onClose={handleClose} severity="error">
+          Debe agregar una nueva imagen!
+        </Alert>
+      </Snackbar>
       <div className="modalUpContainer">
         <div className="titleLabelContainer">
           <Label className="titleLabel">Modificar Marca</Label>
@@ -262,13 +287,12 @@ const modificarMarca = ({ isOpen, change, datos }) => {
                   color="primary"
                   onClick={() => {
                     if (typeof imagenMarca === 'string') {
-                      alert('Verifique si la marca está en uso');
+                      // alert('Verifique si la marca está en uso');
+                      setOpenNotification(!openNotification);
                     } else {
                       console.log(typeof imagenMarca);
-
                       deleteMarca();
                       datos.setIngresando(true);
-
                       clean();
                       cerrarModal();
                     }
