@@ -31,6 +31,19 @@
   color: orange;
 }
 
+.notification {
+  position: absolute;
+  /* height: 100px; */
+  width: 100%;
+  top: -70%;
+  left: 50%;
+  /* margin-left: -50px;
+  margin-top: -50px; */
+  background-size: 100%;
+
+  /* color: orange; */
+}
+
 .departmentBoxesContainer {
   flex: 1;
   display: flex;
