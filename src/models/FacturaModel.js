@@ -27,8 +27,14 @@ const facturaSchema = new Schema({
   impuesto: {
     type: Number,
   },
+  invoiceNumber: {
+    type: String,
+  },
   total: {
     type: Number,
+  },
+  invoiceNumber: {
+    type: String,
   },
 });
 
