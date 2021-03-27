@@ -183,15 +183,18 @@ export default function EliminarProducto(props) {
   const [modalAgregarBodega, setModalAgregarBodega] = useState(false);
   const array = [];
   const isAlphanumeric = require('is-alphanumeric');
+  const [tagsBodegas, settagsBodegas] = useState([]);
   const [tagsProveedores, settagsProveedores] = useState([]);
   let [tempProv, settempProv] = useState([]);
-  const [tagsBodegas, settagsBodegas] = useState([]);
   let [tempBod, settempBod] = useState([]);
   const [modalAgregarProducto, setModalAgregarProducto] = useState(false);
   const [tagstemp, setTagsTemp] = useState([]);
   let [proveedores, setProveedores] = useState([]);
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
+  const [marcaSel, setMarcaSel] = useState([]);
+  const [marcaSelNom, setMarcaSelNom] = useState('');
+  const [bodegaSel, setBodegaSel] = useState([]);
   const fecthProveedores = async () => {
     await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       const proveedoresDB = response.data;
@@ -217,7 +220,6 @@ export default function EliminarProducto(props) {
           _v: element._v,
         });
       }
-
       setProveedores(proveedoresagregados);
     });
   };
@@ -319,7 +321,6 @@ export default function EliminarProducto(props) {
         precio: precioprovedor7,
         _v: uniqueData[0]._v,
       });
-      //setTagsTempProveedor([...tagstempProveedor, tempProv]);
       setSize6('6');
       settempProv([]);
       setPrecioProvedor7(0);
@@ -328,11 +329,10 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el precio del proveedor',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
-
   const removerImagen = () => {
     setFiles([]);
     setSingleFiles([]);
@@ -352,6 +352,7 @@ export default function EliminarProducto(props) {
         name: uniqueData[0].name,
         value: uniqueData[0].value,
         numPasillo: precioprovedor6,
+        cantBodega: precioprovedor1,
       });
       //setTagsTempProveedor([...tagstempProveedor, tempProv]);
       setSize7('6');
@@ -362,7 +363,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Debe ingresar el pasillo en el que esta el producto',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -664,6 +665,9 @@ export default function EliminarProducto(props) {
     setprecio3(elemento.precios[2]);
     settagsProveedores(elemento.proveedores);
     setTags(elemento.codigos);
+    setMarcaSel(elemento.marca);
+    setMarcaSelNom(elemento.marca[0].name);
+    alert(JSON.stringify(elemento.marca[0].name));
     if (elemento.productoExento) {
       setExento('Exento');
     }
@@ -712,49 +716,9 @@ export default function EliminarProducto(props) {
     bodegas = bodegas.filter((item) => item.value !== value);
   };
   const handleOnChange = (value) => {
-    for (let index = 0; index < proveedores.length; index++) {
-      const element = proveedores[index];
-      if (element.value === value) {
-        const id = element.value;
-        const proveedorActual = {
-          company: element.company,
-          value: id,
-          agencia: element.agencia,
-          name: element.name,
-          apellidos: element.apellidos,
-          genero: element.genero,
-          email: element.email,
-          telefono: element.telefono,
-          direccion1: element.direccion1,
-          direccion2: element.direccion2,
-          ciudad: element.ciudad,
-          departamento: element.departamento,
-          codigoPostal: element.codigoPostal,
-          pais: element.pais,
-          comentario: element.comentario,
-          precio: '',
-        };
-        proveedoresSeleccionados.push(proveedorActual);
-      }
-    }
-
-    if (proveedoresSeleccionados.length - 1 === 0) {
-      precioprov1 = false;
-    } else if (proveedoresSeleccionados.length - 1 === 1) {
-      precioprov2 = false;
-    } else if (proveedoresSeleccionados.length - 1 === 2) {
-      precioprov3 = false;
-    } else if (proveedoresSeleccionados.length - 1 === 3) {
-      precioprov4 = false;
-    } else if (proveedoresSeleccionados.length - 1 === 4) {
-      precioprov5 = false;
-    } else if (proveedoresSeleccionados.length - 1 === 5) {
-      precioprov6 = false;
-    } else if (proveedoresSeleccionados.length - 1 === 6) {
-      precioprov7 = false;
-    }
+    //setProveedores([...proveedores, tempProv]);
+    tempProv.push(proveedores.filter((item) => item.value === value)[0]);
     proveedores = proveedores.filter((item) => item.value !== value);
-    console.log(JSON.stringify(proveedores));
   };
   /*
   Metodo para fuardar codigos del ModalModificar
@@ -816,7 +780,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: 'Los precios deben ser diferentes y descendentes.',
-        onok: () => {},
+        onok: () => { },
       });
     } else {
       setModalModificarPrecios(false);
@@ -877,8 +841,6 @@ export default function EliminarProducto(props) {
     await singleFileUpload(formData, singleFileOptions);
   };
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
-  const [marcaSel, setMarcaSel] = useState([]);
-  const [bodegaSel, setBodegaSel] = useState([]);
   const updateItem = async (Id) => {
     GuardarPrecio();
     let marcaMod = [];
@@ -970,14 +932,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: 'Al parecer tiene algun campo del producto con simbolos invalidos.',
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Al parecer tiene algun campo del producto incompleto/vacio.',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1087,8 +1049,7 @@ export default function EliminarProducto(props) {
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
     setTagsTemp(element.codigos);
-    settempProv(element.proveedores);
-    settagsBodegas(seleccionado.bodega);
+    //settempProv(tagsProveedores);
     //settempBod(tagsBodegas);
     getSingleFiles();
     const pic = fotos1.filter((item) => item.idProducto === element.codigoPrincipal);
@@ -1123,8 +1084,10 @@ export default function EliminarProducto(props) {
     setprecio1(element.precios[0]);
     setprecio2(element.precios[1]);
     setprecio3(element.precios[2]);
+    settagsBodegas(element.bodega);
     settagsProveedores(element.proveedores);
     setTags(element.codigos);
+    setMarcaSel(element.marca[0]);
     setModalModificar(true);
   };
   const mostrarProveedores = (i) => {
@@ -1305,7 +1268,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: 'Existen códigos duplicados, verifique e intente nuevamente.',
-            onok: () => {},
+            onok: () => { },
           });
           entra = false;
         } else if (yaesta) {
@@ -1330,14 +1293,14 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `Los Codigos de ${seleccionado.nombre} estan vacio`,
-          onok: () => {},
+          onok: () => { },
         });
       }
     } else {
       Confirm.open({
         title: 'Error',
         message: 'Los Codigos solo pueden ser Alfanumericos',
-        onok: () => {},
+        onok: () => { },
       });
     }
   };
@@ -1448,7 +1411,7 @@ export default function EliminarProducto(props) {
       Confirm.open({
         title: 'Error',
         message: `El código tiene caracteres inválidos:${' '}`,
-        onok: () => {},
+        onok: () => { },
       });
     } else if (event.key === 'Enter' && event.target.value !== '') {
       seleccionado.codigos = [];
@@ -1518,7 +1481,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -1559,7 +1522,7 @@ export default function EliminarProducto(props) {
         Confirm.open({
           title: 'Error',
           message: `El código tiene caracteres inválidos:${' '}`,
-          onok: () => {},
+          onok: () => { },
         });
       } else if (event !== '') {
         seleccionado.codigos = [];
@@ -1628,7 +1591,7 @@ export default function EliminarProducto(props) {
           Confirm.open({
             title: 'Error',
             message: mansajenot,
-            onok: () => {},
+            onok: () => { },
           });
         } else if (entra) {
           Confirm.open({
@@ -1748,7 +1711,7 @@ export default function EliminarProducto(props) {
     fecthData();
   };
   return (
-    <div align="center" style={{ width: '1800px', maxWidth: '1800px' }}>
+    <div align="center" style={{ maxWidth: '1800px' }}>
       <br />
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
       <br />
@@ -2337,7 +2300,8 @@ export default function EliminarProducto(props) {
                       value={size6}
                     />
                   </Col>
-                  <Col style={{ marginLeft: '30px', 'max-width': '90px' }}>
+                  <Col style={{ marginLeft: '30px', 'max-width': '90px', top: '-35px' }}>
+                    <label style={{ marginLeft: '30px', top: '-50px', position: 'abolsute' }}>Costo</label>
                     <input
                       style={paddingAvInputCantidades()}
                       className="form-control"
@@ -2545,247 +2509,252 @@ export default function EliminarProducto(props) {
           }}
         >
           <div>
-            <h3>Información detallada del producto</h3>
+            <h3 style={{ 'font-size': '33px' }}>Información detallada del producto</h3>
           </div>
           <ModalBody>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col>
-                <label style={{ color: '#ffa500' }}>Información de Producto</label>
-              </Col>
-              <Col>
-                <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Descripcion:</label>
-              </Col>
-              <Col style={{ maxWidth: '380px' }}>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="text"
-                  name="descripcion"
-                  id="descripcionver"
-                  value={seleccionado ? seleccionado.descripcion : ''}
-                  readOnly
-                />
-              </Col>
-              <Col>
-                <section style={{ paddingLeft: '100px' }} className="container">
-                  <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
-                    <br />
-                    <br />
-                  </div>
-                </section>
+            <div style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Row>
                 <Col>
-                  <div style={{ marginTop: -200, marginRight: '350px' }}>
-                    <aside style={thumbsContainer}>{thumbs}</aside>
+                  <label style={{ color: '#ffa500' }}>Información de Producto</label>
+                </Col>
+                <Col>
+                  <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
+                </Col>
+              </Row>
+              <Row >
+                <Col>
+                  <Row>
+                    <Col style={{ maxWidth: '300px' }}>
+                      <label style={{ 'font-weight': '635' }}>Descripcion:</label>
+                    </Col>
+                    <Col style={{ maxWidth: '380px' }}>
+                      <input
+                        style={paddinginputVerProducto()}
+                        type="text"
+                        name="descripcion"
+                        id="descripcionver"
+                        value={seleccionado ? seleccionado.descripcion : ''}
+                        readOnly
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col style={{ maxWidth: '300px' }}>
+                      <label style={{ 'font-weight': '635' }}>Marca:</label>
+                    </Col>
+                    <Col>
+                      <input
+                        style={paddinginputVerProducto()}
+                        type="text"
+                        name="verMarca"
+                        id="verMarca"
+                        value={marcaSelNom}
+                        readOnly
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col style={{ maxWidth: '300px' }}>
+                      <label style={{ 'font-weight': '635' }}>Codigo Principal:</label>
+                    </Col>
+                    <Col>
+                      <input
+                        style={paddinginputVerProducto()}
+                        type="text"
+                        name="codigoPrincipal"
+                        id="codigoPrincipal"
+                        value={seleccionado.codigoPrincipal ? seleccionado.codigoPrincipal : ''}
+                        readOnly
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col>
+                  <section style={{ paddingLeft: '100px' }} className="container">
+                    <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
+                      <br />
+                      <br />
+                    </div>
+                  </section>
+                  <Col>
+                    <div style={{ marginTop: -200, marginRight: '350px' }}>
+                      <aside style={thumbsContainer}>{thumbs}</aside>
+                    </div>
+                  </Col>
+                </Col>
+                <br />
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '270px' }}>
+                  <label style={{ 'font-weight': '635' }}>Códigos de Referencia:</label>
+                </Col>
+                <Col>
+                  <div>
+                    <ul>
+                      {tags.map((tag, index) => (
+                        <li key={index}>
+                          <span>{tag}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </Col>
-              </Col>
-              <br />
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Marca:</label>
-              </Col>
-              <Col>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="text"
-                  name="verMarca"
-                  id="verMarca"
-                  value={marcaSel}
-                  readOnly
-                />
-              </Col>
-              <br />
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Codigo Principal:</label>
-              </Col>
-              <Col>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="text"
-                  name="codigoPrincipal"
-                  id="codigoPrincipal"
-                  value={seleccionado.codigoPrincipal ? seleccionado.codigoPrincipal : ''}
-                  readOnly
-                />
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '270px' }}>
-                <label>Códigos de Referencia:</label>
-              </Col>
-              <Col>
-                <div>
-                  <ul>
-                    {tags.map((tag, index) => (
-                      <li key={index}>
-                        <span>{tag}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Código de Barra:</label>
-              </Col>
-              <Col style={{ maxWidth: '480px' }}>
-                <Barcode value={seleccionado.codigoBarra} />
-              </Col>
-              <Col style={{ maxWidth: '200px' }}>
-                <label style={{ color: '#ffa500' }}>Proveedores:</label>
-              </Col>
-              <Col>
-                <div>
-                  <ul>
-                    {tagsProveedores.map((tag, index) => (
-                      <li key={index}>
-                        <span>{tag.name}</span>
-                      </li>
-                    ))}
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '300px' }}>
+                  <label style={{ 'font-weight': '635' }}>Código de Barra:</label>
+                </Col>
+                <Col style={{ maxWidth: '480px' }}>
+                  <Barcode value={seleccionado.codigoBarra} />
+                </Col>
+                <Col style={{ maxWidth: '200px' }}>
+                  <label style={{ color: '#ffa500' }}>Proveedores:</label>
+                </Col>
+                <Col>
+                  <div>
+                    <ul>
+                      {tagsProveedores.map((tag, index) => (
+                        <li key={index}>
+                          <span>{tag.name}</span>
+                        </li>
+                      ))}
 
-                    <br />
-                  </ul>
-                </div>
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '350px' }}>
-                <label>Descripción Específica:</label>
-              </Col>
-              <Col style={{ maxWidth: '440px', marginLeft: '-50px' }}>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="textarea"
-                  name="verDescripcion_especifica"
-                  id="verDescripcion_especifica"
-                  value={seleccionado ? seleccionado.descripcion_larga : ''}
-                />
-              </Col>
-              <Col>
-                <label style={{ color: '#ffa500' }}>Precios de Venta:</label>
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Producto:</label>
-              </Col>
-              <Col style={{ maxWidth: '480px' }}>
-                <input
-                  style={paddinginputVerProductoExento()}
-                  type="text"
-                  name="codigoPrincipal"
-                  id="codigoPrincipal"
-                  value={Exento}
-                  color="#ffa500"
-                  readOnly
-                />
-              </Col>
-              <Col style={{ maxWidth: '200px' }}>
-                <label>Precio 1:</label>
-              </Col>
-              <Col>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="Number"
-                  name="verprecio2"
-                  id="verprecio2"
-                  value={precio1}
-                  readOnly
-                />
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Departamento:</label>
-              </Col>
-              <Col style={{ maxWidth: '480px' }}>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="textarea"
-                  name="verDepartamento"
-                  id="verDepartamento"
-                  value={seleccionado ? seleccionado.area : ''}
-                  readOnly
-                />
-              </Col>
-              <Col style={{ maxWidth: '200px' }}>
-                <label>Precio 2:</label>
-              </Col>
-              <Col>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="Number"
-                  name="verprecio2"
-                  id="verprecio2"
-                  value={precio2}
-                  readOnly
-                />
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label style={{ color: '#ffa500' }}>Inventario:</label>
-              </Col>
-              <Col style={{ maxWidth: '480px' }}>
-                <input style={paddinginputVerProducto()} type="Number" readOnly />
-              </Col>
-              <Col style={{ maxWidth: '200px' }}>
-                <label>Precio 3:</label>
-              </Col>
-              <Col>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="Number"
-                  name="verprecio3"
-                  id="verprecio3"
-                  value={precio3}
-                  readOnly
-                />
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '300px' }}>
-                <label>Inventario total:</label>
-              </Col>
-              <Col>
-                <input
-                  style={paddinginputVerProducto()}
-                  type="textarea"
-                  name="verDepartamento"
-                  value={cantsel}
-                  readOnly
-                />
-              </Col>
-            </Row>
-            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-              <Col style={{ maxWidth: '270px' }}>
-                <label>Bodegas:</label>
-              </Col>
-              <Col>
-                <div>
-                  <ul>
-                    {tagsBodegas.map((tag, index) => (
-                      <li key={index}>
-                        <span>
-                          Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
+                      <br />
+                    </ul>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '350px' }}>
+                  <label style={{ 'font-weight': '635' }}>Descripción Específica:</label>
+                </Col>
+                <Col style={{ maxWidth: '440px', marginLeft: '-50px' }}>
+                  <input
+                    style={paddinginputVerProducto()}
+                    type="textarea"
+                    name="verDescripcion_especifica"
+                    id="verDescripcion_especifica"
+                    value={seleccionado ? seleccionado.descripcion_larga : ''}
+                  />
+                </Col>
+                <Col>
+                  <label style={{ color: '#ffa500' }}>Precios de Venta:</label>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '300px' }}>
+                  <label style={{ 'font-weight': '635' }}>Producto:</label>
+                </Col>
+                <Col style={{ maxWidth: '480px' }}>
+                  <input
+                    style={paddinginputVerProductoExento()}
+                    type="text"
+                    name="codigoPrincipal"
+                    id="codigoPrincipal"
+                    value={Exento}
+                    color="#ffa500"
+                    readOnly
+                  />
+                </Col>
+                <Col style={{ maxWidth: '200px' }}>
+                  <label style={{ 'font-weight': '635' }}>Precio 1:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerProducto()}
+                    type="Number"
+                    name="verprecio2"
+                    id="verprecio2"
+                    value={precio1}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '300px' }}>
+                  <label style={{ 'font-weight': '635' }}>Departamento:</label>
+                </Col>
+                <Col style={{ maxWidth: '480px' }}>
+                  <input
+                    style={paddinginputVerProducto()}
+                    type="textarea"
+                    name="verDepartamento"
+                    id="verDepartamento"
+                    value={seleccionado ? seleccionado.area : ''}
+                    readOnly
+                  />
+                </Col>
+                <Col style={{ maxWidth: '200px' }}>
+                  <label style={{ 'font-weight': '635' }}>Precio 2:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerProducto()}
+                    type="Number"
+                    name="verprecio2"
+                    id="verprecio2"
+                    value={precio2}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '300px' }}>
+                  <label style={{ color: '#ffa500' }}>Inventario:</label>
+                </Col>
+                <Col style={{ maxWidth: '480px' }}>
+                  <input style={paddinginputVerProducto()} type="Number" readOnly />
+                </Col>
+                <Col style={{ maxWidth: '200px' }}>
+                  <label style={{ 'font-weight': '635' }}>Precio 3:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerProducto()}
+                    type="Number"
+                    name="verprecio3"
+                    id="verprecio3"
+                    value={precio3}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '300px' }}>
+                  <label style={{ 'font-weight': '635' }}>Inventario total:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerProducto()}
+                    type="textarea"
+                    name="verDepartamento"
+                    value={cantsel}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ maxWidth: '270px' }}>
+                  <label style={{ 'font-weight': '635' }}>Bodegas:</label>
+                </Col>
+                <Col>
+                  <div>
+                    <ul>
+                      {tagsBodegas.map((tag, index) => (
+                        <li key={index}>
+                          <span>
+                            Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
                           {tag.numPasillo}
-                          {tag.pasillo}
-                        </span>
-                      </li>
-                    ))}
-                    <br />
-                  </ul>
-                </div>
-              </Col>
-            </Row>
+                            {tag.pasillo}
+                          </span>
+                        </li>
+                      ))}
+                      <br />
+                    </ul>
+                  </div>
+                </Col>
+              </Row>
+            </div>
           </ModalBody>
           <ModalFooter>
             <button
