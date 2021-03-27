@@ -6,6 +6,7 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+// const cookieParser = require('cookie-parser');
 
 const checkAuth = require('../middleware/check-auth');
 
@@ -90,6 +91,8 @@ router.post('/login', (req, res, next) => {
           );
           console.log('Verificando: ', user);
           const rutaTemporal = user[0].rol;
+          console.log('El token: ', token);
+          // res.cookie('jwt', token, { httpOnly: false });
           return res.status(200).json({
             ruta: rutaTemporal,
             message: 'Auth successful',

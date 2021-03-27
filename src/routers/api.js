@@ -9,12 +9,18 @@ const bodegas = require('./bodegaRoutes');
 const proveedores = require('./proveedorRoutes');
 const marcas = require('./marcaRoutes');
 const imagen = require('./file-upload-routes');
+const marcas = require('./marca.router');
+const departamentos = require('./departmento.router');
+
 const login = require('./login');
 
 const api = express.Router();
 
 //
 api.use('/', login);
+api.use('/marca', marcas2);
+api.use('/marcas', marcas);
+api.use('/departamentos', departamentos);
 api.use('/administrador', administrador);
 api.use('/productos', productos);
 api.get('/productos', productos);

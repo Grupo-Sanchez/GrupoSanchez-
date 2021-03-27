@@ -260,6 +260,20 @@
   width: 50px;
 }
 
+.deleteIcon {
+  /* fill: #dc0000 !important; */
+
+  display: flex;
+  flex-direction: row-reverse;
+  align-self: center;
+  justify-content: center;
+  object-fit: contain;
+
+  margin: 5px 5px;
+
+  width: 50px;
+}
+
 .marcaIcon {
   display: flex;
   justify-content: center;

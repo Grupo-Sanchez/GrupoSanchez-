@@ -7,6 +7,9 @@ const router = express.Router();
 
 const multer = require('multer');
 
+const mongoose = require('mongoose');
+const checkAuth = require('../middleware/check-auth');
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads');
@@ -19,8 +22,6 @@ const storage = multer.diskStorage({
 // eslint-disable-next-line object-shorthand
 const upload = multer({ storage: storage });
 
-const mongoose = require('mongoose');
-
 const Marca = require('../models/marcaModel');
 
 router.post('/create', upload.single('imagenMarca'), (req, res, next) => {
@@ -29,9 +30,10 @@ router.post('/create', upload.single('imagenMarca'), (req, res, next) => {
     .exec()
     .then((marca) => {
       if (marca.length >= 1) {
-        return res.status(409).json({
-          message: 'La marca ya existe',
-        });
+        return res.status(409);
+        // return res.status(409).json({
+        //   message: 'La marca ya existe',
+        // });
       } else {
         // eslint-disable-next-line consistent-return
         // eslint-disable-next-line no-shadow
@@ -45,18 +47,19 @@ router.post('/create', upload.single('imagenMarca'), (req, res, next) => {
           .save()
           .then((result) => {
             console.log(result);
-            res.status(201).json({
-              message: 'Marca created',
-              createdMarca: {
-                nombre: result.nombre,
-                descripcion: result.descripcion,
-                _id: result._id,
-                request: {
-                  type: 'GET',
-                  url: 'http://localhost:3001/api/marcas',
-                },
-              },
-            });
+            res.status(201);
+            // .json({
+            //   message: 'Marca created',
+            //   createdMarca: {
+            //     nombre: result.nombre,
+            //     descripcion: result.descripcion,
+            //     _id: result._id,
+            //     request: {
+            //       type: 'GET',
+            //       url: 'http://localhost:3001/api/marcas',
+            //     },
+            //   },
+            // });
           })
           .catch((err) => {
             console.log(err);
@@ -87,20 +90,20 @@ router.post('/simplecreate', upload.none(), (req, res, next) => {
         });
         marca
           .save()
-          .then((result) => {
-            console.log(result);
-            res.status(201).json({
-              message: 'Marca created',
-              createdMarca: {
-                nombre: result.nombre,
-                _id: result._id,
-                request: {
-                  type: 'GET',
-                  url: 'http://localhost:3001/api/marcas',
-                },
-              },
-            });
-          })
+          // .then((result) => {
+          //   console.log(result);
+          //   res.status(201).json({
+          //     message: 'Marca created',
+          //     createdMarca: {
+          //       nombre: result.nombre,
+          //       _id: result._id,
+          //       request: {
+          //         type: 'GET',
+          //         url: 'http://localhost:3001/api/marcas',
+          //       },
+          //     },
+          //   });
+          // })
           .catch((err) => {
             console.log(err);
             res.status(500).json({

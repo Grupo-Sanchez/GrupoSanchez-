@@ -27,7 +27,7 @@ import '../Styles/marcas.css';
 import edit from '../Icons/edit.svg';
 import plus from '../Icons/plus.svg';
 
-const gestionarDepartamentos = () => {
+const gestionarMarcas = () => {
   const [ingresando, setIngresando] = useState(true);
 
   const [modalAgregar, setModalAgregar] = useState(false);
@@ -57,6 +57,7 @@ const gestionarDepartamentos = () => {
   useEffect(() => {
     getData();
     setTimeout(() => setIngresando(false), 1500);
+    // window.stop();
   }, [ingresando]);
 
   return (
@@ -135,4 +136,4 @@ const gestionarDepartamentos = () => {
   );
 };
 
-export default gestionarDepartamentos;
+export default gestionarMarcas;
