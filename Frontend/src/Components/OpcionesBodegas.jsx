@@ -212,7 +212,8 @@ const OpcionesBodegas = (props) => {
         parseInt(ProductoMigrar.bodega[BodegaProducto].cantBodega, 10) -
         parseInt(MigrarProducto.CantMigrar, 10);
       NewProduct = ProductoMigrar;
-      NewProduct.bodega[BodegaProducto].cantBodega = CantVieja;
+
+      NewProduct.bodega[BodegaProducto].cantBodega = `${CantVieja}`;
       // alert(JSON.stringify(CantVieja));
       //bodega nueva
       let bandera2 = 0; //ver si existe la bodega
@@ -235,11 +236,12 @@ const OpcionesBodegas = (props) => {
         //la bodega si existe
         NewProduct.bodega[a].cantBodega = cantNueva;
       } else {
+        let nummm = parseInt(MigrarProducto.CantMigrar, 10);
         newBodega = {
           name: '..',
           value: MigrarProducto.bodegaMigrar,
           numPasillo: '12',
-          cantBodega: parseInt(MigrarProducto.CantMigrar, 10),
+          cantBodega: `${nummm}`,
         };
         NewProduct.bodega.push(newBodega);
         // alert(JSON.stringify(NewProduct.bodega));
