@@ -1823,7 +1823,6 @@ export default function EliminarProducto(props) {
           isOpen={ModalModificar}
           className="text-center"
           style={{
-            height: '90vh',
             'overflow-y': 'overflow',
             top: '20px',
             width: '1700px',
@@ -2501,7 +2500,6 @@ export default function EliminarProducto(props) {
           isOpen={modalVerProducto}
           className="text-center"
           style={{
-            height: '100vh',
             'overflow-y': 'overflow',
             top: '20px',
             width: '1400px',

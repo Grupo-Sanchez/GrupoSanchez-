@@ -1219,7 +1219,6 @@ todos los atributos, escribe un producto nuevo a la db*/
         isOpen={props.isOpen}
         className="text-center"
         style={{
-          height: '100vh',
           'overflow-y': 'overflow',
           top: '20px',
           width: '1700px',
