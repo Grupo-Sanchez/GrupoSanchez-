@@ -9,6 +9,7 @@ const cors = require('cors');
 const body = require('body-parser');
 const path = require('path');
 const fs = require('fs');
+const fileRoutes = require('./routers/file-upload-routes.js');
 
 // Definimos ruta del backend (backend)
 const api = require('./routers/api');
@@ -24,6 +25,14 @@ app.use(cors());
 app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
+app.use('/uploads', express.static('uploads'));
+
+//File Upload
+app.use(
+  './Frontend/public/uploads/',
+  express.static(path.join(__dirname, './Frontend/public/uploads/')),
+);
+app.use('/api', fileRoutes);
 
 // Nos conectamos a la base de datos por medio de mongoose
 // El proces busca donde se hizo el npm dotenv

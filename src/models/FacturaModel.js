@@ -33,6 +33,9 @@ const facturaSchema = new Schema({
   total: {
     type: Number,
   },
+  invoiceNumber: {
+    type: String,
+  },
 });
 
 module.exports = model('facturas', facturaSchema);

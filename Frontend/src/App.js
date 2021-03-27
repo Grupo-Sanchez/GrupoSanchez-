@@ -21,6 +21,7 @@ import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
 import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
 import AmbientePropietarioClientes from './Views/AmbientePropietarioClientes.jsx';
 import AmbientePropietarioMarcas from './Views/AmbientePropietarioMarcas.jsx';
+import AmbientePropietarioDepartamentos from './Views/AmbientePropietarioDepartamentos.jsx';
 import AmbientePropietarioProveedores from './Views/AmbientePropietarioProveedor.jsx';
 import AmbientePropietarioModificarProveedores from './Views/AmbientePropietarioModificarProveedores.jsx';
 import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModificarMarcas.jsx';
@@ -75,6 +76,9 @@ const App = () => {
       </Route>
       <Route exact path="/Propietario/Marcas">
         <AmbientePropietarioMarcas />
+      </Route>
+      <Route exact path="/Propietario/Departamentos">
+        <AmbientePropietarioDepartamentos />
       </Route>
       <Route exact path="/Propietario/Proveedores">
         <AmbientePropietarioProveedores />

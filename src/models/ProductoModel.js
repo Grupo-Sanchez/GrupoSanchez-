@@ -13,7 +13,6 @@ precio: '',*/
   },
   area: {
     type: String,
-    required: 'area requerido',
   },
   codigos: {
     type: Array,

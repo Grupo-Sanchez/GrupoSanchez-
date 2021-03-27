@@ -1,9 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, FormGroup, Row, Col, Modal, ModalBody, ModalFooter } from 'reactstrap';
+import {
+  Button,
+  Table,
+  Label,
+  FormGroup,
+  Input,
+  Row,
+  Col,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  ModalFooter,
+} from 'reactstrap';
+import { Dropdown, DropdownButton } from 'react-bootstrap';
 import SelectSearch from 'react-select-search';
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
-import { AvForm, AvField, AvInput, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
+import { AvForm, AvField, AvRadioGroup, AvRadio } from 'availity-reactstrap-validation';
 import { useDropzone } from 'react-dropzone';
 import imagePath from '../Icons/lupa1.jpeg';
 import AgregarProveedor from './AgregarProveedor.jsx';
@@ -22,7 +35,7 @@ const thumbsContainer = {
   flexWrap: 'wrap',
   marginTop: -160,
   'margin-left': '300px',
-  paddingRight: '50px',
+  paddingLeft: '60px',
   margin: 'auto',
   width: '1%',
 };
@@ -49,13 +62,13 @@ const baseStyle = {
 const thumb = {
   display: 'inline-flex',
   borderRadius: 2,
-  border: '1px solid #eaeaea',
   marginBottom: 8,
   marginRight: 8,
-  width: 150,
-  height: 150,
+  width: 'auto',
+  height: 'auto',
+  maxHeight: '200px',
+  maxWidth: '300px',
   padding: 4,
-  boxSizing: 'border-box',
 };
 
 const thumbInner = {
@@ -80,6 +93,7 @@ export default function EliminarProducto(props) {
   const JsBarcode = require('jsbarcode');
   const [size, setSize] = useState('1');
   let [precioprov1, setPrecioProv1] = useState(true);
+  const [Exento, setExento] = useState('');
   const [codigoBarra, setCodigoBarra] = useState('');
   let [precioprov2, setPrecioProv2] = useState(true);
   const [tags, setTags] = useState([]);
@@ -91,22 +105,27 @@ export default function EliminarProducto(props) {
   let [precioprov7, setPrecioProv7] = useState(true);
   const [size2, setSize2] = useState('2');
   const [size3, setSize3] = useState('3');
-  const [nombreProducto, setNombre] = useState('');
   const [size4, setSize4] = useState('4');
   const [size5, setSize5] = useState('5');
   const [size6, setSize6] = useState('6');
   const [size7, setSize7] = useState('7');
   const [precio1, setprecio1] = useState('');
+  const [files, setFiles] = useState([]);
+  const [fotos1, setfotos1] = useState([]);
+  const [idImagen, setidImagen] = useState([]);
+  let [singleFiles, setSingleFiles] = useState([]);
+  const [singleProgress, setSingleProgress] = useState(0);
   const [precio2, setprecio2] = useState('');
   const [precio3, setprecio3] = useState('');
-  const [modalVerProducto, setModalVerProducto] = useState(false);
+  const [productoExento, setProductoExento] = useState(false);
+  const [modalVerCodigos, setModalVerCodigos] = useState(false);
   const [modalVerProveedor, setModalVerProveedor] = useState(false);
   const [modalVerDescripciones, setmodalVerDescripciones] = useState(false);
   const [ModalModificar, setModalModificar] = useState(false);
   const [ModalModificarCodigos, setModalModificarCodigos] = useState(false);
   const [ModalModificarProveedores, setModalModificarProveedores] = useState(false);
   const [ModalModificarPrecios, setModalModificarPrecios] = useState(false);
-  const [Exento, setExento] = useState('');
+  const [ModalVerPrecios, setModalVerPrecios] = useState(false);
   const [ModalVerCodigoBarra, setModalVerCodigoBarra] = useState(false);
   const [inputcod2, setinputcod2] = useState(false);
   const [inputcod3, setinputcod3] = useState(false);
@@ -150,8 +169,8 @@ export default function EliminarProducto(props) {
     codigoBarra: '',
     fecha_vencimiento: new Date(),
   });
+  const [modalVerProducto, setModalVerProducto] = useState(false);
   const [bodega, setBodega] = useState('');
-  const [codPrincipal, setCodPrincipal] = useState('');
   const [cantsel, setCantsel] = useState(seleccionado.cantidad);
   const [cantminsel, setCantminsel] = useState(seleccionado.cantidad_minima);
   const [precioprovedor1, setPrecioProvedor1] = useState('');
@@ -211,8 +230,6 @@ export default function EliminarProducto(props) {
         bodegasAgregar.push({
           value: element._id,
           name: `Bodega ${element.numBodega}`,
-          cantPasillos: element.cantPasillos,
-          cantProductos: element.CantProductos,
         });
       }
       setBodegas(bodegasAgregar);
@@ -242,10 +259,6 @@ export default function EliminarProducto(props) {
     fecthMarcas();
     fecthProveedores();
   };
-
-  useEffect(() => {
-    fecthData();
-  }, []);
   const removeTagsProv = (index) => {
     let provAgregar = [];
     for (let inde = 0; inde < tagsProveedores.length; inde++) {
@@ -319,6 +332,16 @@ export default function EliminarProducto(props) {
       });
     }
   };
+
+  const removerImagen = () => {
+    setFiles([]);
+    setSingleFiles([]);
+  };
+  const cancelarMod = () => {
+    setModalModificar(false);
+    setFiles([]);
+    setSingleFiles([]);
+  };
   const onChangeBodega = () => {
     if (precioprovedor6 !== 0) {
       tempBod = tempBod.filter((x) => x != null);
@@ -358,6 +381,21 @@ export default function EliminarProducto(props) {
       cursor: 'pointer',
     };
   }
+  function paddingcloseprov() {
+    return {
+      display: 'block',
+      width: '20px',
+      height: '20px',
+      'line-height': '16px',
+      'text-align': 'center',
+      'font-size': '20px',
+      'margin-left': '60px',
+      color: 'white',
+      'border-radius': '50%',
+      background: '#f60000',
+      cursor: 'pointer',
+    };
+  }
   function paddingclosebodega() {
     return {
       display: 'block',
@@ -373,27 +411,6 @@ export default function EliminarProducto(props) {
       cursor: 'pointer',
     };
   }
-  const mostrarModalVerProducto = (elemento) => {
-    setSeleccionado(elemento);
-    setCantminsel(elemento.cantidad_minima);
-    setCantsel(elemento.cantidad);
-    setNombre(elemento.descripcion);
-    settagsBodegas(elemento.bodega);
-    setCodPrincipal(elemento.codigoPrincipal);
-    setCodigoBarra(elemento.codigoBarra);
-    setprecio1(elemento.precios[0]);
-    setprecio2(elemento.precios[1]);
-    setprecio3(elemento.precios[2]);
-    settagsProveedores(elemento.proveedores);
-    setTags(elemento.codigos);
-    if (elemento.productoExento) {
-      setExento('Exento');
-    }
-    setModalVerProducto(true);
-  };
-  const cerrarModalVerProducto = () => {
-    setModalVerProducto(false);
-  };
   function paddingmain() {
     return {
       width: 'auto',
@@ -411,7 +428,7 @@ export default function EliminarProducto(props) {
       background: '#e9e3e3',
     };
   }
-  function paddingmainbodegas() {
+  function paddingmainprov() {
     return {
       width: 'auto',
       height: '32px',
@@ -426,56 +443,6 @@ export default function EliminarProducto(props) {
       'border-radius': '25px',
       'margin-top': '8px',
       background: '#e9e3e3',
-    };
-  }
-  function paddingdiv() {
-    return {
-      display: 'flex',
-      'align-items': 'flex-start',
-      'flex-wrap': 'wrap',
-      'min-height': '48px',
-      width: '400px',
-      border: 'none',
-      'border-radius': '10px',
-      padding: '0 8px',
-      'margin-left': '80px',
-      overflow: 'auto',
-      maxHeight: '100px',
-    };
-  }
-  function paddingdivbodegas() {
-    return {
-      display: 'flex',
-      'align-items': 'flex-start',
-      'flex-wrap': 'wrap',
-      'min-height': '48px',
-      width: '400px',
-      border: 'none',
-      'border-radius': '10px',
-      padding: '0 8px',
-      'margin-left': '50px',
-      paddingRight: '-250px',
-      overflow: 'auto',
-      maxHeight: '100px',
-    };
-  }
-  function paddingInput() {
-    return {
-      display: 'flex',
-      'align-items': 'flex-start',
-      'flex-wrap': 'wrap',
-      'min-height': '40px',
-      width: '320px',
-      border: '1px solid #0052cc',
-      'border-radius': '26px',
-      padding: '0 8px',
-    };
-  }
-  function paddingAvInput() {
-    return {
-      'margin-left': '-20px',
-      'border-radius': '26px',
-      width: '320px',
     };
   }
   function paddinginputVerProducto() {
@@ -501,6 +468,110 @@ export default function EliminarProducto(props) {
       padding: '0 8px',
       outline: 'none',
       color: '#ffa500',
+    };
+  }
+  function paddingmainbodegas() {
+    return {
+      width: 'auto',
+      height: '32px',
+      display: 'flex',
+      'align-items': 'center',
+      'justify-content': 'center',
+      color: '#282c34',
+      padding: '0 8px',
+      'font-size': '20px',
+      'list-style': 'none',
+      margin: '0 8px 8px 0',
+      'border-radius': '25px',
+      'margin-top': '8px',
+      background: '#e9e3e3',
+    };
+  }
+  function paddingdiv() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '300px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '10px',
+      overflow: 'auto',
+      maxHeight: '180px',
+    };
+  }
+  function paddingdivprov() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '400px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '80px',
+      overflow: 'auto',
+      maxHeight: '180px',
+      marginTop: '-15px',
+    };
+  }
+  function paddingdivbodegas() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '48px',
+      width: '500px',
+      border: 'none',
+      'border-radius': '10px',
+      padding: '0 8px',
+      'margin-left': '150px',
+      paddingRight: '-250px',
+      overflow: 'auto',
+      maxHeight: '180px',
+      marginTop: '-25px',
+    };
+  }
+  function paddingInput() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '1px solid #0052cc',
+      'border-radius': '26px',
+      padding: '0 8px',
+    };
+  }
+  function paddingInputprov() {
+    return {
+      display: 'flex',
+      'align-items': 'flex-start',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '1px solid #0052cc',
+      'border-radius': '26px',
+      padding: '0 8px',
+    };
+  }
+  function paddingAvInputObligatorio() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      width: '320px',
+      'border-color': '#62d162',
+    };
+  }
+  function paddingAvInput() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      width: '320px',
     };
   }
   function paddingAvInputCantidades() {
@@ -539,12 +610,25 @@ export default function EliminarProducto(props) {
       'margin-top': '3px',
     };
   }
+  function paddingtitleprov() {
+    return {
+      'margin-top': '3px',
+    };
+  }
   function paddingtitlebodega() {
     return {
       'margin-top': '3px',
     };
   }
   function paddingul() {
+    return {
+      'flex-wrap': 'wrap',
+      padding: '0',
+      paddingLeft: '45px',
+      margin: '8px 0 0 0',
+    };
+  }
+  function paddingulprov() {
     return {
       'flex-wrap': 'wrap',
       padding: '0',
@@ -566,9 +650,59 @@ export default function EliminarProducto(props) {
       setCodigoBarra(tags[1]);
     }
   };
+  const cerrarModalVerProducto = () => {
+    setModalVerProducto(false);
+  };
+  const mostrarModalVerProducto = (elemento) => {
+    setSeleccionado(elemento);
+    setCantminsel(elemento.cantidad_minima);
+    setCantsel(elemento.cantidad);
+    settagsBodegas(elemento.bodega);
+    setCodigoBarra(elemento.codigoBarra);
+    setprecio1(elemento.precios[0]);
+    setprecio2(elemento.precios[1]);
+    setprecio3(elemento.precios[2]);
+    settagsProveedores(elemento.proveedores);
+    setTags(elemento.codigos);
+    if (elemento.productoExento) {
+      setExento('Exento');
+    }
+    setModalVerProducto(true);
+    const pic = fotos1.filter((item) => item.idProducto === elemento.codigoPrincipal);
+    // setFiles(pic);
+    if (pic.length > 0) {
+      let f = new File([pic[pic.length - 1]], pic[pic.length - 1].fileName, {
+        type: pic[pic.length - 1].fileType,
+        lastModified: new Date(),
+      });
+      let files2 = [];
+      files2.push(f);
+      setFiles(
+        files2.map((file) =>
+          Object.assign(file, {
+            preview: `http://localhost:3000/${pic[pic.length - 1].filePath
+              .replace('\\', '')
+              .replace('Frontend', '')
+              .replace('\\', '')
+              .replace('\\', '/')
+              .split('public')
+              .join('')
+              .replace('//uploads/', '/uploads/')}`,
+          }),
+        ),
+      );
+      console.log('----------');
+      console.log(pic[pic.length - 1]._id);
+      setidImagen(pic[pic.length - 1]._id);
+      setSingleFiles(pic);
+    }
+  };
   let proveedoresSeleccionados = [];
-  const manejarCambioPrecioBodega = (e) => {
+  const manejarCambioPasillo = (e) => {
     setPrecioProvedor6(e.target.value);
+  };
+  const manejarCambioPrecioBodega = (e) => {
+    setPrecioProvedor1(e.target.value);
   };
   const manejarCambioPrecioProveedor = (e) => {
     setPrecioProvedor7(e.target.value);
@@ -578,7 +712,7 @@ export default function EliminarProducto(props) {
     bodegas = bodegas.filter((item) => item.value !== value);
   };
   const handleOnChange = (value) => {
-    /*for (let index = 0; index < proveedores.length; index++) {
+    for (let index = 0; index < proveedores.length; index++) {
       const element = proveedores[index];
       if (element.value === value) {
         const id = element.value;
@@ -603,6 +737,7 @@ export default function EliminarProducto(props) {
         proveedoresSeleccionados.push(proveedorActual);
       }
     }
+
     if (proveedoresSeleccionados.length - 1 === 0) {
       precioprov1 = false;
     } else if (proveedoresSeleccionados.length - 1 === 1) {
@@ -618,29 +753,13 @@ export default function EliminarProducto(props) {
     } else if (proveedoresSeleccionados.length - 1 === 6) {
       precioprov7 = false;
     }
-    */
-    tempProv.push(proveedores.filter((item) => item.value === value)[0]);
     proveedores = proveedores.filter((item) => item.value !== value);
+    console.log(JSON.stringify(proveedores));
   };
   /*
   Metodo para fuardar codigos del ModalModificar
    */
-  function paddingdivcodigosRef() {
-    return {
-      display: 'flex',
-      'align-items': 'flex-start',
-      'flex-wrap': 'wrap',
-      'min-height': '48px',
-      width: '300px',
-      border: 'none',
-      'border-radius': '10px',
-      padding: '0 8px',
-      'margin-left': '30px',
-      overflow: 'auto',
-      maxHeight: '100px',
-      top: '20px',
-    };
-  }
+
   const handleChange = (e, num) => {
     if (num === 2) {
       setinputcod2(e.target.value);
@@ -670,22 +789,26 @@ export default function EliminarProducto(props) {
     seleccionado.precios[0] = parseInt(document.getElementById('modprecio1').value, 10);
     seleccionado.precios[1] = parseInt(document.getElementById('modprecio2').value, 10);
     seleccionado.precios[2] = parseInt(document.getElementById('modprecio3').value, 10);
-    if (precio2 !== '' && precio3 === '' && seleccionado.precios[0] > seleccionado.precios[1]) {
+    if (
+      seleccionado.precios[1] !== '' &&
+      seleccionado.precios[2] === '' &&
+      seleccionado.precios[0] > seleccionado.precios[1]
+    ) {
       menor = true;
     } else if (
-      precio3 !== '' &&
-      precio2 === '' &&
+      seleccionado.precios[2] !== null &&
+      seleccionado.precios[1] === null &&
       seleccionado.precios[0] > seleccionado.precios[2]
     ) {
       menor = true;
     } else if (
-      precio2 !== '' &&
-      precio3 !== '' &&
+      seleccionado.precios[1] !== null &&
+      seleccionado.precios[2] !== null &&
       seleccionado.precios[0] > seleccionado.precios[1] &&
       seleccionado.precios[1] > seleccionado.precios[2]
     ) {
       menor = true;
-    } else if (precio2 === '' && precio3 === '') {
+    } else if (seleccionado.precios[1] === null && seleccionado.precios[2] === null) {
       menor = true;
     }
     if (!menor) {
@@ -714,7 +837,45 @@ export default function EliminarProducto(props) {
       },
     });
   };
-
+  const getSingleFiles = async () => {
+    try {
+      await axios.get('http://localhost:3001/api/getSingleFiles').then((response) => {
+        const fotos = response.data;
+        let tempfotos = [];
+        for (let index = 0; index < fotos.length; index++) {
+          const element = fotos[index];
+          tempfotos.push(element);
+        }
+        singleFiles = tempfotos;
+      });
+      setfotos1(singleFiles);
+      console.log(fotos1);
+    } catch (error) {
+      //alert('ACA DOS: ', error);
+    }
+    return null;
+  };
+  const singleFileUpload = async (data1, options1) => {
+    try {
+      await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
+    } catch (error) {
+      alert(`ACA: , ${error}`);
+    }
+    return null;
+  };
+  const singleFileOptions = {
+    onUploadProgress: (progressEvent) => {
+      const { loaded, total } = progressEvent;
+      const percentage = Math.floor(((loaded / 1000) * 100) / (total / 1000));
+      setSingleProgress(percentage);
+    },
+  };
+  const uploadSingleFile = async () => {
+    const formData = new FormData();
+    formData.append('id', seleccionado.codigoPrincipal);
+    formData.append('file', singleFiles[0]);
+    await singleFileUpload(formData, singleFileOptions);
+  };
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
   const [marcaSel, setMarcaSel] = useState([]);
   const [bodegaSel, setBodegaSel] = useState([]);
@@ -734,7 +895,6 @@ export default function EliminarProducto(props) {
         }
       }
     }
-
     for (let index = 0; index < bodegas.length; index++) {
       const element = bodegas[index];
       if (element.value === bodegaSel) {
@@ -766,7 +926,11 @@ export default function EliminarProducto(props) {
       ) {
         if (banderaPrecios) {
           setModalModificar(false);
-          axios
+          /*let result = findRemoveSync('../public/uploads/', {
+            files: '2021-03-13T02-49-34.397Z-multiplexer12.png',
+          });*/
+
+          await axios
             .put(`http://localhost:3001/api/productos/${Id}`, {
               descripcion: document.getElementById('modnombre').value,
               area: document.getElementById('modarea').value,
@@ -787,13 +951,20 @@ export default function EliminarProducto(props) {
                 title: '',
                 message: `Producto ${seleccionado.descripcion} modificado exitosamente`,
                 onok: () => {
-                  fecthData();
+                  window.location.reload();
                 },
               }),
             )
             .catch((error) => {
               console.log(error);
             });
+          if (singleFiles.length > 0) {
+            uploadSingleFile();
+          } else {
+            await axios.delete(`http://localhost:3001/api/SingleFile/${idImagen}`);
+          }
+          removerImagen();
+          getSingleFiles();
         }
       } else {
         Confirm.open({
@@ -813,6 +984,7 @@ export default function EliminarProducto(props) {
   const mostrarCodigos = (i) => {
     setSeleccionado(i);
     console.log(i.nombre);
+    setModalVerCodigos(true);
   };
   const onTodoChange = (value) => {
     this.setState({
@@ -888,6 +1060,13 @@ export default function EliminarProducto(props) {
     }
     return 0;
   };*/
+
+  const [nombreProducto, setNombre] = useState('');
+
+  useEffect(() => {
+    fecthData();
+    getSingleFiles();
+  }, []);
   const Modificar = (element) => {
     setSeleccionado(element);
     setSize('');
@@ -907,13 +1086,39 @@ export default function EliminarProducto(props) {
     setCodes(element.codigos);
     setCantminsel(element.cantidad_minima);
     setCantsel(element.cantidad);
-    // setMarcaSel(element.marca[0].value);
-    //setBodegaSel(element.bodega[0].value);
-    setNombre(element.nombre);
     setTagsTemp(element.codigos);
-    settempProv(tagsProveedores);
-    settagsBodegas(element.bodega);
-    settempBod(tagsBodegas);
+    settempProv(element.proveedores);
+    settagsBodegas(seleccionado.bodega);
+    //settempBod(tagsBodegas);
+    getSingleFiles();
+    const pic = fotos1.filter((item) => item.idProducto === element.codigoPrincipal);
+    // setFiles(pic);
+    if (pic.length > 0) {
+      let f = new File([pic[pic.length - 1]], pic[pic.length - 1].fileName, {
+        type: pic[pic.length - 1].fileType,
+        lastModified: new Date(),
+      });
+      let files2 = [];
+      files2.push(f);
+      setFiles(
+        files2.map((file) =>
+          Object.assign(file, {
+            preview: `http://localhost:3000/${pic[pic.length - 1].filePath
+              .replace('\\', '')
+              .replace('Frontend', '')
+              .replace('\\', '')
+              .replace('\\', '/')
+              .split('public')
+              .join('')
+              .replace('//uploads/', '/uploads/')}`,
+          }),
+        ),
+      );
+      console.log('----------');
+      console.log(pic[pic.length - 1]._id);
+      setidImagen(pic[pic.length - 1]._id);
+      setSingleFiles(pic);
+    }
     setCodigoBarra(element.codigoBarra);
     setprecio1(element.precios[0]);
     setprecio2(element.precios[1]);
@@ -1202,6 +1407,10 @@ export default function EliminarProducto(props) {
     setprecio3(seleccionado.precios[2]);
     setModalModificarPrecios(true);
   };
+  const mostrarPrecios = (elemento) => {
+    setSeleccionado(elemento);
+    setModalVerPrecios(true);
+  };
   const mostrarCodigoBarra = (elemento) => {
     setSeleccionado(elemento);
 
@@ -1474,7 +1683,6 @@ export default function EliminarProducto(props) {
     };
   }
 
-  const [files, setFiles] = useState([]);
   const { getRootProps, getInputProps } = useDropzone({
     accept: 'image/*',
     onDrop: (acceptedFiles) => {
@@ -1485,6 +1693,7 @@ export default function EliminarProducto(props) {
           }),
         ),
       );
+      setSingleFiles(acceptedFiles);
     },
   });
 
@@ -1507,6 +1716,19 @@ export default function EliminarProducto(props) {
   const mostarModalProveedor = () => {
     setModalInsertar(true);
   };
+  const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
+    <a
+      href=""
+      ref={ref}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick(e);
+      }}
+    >
+      <Plus width="50px" height="50px" />
+      {children}
+    </a>
+  ));
   const cerraroAbrirModal = () => {
     setModalInsertar(!modalInsertar);
     fecthProveedores();
@@ -1526,44 +1748,47 @@ export default function EliminarProducto(props) {
     fecthData();
   };
   return (
-    <div align="center">
+    <div align="center" style={{ width: '1800px', maxWidth: '1800px' }}>
       <br />
       <h1 class="text-center">PRODUCTOS EN INVENTARIO</h1>
       <br />
       <br />
-      <Row>
-        <Col style={{ paddingLeft: '100px' }}>
-          <Button
-            style={{
-              'background-color': 'transparent',
-              borderColor: 'transparent',
-              'margin-left': '20px',
-              'border-radius': '26px',
-            }}
-            onClick={() => mostrarModalProducto()}
-          >
-            <Plus width="50px" height="50px" />
-          </Button>
-        </Col>
-        <Col style={{ paddingRight: '650px' }}>
-          <input
-            type="text"
-            id="myInput"
-            onChange={() => myFunction()}
-            placeholder="Encuentre Productos.."
-            title="Type in a name"
-            style={{
-              'background-image': `url('${imagePath}')`,
-              'background-position': '10px 10px',
-              'background-repeat': 'no-repeat',
-              width: '90%',
-              'font-size': '16px',
-              padding: '12px 20px 12px 40px',
-              'border-radius': '26px',
-            }}
-          ></input>
-        </Col>
-      </Row>
+      <div>
+        <Row>
+          <Col style={{ paddingLeft: '100px' }}>
+            <Button
+              style={{
+                'background-color': 'transparent',
+                borderColor: 'transparent',
+                'margin-left': '20px',
+                'border-radius': '26px',
+              }}
+              onClick={() => mostrarModalProducto()}
+            >
+              <Plus width="50px" height="50px" />
+            </Button>
+          </Col>
+          <Col style={{ paddingRight: '650px' }}>
+            <input
+              type="text"
+              id="myInput"
+              onChange={() => myFunction()}
+              placeholder="Encuentre Productos.."
+              title="Type in a name"
+              style={{
+                'background-image': `url('${imagePath}')`,
+                'background-position': '10px 10px',
+                'background-repeat': 'no-repeat',
+                width: '500px',
+                'max-width': '600px',
+                'font-size': '16px',
+                padding: '12px 20px 12px 40px',
+                'border-radius': '26px',
+              }}
+            ></input>
+          </Col>
+        </Row>
+      </div>
       <div
         style={{
           maxHeight: '600px',
@@ -1576,7 +1801,7 @@ export default function EliminarProducto(props) {
           striped
           hover
           align="center"
-          size="sm"
+          size="lg"
           id="myTable"
           style={{
             width: '1200px',
@@ -1600,19 +1825,20 @@ export default function EliminarProducto(props) {
               <th>Inventario</th>
               <th>Precio</th>
               <th class="text-center"> Acción</th>
-              <th>Prueba</th>
             </tr>
           </thead>
           <tbody>
             {data.map((elemento, index) => (
-              <tr>
+              <tr onDoubleClick={() => mostrarModalVerProducto(elemento)}>
                 <td>{(index += 1)}</td>
                 <td>{`${elemento.codigoBarra}`}</td>
                 <td>{elemento.codigoPrincipal}</td>
                 <td style={{ whiteSpace: 'unset' }}>{elemento.descripcion}</td>
-                <td style={{ whiteSpace: 'unset' }}>{elemento.marca[0].name}</td>
+                <td style={{ whiteSpace: 'unset' }}>
+                  {elemento.marca[0] ? elemento.marca[0].name : ''}
+                </td>
                 <td>{elemento.cantidad}</td>
-                <td>{elemento.precios[0]}</td>
+                <td>L. {elemento.precios[0]}.00</td>
                 <td align="center">
                   <Button
                     style={{
@@ -1624,9 +1850,6 @@ export default function EliminarProducto(props) {
                     <Logo width="30px" height="30px" />
                   </Button>
                 </td>
-                <td>
-                  <button onClick={() => mostrarModalVerProducto(elemento)}>ver producto</button>
-                </td>
               </tr>
             ))}
           </tbody>
@@ -1637,18 +1860,72 @@ export default function EliminarProducto(props) {
           isOpen={ModalModificar}
           className="text-center"
           style={{
-            height: '95vh',
-            'overflow-y': 'auto',
+            height: '90vh',
+            'overflow-y': 'overflow',
             top: '20px',
-            maxWidth: '1500px',
+            width: '1700px',
+            maxWidth: '1700px',
             'border-radius': '36px',
-            'overflow-x': 'hidden',
+            'overflow-x': 'overflow',
           }}
         >
-          <h3>EDITAR PRODUCTO</h3>
+          <Dropdown style={{ marginLeft: '-1560px', top: '20px' }}>
+            <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" />
+            <Dropdown.Menu
+              style={{
+                background: 'transparent',
+                border: 'transparent',
+                'padding-left': '55px',
+                'margin-top': '-40px',
+              }}
+            >
+              <Dropdown.Item
+                style={{
+                  borderRadius: '36px',
+                  'background-color': '#fff1d6',
+                  height: '40px',
+                  'margin-top': '2px',
+                  'font-size': '23px',
+                }}
+                eventKey="2"
+                onClick={() => setModalAgregar(true)}
+              >
+                Crear Marca
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  borderRadius: '36px',
+                  'background-color': '#fff1d6',
+                  height: '40px',
+                  'margin-top': '2px',
+                  'font-size': '23px',
+                }}
+                eventKey="3"
+                onClick={() => setModalInsertar(true)}
+              >
+                Crear Proveedor
+              </Dropdown.Item>
+              <Dropdown.Item
+                style={{
+                  borderRadius: '36px',
+                  'background-color': '#fff1d6',
+                  height: '40px',
+                  'margin-top': '2px',
+                  'font-size': '23px',
+                }}
+                eventKey="4"
+                onClick={() => setModalAgregarBodega(true)}
+              >
+                Crear Bodega
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <div>
+            <h2>EDITAR PRODUCTO</h2>
+          </div>
           <ModalBody
             style={{
-              'margin-right': '-80px',
+              'margin-right': '-50px',
               paddingLeft: '200px',
             }}
           >
@@ -1676,35 +1953,53 @@ export default function EliminarProducto(props) {
             </Button>
             <br />
             <AvForm>
-              <Row style={{ marginRight: '200px' }}>
-                <h style={{ marginRight: '-20px', paddingRight: '50px' }}>Descripción</h>
-                <Col sm={{ size: 'auto' }}>
+              <Row style={{ marginLeft: '-105px' }}>
+                <h
+                  style={{
+                    marginRight: '55px',
+                    paddingRight: '60px',
+                    color: '#62d162',
+                    'font-size': '23px',
+                  }}
+                >
+                  Descripcion
+                </h>
+                <Col style={{ marginLeft: '10px ' }}>
                   <AvField
                     style={paddingAvInput()}
                     className="form-control"
                     type="text"
-                    value={seleccionado.descripcion ? seleccionado.descripcion : ''}
                     name="nombre"
                     id="modnombre"
-                    errorMessage="Nombre Inválido"
+                    errorMessage=" "
                     validate={{
                       required: { value: true },
                       pattern: { value: regex },
 
                       minLength: { value: 1 },
                     }}
+                    value={seleccionado ? seleccionado.descripcion : ''}
                     onChange={(e) => manejarCambio(e)}
                   />
-                  <Row>
-                    <h style={{ paddingRight: '-25px', marginLeft: '-150px' }}>Codigo Principal</h>
-                    <Col style={{ paddingRight: '-25px', marginLeft: '30px' }}>
+                  <Row style={{ marginLeft: '-75px' }}>
+                    <h
+                      style={{
+                        paddingRight: '80px',
+                        marginLeft: '-185px',
+                        color: '#62d162',
+                        'font-size': '23px',
+                      }}
+                    >
+                      Codigo Principal
+                    </h>
+                    <Col>
                       <AvField
-                        style={paddingAvInput()}
+                        style={paddingAvInputObligatorio()}
                         className="form-control"
                         type="text"
-                        name="nombre"
-                        id="codigo_principal"
-                        errorMessage="Nombre Inválido"
+                        name="codigoPrincipal"
+                        id="codigoPrincipal"
+                        errorMessage=" "
                         validate={{
                           required: { value: true },
                           pattern: { value: regex },
@@ -1712,12 +2007,17 @@ export default function EliminarProducto(props) {
                         }}
                         value={seleccionado ? seleccionado.codigoPrincipal : ''}
                         onChange={(e) => manejarCambio(e)}
+                        onKeyDown={handleKeyDown}
                       />
                     </Col>
                   </Row>
                 </Col>
-                <h style={{ 'margin-left': '5px' }}>Descripción especifica</h>
-                <Col sm={{ size: 5 }}>
+                <label style={{ 'margin-left': '-100px', fontSize: '23px' }}>
+                  Descripción
+                  <br />
+                  especifica{' '}
+                </label>
+                <Col style={{ 'margin-left': '35px' }}>
                   <FormGroup>
                     <AvField
                       style={paddingDescripciones()}
@@ -1732,7 +2032,7 @@ export default function EliminarProducto(props) {
               </Row>
             </AvForm>
             <Row>
-              <h style={{ marginLeft: '-70px' }}>Códigos de Referencia</h>
+              <h style={{ marginLeft: '-70px', 'font-size': '23px' }}>Códigos de Referencia</h>
               <Col style={{ marginRight: '-200px' }}>
                 <input
                   style={paddingInput()}
@@ -1778,10 +2078,26 @@ export default function EliminarProducto(props) {
                     <Plus width="40px" height="50px" />
                   </Button>
                 </div>
+                <Row>
+                  <AvForm>
+                    <AvRadioGroup id="exento" inline name="producto_exento" required>
+                      <AvRadio
+                        onClick={() => setProductoExento(true)}
+                        label="Producto Exento"
+                        value="exento"
+                      />
+                      <AvRadio
+                        onClick={() => setProductoExento(false)}
+                        label="Producto No Exento"
+                        value="noexento"
+                      />
+                    </AvRadioGroup>
+                  </AvForm>
+                </Row>
                 <Row style={{ marginRight: '-100px', marginLeft: '-50px' }}>
-                  <h style={{ marginLeft: '-50px' }}>Marca</h>
-                  <Col sm={{ size: 'auto' }}>
-                    <div style={{ marginLeft: '-15px' }}>
+                  <label style={{ marginLeft: '-190px', 'font-size': '23px' }}>Marca</label>
+                  <Col>
+                    <div style={{ marginLeft: '102px' }}>
                       <SelectSearch
                         printOptions="on-focus"
                         search
@@ -1794,10 +2110,9 @@ export default function EliminarProducto(props) {
                       />
                     </div>
                     <br />
-                    <label style={{ 'margin-left': '-15px', paddingTop: '-10px' }}># Pasillo</label>
                     <Row>
-                      <h style={{ 'margin-left': '-45px' }}>Bodega</h>
-                      <Col sm={{ size: 'auto' }} style={{ 'margin-left': '-25px' }}>
+                      <h style={{ 'margin-left': '-60px', 'font-size': '23px' }}>Bodega</h>
+                      <Col style={{ 'margin-left': '85px' }}>
                         <SelectSearch
                           class="selectsearch2"
                           printOptions="on-focus"
@@ -1811,40 +2126,92 @@ export default function EliminarProducto(props) {
                           onChange={setSize7}
                         />
                       </Col>
-                      <AvForm>
-                        <input
-                          style={{
-                            width: '90px',
-                            'margin-left': '20px',
-                            'border-radius': '26px',
-                          }}
-                          className="form-control"
-                          type="Number"
-                          onChange={(e) => manejarCambioPrecioBodega(e)}
-                          value={precioprovedor6}
-                          min={1}
-                        />
+                      <Col
+                        style={{
+                          width: '90px',
+                          'margin-left': '25px',
+                        }}
+                      >
+                        <div>
+                          <label
+                            style={{
+                              fontSize: '14px',
+                              top: '-22px',
+                              position: 'relative',
+                              'margin-left': '-40px',
+                            }}
+                          >
+                            Cantidad
+                          </label>
+                          <input
+                            style={{
+                              width: '90px',
+                              'border-radius': '26px',
+                              top: '-31px',
+                              position: 'relative',
+                            }}
+                            className="form-control"
+                            type="Number"
+                            onChange={(e) => manejarCambioPrecioBodega(e)}
+                            value={precioprovedor1}
+                            min={1}
+                          />
+                        </div>
+                      </Col>
+                      <Col
+                        style={{
+                          width: '80px',
+                          'margin-left': '-45px',
+                        }}
+                      >
+                        <div>
+                          <label
+                            style={{
+                              fontSize: '14px',
+                              top: '-22px',
+                              position: 'relative',
+                              'margin-left': '-60px',
+                            }}
+                          >
+                            # Pasillo
+                          </label>
+                          <input
+                            style={{
+                              width: '70px',
+                              'border-radius': '26px',
+                              top: '-31px',
+                              position: 'relative',
+                            }}
+                            className="form-control"
+                            type="Number"
+                            onChange={(e) => manejarCambioPasillo(e)}
+                            value={precioprovedor6}
+                            min={1}
+                          />
+                        </div>
+                      </Col>
+                      <Col style={{ width: '40px' }}>
                         <Button
                           style={{
                             'background-color': 'transparent',
                             border: 'none',
                             position: 'absolute',
-                            top: '78px',
-                            left: '467px',
+                            top: '-13px',
                             outline: 'none',
                             'box-shadow': 'none',
+                            'margin-left': '-130px',
                           }}
                           onClick={() => onChangeBodega()}
                         >
                           <Plus width="40px" height="50px" />
                         </Button>
-                      </AvForm>
+                      </Col>
                       <div style={paddingdivbodegas()}>
                         <ul style={paddingulbodegas()}>
                           {tagsBodegas.map((tag, index) => (
                             <li style={paddingmain()} key={index}>
                               <span style={paddingtitle()}>
-                                {tag.name}, L. {tag.precio}
+                                {tag.name},# {tag.cantBodega} ,Pasillo {tag.numPasillo}
                               </span>
                               <i
                                 style={paddingclosebodega()}
@@ -1854,7 +2221,6 @@ export default function EliminarProducto(props) {
                               </i>
                             </li>
                           ))}
-
                           <br />
                         </ul>
                       </div>
@@ -1862,15 +2228,19 @@ export default function EliminarProducto(props) {
                     <br />
                     <br />
                     <Row style={{ marginLeft: '-60px' }}>
-                      <h>Inventario</h>
-                      <Col sm={{ size: 'auto' }} style={{ marginLeft: '50px', top: '-20px' }}>
-                        <h style={{ 'margin-left': '5px' }}>Cantidad</h>
+                      <label style={{ 'font-size': '23px' }}>Inventario</label>
+                      <Col
+                        sm={{ size: 'auto' }}
+                        style={{ marginLeft: '95px', top: '-20px', 'font-size': '20px' }}
+                      >
+                        <h style={{ 'margin-left': '5px', color: '#62d162' }}>Cantidad</h>
                         <input
                           style={paddingAvInputCantidades()}
                           className="form-control"
                           type="number"
                           id="modcantidad"
                           value={cantsel}
+                          disabled={cantsel}
                           min={
                             document.getElementById('cantidad_minima')
                               ? document.getElementById('cantidad_minima').value
@@ -1880,7 +2250,9 @@ export default function EliminarProducto(props) {
                         />
                       </Col>
                       <Col sm={{ size: 'auto' }} style={{ top: '-20px' }}>
-                        <h style={{ 'margin-left': '-15px' }}>Cantidad Mínima</h>
+                        <h style={{ 'margin-left': '-15px', 'font-size': '20px' }}>
+                          Cantidad Mínima
+                        </h>
                         <input
                           style={paddingAvInputCantidades()}
                           className="form-control"
@@ -1894,16 +2266,16 @@ export default function EliminarProducto(props) {
                       </Col>
                     </Row>
                     <Row>
-                      <h style={{ marginLeft: '-90px' }}>Código de Barra</h>
+                      <h style={{ marginLeft: '-50px', 'font-size': '23px' }}>Codigo de Barra</h>
                       <AvForm>
-                        <Col style={{ paddingRight: '-25px', marginLeft: '40px' }}>
+                        <Col style={{ paddingRight: '-25px', marginLeft: '35px' }}>
                           <AvField
                             style={paddingAvInput()}
                             className="form-control"
                             type="text"
                             name="nombre"
                             id="nombre_agregar"
-                            errorMessage="Nombre Inválido"
+                            errorMessage="Codigo de Barra Inválido"
                             validate={{
                               required: { value: true },
                               pattern: { value: regex },
@@ -1911,6 +2283,7 @@ export default function EliminarProducto(props) {
                             }}
                             value={seleccionado ? seleccionado.codigoBarra : ''}
                             onChange={(e) => manejarCambio(e)}
+                            onKeyDown={handleKeyDown}
                           />
                           <Row>
                             <Col sm={{ size: 'auto' }}>
@@ -1923,20 +2296,24 @@ export default function EliminarProducto(props) {
                   </Col>
                 </Row>
               </Col>
-              <h style={{ marginLeft: '-5px' }}>Área</h>
+              <Col style={{ 'max-width': '120px' }}>
+                <label style={{ fontSize: '23px', position: 'relative', 'margin-left': '13px' }}>
+                  Departamento
+                </label>
+              </Col>
               <Col>
                 <AvForm>
                   <AvField
                     style={{
                       'border-radius': '26px',
                       width: '320px',
-                      marginLeft: '-10px',
+                      marginLeft: '45px',
                     }}
                     className="form-control"
                     type="text"
                     name="area"
                     id="modarea"
-                    errorMessage="Campo Obligatorio"
+                    errorMessage=" "
                     validate={{
                       required: { value: true },
                       pattern: { value: regex },
@@ -1946,51 +2323,55 @@ export default function EliminarProducto(props) {
                     onChange={(e) => manejarCambio(e)}
                   />
                 </AvForm>
-                <Row style={{ marginLeft: '-120px' }}>
-                  <label style={{ marginTop: '25px' }}>Proveedor</label>
-                  <SelectSearch
-                    search
-                    onChange={setSize6}
-                    placeholder="Encuentre el Proveedor del Producto"
-                    required
-                    autoComplete
-                    options={proveedores}
-                    onClick={handleOnChange(size6)}
-                    value={size6}
-                  />
-                  <Col sm={{ size: 'auto' }} style={{ top: '-15px', marginLeft: '60px' }}>
-                    <label style={{ top: '-200px' }}>Precio Proveedor</label>
+                <Row style={{ top: '30px', position: 'relative' }}>
+                  <h style={{ fontSize: '23px', marginLeft: '-90px' }}>Proveedor</h>
+                  <Col>
+                    <SelectSearch
+                      search
+                      onChange={setSize6}
+                      placeholder="Encuentre el Proveedor del Producto"
+                      required
+                      autoComplete
+                      options={proveedores}
+                      onClick={handleOnChange(size6)}
+                      value={size6}
+                    />
+                  </Col>
+                  <Col style={{ marginLeft: '30px', 'max-width': '90px' }}>
                     <input
                       style={paddingAvInputCantidades()}
                       className="form-control"
                       type="number"
                       id="precioprov3"
                       onChange={(e) => manejarCambioPrecioProveedor(e)}
+                      value={precioprovedor7}
                       min={1}
                     />
+                  </Col>
+                  <Col style={{ width: '40px' }}>
                     <Button
                       style={{
                         'background-color': 'transparent',
                         border: 'none',
                         position: 'absolute',
-                        top: '20px',
-                        left: '120px',
                         outline: 'none',
                         'box-shadow': 'none',
+                        top: '-10px',
+                        marginLeft: '-100px',
                       }}
-                      onClick={() => onChangeProv()}
+                      onClick={(e) => onChangeProv(e)}
                     >
                       <Plus width="40px" height="50px" />
                     </Button>
                   </Col>
-                  <div style={paddingdiv()}>
-                    <ul style={paddingul()}>
+                  <div style={paddingdivprov()}>
+                    <ul style={paddingulprov()}>
                       {tagsProveedores.map((tag, index) => (
-                        <li style={paddingmain()} key={index}>
-                          <span style={paddingtitle()}>
+                        <li style={paddingmainprov()} key={index}>
+                          <span style={paddingtitleprov()}>
                             {tag.name}, L. {tag.precio}
                           </span>
-                          <i style={paddingclose()} onClick={() => removeTagsProv(index)}>
+                          <i style={paddingcloseprov()} onClick={() => removeTagsProv(index)}>
                             <Remove width="20px" height="20px" />
                           </i>
                         </li>
@@ -2000,68 +2381,80 @@ export default function EliminarProducto(props) {
                     </ul>
                   </div>
                   <div />
-                  <AvForm
-                    style={{
-                      marginTop: '50px',
-                    }}
-                  >
-                    <Row>
-                      <label style={{ 'margin-left': '40px', marginTop: '-20px' }}>
-                        Precios de
-                        <br /> Venta
-                      </label>
-                      <Col sm={{ size: 'auto' }} style={{ top: '-30px' }}>
-                        <div>
-                          <h style={{ paddingRight: '-300px' }}>Precio 1</h>
-                          <input
-                            style={paddingAvInputCantidades()}
-                            className="form-control"
-                            type="Number"
-                            name="modprecio1"
-                            id="modprecio1"
-                            value={precio1}
-                            onChange={(event) => setprecio1(event.target.value)}
-                            validate={{}}
-                          />
-                        </div>
-                      </Col>
-                      <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
-                        <label style={{ 'margin-right': '5px' }}>Precio 2</label>
-                        <AvField
-                          style={paddingAvInputCantidades()}
-                          className="form-control"
-                          type="Number"
-                          name="Fecha"
-                          name="precio2"
-                          id="modprecio2"
-                          validate={{
-                            required: { value: false },
-                          }}
-                          value={precio2}
-                          // value={elementoSeleccionado ? elementoSeleccionado.Fecha : ''}
-                          // onChange={manejarCambio}
-                        />
-                      </Col>
-                      <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
-                        <label style={{ 'margin-left': '10px' }}>Precio 3</label>
-                        <AvField
-                          style={paddingAvInputCantidades()}
-                          className="form-control"
-                          type="Number"
-                          name="Etiqueta"
-                          name="precio3"
-                          id="modprecio3"
-                          validate={{
-                            required: { value: false },
-                          }}
-                          value={precio3}
-                          // value={elementoSeleccionado ? elementoSeleccionado.Etiqueta : ''}
-                          // onChange={manejarCambio}
-                        />
-                      </Col>
-                    </Row>
-                  </AvForm>
                 </Row>
+                <AvForm
+                  style={{
+                    marginTop: '50px',
+                  }}
+                >
+                  <Row>
+                    <label
+                      style={{ 'margin-left': '-110px', marginTop: '-20px', fontSize: '23px' }}
+                    >
+                      Precios de
+                      <br /> Venta
+                    </label>
+                    <Col sm={{ size: 'auto' }} style={{ 'margin-left': '8px', top: '-30px' }}>
+                      <div style={{ 'padding-left': '40px' }}>
+                        <h
+                          style={{
+                            paddingRight: '-300px',
+                            color: '#62d162',
+                            fontSize: '23px',
+                            top: '-5px',
+                            position: 'relative',
+                          }}
+                        >
+                          Precio 1
+                        </h>
+                        <AvField
+                          style={paddingAvInputCantidades()}
+                          className="form-control"
+                          type="Number"
+                          name="modprecio1"
+                          id="modprecio1"
+                          errorMessage="Obligatorio"
+                          validate={{
+                            required: { value: true },
+                          }}
+                          min={1}
+                          onChange={(event) => setprecio1(event.target.value)}
+                          value={precio1}
+                        />
+                      </div>
+                    </Col>
+                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
+                      <label style={{ 'margin-right': '5px', fontSize: '23px' }}>Precio 2</label>
+                      <AvField
+                        style={paddingAvInputCantidades()}
+                        className="form-control"
+                        type="Number"
+                        name="Fecha"
+                        name="modprecio2"
+                        id="modprecio2"
+                        validate={{
+                          required: { value: false },
+                        }}
+                        value={precio2}
+                      />
+                    </Col>
+                    <Col sm={{ size: 'auto' }} style={{ marginLeft: '-20px', top: '-35px' }}>
+                      <label style={{ 'margin-left': '10px', fontSize: '23px' }}>Precio 3</label>
+                      <AvField
+                        style={paddingAvInputCantidades()}
+                        className="form-control"
+                        type="Number"
+                        name="Etiqueta"
+                        name="modprecio3"
+                        id="modprecio3"
+                        validate={{
+                          required: { value: false },
+                        }}
+                        value={precio3}
+                      />
+                    </Col>
+                  </Row>
+                </AvForm>
                 <Row style={{ marginTop: '-25px' }}>
                   <Col style={{ 'margin-left': '-50px' }}>
                     <Button
@@ -2071,12 +2464,12 @@ export default function EliminarProducto(props) {
                         'margin-left': '-20px',
                         'border-radius': '26px',
                       }}
-                      onClick={() => setFiles([])}
+                      onClick={() => removerImagen()}
                     >
                       <Remove width="25px" height="25px" />
                     </Button>
                     <h style={{ 'margin-left': '-240px' }}>Imagen del Producto</h>
-                    <section style={{ paddingLeft: '40px' }} className="container">
+                    <section style={{ paddingLeft: '100px' }} className="container">
                       <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
                         <input {...getInputProps()} />
                         <br />
@@ -2085,7 +2478,7 @@ export default function EliminarProducto(props) {
                       </div>
                     </section>
                     <Col>
-                      <div style={{ marginTop: -170, marginRight: '350px' }}>
+                      <div style={{ marginTop: -200, marginRight: '350px' }}>
                         <aside style={thumbsContainer}>{thumbs}</aside>
                       </div>
                     </Col>
@@ -2093,6 +2486,7 @@ export default function EliminarProducto(props) {
                 </Row>
               </Col>
             </Row>
+            .....
             <br />
           </ModalBody>
           <ModalFooter>
@@ -2130,290 +2524,289 @@ export default function EliminarProducto(props) {
                 cursor: 'pointer',
               }}
               className="btn btn-danger"
-              onClick={() => setModalModificar(false)}
+              onClick={() => cancelarMod()}
             >
               Cancelar
+            </button>
+          </ModalFooter>
+        </Modal>
+        {/*------------------------MODAL VER PRODUCTO-------------------------- */}
+        <Modal
+          isOpen={modalVerProducto}
+          className="text-center"
+          style={{
+            'overflow-y': 'overflow',
+            top: '20px',
+            width: '1400px',
+            maxWidth: '1400px',
+            'border-radius': '36px',
+            'overflow-x': 'overflow',
+          }}
+        >
+          <div>
+            <h3>Información detallada del producto</h3>
+          </div>
+          <ModalBody>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col>
+                <label style={{ color: '#ffa500' }}>Información de Producto</label>
+              </Col>
+              <Col>
+                <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Descripcion:</label>
+              </Col>
+              <Col style={{ maxWidth: '380px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="text"
+                  name="descripcion"
+                  id="descripcionver"
+                  value={seleccionado ? seleccionado.descripcion : ''}
+                  readOnly
+                />
+              </Col>
+              <Col>
+                <section style={{ paddingLeft: '100px' }} className="container">
+                  <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
+                    <br />
+                    <br />
+                  </div>
+                </section>
+                <Col>
+                  <div style={{ marginTop: -200, marginRight: '350px' }}>
+                    <aside style={thumbsContainer}>{thumbs}</aside>
+                  </div>
+                </Col>
+              </Col>
+              <br />
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Marca:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="text"
+                  name="verMarca"
+                  id="verMarca"
+                  value={marcaSel}
+                  readOnly
+                />
+              </Col>
+              <br />
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Codigo Principal:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="text"
+                  name="codigoPrincipal"
+                  id="codigoPrincipal"
+                  value={seleccionado.codigoPrincipal ? seleccionado.codigoPrincipal : ''}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '270px' }}>
+                <label>Códigos de Referencia:</label>
+              </Col>
+              <Col>
+                <div>
+                  <ul>
+                    {tags.map((tag, index) => (
+                      <li key={index}>
+                        <span>{tag}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Código de Barra:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <Barcode value={seleccionado.codigoBarra} />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label style={{ color: '#ffa500' }}>Proveedores:</label>
+              </Col>
+              <Col>
+                <div>
+                  <ul>
+                    {tagsProveedores.map((tag, index) => (
+                      <li key={index}>
+                        <span>{tag.name}</span>
+                      </li>
+                    ))}
+
+                    <br />
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '350px' }}>
+                <label>Descripción Específica:</label>
+              </Col>
+              <Col style={{ maxWidth: '440px', marginLeft: '-50px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="textarea"
+                  name="verDescripcion_especifica"
+                  id="verDescripcion_especifica"
+                  value={seleccionado ? seleccionado.descripcion_larga : ''}
+                />
+              </Col>
+              <Col>
+                <label style={{ color: '#ffa500' }}>Precios de Venta:</label>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Producto:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input
+                  style={paddinginputVerProductoExento()}
+                  type="text"
+                  name="codigoPrincipal"
+                  id="codigoPrincipal"
+                  value={Exento}
+                  color="#ffa500"
+                  readOnly
+                />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label>Precio 1:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  name="verprecio2"
+                  id="verprecio2"
+                  value={precio1}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Departamento:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="textarea"
+                  name="verDepartamento"
+                  id="verDepartamento"
+                  value={seleccionado ? seleccionado.area : ''}
+                  readOnly
+                />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label>Precio 2:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  name="verprecio2"
+                  id="verprecio2"
+                  value={precio2}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label style={{ color: '#ffa500' }}>Inventario:</label>
+              </Col>
+              <Col style={{ maxWidth: '480px' }}>
+                <input style={paddinginputVerProducto()} type="Number" readOnly />
+              </Col>
+              <Col style={{ maxWidth: '200px' }}>
+                <label>Precio 3:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="Number"
+                  name="verprecio3"
+                  id="verprecio3"
+                  value={precio3}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '300px' }}>
+                <label>Inventario total:</label>
+              </Col>
+              <Col>
+                <input
+                  style={paddinginputVerProducto()}
+                  type="textarea"
+                  name="verDepartamento"
+                  value={cantsel}
+                  readOnly
+                />
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+              <Col style={{ maxWidth: '270px' }}>
+                <label>Bodegas:</label>
+              </Col>
+              <Col>
+                <div>
+                  <ul>
+                    {tagsBodegas.map((tag, index) => (
+                      <li key={index}>
+                        <span>
+                          Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
+                          {tag.numPasillo}
+                          {tag.pasillo}
+                        </span>
+                      </li>
+                    ))}
+                    <br />
+                  </ul>
+                </div>
+              </Col>
+            </Row>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              style={{
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'red',
+                border: '2px solid red',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-danger"
+              onClick={() => cerrarModalVerProducto()}
+            >
+              Cerrar
             </button>
           </ModalFooter>
         </Modal>
       </div>
       <AgregarBodega isOpen={modalAgregarBodega} change={() => cerraroAbrirModalBodega()} />
       <AgregarProducto isOpen={modalAgregarProducto} change={() => cerraroAbrirModalProducto()} />
-      {/*------------------------MODAL VER PRODUCTO-------------------------- */}
-      <Modal
-        isOpen={modalVerProducto}
-        className="text-center"
-        style={{
-          height: '100vh',
-          'overflow-y': 'overflow',
-          top: '20px',
-          width: '1700px',
-          maxWidth: '1700px',
-          'border-radius': '36px',
-          'overflow-x': 'hidden',
-        }}
-      >
-        <div>
-          <h3>Información detallada del producto</h3>
-        </div>
-        <ModalBody>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col>
-              <label style={{ color: '#ffa500' }}>Información de Producto</label>
-            </Col>
-            <Col>
-              <label style={{ color: '#ffa500' }}>Imagen de Producto:</label>
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Descripcion:</label>
-            </Col>
-            <Col style={{ maxWidth: '380px' }}>
-              <input
-                style={paddinginputVerProducto()}
-                type="text"
-                name="descripcion"
-                id="descripcionver"
-                value={seleccionado ? seleccionado.descripcion : ''}
-                readOnly
-              />
-            </Col>
-            <Col>
-              <section style={{ paddingLeft: '100px' }} className="container">
-                <div style={baseStyle} {...getRootProps({ className: 'dropzone' })}>
-                  <br />
-                  <br />
-                </div>
-              </section>
-              <Col>
-                <div style={{ marginTop: -170, marginRight: '350px' }}>
-                  <aside style={thumbsContainer}>{thumbs}</aside>
-                </div>
-              </Col>
-            </Col>
-            <br />
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Marca:</label>
-            </Col>
-            <Col>
-              <input
-                style={paddinginputVerProducto()}
-                type="text"
-                name="verMarca"
-                id="verMarca"
-                value={marcaSel}
-                readOnly
-              />
-            </Col>
-            <br />
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Codigo Principal:</label>
-            </Col>
-            <Col>
-              <input
-                style={paddinginputVerProducto()}
-                type="text"
-                name="codigoPrincipal"
-                id="codigoPrincipal"
-                value={seleccionado.codigoPrincipal ? seleccionado.codigoPrincipal : ''}
-                readOnly
-              />
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '270px' }}>
-              <label>Códigos de Referencia:</label>
-            </Col>
-            <Col>
-              <div>
-                <ul>
-                  {tags.map((tag, index) => (
-                    <li key={index}>
-                      <span>{tag}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Código de Barra:</label>
-            </Col>
-            <Col style={{ maxWidth: '480px' }}>
-              <Barcode value={seleccionado.codigoBarra} />
-            </Col>
-            <Col style={{ maxWidth: '200px' }}>
-              <label style={{ color: '#ffa500' }}>Proveedores:</label>
-            </Col>
-            <Col>
-              <div>
-                <ul>
-                  {tagsProveedores.map((tag, index) => (
-                    <li key={index}>
-                      <span>{tag.name}</span>
-                    </li>
-                  ))}
-
-                  <br />
-                </ul>
-              </div>
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Descripción Específica:</label>
-            </Col>
-            <Col style={{ maxWidth: '480px' }}>
-              <input
-                style={paddinginputVerProducto()}
-                type="textarea"
-                name="verDescripcion_especifica"
-                id="verDescripcion_especifica"
-                value={seleccionado ? seleccionado.descripcion_larga : ''}
-              />
-            </Col>
-            <Col>
-              <label style={{ color: '#ffa500' }}>Precios de Venta:</label>
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Producto:</label>
-            </Col>
-            <Col style={{ maxWidth: '480px' }}>
-              <input
-                style={paddinginputVerProductoExento()}
-                type="text"
-                name="codigoPrincipal"
-                id="codigoPrincipal"
-                value={Exento}
-                color="#ffa500"
-                readOnly
-              />
-            </Col>
-            <Col style={{ maxWidth: '200px' }}>
-              <label>Precio 1:</label>
-            </Col>
-            <Col>
-              <input
-                style={paddinginputVerProducto()}
-                type="Number"
-                name="verprecio2"
-                id="verprecio2"
-                value={precio1}
-                readOnly
-              />
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Departamento:</label>
-            </Col>
-            <Col style={{ maxWidth: '480px' }}>
-              <input
-                style={paddinginputVerProducto()}
-                type="textarea"
-                name="verDepartamento"
-                id="verDepartamento"
-                value={seleccionado ? seleccionado.area : ''}
-                readOnly
-              />
-            </Col>
-            <Col style={{ maxWidth: '200px' }}>
-              <label>Precio 2:</label>
-            </Col>
-            <Col>
-              <input
-                style={paddinginputVerProducto()}
-                type="Number"
-                name="verprecio2"
-                id="verprecio2"
-                value={precio2}
-                readOnly
-              />
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label style={{ color: '#ffa500' }}>Inventario:</label>
-            </Col>
-            <Col style={{ maxWidth: '480px' }}>
-              <input style={paddinginputVerProducto()} type="Number" readOnly />
-            </Col>
-            <Col style={{ maxWidth: '200px' }}>
-              <label>Precio 3:</label>
-            </Col>
-            <Col>
-              <input
-                style={paddinginputVerProducto()}
-                type="Number"
-                name="verprecio3"
-                id="verprecio3"
-                value={precio3}
-                readOnly
-              />
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '300px' }}>
-              <label>Inventario total:</label>
-            </Col>
-            <Col>
-              <input
-                style={paddinginputVerProducto()}
-                type="textarea"
-                name="verDepartamento"
-                value={cantsel}
-                readOnly
-              />
-            </Col>
-          </Row>
-          <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-            <Col style={{ maxWidth: '270px' }}>
-              <label>Bodegas:</label>
-            </Col>
-            <Col>
-              <div>
-                <ul>
-                  {tagsBodegas.map((tag, index) => (
-                    <li key={index}>
-                      <span>
-                        Nombre: {tag.name} <br /> Cantidad: {tag.cantBodega} <br /> Pasillo:
-                        {tag.numPasillo}
-                        {tag.pasillo}
-                      </span>
-                    </li>
-                  ))}
-                  <br />
-                </ul>
-              </div>
-            </Col>
-          </Row>
-        </ModalBody>
-        <ModalFooter>
-          <button
-            style={{
-              'border-radius': '26px',
-              'border-color': '#ff9800',
-              color: 'red',
-              border: '2px solid red',
-              'background-color': 'white',
-              'font-size': '16px',
-              cursor: 'pointer',
-            }}
-            className="btn btn-danger"
-            onClick={() => cerrarModalVerProducto()}
-          >
-            Cerrar
-          </button>
-        </ModalFooter>
-      </Modal>
     </div>
   );
 }

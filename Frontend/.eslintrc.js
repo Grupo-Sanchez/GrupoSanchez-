@@ -39,5 +39,7 @@ module.exports = {
     'function-paren-newline': 0,
     'arrow-body-style': 0,
     'no-unused-expressions': 0,
+    'padded-blocks': 0,
+    'no-confusing-arrow': 0,
   },
 };

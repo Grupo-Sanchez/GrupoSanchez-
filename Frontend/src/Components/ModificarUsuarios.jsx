@@ -29,11 +29,11 @@ import {
 import '../Styles/InterfazProducto.css';
 import axios from 'axios';
 import SelectSearch from 'react-select-search';
-import imagePath from '../Icons/lupa1.jpeg';
 import Agregar from './AgregarUsuario';
 import { ReactComponent as EditLogo } from '../Icons/edit.svg';
 import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
 import { ReactComponent as AgregarLogo } from '../Icons/plus.svg';
+import LupaIcon from '../Icons/lupa1.jpeg';
 import { Confirm } from './Confirm';
 
 export default function ModificarUsuario(props) {
@@ -66,7 +66,14 @@ export default function ModificarUsuario(props) {
       width: '320px',
     };
   }
-
+  function paddingAvInputGreen() {
+    return {
+      'margin-left': '-20px',
+      'border-radius': '26px',
+      'border-color': '#62d162',
+      width: '320px',
+    };
+  }
   const handleChange2 = (e) => {
     agregarMarca(e);
   };
@@ -74,14 +81,14 @@ export default function ModificarUsuario(props) {
   const [modalModificar, setModalModificarUsuario] = useState(false);
 
   const onDelete = (memberId) => {
-    axios.delete(`http://Localhost:3001/api/users/${memberId}`);
+    axios.delete(`http://localhost:3001/api/users/${memberId}`);
     setModalModificarUsuario(false);
   };
 
   const [data, setData] = useState([]);
 
   const fecthData = async () => {
-    await axios.get('http://Localhost:3001/api/users').then((response) => {
+    await axios.get('http://localhost:3001/api/users').then((response) => {
       setData(response.data);
     });
   };
@@ -204,6 +211,7 @@ export default function ModificarUsuario(props) {
   };
 
   const [modalAgregar, setModalAgregar] = useState(false);
+  const [modalVerUsuario, setModalVerUsuario] = useState(false);
 
   const cerraroAbrirModal = () => {
     setModalAgregar(!modalAgregar);
@@ -214,36 +222,65 @@ export default function ModificarUsuario(props) {
     setModalAgregar(true);
   };
 
+  function paddinginputVerUsuario() {
+    return {
+      display: 'flex',
+      'align-items': 'left',
+      'flex-wrap': 'wrap',
+      'min-height': '40px',
+      width: '320px',
+      border: '0px solid',
+      padding: '0 8px',
+      outline: 'none',
+    };
+  }
+
+  const mostrarModalVerUsuario = (elemento) => {
+    setSeleccionado(elemento);
+    setMarcaSel(elemento.rol[0].value);
+    setModalVerUsuario(true);
+  };
+
+  const cerrarModalVerUsuario = () => {
+    setModalVerUsuario(false);
+  };
+
   return (
     <div align="center">
       <h1 class="text-center">USUARIOS</h1>
-      <Button
-        style=
-        {{
-          'background-color': 'transparent',
-          borderColor: 'transparent',
-        }}
-        onClick={() => mostrarModal()}
-        >
-        <AgregarLogo width="30px" height="30px" />
-      </Button>
-      <input
-        type="text"
-        id="myInput"
-        onChange={() => myFunction()}
-        placeholder="Buscar por identificacion"
-        title="Type in a name"
-        style={{
-          'background-image': `url('${imagePath}')`,
-          'background-position': '10px 10px',
-          'background-repeat': 'no-repeat',
-          width: '50%',
-          'font-size': '16px',
-          padding: '12px 20px 12px 40px',
-          border: '1px solid #ddd',
-          'margin-bottom': '12px',
-        }}
-      ></input>
+      <Row>
+        <Col sm="3">
+          <Button
+            style={{
+              'background-color': 'transparent',
+              borderColor: 'transparent',
+              'margin-left': '20px',
+              'border-radius': '26px',
+            }}
+            onClick={() => mostrarModal()}
+          >
+            <AgregarLogo width="50px" height="50px" />
+          </Button>
+        </Col>
+        <Col sm={{ size: 6, order: 2, offset: 0 }}>
+          <input
+            type="text"
+            id="myInput"
+            onChange={() => myFunction()}
+            placeholder="Buscar por identificacion"
+            title="Type in a name"
+            style={{
+              'background-image': `url('${LupaIcon}')`,
+              'background-position': '10px 10px',
+              'background-repeat': 'no-repeat',
+              width: '90%',
+              'font-size': '16px',
+              padding: '12px 20px 12px 40px',
+              'border-radius': '26px',
+            }}
+          ></input>
+        </Col>
+      </Row>
       <div
         style={{
           maxHeight: '600px',
@@ -255,7 +292,7 @@ export default function ModificarUsuario(props) {
           striped
           hover
           align="center"
-          size="sm"
+          size="lg"
           id="myTable"
           style={{
             'max-width': '360px',
@@ -282,7 +319,7 @@ export default function ModificarUsuario(props) {
           </thead>
           <tbody>
             {data.map((elemento, index) => (
-              <tr>
+              <tr onDoubleClick={() => mostrarModalVerUsuario(elemento)}>
                 <td>{elemento.identidad}</td>
                 <td>{elemento.nombre}</td>
                 <td>{elemento.primer_apellido}</td>
@@ -315,60 +352,42 @@ export default function ModificarUsuario(props) {
             maxWidth: '1200px',
           }}
         >
-          <Row>
-            <Col>
-              <div>
-                <h3>MODIFICAR USUARIO</h3>
-              </div>
-            </Col>
-            <Col>
-              <Button
-                style={{
-                  'background-color': 'transparent',
-                  borderColor: 'transparent',
-                }}
-                color="danger"
-                onClick={() =>
-                  Confirm.open({
-                    title: '¡Advertencia!',
-                    message: '¿Esta seguro que desea eliminar el usuario?.',
-                    onok: () => {
-                      onDelete(seleccionado._id);
-                    },
-                  })
-                }
-              >
-                <BasureroLogo fill="#dc0000" width="30px" height="30px" />
-              </Button>
-            </Col>
-          </Row>
+          <div>
+            <h3>MODIFICAR USUARIO</h3>
+          </div>
+
+          <Button
+            style={{
+              'background-color': 'transparent',
+              borderColor: 'transparent',
+              marginLeft: '1050px',
+              top: '-20px',
+              position: 'relative',
+            }}
+            color="danger"
+            onClick={() =>
+              Confirm.open({
+                title: '¡Advertencia!',
+                message: '¿Esta seguro que desea eliminar el usuario?.',
+                onok: () => {
+                  onDelete(seleccionado._id);
+                },
+              })
+            }
+          >
+            <BasureroLogo fill="#dc0000" width="50px" height="50px" />
+          </Button>
+
           <ModalBody>
             <div>
               <AvForm>
-                <Row>
-                  <Col>Identidad</Col>
+                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                   <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Numero de identidad Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regexSoloNumeros },
-                        minLength: { value: 13 },
-                      }}
-                      maxLength="13"
-                      className="form-control"
-                      type="text"
-                      name="identidad"
-                      id="identidad"
-                      value={seleccionado ? seleccionado.identidad : ''}
-                      onChange={manejarCambio}
-                    />
+                    <label style={{ color: '#62d162' }}>Primer nombre</label>
                   </Col>
-                  <Col>Primer Nombre</Col>
                   <Col>
                     <AvField
-                      style={paddingAvInput()}
+                      style={paddingAvInputGreen()}
                       errorMessage="Nombre Inválido"
                       validate={{
                         required: { value: true },
@@ -383,34 +402,12 @@ export default function ModificarUsuario(props) {
                       onChange={manejarCambio}
                     />
                   </Col>
-                </Row>
-              </AvForm>
-            </div>
-            <div>
-              <AvForm>
-                <Row>
-                  <Col>Segundo nombre</Col>
                   <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Nombre Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regex },
-                        minLength: { value: 1 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="segundo_nombre"
-                      id="segundo_nombre"
-                      value={seleccionado ? seleccionado.segundo_nombre : ''}
-                      onChange={manejarCambio}
-                    />
+                    <label style={{ color: '#62d162' }}>Primer apellido</label>
                   </Col>
-                  <Col>Primer apellido</Col>
                   <Col>
                     <AvField
-                      style={paddingAvInput()}
+                      style={paddingAvInputGreen()}
                       errorMessage="Apellido Inválido"
                       validate={{
                         required: { value: true },
@@ -428,16 +425,39 @@ export default function ModificarUsuario(props) {
                 </Row>
               </AvForm>
             </div>
+
             <div>
               <AvForm>
-                <Row>
-                  <Col>Segundo apellido</Col>
+                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                  <Col>
+                    <label>Segundo nombre</label>
+                  </Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Nombre Inválido"
+                      validate={{
+                        required: { value: false },
+                        pattern: { value: regex },
+                        minLength: { value: 1 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="segundo_nombre"
+                      id="segundo_nombre"
+                      value={seleccionado ? seleccionado.segundo_nombre : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>
+                    <label>Segundo apellido</label>
+                  </Col>
                   <Col>
                     <AvField
                       style={paddingAvInput()}
                       errorMessage="Apellido Inválido"
                       validate={{
-                        required: { value: true },
+                        required: { value: false },
                         pattern: { value: regex },
                         minLength: { value: 1 },
                       }}
@@ -449,7 +469,78 @@ export default function ModificarUsuario(props) {
                       onChange={manejarCambio}
                     />
                   </Col>
-                  <Col>RTN</Col>
+                </Row>
+              </AvForm>
+            </div>
+
+            <div>
+              <AvForm>
+                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                  <Col>
+                    <label style={{ color: '#62d162' }}>Nombre de usuario</label>
+                  </Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInputGreen()}
+                      errorMessage="Revise el formato"
+                      className="form-control"
+                      type="text"
+                      name="usuario"
+                      id="usuario"
+                      //value={seleccionado ? seleccionado.usuario : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>
+                    <label style={{ color: '#62d162' }}>No. Identidad</label>
+                  </Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInputGreen()}
+                      errorMessage="Numero de identidad inválido"
+                      validate={{
+                        required: { value: true },
+                        pattern: { value: regexSoloNumeros },
+                        minLength: { value: 13 },
+                      }}
+                      maxLength="13"
+                      className="form-control"
+                      type="text"
+                      name="identidad"
+                      id="identidad"
+                      value={seleccionado ? seleccionado.identidad : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                </Row>
+              </AvForm>
+            </div>
+            <div>
+              <AvForm>
+                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                  <Col>
+                    <label>Telefono</label>
+                  </Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInput()}
+                      errorMessage="Telefono Inválido"
+                      validate={{
+                        required: { value: false },
+                        pattern: { value: regexSoloNumeros },
+                        minLength: { value: 1 },
+                      }}
+                      className="form-control"
+                      type="text"
+                      name="telefono"
+                      id="telefono"
+                      value={seleccionado ? seleccionado.telefono : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
+                  <Col>
+                    <label>RTN</label>
+                  </Col>
                   <Col>
                     <AvField
                       style={paddingAvInput()}
@@ -471,29 +562,13 @@ export default function ModificarUsuario(props) {
                 </Row>
               </AvForm>
             </div>
+
             <div>
               <AvForm>
-                <Row>
-                  <Col>Telefono</Col>
+                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
                   <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Telefono Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regexSoloNumeros },
-                        minLength: { value: 1 },
-                      }}
-                      maxLength="8"
-                      className="form-control"
-                      type="text"
-                      name="telefono"
-                      id="telefono"
-                      value={seleccionado ? seleccionado.telefono : ''}
-                      onChange={manejarCambio}
-                    />
+                    <label>Correo electronico</label>
                   </Col>
-                  <Col>Correo</Col>
                   <Col>
                     <AvField
                       style={paddingAvInput()}
@@ -510,11 +585,30 @@ export default function ModificarUsuario(props) {
                       onChange={manejarCambio}
                     />
                   </Col>
+                  <Col>
+                    <label style={{ color: '#62d162' }}>Constraseña</label>
+                  </Col>
+                  <Col>
+                    <AvField
+                      style={paddingAvInputGreen()}
+                      errorMessage="Constraseña debe tener mas de 4 caracteres"
+                      validate={{
+                        required: { value: true },
+                        minLength: { value: 4 },
+                      }}
+                      className="form-control"
+                      type="password"
+                      name="password"
+                      id="password"
+                      value={seleccionado ? seleccionado.password : ''}
+                      onChange={manejarCambio}
+                    />
+                  </Col>
                 </Row>
               </AvForm>
             </div>
             <div>
-              <label>Tipo de usuario</label>
+              <label style={{ color: '#62d162', fontSize: '23px' }}>Tipo de usuario</label>
               <Row>
                 <Col sm="12" md={{ size: 6, offset: 3 }}>
                   <SelectSearch
@@ -558,6 +652,196 @@ export default function ModificarUsuario(props) {
               onClick={() => setModalModificarUsuario(false)}
             >
               Cancelar
+            </button>
+          </ModalFooter>
+        </Modal>
+        {/* =========================== VER USUARIOS ============================== */}
+        <Modal
+          isOpen={modalVerUsuario}
+          className="text-center"
+          style={{
+            height: '95vh',
+            'overflow-y': 'auto',
+            top: '-100px',
+            maxWidth: '1200px',
+          }}
+        >
+          <div>
+            <h3>INFORMACION DETALLADA</h3>
+          </div>
+          <ModalBody>
+            <div>
+              <Row style={{ 'text-align': 'left' }}>
+                <Col>
+                  <label>Nombre de usuario:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="usuario"
+                    id="usuario"
+                    //value={seleccionado ? seleccionado.usuario : ''}
+                    value="User00"
+                    readOnly
+                  />
+                </Col>
+                <Col>
+                  <label>Tipo de usuario:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="identidad"
+                    id="identidad"
+                    value="Jefe de Tienda"
+                    //value={seleccionado ? seleccionado.rol[0].name : ''}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+            </div>
+
+            <div>
+              <Row style={{ 'text-align': 'left' }}>
+                <Col>
+                  <label>Primer nombre:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="nombre"
+                    id="nombre"
+                    value={seleccionado ? seleccionado.nombre : ''}
+                    readOnly
+                  />
+                </Col>
+                <Col>
+                  <label>Primer apellido:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="primer_apellido"
+                    id="primer_apellido"
+                    value={seleccionado ? seleccionado.primer_apellido : ''}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+            </div>
+
+            <div>
+              <Row style={{ 'text-align': 'left' }}>
+                <Col>
+                  <label>Segundo nombre:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="segundo_nombre"
+                    id="segundo_nombre"
+                    value={seleccionado ? seleccionado.segundo_nombre : ''}
+                    readOnly
+                  />
+                </Col>
+                <Col>
+                  <label>Segundo apellido:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="segundo_apellido"
+                    id="segundo_apellido"
+                    value={seleccionado ? seleccionado.segundo_apellido : ''}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+            </div>
+
+            <div>
+              <Row style={{ 'text-align': 'left' }}>
+                <Col>
+                  <label>No. Identidad:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="identidad"
+                    id="identidad"
+                    value={seleccionado ? seleccionado.identidad : ''}
+                    readOnly
+                  />
+                </Col>
+                <Col>
+                  <label>Telefono:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="telefono"
+                    id="telefono"
+                    value={seleccionado ? seleccionado.telefono : ''}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+            </div>
+            <div>
+              <Row style={{ 'text-align': 'left' }}>
+                <Col>
+                  <label>RTN:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="rtn"
+                    id="rtn"
+                    value={seleccionado ? seleccionado.rtn : ''}
+                    readOnly
+                  />
+                </Col>
+                <Col>
+                  <label>Correo:</label>
+                </Col>
+                <Col>
+                  <input
+                    style={paddinginputVerUsuario()}
+                    type="text"
+                    name="correo"
+                    id="correo"
+                    value={seleccionado ? seleccionado.correo : ''}
+                    readOnly
+                  />
+                </Col>
+              </Row>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <button
+              style={{
+                margin: '10px',
+                'border-radius': '26px',
+                'border-color': '#ff9800',
+                color: 'red',
+                border: '1px solid red',
+                'background-color': 'white',
+                'font-size': '16px',
+                cursor: 'pointer',
+              }}
+              className="btn btn-danger"
+              onClick={() => cerrarModalVerUsuario()}
+            >
+              Cerrar
             </button>
           </ModalFooter>
         </Modal>

@@ -30,6 +30,7 @@ import Facturar from '../Icons/Facturar.svg';
 import '../Styles/SearchBar.css';
 import { ReactComponent as Check } from '../Icons/check.svg';
 import Devolucion from '../Icons/Devolucion.svg';
+import { Confirm } from './Confirm';
 import DevolucionImprimir from './DevolucionImprimir.jsx';
 
 export default function Devoluciones() {
@@ -254,6 +255,8 @@ export default function Devoluciones() {
   };
   const guardarDevolucion = () => {};
   let campos = {};
+
+  const [cantSel, setcantSel] = useState(0);
   const handleValidSubmit = async () => {
     // alert(JSON.stringify(productosDevolucion));
     let productosSumar = [];
@@ -269,11 +272,7 @@ export default function Devoluciones() {
           const fac = element.productosSeleccionado[i];
           for (let j = 0; j < productosDevolucion.length; j++) {
             const facSel = productosDevolucion[j];
-            if (
-              facSel.cantidadAdevolver !== fac.cantidad &&
-              facSel.seleccionado &&
-              fac.value === facSel.value
-            ) {
+            if (facSel.seleccionado && fac.value === facSel.value) {
               fac.cantidad -= facSel.cantidadAdevolver;
             }
             productosSumar.push(facSel);
@@ -301,6 +300,7 @@ export default function Devoluciones() {
       }
     }
     let productosFacturaNueva = [];
+    let productosDevueltos = [];
     let nuevototal = 0;
     let nuevosubtotal = 0;
     let nuevoimpuesto = 0;
@@ -308,6 +308,14 @@ export default function Devoluciones() {
       const element = productosDevolucion[index];
       if (element.cantidadAdevolver > 0) {
         element.precioSumado = Number(element.cantidad) * Number(element.precioUnitario);
+        productosDevueltos.push({
+          name: element.name,
+          value: element.value,
+          codigoPrincipal: element.codigoPrincipal,
+          precioUnitario: element.precioUnitario,
+          precioSumado: Number(element.cantidadAdevolver) * Number(element.precioUnitario),
+          cantidadAdevolver: element.cantidadAdevolver,
+        });
       }
       nuevosubtotal += Number(element.cantidad) * Number(element.precioUnitario);
       if (!element.exento) {
@@ -317,7 +325,7 @@ export default function Devoluciones() {
     nuevototal = Number(nuevosubtotal) + Number(nuevoimpuesto);
     for (let index = 0; index < productosDevolucion.length; index++) {
       const element = productosDevolucion[index];
-      if (element.cantidad !== 0) {
+      if (element.cantidad > 0) {
         productosFacturaNueva.push({
           name: element.name,
           value: element.value,
@@ -329,7 +337,7 @@ export default function Devoluciones() {
         });
       }
     }
-    /*await axios
+    await axios
       .put(`http://localhost:3001/api/facturas/${facturaSeleccionada.id}`, {
         productosSeleccionado: productosFacturaNueva,
         subtotal: nuevosubtotal,
@@ -353,7 +361,7 @@ export default function Devoluciones() {
         .catch((error) => {
           alert(error);
         });
-    }*/
+    }
     campos = {
       subtotal: nuevosubtotal,
       impuesto: nuevoimpuesto,
@@ -362,53 +370,34 @@ export default function Devoluciones() {
       nombreCliente: nombreCliente2,
       identificacion: id2,
       razon: razonDev,
-      invoiceNumber: facturaSeleccionada.invoiceNumber,
+      invoiceNumber: facturaSeleccionada.name,
       fecha: new Date(),
       estado: estado,
     };
-    setrecibo(campos);
-    setModalModificarPrecios(true);
-
-    /*await axios
-      .put(`http://localhost:3001/api/devoluciones/${Id}`, {
-        descripcion: document.getElementById('modnombre').value,
-        area: document.getElementById('modarea').value,
-        codigoPrincipal: seleccionado.codigoPrincipal,
-        codigos: tags,
-        proveedores: tagsProveedores,
-        marca: seleccionado.marca,
-        bodega: tagsBodegas,
-        precios: seleccionado.precios,
-        cantidad: document.getElementById('modcantidad').value,
-        codigoBarra: seleccionado.nombre,
-        descripcion_larga: document.getElementById('descripcion2').value,
-        cantidad_minima: document.getElementById('modcantidad_minima').value,
-        productoExento: seleccionado.productoExento,
-      })
-      .then(
-        Confirm.open({
-          title: '',
-          message: `Producto ${seleccionado.descripcion} modificado exitosamente`,
-          onok: () => {
-            window.location.reload();
-          },
-        }),
-      )
-      .catch((error) => {
-        console.log(error);
+    if (productosFacturaNueva.length !== 0) {
+      setrecibo(campos);
+    } else {
+      Confirm.open({
+        title: 'Exito',
+        message: 'Productos devueltos exitosamente',
+        onok: () => {},
       });
-    alert(JSON.stringify(facturas));
-    /*
-    const campos = {
-      nombreCliente: nombreCliente,
-      identificacion: id,
-      razonDevolucion: this.state.razonDevolucion,
-      Estado: this.state.Estado,
-      LugarDevolucion: this.state.LugarDevolucion,
-      productosDevueltos: this.state.productosDevolucion,
+    }
+    setModalModificarPrecios(true);
+    const campos2 = {
+      nombreCliente: nombreCliente2,
+      identificacion: id2,
+      razonDevolucion: razonDev,
+      Estado: estado,
+      LugarDevolucion: 'Bodega',
+      productosDevueltos: productosDevueltos,
     };
-    await axios.post('http://localhost:3001/api/devoluciones', campos);
-    window.location.reload();*/
+    await axios.post('http://localhost:3001/api/devoluciones', campos2);
+    getFacturas();
+    setproductosDevolucion([]);
+    setBodegaSel([]);
+    fecthBodegas();
+    setcantSel(0);
     document.getElementById('nameCliente').value = '';
     document.getElementById('Identificacion').value = '';
     document.getElementById('razonDev').value = '';
@@ -432,7 +421,6 @@ export default function Devoluciones() {
     setfacturaSeleccionada(factSele);
   };
 
-  const [cantSel, setcantSel] = useState(0);
   const cantpro = () => {
     if (checkAll) {
       setcantSel(productosDevolucion.length);

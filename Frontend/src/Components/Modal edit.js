@@ -89,11 +89,10 @@ class ModalForm extends Component {
       <div>
         {button}
         <Modal
-          className="estiloModal "
           style={{
             height: '95vh',
             'overflow-y': 'auto',
-            top: '20px',
+            top: '-100px',
             maxWidth: '1000px',
           }}
           isOpen={this.state.modal}
