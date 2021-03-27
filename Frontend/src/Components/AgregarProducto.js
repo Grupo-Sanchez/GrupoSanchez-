@@ -407,10 +407,11 @@ export default function AgregarProducto(props) {
       file: singleFiles[0],
     };*/
     singleFiles[0].idProducto = 'asi es';
-    formData.append('id', seleccionado.codigoPrincipal);
-    formData.append('file', singleFiles[0]);
+    formData.append('id', seleccionado.codigoPrincipal); //se manda id, del producto al que se le quiere link la imagen
+    formData.append('file', singleFiles[0]); //manda la imagen en si, la que eligio
     await singleFileUpload(formData, singleFileOptions);
   };
+
   const thumbs = files.map((file) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>{<img src={file.preview} style={img} />}</div>
@@ -428,6 +429,7 @@ export default function AgregarProducto(props) {
   const handleChange2 = (e) => {
     agregarMarca(e);
   };
+
   const agregarBodega = (idToSearch) => {
     seleccionado.bodega = [];
     bodegas.filter((item) => {
