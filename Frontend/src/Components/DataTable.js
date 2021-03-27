@@ -83,14 +83,14 @@ class DataTable extends Component {
           style={{
             height: '95vh',
             'overflow-y': 'auto',
-            top: '-100px',
+            top: '-190px',
             maxWidth: '1024px',
           }}
           isOpen={this.state.abierto}
           toggle={this.abrirModal}
         >
           <ModalBody>
-            <InfoDetallada elemento={this.state.elemento} />
+            <InfoDetallada elemento={this.state.elemento} toggle={this.abrirModal} />
           </ModalBody>
         </Modal>
 

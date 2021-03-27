@@ -32,7 +32,6 @@ import { Confirm } from './Confirm';
 import '../Styles/ModalMarcas.css';
 
 const AgregarMarca = ({ isOpen, change, datos }) => {
-  // Use state variables
   const [marcas, setMarcas] = useState(null);
 
   const [nombreMarca, setnombreMarca] = useState(null);
@@ -153,12 +152,6 @@ const AgregarMarca = ({ isOpen, change, datos }) => {
           enctype="multipart/form-data"
           target="_blank"
         >
-          <input
-            className="dropzoneContainer "
-            onChange={(e) => console.log(e)}
-            type="file"
-            name="imagenMarca"
-          />
           {/* ------- Fields comienzan ------- */}
           <div className="labelInputForm">
             <div className="labelInputInnerForm">
