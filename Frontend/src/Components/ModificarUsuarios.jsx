@@ -35,6 +35,32 @@ import { ReactComponent as BasureroLogo } from '../Icons/delete.svg';
 import { ReactComponent as AgregarLogo } from '../Icons/plus.svg';
 import LupaIcon from '../Icons/lupa1.jpeg';
 import { Confirm } from './Confirm';
+// import AgregarUsuario from './AgregarUsuario';
+
+function paddingAvInput() {
+  return {
+    'margin-left': '-20px',
+    'border-radius': '26px',
+    width: '260px',
+  };
+}
+function paddingAvInputGreen() {
+  return {
+    'margin-left': '-20px',
+    'border-radius': '26px',
+    'border-color': '#62d162',
+    width: '260px',
+  };
+}
+function paddingAvInputGreen2() {
+  return {
+    'margin-left': '-20px',
+    'border-radius': '26px',
+    'border-color': '#62d162',
+    width: '260px',
+    maxWidth: '260px',
+  };
+}
 
 export default function ModificarUsuario(props) {
   const regex = /^[ña-zA-Z\u00E0-\u00FC-\s]+$/;
@@ -49,6 +75,7 @@ export default function ModificarUsuario(props) {
   ];
 
   const [marcaSel, setMarcaSel] = useState([]);
+  const [rol, setRol] = useState('');
 
   const agregarMarca = (idToSearch) => {
     options.filter((item) => {
@@ -59,21 +86,7 @@ export default function ModificarUsuario(props) {
       return 0;
     });
   };
-  function paddingAvInput() {
-    return {
-      'margin-left': '-20px',
-      'border-radius': '26px',
-      width: '320px',
-    };
-  }
-  function paddingAvInputGreen() {
-    return {
-      'margin-left': '-20px',
-      'border-radius': '26px',
-      'border-color': '#62d162',
-      width: '320px',
-    };
-  }
+
   const handleChange2 = (e) => {
     agregarMarca(e);
   };
@@ -113,6 +126,7 @@ export default function ModificarUsuario(props) {
     setSeleccionado(elemento);
     setMarcaSel(elemento.rol[0].value);
     setModalModificarUsuario(true);
+    // alert(JSON.stringify(seleccionado));
   };
 
   const modificarUsuario = async () => {
@@ -129,37 +143,50 @@ export default function ModificarUsuario(props) {
       }
     }
     if (
-      regexSoloNumeros.test(document.getElementById('identidad').value) &&
-      regex.test(document.getElementById('nombre').value) &&
-      (regex.test(document.getElementById('segundo_nombre').value) ||
-        seleccionado.segundo_nombre === '') &&
-      regex.test(document.getElementById('primer_apellido').value) &&
-      (regex.test(document.getElementById('segundo_apellido').value) ||
-        seleccionado.segundo_apellido === '') &&
-      (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
-      regexSoloNumeros.test(document.getElementById('telefono').value) &&
-      regEmail.test(document.getElementById('correo').value) &&
       seleccionado.rol !== '' &&
+      seleccionado.rol !== 'Seleccione el rol' &&
+      regexSoloNumeros.test(document.getElementById('identidad').value) &&
       seleccionado.identidad.length === 13 &&
-      seleccionado.rtn.length === 14
+      seleccionado.password.length >= 4 &&
+      regex.test(document.getElementById('nombre').value) &&
+      regex.test(document.getElementById('primer_apellido').value) &&
+      seleccionado.alias !== '' &&
+      (seleccionado.rtn.length === 14 || seleccionado.rtn === '') &&
+      document.getElementById('password').value === document.getElementById('passwordConfirm').value
+      // regexSoloNumeros.test(document.getElementById('identidad').value) &&
+      // regex.test(document.getElementById('nombre').value) &&
+      // (regex.test(document.getElementById('segundo_nombre').value) ||
+      //   seleccionado.segundo_nombre === '') &&
+      // regex.test(document.getElementById('primer_apellido').value) &&
+      // (regex.test(document.getElementById('segundo_apellido').value) ||
+      //   seleccionado.segundo_apellido === '') &&
+      // (regexSoloNumeros.test(document.getElementById('rtn').value) || seleccionado.rtn === '') &&
+      // regexSoloNumeros.test(document.getElementById('telefono').value) &&
+      // regEmail.test(document.getElementById('correo').value) &&
+      // seleccionado.rol !== '' &&
+      // seleccionado.identidad.length === 13 &&
+      // seleccionado.rtn.length === 14
     ) {
       setModalModificarUsuario(false);
+      // alert(JSON.stringify(seleccionado));
       axios
         .put(`http://localhost:3001/api/users/${seleccionado._id}`, {
           identidad: seleccionado.identidad,
-          nombre: seleccionado.nombre,
-          segundo_nombre: seleccionado.segundo_nombre,
-          primer_apellido: seleccionado.primer_apellido,
-          segundo_apellido: seleccionado.segundo_apellido,
+          primerNombre: seleccionado.primerNombre,
+          segundoNombre: seleccionado.segundoNombre,
+          primerApellido: seleccionado.primerApellido,
+          segundoApellido: seleccionado.segundoApellido,
           rtn: seleccionado.rtn,
           telefono: seleccionado.telefono,
           correo: seleccionado.correo,
+          alias: seleccionado.alias,
           rol: seleccionado.rol,
+          password: seleccionado.password,
         })
         .then(
           Confirm.open({
             title: 'Alerta',
-            message: `Usuario ${seleccionado.nombre} modificado exitosamente`,
+            message: `Usuario ${seleccionado.primerNombre} modificado exitosamente`,
             onok: () => {},
           }),
         )
@@ -267,7 +294,7 @@ export default function ModificarUsuario(props) {
             type="text"
             id="myInput"
             onChange={() => myFunction()}
-            placeholder="Buscar por identificacion"
+            placeholder="Buscar por nombre..."
             title="Type in a name"
             style={{
               'background-image': `url('${LupaIcon}')`,
@@ -321,9 +348,9 @@ export default function ModificarUsuario(props) {
             {data.map((elemento, index) => (
               <tr onDoubleClick={() => mostrarModalVerUsuario(elemento)}>
                 <td>{elemento.identidad}</td>
-                <td>{elemento.nombre}</td>
-                <td>{elemento.primer_apellido}</td>
-                <td>{elemento.rol[0].name}</td>
+                <td>{elemento.primerNombre}</td>
+                <td>{elemento.primerApellido}</td>
+                <td>{elemento.rol}</td>
                 <td>{elemento.telefono}</td>
                 <td>{elemento.correo}</td>
                 <td>
@@ -342,320 +369,365 @@ export default function ModificarUsuario(props) {
             ))}
           </tbody>
         </Table>
-        <Modal
-          isOpen={modalModificar}
-          className="text-center"
-          style={{
-            height: '95vh',
-            'overflow-y': 'auto',
-            top: '20px',
-            maxWidth: '1200px',
-          }}
-        >
+        <AvForm>
           <div>
-            <h3>MODIFICAR USUARIO</h3>
+            <Modal
+              isOpen={modalModificar}
+              className="text-center"
+              style={{
+                height: '95vh',
+                'overflow-y': 'auto',
+                // top: '20px',
+                maxWidth: '1200px',
+              }}
+            >
+              <br />
+              <div>
+                <h3>MODIFICAR USUARIO</h3>
+                <Button
+                  style={{
+                    'background-color': 'transparent',
+                    borderColor: 'transparent',
+                    marginLeft: '1050px',
+                    top: '-20px',
+                    position: 'relative',
+                  }}
+                  color="danger"
+                  onClick={() =>
+                    Confirm.open({
+                      title: '¡Advertencia!',
+                      message: '¿Esta seguro que desea eliminar el usuario?.',
+                      onok: () => {
+                        onDelete(seleccionado._id);
+                      },
+                    })
+                  }
+                >
+                  <BasureroLogo fill="#dc0000" width="50px" height="50px" />
+                </Button>
+              </div>
+
+              <ModalBody>
+                <div style={{ margin: '15px 0px' }}>
+                  <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>Tipo de usuario</label>
+                    </Col>
+                    <Col>
+                      <div>
+                        {/* <SelectSearch
+                      style={paddingAvInputGreen2()}
+                      search
+                      placeholder="Seleccione el rol del usuario"
+                      required
+                      autoComplete
+                      options={options}
+                      value={marca}
+                      onChange={(e) => handleChange2(e)}
+                    /> */}
+                        <Input
+                          style={paddingAvInputGreen2()}
+                          type="select"
+                          name="select"
+                          id="exampleSelect"
+                          value={rol}
+                          onChange={(e) => {
+                            seleccionado.rol = e.target.value;
+                            setRol(seleccionado.rol);
+                            console.log(seleccionado.rol);
+                          }}
+                        >
+                          {options.map((option) => {
+                            return <option>{option.name}</option>;
+                          })}
+                        </Input>
+                      </div>
+                    </Col>
+                    <Col>
+                      <label>Teléfono</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInput()}
+                        errorMessage="Teléfono Inválido"
+                        validate={{
+                          required: { value: false },
+                          pattern: { value: regexSoloNumeros },
+                          minLength: { value: 1 },
+                        }}
+                        className="form-control"
+                        type="text"
+                        name="telefono"
+                        id="telefono"
+                        value={seleccionado ? seleccionado.telefono : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+
+                <div style={{ margin: '15px 0px' }}>
+                  <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>Primer nombre</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInputGreen()}
+                        errorMessage="Nombre Inválido"
+                        validate={{
+                          required: { value: true },
+                          pattern: { value: regex },
+                          minLength: { value: 1 },
+                        }}
+                        className="form-control"
+                        type="text"
+                        name="primerNombre"
+                        id="nombre"
+                        value={seleccionado ? seleccionado.primerNombre : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>Primer apellido</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInputGreen()}
+                        errorMessage="Apellido Inválido"
+                        validate={{
+                          required: { value: true },
+                          pattern: { value: regex },
+                          minLength: { value: 1 },
+                        }}
+                        className="form-control"
+                        type="text"
+                        name="primerApellido"
+                        id="primer_apellido"
+                        value={seleccionado ? seleccionado.primerApellido : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+
+                <div style={{ margin: '15px 0px' }}>
+                  <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                    <Col>
+                      <label>Segundo nombre</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInput()}
+                        errorMessage="Nombre Inválido"
+                        validate={{
+                          required: { value: false },
+                          pattern: { value: regex },
+                          minLength: { value: 1 },
+                        }}
+                        className="form-control"
+                        type="text"
+                        name="segundoNombre"
+                        id="segundo_nombre"
+                        value={seleccionado ? seleccionado.segundoNombre : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                    <Col>
+                      <label>Segundo apellido</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInput()}
+                        errorMessage="Apellido Inválido"
+                        validate={{
+                          required: { value: false },
+                          pattern: { value: regex },
+                          minLength: { value: 1 },
+                        }}
+                        className="form-control"
+                        type="text"
+                        name="segundoApellido"
+                        id="segundo_apellido"
+                        value={seleccionado ? seleccionado.segundoApellido : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+
+                <div style={{ margin: '15px 0px' }}>
+                  <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>Nombre de usuario</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInputGreen()}
+                        errorMessage="Revise el formato"
+                        className="form-control"
+                        type="text"
+                        name="alias"
+                        id="alias"
+                        value={seleccionado ? seleccionado.alias : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>No. Identidad</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInputGreen()}
+                        errorMessage="Numero de identidad inválido"
+                        validate={{
+                          required: { value: true },
+                          pattern: { value: regexSoloNumeros },
+                          minLength: { value: 13 },
+                        }}
+                        maxLength="13"
+                        className="form-control"
+                        type="text"
+                        name="identidad"
+                        id="identidad"
+                        value={seleccionado ? seleccionado.identidad : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+                <div style={{ margin: '15px 0px' }}>
+                  <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>Constraseña</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInputGreen()}
+                        errorMessage="Constraseña debe tener mas de 4 caracteres"
+                        validate={{
+                          required: { value: true },
+                          minLength: { value: 4 },
+                        }}
+                        className="form-control"
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={seleccionado ? '********' : ''}
+                        // onChange={manejarCambio}
+                        readOnly
+                      />
+                    </Col>
+                    <Col>
+                      <label>RTN</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInput()}
+                        errorMessage="RTN Inválido"
+                        validate={{
+                          pattern: { value: regexSoloNumeros },
+                          minLength: { value: 14 },
+                        }}
+                        maxLength="14"
+                        className="form-control"
+                        type="text"
+                        name="rtn"
+                        id="rtn"
+                        value={seleccionado ? seleccionado.rtn : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+
+                <div>
+                  <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
+                    <Col>
+                      <label style={{ color: '#62d162' }}>Confirmar constraseña</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInputGreen()}
+                        errorMessage="Revise el formato"
+                        validate={{
+                          required: { value: true },
+                          minLength: { value: 4 },
+                        }}
+                        className="form-control"
+                        type="password"
+                        name="passwordConfirm"
+                        id="passwordConfirm"
+                        value={seleccionado ? '********' : ''}
+                        // onChange={manejarCambio}
+                        readOnly
+                      />
+                    </Col>
+                    <Col>
+                      <label>Correo electronico</label>
+                    </Col>
+                    <Col>
+                      <AvField
+                        style={paddingAvInput()}
+                        errorMessage="Revise el formato"
+                        validate={{
+                          email: true,
+                          minLength: { value: 5 },
+                        }}
+                        className="form-control"
+                        type="text"
+                        name="correo"
+                        id="correo"
+                        value={seleccionado ? seleccionado.correo : ''}
+                        onChange={manejarCambio}
+                      />
+                    </Col>
+                  </Row>
+                </div>
+              </ModalBody>
+              <ModalFooter>
+                {' '}
+                <div>
+                  <Button
+                    style={{
+                      margin: '10px',
+                      'border-radius': '26px',
+                      'border-color': '#ff9800',
+                      color: 'red',
+                      border: '1px solid red',
+                      'background-color': 'white',
+                      'font-size': '16px',
+                      cursor: 'pointer',
+                    }}
+                    className="btn btn-danger"
+                    onClick={() => setModalModificarUsuario(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button
+                    style={{
+                      'border-radius': '26px',
+                      'border-color': '#98ff98',
+                      color: 'green',
+                      border: '1px solid green',
+                      'background-color': 'white',
+                      'font-size': '16px',
+                      cursor: 'pointer',
+                    }}
+                    outline
+                    color="success"
+                    onClick={() => modificarUsuario()}
+                  >
+                    Modificar
+                  </Button>
+                </div>
+              </ModalFooter>
+            </Modal>
           </div>
+        </AvForm>
 
-          <Button
-            style={{
-              'background-color': 'transparent',
-              borderColor: 'transparent',
-              marginLeft: '1050px',
-              top: '-20px',
-              position: 'relative',
-            }}
-            color="danger"
-            onClick={() =>
-              Confirm.open({
-                title: '¡Advertencia!',
-                message: '¿Esta seguro que desea eliminar el usuario?.',
-                onok: () => {
-                  onDelete(seleccionado._id);
-                },
-              })
-            }
-          >
-            <BasureroLogo fill="#dc0000" width="50px" height="50px" />
-          </Button>
-
-          <ModalBody>
-            <div>
-              <AvForm>
-                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                  <Col>
-                    <label style={{ color: '#62d162' }}>Primer nombre</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInputGreen()}
-                      errorMessage="Nombre Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regex },
-                        minLength: { value: 1 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="nombre"
-                      id="nombre"
-                      value={seleccionado ? seleccionado.nombre : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                  <Col>
-                    <label style={{ color: '#62d162' }}>Primer apellido</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInputGreen()}
-                      errorMessage="Apellido Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regex },
-                        minLength: { value: 1 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="primer_apellido"
-                      id="primer_apellido"
-                      value={seleccionado ? seleccionado.primer_apellido : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                </Row>
-              </AvForm>
-            </div>
-
-            <div>
-              <AvForm>
-                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                  <Col>
-                    <label>Segundo nombre</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Nombre Inválido"
-                      validate={{
-                        required: { value: false },
-                        pattern: { value: regex },
-                        minLength: { value: 1 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="segundo_nombre"
-                      id="segundo_nombre"
-                      value={seleccionado ? seleccionado.segundo_nombre : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                  <Col>
-                    <label>Segundo apellido</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Apellido Inválido"
-                      validate={{
-                        required: { value: false },
-                        pattern: { value: regex },
-                        minLength: { value: 1 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="segundo_apellido"
-                      id="segundo_apellido"
-                      value={seleccionado ? seleccionado.segundo_apellido : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                </Row>
-              </AvForm>
-            </div>
-
-            <div>
-              <AvForm>
-                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                  <Col>
-                    <label style={{ color: '#62d162' }}>Nombre de usuario</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInputGreen()}
-                      errorMessage="Revise el formato"
-                      className="form-control"
-                      type="text"
-                      name="usuario"
-                      id="usuario"
-                      //value={seleccionado ? seleccionado.usuario : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                  <Col>
-                    <label style={{ color: '#62d162' }}>No. Identidad</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInputGreen()}
-                      errorMessage="Numero de identidad inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regexSoloNumeros },
-                        minLength: { value: 13 },
-                      }}
-                      maxLength="13"
-                      className="form-control"
-                      type="text"
-                      name="identidad"
-                      id="identidad"
-                      value={seleccionado ? seleccionado.identidad : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                </Row>
-              </AvForm>
-            </div>
-            <div>
-              <AvForm>
-                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                  <Col>
-                    <label>Telefono</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Telefono Inválido"
-                      validate={{
-                        required: { value: false },
-                        pattern: { value: regexSoloNumeros },
-                        minLength: { value: 1 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="telefono"
-                      id="telefono"
-                      value={seleccionado ? seleccionado.telefono : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                  <Col>
-                    <label>RTN</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="RTN Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regexSoloNumeros },
-                        minLength: { value: 14 },
-                      }}
-                      maxLength="14"
-                      className="form-control"
-                      type="text"
-                      name="rtn"
-                      id="rtn"
-                      value={seleccionado ? seleccionado.rtn : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                </Row>
-              </AvForm>
-            </div>
-
-            <div>
-              <AvForm>
-                <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                  <Col>
-                    <label>Correo electronico</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInput()}
-                      errorMessage="Revise el formato"
-                      validate={{
-                        email: true,
-                        minLength: { value: 5 },
-                      }}
-                      className="form-control"
-                      type="text"
-                      name="correo"
-                      id="correo"
-                      value={seleccionado ? seleccionado.correo : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                  <Col>
-                    <label style={{ color: '#62d162' }}>Constraseña</label>
-                  </Col>
-                  <Col>
-                    <AvField
-                      style={paddingAvInputGreen()}
-                      errorMessage="Constraseña debe tener mas de 4 caracteres"
-                      validate={{
-                        required: { value: true },
-                        minLength: { value: 4 },
-                      }}
-                      className="form-control"
-                      type="password"
-                      name="password"
-                      id="password"
-                      value={seleccionado ? seleccionado.password : ''}
-                      onChange={manejarCambio}
-                    />
-                  </Col>
-                </Row>
-              </AvForm>
-            </div>
-            <div>
-              <label style={{ color: '#62d162', fontSize: '23px' }}>Tipo de usuario</label>
-              <Row>
-                <Col sm="12" md={{ size: 6, offset: 3 }}>
-                  <SelectSearch
-                    search
-                    options={options}
-                    value={marcaSel}
-                    onChange={(e) => handleChange2(e)}
-                  />
-                </Col>
-              </Row>
-            </div>
-          </ModalBody>
-          <ModalFooter>
-            <button
-              style={{
-                'border-radius': '26px',
-                'border-color': '#98ff98',
-                color: 'green',
-                border: '1px solid green',
-                'background-color': 'white',
-                'font-size': '16px',
-                cursor: 'pointer',
-              }}
-              className="btn btn-primary"
-              onClick={() => modificarUsuario()}
-            >
-              Modificar
-            </button>
-            <button
-              style={{
-                margin: '10px',
-                'border-radius': '26px',
-                'border-color': '#ff9800',
-                color: 'red',
-                border: '1px solid red',
-                'background-color': 'white',
-                'font-size': '16px',
-                cursor: 'pointer',
-              }}
-              className="btn btn-danger"
-              onClick={() => setModalModificarUsuario(false)}
-            >
-              Cancelar
-            </button>
-          </ModalFooter>
-        </Modal>
         {/* =========================== VER USUARIOS ============================== */}
+
         <Modal
           isOpen={modalVerUsuario}
           className="text-center"
@@ -664,8 +736,11 @@ export default function ModificarUsuario(props) {
             'overflow-y': 'auto',
             top: '-100px',
             maxWidth: '1200px',
+            'font-weight': '635',
+            'font-size': '23px',
           }}
         >
+          <br />
           <div>
             <h3>INFORMACION DETALLADA</h3>
           </div>
@@ -679,10 +754,9 @@ export default function ModificarUsuario(props) {
                   <input
                     style={paddinginputVerUsuario()}
                     type="text"
-                    name="usuario"
-                    id="usuario"
-                    //value={seleccionado ? seleccionado.usuario : ''}
-                    value="User00"
+                    name="alias"
+                    id="alias"
+                    value={seleccionado ? seleccionado.alias : ''}
                     readOnly
                   />
                 </Col>
@@ -693,10 +767,10 @@ export default function ModificarUsuario(props) {
                   <input
                     style={paddinginputVerUsuario()}
                     type="text"
-                    name="identidad"
-                    id="identidad"
-                    value="Jefe de Tienda"
-                    //value={seleccionado ? seleccionado.rol[0].name : ''}
+                    name="rol"
+                    id="rol"
+                    //value="Jefe de Tienda"
+                    value={seleccionado ? seleccionado.rol : ''}
                     readOnly
                   />
                 </Col>
@@ -714,7 +788,7 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="nombre"
                     id="nombre"
-                    value={seleccionado ? seleccionado.nombre : ''}
+                    value={seleccionado ? seleccionado.primerNombre : ''}
                     readOnly
                   />
                 </Col>
@@ -727,7 +801,7 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="primer_apellido"
                     id="primer_apellido"
-                    value={seleccionado ? seleccionado.primer_apellido : ''}
+                    value={seleccionado ? seleccionado.primerApellido : ''}
                     readOnly
                   />
                 </Col>
@@ -745,7 +819,7 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="segundo_nombre"
                     id="segundo_nombre"
-                    value={seleccionado ? seleccionado.segundo_nombre : ''}
+                    value={seleccionado ? seleccionado.segundoNombre : ''}
                     readOnly
                   />
                 </Col>
@@ -758,7 +832,7 @@ export default function ModificarUsuario(props) {
                     type="text"
                     name="segundo_apellido"
                     id="segundo_apellido"
-                    value={seleccionado ? seleccionado.segundo_apellido : ''}
+                    value={seleccionado ? seleccionado.segundoApellido : ''}
                     readOnly
                   />
                 </Col>

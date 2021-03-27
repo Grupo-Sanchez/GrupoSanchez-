@@ -41,6 +41,13 @@ app.use(
 );
 app.use('/api', fileRoutes);
 
+//File Upload
+app.use(
+  './Frontend/public/uploads/',
+  express.static(path.join(__dirname, './Frontend/public/uploads/')),
+);
+app.use('/api', fileRoutes);
+
 // Nos conectamos a la base de datos por medio de mongoose
 // El proces busca donde se hizo el npm dotenv
 mongoose.connect(

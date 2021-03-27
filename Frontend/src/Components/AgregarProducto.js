@@ -83,56 +83,18 @@ const img = {
 export default function AgregarProducto(props) {
   const dataApuntes = [];
   /* https://stackblitz.com/edit/react-tag-input-1nelrc */
-  const [cod1, setcod1] = useState('');
-  let cod = '';
   const Barcode = require('react-barcode');
   const regex = /^[ña-zA-Z0-9\u00E0-\u00FC-\s]+$/;
-  const [cod2, setcod2] = useState('');
-  const [cod3, setcod3] = useState('');
-  const [cod4, setcod4] = useState('');
-  const [cod5, setcod5] = useState('');
-  const [cod6, setcod6] = useState('');
   const [descripcionRapida, setdescripcionrapida] = useState('');
   const [preciouno, setprecio1] = useState(0);
   const [preciodos, setprecio2] = useState(0);
   const [preciotres, setprecio3] = useState(0);
-  const [startDate, setStartDate] = useState(new Date());
   const [marca, setMarca] = useState('');
-  const [bodega, setBodega] = useState('');
   const [modalAgregarBodega, setModalAgregarBodega] = useState(false);
-  const [cod7, setcod7] = useState('');
-  const [size, setSize] = useState('1');
-  const [size2, setSize2] = useState('2');
-  const [size3, setSize3] = useState('3');
-  const [size4, setSize4] = useState('4');
   const [cantidadProducto, setcantidadProducto] = useState(0);
   const [size6, setSize6] = useState('6');
   const [size7, setSize7] = useState('7');
-  let [precioprov1, setPrecioProv1] = useState(true);
-  let [precioprov2, setPrecioProv2] = useState(true);
-  let [precioprov3, setPrecioProv3] = useState(true);
-  let [precioprov4, setPrecioProv4] = useState(true);
-  let [precioprov5, setPrecioProv5] = useState(true);
-  let [precioprov6, setPrecioProv6] = useState(true);
-  let [precioprov7, setPrecioProv7] = useState(true);
-  const proveedoresSeleccionados = [];
-  const [modalInsertarPrecio, setModalInsertarPrecio] = useState(false);
-  const [modalInsertarCodigo, setModalInsertarCodigo] = useState(false);
-  const [modalInsertarProveedor, setModalInsertarProveedor] = useState(false);
   const [modalCreacionRapida, setmodalCreacionRapida] = useState(false);
-  const [inputcod2, setinputcod2] = useState(false);
-  const [inputcod3, setinputcod3] = useState(false);
-  const [inputcod4, setinputcod4] = useState(false);
-  const [inputcod5, setinputcod5] = useState(false);
-  const [inputcod6, setinputcod6] = useState(false);
-  const [inputcod7, setinputcod7] = useState(false);
-  const [inputprov2, setinputprov2] = useState(false);
-  const [inputprov3, setinputprov3] = useState(false);
-  const [inputprov4, setinputprov4] = useState(false);
-  const [inputprov5, setinputprov5] = useState(false);
-  const [inputprov6, setinputprov6] = useState(false);
-  const [inputprov7, setinputprov7] = useState(false);
-  const [existe, setExiste] = useState(false);
   const [data, setData] = useState(dataApuntes);
   const isAlphanumeric = require('is-alphanumeric');
   const [tags, setTags] = useState([]);
@@ -142,8 +104,10 @@ export default function AgregarProducto(props) {
   let [tempBod, settempBod] = useState([]);
   const [tagstemp, setTagsTemp] = useState([]);
   const [codRef, setCodRef] = useState('');
+  const [cantsel, setCantsel] = useState(1);
   const [seleccionado, setSeleccionado] = useState({
-    descripcion: '',
+    /*Hace referencia al producto
+    seleccionado en la celda de la tabla*/ descripcion: '',
     area: '',
     codigos: [],
     proveedores: [],
@@ -174,11 +138,9 @@ export default function AgregarProducto(props) {
   });
   const [codigoprincipal, setcodigoprincipal] = useState('');
   const [cantidadRapida, setcantidadRapida] = useState(1);
-  const [descripcion, setdescripcion] = useState('');
   const [precioRapida, setprecioRapida] = useState(0);
   const [codigobarra, setCodigobarra] = useState('');
   const [productoExento, setProductoExento] = useState(false);
-  const [cantsel, setCantsel] = useState(1);
   const [cantminsel, setCantminsel] = useState(0);
   const [codigoBarra, setCodigoBarra] = useState('');
   let [proveedores, setProveedores] = useState([]);
@@ -186,7 +148,9 @@ export default function AgregarProducto(props) {
   let [marcas, setMarcas] = useState([]);
   let [bodegas, setBodegas] = useState([]);
   const fecthMarcas = async () => {
-    await axios.get('http://localhost:3001/api/marca').then((response) => {
+    /*metodo utilizado para cargar las marcas que iran
+    desplegadas en los combo box dentro de la interfaz de productos*/
+    await axios.get('http://localhost:3001/api/marcas').then((response) => {
       const marcasobtenidas = response.data;
       const marcasAgregar = [];
       for (let index = 0; index < marcasobtenidas.length; index++) {
@@ -194,19 +158,20 @@ export default function AgregarProducto(props) {
         marcasAgregar.push({
           value: element._id,
           name: element.nombre,
+          _v: element._v,
         });
       }
       setMarcas(marcasAgregar);
     });
   };
+  let [singleFiles, setSingleFiles] = useState([]);
+  const [files, setFiles] = useState([]);
   const [precioprovedor1, setPrecioProvedor1] = useState(0);
-  const [precioprovedor2, setPrecioProvedor2] = useState('');
-  const [precioprovedor3, setPrecioProvedor3] = useState('');
-  const [precioprovedor4, setPrecioProvedor4] = useState('');
-  const [precioprovedor5, setPrecioProvedor5] = useState('');
   const [precioprovedor6, setPrecioProvedor6] = useState(0);
   const [precioprovedor7, setPrecioProvedor7] = useState(0);
   const fecthBodegas = async () => {
+    /*metodo utilizado para cargar las bodegas que iran
+    desplegadas en los combo box dentro de la interfaz de productos*/
     await axios.get('http://localhost:3001/api/bodegas').then((response) => {
       const bodegasobtenidas = response.data;
       const bodegasAgregar = [];
@@ -221,6 +186,8 @@ export default function AgregarProducto(props) {
     });
   };
   const fecthProveedores = async () => {
+    /*metodo utilizado para cargar los proveedores que iran
+    desplegados en los combo box dentro de la interfaz de productos*/
     await axios.get('http://localhost:3001/api/proveedor').then((response) => {
       // setData(response.data);
       const proveedoresDB = response.data;
@@ -246,6 +213,8 @@ export default function AgregarProducto(props) {
     });
   };
   const removeTagsProv = (index) => {
+    /*metodo para eliminar los tags o vaciar el arreglo de proveedores
+    ingresados para la creación de productos*/
     let provAgregar = [];
     for (let inde = 0; inde < tagsProveedores.length; inde++) {
       const element2 = tagsProveedores[inde];
@@ -264,6 +233,8 @@ export default function AgregarProducto(props) {
     tagsProveedores.splice(index, 1);
   };
   const removeTagsBodega = (index) => {
+    /*metodo para eliminar los tags especificados o vaciar el arreglo de bodegas
+    ingresadas para la creación de productos */
     //setBodegas([...bodegas, tagsBodegas[index]]);
     let provAgregar = [];
     for (let inde = 0; inde < tagsBodegas.length; inde++) {
@@ -283,6 +254,8 @@ export default function AgregarProducto(props) {
     tagsBodegas.splice(index, 1);
   };
   const fecthProductos = async () => {
+    /*Metodo utilizado para cargar todos los productos
+    en una variable que luego será utilizada para llenar la tabla*/
     await axios.get('http://localhost:3001/api/productos').then((response) => {
       setProductos(response.data);
     });
@@ -295,6 +268,8 @@ export default function AgregarProducto(props) {
   }, []);
   let hoy = new Date();
   const prueba = async () => {
+    /*metodo en el cual luego de ser llenados y validados
+todos los atributos, escribe un producto nuevo a la db*/
     const campos = {
       descripcion: seleccionado.descripcion,
       area: seleccionado.area,
@@ -318,7 +293,8 @@ export default function AgregarProducto(props) {
       message: '¡Producto Agregado!',
       onok: () => {},
     });
-    fecthProductos();
+    fecthProductos(); /*actualiza automaticamente el nuevo producto recien ingresado*/
+    /*reinicio de variables*/
     seleccionado.descripcion = '';
     setcantidadProducto(0);
     seleccionado.area = '';
@@ -343,32 +319,15 @@ export default function AgregarProducto(props) {
     setprecio2(0);
     setprecio3(0);
     setCantsel(0);
+    setFiles([]);
+    setSingleFiles([]);
     setCantminsel(0);
-    setcod2('');
-    setcod3('');
-    setcod4('');
-    setcod5('');
-    setcod6('');
-    setcod7('');
-    setinputcod2(false);
-    setinputcod3(false);
-    setinputcod4(false);
-    setinputcod5(false);
-    setinputcod6(false);
-    setinputcod7(false);
   };
-  /*
-  HandleChange(event){
-      this.state.codigos.push();
-      this.setState({some:'val',arr:this.state.arr})
-  }
-  */
+  /*Metodos referentes al drop de imagen en los modales de productos*/
 
-  let [singleFiles, setSingleFiles] = useState([]);
-  const [files, setFiles] = useState([]);
   const [singleProgress, setSingleProgress] = useState(0);
   const { getRootProps, getInputProps } = useDropzone({
-    accept: 'image/*',
+    /*agrgar imagen a dropzone*/ accept: 'image/*',
     onDrop: (acceptedFiles) => {
       setFiles(
         acceptedFiles.map((file) =>
@@ -377,19 +336,19 @@ export default function AgregarProducto(props) {
           }),
         ),
       );
-      console.log('ACAAAAAAAAAAAAA');
       setSingleFiles(acceptedFiles);
     },
   });
   const singleFileUpload = async (data1, options1) => {
+    //cargar imagen
     try {
-      await axios.post('http://localhost:3001/api/SingleFile', data1, options1);
+      await axios.post('http://localhost:3001/api/singlefile', data1, options1);
     } catch (error) {
       alert(`ACA: , ${error}`);
     }
-    return null;
   };
   const removerImagen = () => {
+    /*eliminar imagen del dropzone*/
     setFiles([]);
     setSingleFiles([]);
   };
@@ -401,17 +360,17 @@ export default function AgregarProducto(props) {
     },
   };
   const uploadSingleFile = async () => {
+    /*cargar imagen para mostrar*/
     const formData = new FormData();
     /*let valores = {
       idProducto: 'simonn',
       file: singleFiles[0],
     };*/
-    singleFiles[0].idProducto = 'asi es';
     formData.append('id', seleccionado.codigoPrincipal);
     formData.append('file', singleFiles[0]);
     await singleFileUpload(formData, singleFileOptions);
   };
-  const thumbs = files.map((file) => (
+  const thumbs = files.map((file /*mapeo de la imagen dentro del producto*/) => (
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>{<img src={file.preview} style={img} />}</div>
     </div>
@@ -440,14 +399,7 @@ export default function AgregarProducto(props) {
   const handleChange3 = (e) => {
     agregarBodega(e);
   };
-  const handleChangeDate = (date) => {
-    setStartDate(date);
-    seleccionado.fecha_vencimiento = date;
-  };
   const handleOnChange = (value) => {
-    if (tempProv.length > 0) {
-      //setProveedores([...proveedores, tempProv]);
-    }
     tempProv.push(proveedores.filter((item) => item.value === value)[0]);
     proveedores = proveedores.filter((item) => item.value !== value);
   };
@@ -539,35 +491,14 @@ export default function AgregarProducto(props) {
     settagsProveedores([]);
     setTags([]);
     settempBod([]);
+    setFiles([]);
+    setSingleFiles([]);
     settempProv([]);
     setprecio1(0);
     setprecio2(0);
     setprecio3(0);
     setCantsel(0);
     setCantminsel(0);
-    setcod2('');
-    setcod3('');
-    setcod4('');
-    setcod5('');
-    setcod6('');
-    setcod7('');
-    setinputcod2(false);
-    setinputcod3(false);
-    setinputcod4(false);
-    setinputcod5(false);
-    setinputcod6(false);
-    setinputcod7(false);
-  };
-  const GuardarProveedores = () => {
-    if (tagsProveedores.length === 0) {
-      Confirm.open({
-        title: 'Error',
-        message: 'Debe ingresar almenos el Proveedor 1.',
-        onok: () => {},
-      });
-    } else {
-      seleccionado.proveedores = tagsProveedores;
-    }
   };
   const cerrarModalAgregarProductoCreacionRapida = () => {
     setmodalCreacionRapida(false);
@@ -631,85 +562,6 @@ export default function AgregarProducto(props) {
     setTags([...tags.filter((tag) => tags.indexOf(tag) !== index)]);
     if (index === 0) {
       setCodigoBarra(tags[1]);
-    }
-  };
-  const GuardarCodigos = () => {
-    if (tags.length > 0) {
-      seleccionado.codigos = tags;
-      setTagsTemp(tags);
-      setModalInsertarCodigo(false);
-    } else {
-      Confirm.open({
-        title: 'Códigos vacios',
-        message: 'No puede insertar si no existe ningun código',
-        onok: () => {},
-      });
-    }
-  };
-  const insertarCodigos = () => {
-    setModalInsertarCodigo(true);
-  };
-  const GuardarPrecio = () => {
-    seleccionado.precio = [0, 0, 0];
-    let precio1 = '';
-    let precio2 = '';
-    let precio3 = '';
-    if (document.getElementById('precio1').value != null) {
-      precio1 = document.getElementById('precio1').value;
-    }
-    if (document.getElementById('precio2').value != null) {
-      precio2 = document.getElementById('precio2').value;
-    }
-    if (document.getElementById('precio3').value != null) {
-      precio3 = document.getElementById('precio3').value;
-    }
-    if (precio1.toString().trim() === '') {
-      Confirm.open({
-        title: 'Error',
-        message: 'Debe ingresar almenos el Precio 1.',
-        onok: () => {},
-      });
-    } else {
-      seleccionado.precio[0] = parseInt(precio1, 10);
-      if (precio2.toString() !== '') {
-        seleccionado.precio[1] = parseInt(precio2, 10);
-      }
-      if (precio3.toString() !== '') {
-        seleccionado.precio[2] = parseInt(precio3, 10);
-      }
-      let menor = false;
-      if (
-        precio2.toString() !== '' &&
-        precio3.toString() === '' &&
-        seleccionado.precio[0] > seleccionado.precio[1]
-      ) {
-        menor = true;
-      } else if (
-        precio3.toString() !== '' &&
-        precio2.toString() === '' &&
-        seleccionado.precio[0] > seleccionado.precio[2]
-      ) {
-        menor = true;
-      } else if (
-        precio2.toString() !== '' &&
-        precio3.toString() !== '' &&
-        seleccionado.precio[0] > seleccionado.precio[1] &&
-        seleccionado.precio[1] > seleccionado.precio[2]
-      ) {
-        menor = true;
-      } else if (precio2.toString() === '' && precio3.toString() === '') {
-        menor = true;
-      }
-      if (!menor) {
-        seleccionado.precio = [];
-        Confirm.open({
-          title: 'Error',
-          message: 'Los precios deben ser diferentes y descendentes.',
-          onok: () => {},
-        });
-      } else {
-        setModalInsertarPrecio(false);
-      }
     }
   };
   const insertarRapido = () => {
@@ -809,10 +661,10 @@ export default function AgregarProducto(props) {
         seleccionado.marca[0] !== undefined
       ) {
         if (regex.test(seleccionado.descripcion) && regex.test(seleccionado.area)) {
-          prueba();
           if (singleFiles) {
             uploadSingleFile();
           }
+          prueba();
           props.change();
         } else {
           Confirm.open({
@@ -835,6 +687,7 @@ export default function AgregarProducto(props) {
         onok: () => {},
       });
     }
+    fecthProductos();
   };
   const addTags = (event) => {
     let duplicadoPrincipal = false;
@@ -1368,7 +1221,6 @@ export default function AgregarProducto(props) {
         isOpen={props.isOpen}
         className="text-center"
         style={{
-          height: '100vh',
           'overflow-y': 'overflow',
           top: '20px',
           width: '1700px',
@@ -1469,124 +1321,112 @@ export default function AgregarProducto(props) {
               <h3>CREACIÓN RÁPIDA DE PRODUCTO NUEVO</h3>
             </div>
             <ModalBody>
-              <br />
-              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                <Col>
-                  <label>Código Principal</label>
-                </Col>
-                <Col style={{ 'margin-left': '-15px ' }}>
-                  <input
-                    style={paddingInput()}
-                    updatable={true}
-                    type="text"
-                    value={codigoprincipal}
-                    placeholder="Inserte codigo principal"
-                    onChange={manejarCambioRapida}
-                  />
-                </Col>
-                <Col style={{ marginLeft: '20px' }}>
-                  <label>Inventario</label>
-                </Col>
-                <Col style={{ top: '-25px' }}>
-                  <h style={{ 'font-size': '18px' }}>Cantidad</h>
-                  <input
-                    style={paddingAvInputCantidades()}
-                    className="form-control"
-                    type="number"
-                    id="cantidad"
-                    value={cantidadRapida}
-                    min={1}
-                    onChange={(e) => manejarCambiocantRapida(e, 0)}
-                  />
-                </Col>
-              </Row>
-              <br />
-              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                <Col>
-                  <label>Descripción</label>
-                </Col>
-                <Col style={{ marginLeft: '-30px' }}>
-                  <AvForm>
-                    <AvInput
-                      style={paddingAvInput()}
-                      className="form-control"
+              <div style={{ 'font-size': '23px', 'text-align': 'left', color: '#62d162' }}>
+                <br />
+                <Row>
+                  <Col>
+                    <label>Código Principal</label>
+                  </Col>
+                  <Col style={{ 'margin-left': '-15px ' }}>
+                    <input
+                      style={paddingInput()}
+                      updatable={true}
                       type="text"
-                      name="descripcion"
-                      id="descripcion"
-                      errorMessage="Nombre Inválido"
-                      validate={{
-                        required: { value: true },
-                        pattern: { value: regex },
-
-                        minLength: { value: 1 },
-                      }}
-                      value={descripcionRapida}
-                      onChange={(e) => manejarCambiodescripcionRapida(e)}
+                      value={codigoprincipal}
+                      placeholder="Inserte codigo principal"
+                      onChange={manejarCambioRapida}
                     />
-                  </AvForm>
-                </Col>
-                <Col>
-                  <label>Precio de Venta</label>
-                </Col>
-                <Col style={{ 'margin-left': '-30px' }}>
-                  <AvForm>
-                    <AvField
+                  </Col>
+                  <Col style={{ marginLeft: '20px' }}>
+                    <label>Inventario</label>
+                  </Col>
+                  <Col style={{ top: '-25px' }}>
+                    <h style={{ 'font-size': '18px' }}>Cantidad</h>
+                    <input
                       style={paddingAvInputCantidades()}
                       className="form-control"
-                      type="Number"
-                      name="precio1"
-                      id="precio1"
-                      errorMessage="Este Campo es Obligatorio"
-                      validate={{
-                        required: { value: true },
-                      }}
+                      type="number"
+                      id="cantidad"
+                      value={cantidadRapida}
                       min={1}
-                      value={precioRapida}
-                      onChange={manejarCambioPrecioRapida}
+                      onChange={(e) => manejarCambiocantRapida(e, 0)}
                     />
-                  </AvForm>
-                </Col>
-              </Row>
-              <br />
-              <Row style={{ 'font-size': '23px', 'text-align': 'left' }}>
-                <Col>
-                  <label>Producto Exento</label>
-                </Col>
-                <Col style={{ marginLeft: '-660px' }}>
-                  <AvForm>
-                    <AvRadioGroup id="exento" inline name="producto_exento" required>
-                      <AvRadio
-                        onClick={() => setProductoExento(true)}
-                        label="Producto Exento"
-                        value="exento"
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col>
+                    <label>Descripción</label>
+                  </Col>
+                  <Col style={{ marginLeft: '-30px' }}>
+                    <AvForm>
+                      <AvInput
+                        style={paddingAvInput()}
+                        className="form-control"
+                        type="text"
+                        name="descripcion"
+                        id="descripcion"
+                        errorMessage="Nombre Inválido"
+                        validate={{
+                          required: { value: true },
+                          pattern: { value: regex },
+
+                          minLength: { value: 1 },
+                        }}
+                        value={descripcionRapida}
+                        onChange={(e) => manejarCambiodescripcionRapida(e)}
                       />
-                      <AvRadio
-                        onClick={() => setProductoExento(false)}
-                        label="Producto No Exento"
-                        value="noexento"
+                    </AvForm>
+                  </Col>
+                  <Col>
+                    <label>Precio de Venta</label>
+                  </Col>
+                  <Col style={{ 'margin-left': '-30px' }}>
+                    <AvForm>
+                      <AvField
+                        style={paddingAvInputCantidades()}
+                        className="form-control"
+                        type="Number"
+                        name="precio1"
+                        id="precio1"
+                        errorMessage="Este Campo es Obligatorio"
+                        validate={{
+                          required: { value: true },
+                        }}
+                        min={1}
+                        value={precioRapida}
+                        onChange={manejarCambioPrecioRapida}
                       />
-                    </AvRadioGroup>
-                  </AvForm>
-                </Col>
-              </Row>
-              <br />
-              <Row style={{ 'font-size': '23px', 'text-align': 'left', marginLeft: '0px' }}>
-                <label>Código de Barra</label>
-                <Col style={{ marginLeft: '20px' }}>
-                  <input
-                    style={paddingInput()}
-                    updatable={true}
-                    type="text"
-                    value={codigobarra}
-                    placeholder="Inserte codigo de barra"
-                    onChange={manejarCambioRapidaBarra}
-                    onKeyDown={handleKeyDown}
-                  />
-                </Col>
-              </Row>
-              <br />
-              <div style={{ marginLeft: '-250px' }}>
-                <Barcode value={codigobarra} />
+                    </AvForm>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col>
+                    <label>Producto Exento</label>
+                  </Col>
+                  <Col style={{ marginLeft: '-660px' }}>
+                    <AvForm>
+                      <AvRadioGroup id="exento" inline name="producto_exento" required>
+                        <AvRadio
+                          onClick={() => setProductoExento(true)}
+                          label="Producto Exento"
+                          value="exento"
+                        />
+                        <AvRadio
+                          onClick={() => setProductoExento(false)}
+                          label="Producto No Exento"
+                          value="noexento"
+                        />
+                      </AvRadioGroup>
+                    </AvForm>
+                  </Col>
+                </Row>
+                <br />
+                <br />
+                <div style={{ marginLeft: '-250px' }}>
+                  <Barcode value={codigobarra} />
+                </div>
               </div>
             </ModalBody>
             <ModalFooter>
@@ -2011,7 +1851,10 @@ export default function AgregarProducto(props) {
                     value={size6}
                   />
                 </Col>
-                <Col style={{ marginLeft: '30px', 'max-width': '90px' }}>
+                <Col style={{ marginLeft: '30px', 'max-width': '90px', top: '-35px' }}>
+                  <label style={{ marginLeft: '30px', top: '-50px', position: 'abolsute' }}>
+                    Costo
+                  </label>
                   <input
                     style={paddingAvInputCantidades()}
                     className="form-control"

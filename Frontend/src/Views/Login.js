@@ -39,7 +39,7 @@ const Login = (props) => {
   };
 
   const handleSubmit = () => {
-    console.log('Email: ', email);
+    console.log('Usuario: ', email);
     console.log('Contraseña: ', password);
 
     // const auth = {
@@ -51,7 +51,7 @@ const Login = (props) => {
   };
 
   const authMethod = () => {
-    const jsonString = { email: email, password: password };
+    const jsonString = { alias: email, password: password };
     console.log('Mandando: ', jsonString);
     //     fetch('http://localhost:3001/api/login', {
     fetch('http://localhost:3001/api/login', {
