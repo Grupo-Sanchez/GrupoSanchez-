@@ -523,7 +523,7 @@ export default function Devoluciones() {
   };
   return (
     <div class="hide-on-print">
-      <Modal isOpen={ModalModificarPrecios}>
+      <Modal style={{ width: '500px' }} isOpen={ModalModificarPrecios}>
         <ModalBody>
           <DevolucionImprimir
             productos={recibo}

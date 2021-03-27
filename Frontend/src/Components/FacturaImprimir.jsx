@@ -12,6 +12,7 @@ import {
   ModalHeader,
   ModalFooter,
 } from 'reactstrap';
+import styles from '../Styles/estiloFactura.css';
 
 export default function FacturaImprimir(props) {
   let d = new Date();

@@ -644,7 +644,7 @@ export default function Facturas() {
   const regexSoloNumeros = /^[0-9]+$/;
   return (
     <div class="hide-on-print">
-      <Modal isOpen={ModalModificarPrecios}>
+      <Modal style={{ width: '500px' }} isOpen={ModalModificarPrecios}>
         <ModalBody>
           <FacturaImprimir
             productos={recibo}
@@ -899,9 +899,9 @@ export default function Facturas() {
             </AvForm>
           </div>
           <div style={{ paddingTop: '80px', marginLeft: '-81px' }}>
-            <h2>Subtotal : {sumatotal.toLocaleString()} Lps.</h2>
-            <h2>Impuesto 15% : {impuestototal.toLocaleString()} Lps.</h2>
-            <h1>Total: {totalfinal.toLocaleString()} Lps.</h1>
+            <h2>Subtotal : L. {sumatotal.toLocaleString()} </h2>
+            <h2>Impuesto 15% : L. {impuestototal.toLocaleString()}</h2>
+            <h1>Total: L. {totalfinal.toLocaleString()}</h1>
           </div>
         </Col>
       </Row>
