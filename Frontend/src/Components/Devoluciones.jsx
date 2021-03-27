@@ -258,9 +258,7 @@ export default function Devoluciones() {
 
   const [cantSel, setcantSel] = useState(0);
   const handleValidSubmit = async () => {
-    // alert(JSON.stringify(productosDevolucion));
     let productosSumar = [];
-    //alert(JSON.stringify(bodegaSel));
     const nombreCliente2 = document.getElementById('nameCliente').value;
     const id2 = document.getElementById('Identificacion').value;
     const razonDev = document.getElementById('razonDev').value;
@@ -280,7 +278,6 @@ export default function Devoluciones() {
         }
       }
     }
-    // alert(JSON.stringify(productosSumar));
     let bodencontrada = false;
     for (let i = 0; i < productosEnBodega.length; i++) {
       const element = productosEnBodega[i];
@@ -356,7 +353,6 @@ export default function Devoluciones() {
           cantidad: element.cantidad,
         })
         .then((res) => {
-          //  alert(JSON.stringify(res.data));
         })
         .catch((error) => {
           alert(error);
@@ -497,14 +493,12 @@ export default function Devoluciones() {
     }
   };
   const handleChange2 = (e) => {
-    //alert(e);
     bodegas.filter((item) => {
       if (item.value === e) {
         setBodegaSel(item);
       }
       return 0;
     });
-    //alert(JSON.stringify(bodegaSel));
   };
   useEffect(() => {
     getProductos();

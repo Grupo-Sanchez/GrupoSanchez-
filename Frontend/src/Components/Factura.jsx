@@ -514,7 +514,6 @@ export default function Facturas() {
         prueba += productosAfacturar[index].precioSumado;
         if (!element2.exento) {
           tempImp += Number(element2.precioSumado) * 0.15;
-          alert(tempImp);
           setImpuestoTotal(tempImp);
         }
       }
