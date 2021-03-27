@@ -214,7 +214,6 @@ const OpcionesBodegas = (props) => {
       NewProduct = ProductoMigrar;
 
       NewProduct.bodega[BodegaProducto].cantBodega = `${CantVieja}`;
-      // alert(JSON.stringify(CantVieja));
       //bodega nueva
       let bandera2 = 0; //ver si existe la bodega
       let nueva = MigrarProducto.bodegaMigrar;
@@ -222,7 +221,6 @@ const OpcionesBodegas = (props) => {
       let a;
       let cantJeje;
       for (let i = 0; i < ProductoMigrar.bodega.length; i++) {
-        // alert(ProductoMigrar.bodega[i].value);
         if (ProductoMigrar.bodega[i].value === nueva) {
           bandera2 = 1;
           cantNueva =
