@@ -1,32 +1,6 @@
-import { Row, Col, Container } from 'reactstrap';
-import Header from '../Components/Header.jsx';
-import SegundoPrecio from '../Icons/SegundoPrecio.svg';
-import Facturar from '../Icons/Facturar.svg';
-import Devolucion from '../Icons/Devolucion.svg';
+import AmbienteAdministradorBase from '../Components/AmbienteAdministradorBase.jsx';
+import Devoluciones from '../Components/Devoluciones.jsx';
 
-const items = [
-  {
-    name: 'Facturar',
-    to: '/EnConstruccion',
-    icon: <img src={Facturar} style={{ width: '2em', height: '2em', marginRight: '0.5rem' }} />,
-  },
-];
+const AmbienteAdministadorBase = () => <AmbienteAdministradorBase></AmbienteAdministradorBase>;
 
-// Landing page para Jefe de tienda
-const AmbienteVendedor = () => (
-  <div>
-    <Container fluid style={{ padding: '0' }}>
-      <Row noGutters>
-        <Col>
-          <Header items={items} />
-        </Col>
-      </Row>
-      <Row noGutters>
-
-      </Row>
-    </Container>
-    <h1>Ambiente Administrador</h1>
-  </div>
-);
-
-export default AmbienteVendedor;
+export default AmbienteAdministadorBase;
