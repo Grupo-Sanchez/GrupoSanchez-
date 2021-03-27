@@ -25,6 +25,14 @@ app.use(cors());
 app.use(body.urlencoded({ extended: true }));
 app.use(body.json());
 app.use(helmet());
+app.use('/uploads', express.static('uploads'));
+
+//File Upload
+app.use(
+  './Frontend/public/uploads/',
+  express.static(path.join(__dirname, './Frontend/public/uploads/')),
+);
+app.use('/api', fileRoutes);
 
 //File Upload
 app.use(

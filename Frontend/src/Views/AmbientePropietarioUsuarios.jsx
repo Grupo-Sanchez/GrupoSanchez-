@@ -1,9 +1,9 @@
 import AmbientePropietarioBase from '../Components/AmbientePropietarioBase.jsx';
-import OpcionesUsuarios from '../Components/OpcionesUsuarios.jsx';
+import AmbientePropietarioGestionarProductos from '../Components/ModificarUsuarios.jsx';
 
 const AmbientePropietarioUsuarios = () => (
   <AmbientePropietarioBase>
-    <OpcionesUsuarios />
+    <AmbientePropietarioGestionarProductos />
   </AmbientePropietarioBase>
 );
 

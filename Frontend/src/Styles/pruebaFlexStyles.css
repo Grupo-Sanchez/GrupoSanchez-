@@ -27,3 +27,8 @@
   align-items: center;
   flex: 1;
 }
+
+.titulos {
+  font-size: 23px;
+  font-weight: bold;
+}

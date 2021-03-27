@@ -40,25 +40,25 @@ const infoDetalladaClientes = (props) => {
       <div className="form_container">
         <div className="form_items">
           <div className="form_input">
-            <label>Primer nombre:</label>
+            <label className="titulos">Primer nombre:</label>
             <Col xs="6">
               <label>{props.elemento.nombre}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label>Segundo nombre:</label>
+            <label className="titulos">Segundo nombre:</label>
             <Col xs="6">
               <label>{props.elemento.segundo_nombre}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label>No. Identidad:</label>
+            <label className="titulos">No. Identidad:</label>
             <Col xs="6">
               <label>{props.elemento.cedula}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label>RTN</label>
+            <label className="titulos">RTN:</label>
             <Col xs="6">
               <label>{props.elemento.RTN}</label>
             </Col>
@@ -67,30 +67,38 @@ const infoDetalladaClientes = (props) => {
         <div className="form_items">
           <div className="form_input">
             {' '}
-            <label>Primer apellido:</label>
+            <label className="titulos">Primer apellido:</label>
             <Col xs="6">
               <label>{props.elemento.primer_apellido}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label>Segundo apellido:</label>
+            <label className="titulos">Segundo apellido:</label>
             <Col xs="6">
               <label>{props.elemento.segundo_apellido}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label>Teléfono</label>
+            <label className="titulos">Teléfono:</label>
             <Col xs="6">
               <label>{props.elemento.tel}</label>
             </Col>
           </div>
           <div className="form_input">
-            <label>Correo</label>
+            <label className="titulos">Correo:</label>
             <Col xs="6">
               <label>{props.elemento.email}</label>
             </Col>
           </div>
         </div>
+      </div>
+      <div className="form_container">
+        <Col xs="6"></Col>
+        <Col xs="6">
+          <Button onClick={() => props.toggle()} className="botonFormRed" outline color="danger">
+            cerrar
+          </Button>
+        </Col>
       </div>
     </>
   );

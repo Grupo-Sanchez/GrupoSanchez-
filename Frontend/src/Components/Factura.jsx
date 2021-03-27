@@ -53,7 +53,7 @@ export default function Facturas() {
           if (element.cantidad > 0) {
             productosagregados.push({
               indice: 0,
-              name: element.nombre,
+              name: element.descripcion,
               value: element._id,
               codigos: element.codigos,
               proveedores: element.proveedores,

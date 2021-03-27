@@ -15,11 +15,14 @@
 
 .verde {
   color: #05dc83;
+  
 }
 
-label {
-  font-size: larger;
+.titulo{
+  font-size: 23px;
 }
+
+
 
 /*
 .text-danger {

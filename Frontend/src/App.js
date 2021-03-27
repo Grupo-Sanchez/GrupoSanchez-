@@ -21,11 +21,10 @@ import AmbientePropietarioBodegas from './Views/AmbientePropietarioBodegas.jsx';
 import AmbientePropietarioUsuarios from './Views/AmbientePropietarioUsuarios.jsx';
 import AmbientePropietarioClientes from './Views/AmbientePropietarioClientes.jsx';
 import AmbientePropietarioMarcas from './Views/AmbientePropietarioMarcas.jsx';
+import AmbientePropietarioDepartamentos from './Views/AmbientePropietarioDepartamentos.jsx';
 import AmbientePropietarioProveedores from './Views/AmbientePropietarioProveedor.jsx';
-import AmbientePropietarioModificarProveedores from './Views/AmbientePropietarioModificarProveedores.jsx';
-import AmbientePropietarioModificarMarcas from './Views/AmbientePropietarioModificarMarcas.jsx';
-import AmbientePropietarioModificarProductos from './Views/AmbientePropietarioModificarProductos.jsx';
-import AmbientePropietarioBuscarProductos from './Views/AmbientePropietarioBuscarProductos.jsx';
+import AmbientePropietarioFacturar from './Views/AmbientePropietarioFacturar.jsx';
+import AmbientePropietarioDevoluciones from './Views/AmbientePropietarioDevoluciones.jsx';
 //ajustar al estadar
 import AmbientePropietarioNotificaciones from './Views/AmbientePropietarioNotificaciones.jsx';
 //------
@@ -41,6 +40,12 @@ import AmbienteVendedorFacturacion from './Views/AmbienteVendedorFactura.jsx';
 
 // Import de funcionalidades administrador
 import AmbienteAdministradorProveedores from './Views/AmbienteAdministradorProveedores.jsx';
+import AmbienteAdministradorProducto from './Views/AmbienteAdministradorProducto.jsx';
+import AmbienteAdministradorUsuarios from './Views/AmbienteAdministradorUsuarios.jsx';
+import AmbienteAdministradorMarcas from './Views/AmbienteAdministradorMarcas.jsx';
+import AmbienteAdministradorDepartamentos from './Views/AmbienteAdministradorDepartamentos.jsx';
+import AmbienteAdministradorClientes from './Views/AmbienteAdministradorClientes.jsx';
+import AmbienteAdministradorBodegas from './Views/AmbienteAdministradorBodegas.jsx';
 
 // Import de pagina en construccion y error
 import EnConstruccion from './Views/PaginaEnConstruccion.jsx';
@@ -76,20 +81,11 @@ const App = () => {
       <Route exact path="/Propietario/Marcas">
         <AmbientePropietarioMarcas />
       </Route>
+      <Route exact path="/Propietario/Departamentos">
+        <AmbientePropietarioDepartamentos />
+      </Route>
       <Route exact path="/Propietario/Proveedores">
         <AmbientePropietarioProveedores />
-      </Route>
-      <Route exact path="/Propietario/Proveedores/Gestionar">
-        <AmbientePropietarioModificarProveedores />
-      </Route>
-      <Route exact path="/Propietario/Marcas/Gestionar">
-        <AmbientePropietarioModificarMarcas />
-      </Route>
-      <Route exact path="/Propietario/Productos/Gestionar">
-        <AmbientePropietarioModificarProductos />
-      </Route>
-      <Route exact path="/Propietario/Productos/Buscar">
-        <AmbientePropietarioBuscarProductos />
       </Route>
       <Route exact path="/Propietario/Gestionar/Usuarios">
         <AmbientePropietarioGestionarProductos />
@@ -100,9 +96,36 @@ const App = () => {
       <Route exact path="/Propietario/Notificaciones">
         <AmbientePropietarioNotificaciones />
       </Route>
+      <Route exact path="/Propietario/Facturar">
+        <AmbientePropietarioFacturar />
+      </Route>
+      <Route exact path="/Propietario/Devoluciones">
+        <AmbientePropietarioDevoluciones />
+      </Route>
       {/* Ambientes administrador */}
       <Route exact path="/Administrador">
         <AmbienteAdministrador />
+      </Route>
+      <Route exact path="/Administrador/Productos">
+        <AmbienteAdministradorProducto />
+      </Route>
+      <Route exact path="/Administrador/Usuarios">
+        <AmbienteAdministradorUsuarios />
+      </Route>
+      <Route exact path="/Administrador/Marcas">
+        <AmbienteAdministradorMarcas />
+      </Route>
+      <Route exact path="/Administrador/Departamentos">
+        <AmbienteAdministradorDepartamentos />
+      </Route>
+      <Route exact path="/Administrador/Clientes">
+        <AmbienteAdministradorClientes />
+      </Route>
+      <Route exact path="/Administrador/Proveedores">
+        <AmbienteAdministradorProveedores />
+      </Route>
+      <Route exact path="/Administrador/Bodegas">
+        <AmbienteAdministradorBodegas />
       </Route>
       {/* Ambientes propietario */}
       <Route exact path="/JefeTienda">
@@ -118,7 +141,7 @@ const App = () => {
       <Route exact path="/Vendedor">
         <AmbienteVendedor />
       </Route>
-      <Route exact path="/Vendedor/Facturacion">
+      <Route exact path="/Vendedor/Facturar">
         <AmbienteVendedorFacturacion />
       </Route>
       {/* Pagina en construccion o error */}
