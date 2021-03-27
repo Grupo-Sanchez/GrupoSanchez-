@@ -70,12 +70,12 @@ const Login = (props) => {
       .then((json) => {
         console.log('JSON: ', json);
         if (json.message === 'Auth successful') {
-          console.log('Antes: ', window.token.token);
+          // console.log('Antes: ', window.token.token);
 
           window.token = {
             token: json.token,
           };
-          console.log('Despues: ', window.token.token);
+          // console.log('Despues: ', window.token.token);
           setIngresando(true);
           console.log('Correcto');
           history.push(`/${json.ruta}`);
