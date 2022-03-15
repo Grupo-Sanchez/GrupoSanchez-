@@ -898,9 +898,30 @@ export default function Facturas() {
             </AvForm>
           </div>
           <div style={{ paddingTop: '80px', marginLeft: '-81px' }}>
-            <h2>Subtotal : L. {sumatotal.toLocaleString()} </h2>
-            <h2>Impuesto 15% : L. {impuestototal.toLocaleString()}</h2>
-            <h1>Total: L. {totalfinal.toLocaleString()}</h1>
+            <Row style={{ 'font-size': '23px' }}>
+              <h2>Subtotal :</h2>
+              <Col style={{ maxWidth: '390px', paddingLeft: '90px' }}>
+                <div>
+                  <h2> L. {sumatotal.toLocaleString()} </h2>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px' }}>
+              <h2>Impuesto 15% : L. </h2>
+              <Col style={{ maxWidth: '390px' }}>
+                <div>
+                  <h2> {impuestototal.toLocaleString()} </h2>
+                </div>
+              </Col>
+            </Row>
+            <Row style={{ 'font-size': '23px' }}>
+              <h2>Total:</h2>
+              <Col style={{ maxWidth: '390px', paddingLeft: '152px' }}>
+                <div>
+                  <h2> L. {totalfinal.toLocaleString()} </h2>
+                </div>
+              </Col>
+            </Row>
           </div>
         </Col>
       </Row>
